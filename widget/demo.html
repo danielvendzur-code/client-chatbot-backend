@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chatbot — demo</title>
+  <style>
+    :root {
+      --fg: #0f172a;
+      --muted: #64748b;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --border: #e2e8f0;
+      --primary: #4f46e5;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        "Helvetica Neue", Arial, sans-serif;
+      color: var(--fg);
+      background:
+        radial-gradient(circle at 10% 0%, #eef2ff, transparent 40%),
+        radial-gradient(circle at 90% 30%, #ecfeff, transparent 50%),
+        var(--bg);
+      min-height: 100vh;
+      line-height: 1.55;
+    }
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 64px 24px 120px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #eef2ff;
+      color: var(--primary);
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      text-transform: uppercase;
+    }
+    .badge::before {
+      content: "";
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      margin: 16px 0 12px;
+      letter-spacing: -0.02em;
+    }
+    p.lead {
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 60ch;
+    }
+    .grid {
+      margin-top: 36px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px 18px 16px;
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -16px rgba(15, 23, 42, 0.18);
+    }
+    .card h3 { margin: 0 0 6px; font-size: 15px; }
+    .card p  { margin: 0; color: var(--muted); font-size: 14px; }
+    .actions { display: flex; gap: 10px; margin-top: 28px; flex-wrap: wrap; }
+    .btn {
+      border: none;
+      cursor: pointer;
+      font: inherit;
+      padding: 11px 18px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 14px;
+      transition: transform 150ms ease, background 150ms ease;
+    }
+    .btn-primary { background: var(--primary); color: #fff; }
+    .btn-primary:hover { background: #4338ca; }
+    .btn-ghost   { background: transparent; color: var(--fg); border: 1px solid var(--border); }
+    .btn-ghost:hover { background: #f1f5f9; }
+    .btn:active { transform: scale(0.97); }
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    .hint { margin-top: 40px; color: var(--muted); font-size: 13px; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <span class="badge">demo</span>
+    <h1>Klientský chatbot — preview</h1>
+    <p class="lead">
+      Toto je ukážková stránka pre vstavaný chat widget. Detaily firmy
+      (názov, kontakty, tón komunikácie, farby) sú zatiaľ zástupné a dajú
+      sa neskôr nastaviť cez <code>app/config.py</code> alebo premenné
+      prostredia.
+    </p>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="window.Chatbot && window.Chatbot.open()">
+        Otvoriť chat
+      </button>
+      <button class="btn btn-ghost" onclick="window.Chatbot && window.Chatbot.send('Ahoj')">
+        Pošli „Ahoj"
+      </button>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>Plávajúci launcher</h3>
+        <p>Kruhové tlačidlo s pulzujúcim prstencom v rohu obrazovky.</p>
+      </div>
+      <div class="card">
+        <h3>Animácie správ</h3>
+        <p>Slide-in bubliny, typing indicator, online status.</p>
+      </div>
+      <div class="card">
+        <h3>Rýchle otázky</h3>
+        <p>Chips s navrhovanými otázkami pre prvý kontakt.</p>
+      </div>
+      <div class="card">
+        <h3>Brand-agnostic farby</h3>
+        <p>Indigo/slate paleta, prepínateľná cez <code>/api/config</code>.</p>
+      </div>
+      <div class="card">
+        <h3>Mobile-ready</h3>
+        <p>Plnoplošné okno na malých obrazovkách, auto-resize input.</p>
+      </div>
+      <div class="card">
+        <h3>Klávesnica</h3>
+        <p>Enter pošle, Shift+Enter nový riadok, Esc zavrie.</p>
+      </div>
+    </div>
+
+    <p class="hint">
+      Tip: Chatbot widget sa pripojí na <code>/api/chat</code>. Ak nie je
+      nastavený <code>ANTHROPIC_API_KEY</code>, beží v demo režime
+      s konzervovanými odpoveďami.
+    </p>
+  </main>
+
+  <script src="/widget/widget.js" defer></script>
+</body>
+</html>
