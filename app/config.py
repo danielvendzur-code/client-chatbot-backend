@@ -26,6 +26,7 @@ class CompanyProfile:
     website: str = _env("COMPANY_WEBSITE", "https://example.com")
     contact_email: str = _env("COMPANY_EMAIL", "hello@example.com")
     contact_phone: str = _env("COMPANY_PHONE", "")
+    contact_whatsapp: str = _env("COMPANY_WHATSAPP", "")
     industry: str = _env("COMPANY_INDUSTRY", "")
     languages: tuple[str, ...] = ("sk", "en")
 
@@ -56,20 +57,47 @@ class BotPersona:
 
 @dataclass
 class Theme:
-    """Visual theme. Defaults are neutral and brand-agnostic."""
+    """Visual theme. Defaults to the Tailwind emerald palette."""
 
-    primary: str = _env("THEME_PRIMARY", "#4f46e5")          # indigo-600
-    primary_hover: str = _env("THEME_PRIMARY_HOVER", "#4338ca")
-    accent: str = _env("THEME_ACCENT", "#22d3ee")            # cyan-400
+    primary: str = _env("THEME_PRIMARY", "#10b981")          # emerald-500
+    primary_hover: str = _env("THEME_PRIMARY_HOVER", "#059669")  # emerald-600
+    accent: str = _env("THEME_ACCENT", "#34d399")            # emerald-400
     bg: str = _env("THEME_BG", "#ffffff")
-    surface: str = _env("THEME_SURFACE", "#f8fafc")          # slate-50
-    text: str = _env("THEME_TEXT", "#0f172a")                # slate-900
-    text_muted: str = _env("THEME_TEXT_MUTED", "#64748b")    # slate-500
-    border: str = _env("THEME_BORDER", "#e2e8f0")            # slate-200
-    user_bubble: str = _env("THEME_USER_BUBBLE", "#4f46e5")
-    bot_bubble: str = _env("THEME_BOT_BUBBLE", "#f1f5f9")    # slate-100
+    surface: str = _env("THEME_SURFACE", "#f0fdf4")          # emerald-50
+    text: str = _env("THEME_TEXT", "#0f172a")
+    text_muted: str = _env("THEME_TEXT_MUTED", "#64748b")
+    border: str = _env("THEME_BORDER", "#d1fae5")            # emerald-100
+    user_bubble: str = _env("THEME_USER_BUBBLE", "#10b981")
+    bot_bubble: str = _env("THEME_BOT_BUBBLE", "#ecfdf5")    # emerald-50/100
     radius: str = _env("THEME_RADIUS", "16px")
-    position: str = _env("THEME_POSITION", "right")           # left | right
+    position: str = _env("THEME_POSITION", "right")
+
+
+@dataclass
+class LeadCopy:
+    """Strings shown by the lead-capture form in the widget."""
+
+    title: str = _env("LEAD_TITLE", "Zanechajte nám kontakt")
+    subtitle: str = _env("LEAD_SUBTITLE", "Ozveme sa vám čo najskôr.")
+    button: str = _env("LEAD_BUTTON", "Odoslať")
+    button_open: str = _env("LEAD_BUTTON_OPEN", "Zanechať kontakt")
+    success: str = _env("LEAD_SUCCESS", "Ďakujeme, ozveme sa vám.")
+    name_placeholder: str = _env("LEAD_NAME_PLACEHOLDER", "Vaše meno")
+    email_placeholder: str = _env("LEAD_EMAIL_PLACEHOLDER", "E-mail")
+    phone_placeholder: str = _env("LEAD_PHONE_PLACEHOLDER", "Telefón (nepovinné)")
+    message_placeholder: str = _env(
+        "LEAD_MESSAGE_PLACEHOLDER", "Správa (nepovinné)"
+    )
+
+
+@dataclass
+class ResendConfig:
+    """Email delivery for incoming leads (resend.com)."""
+
+    api_key: str = _env("RESEND_API_KEY", "")
+    lead_to: str = _env("LEAD_TO", "")
+    lead_from: str = _env("LEAD_FROM", "onboarding@resend.dev")
+    lead_bcc: str = _env("LEAD_BCC", "")
 
 
 @dataclass
@@ -88,6 +116,8 @@ class Settings:
     company: CompanyProfile = field(default_factory=CompanyProfile)
     bot: BotPersona = field(default_factory=BotPersona)
     theme: Theme = field(default_factory=Theme)
+    lead: LeadCopy = field(default_factory=LeadCopy)
+    resend: ResendConfig = field(default_factory=ResendConfig)
     llm: LLMConfig = field(default_factory=LLMConfig)
     cors_origins: tuple[str, ...] = field(
         default_factory=lambda: tuple(
