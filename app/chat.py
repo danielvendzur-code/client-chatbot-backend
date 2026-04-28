@@ -26,8 +26,15 @@ def _build_system_prompt() -> str:
         parts.append(f"Kontaktný e-mail: {company.contact_email}.")
     if company.contact_phone:
         parts.append(f"Telefón: {company.contact_phone}.")
+    if company.contact_whatsapp:
+        parts.append(f"WhatsApp: {company.contact_whatsapp}.")
     if company.website:
         parts.append(f"Web: {company.website}.")
+    parts.append(
+        "Ak má používateľ vážny záujem (cenová ponuka, termín, "
+        "spätné volanie), odporuč mu tlačidlo „Zanechať kontakt\" "
+        "v chate — netreba na to žiadne špeciálne tagy."
+    )
     return " ".join(parts)
 
 

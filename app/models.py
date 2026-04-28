@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, EmailStr, Field
 
 
 Role = Literal["user", "assistant", "system"]
@@ -22,6 +22,24 @@ class ChatResponse(BaseModel):
     reply: str
 
 
+class Contacts(BaseModel):
+    phone: str = ""
+    whatsapp: str = ""
+    email: str = ""
+
+
+class LeadFormCopy(BaseModel):
+    title: str
+    subtitle: str
+    button: str
+    button_open: str
+    success: str
+    name_placeholder: str
+    email_placeholder: str
+    phone_placeholder: str
+    message_placeholder: str
+
+
 class WidgetConfig(BaseModel):
     company_name: str
     bot_name: str
@@ -30,3 +48,18 @@ class WidgetConfig(BaseModel):
     placeholder: str
     suggested_questions: list[str]
     theme: dict[str, str]
+    contacts: Contacts
+    lead_form: LeadFormCopy
+
+
+class LeadRequest(BaseModel):
+    name: str = Field(..., min_length=2, max_length=120)
+    email: EmailStr
+    phone: str | None = Field(default=None, max_length=40)
+    message: str | None = Field(default=None, max_length=2000)
+    conversation: list[Message] = Field(default_factory=list, max_length=20)
+
+
+class LeadResponse(BaseModel):
+    ok: bool
+    message: str
