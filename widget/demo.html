@@ -38,58 +38,12 @@
       radial-gradient(circle at 10% 0%, #d1fae5, transparent 40%),
       radial-gradient(circle at 90% 30%, #ecfdf5, transparent 50%),
       #f0fdf4;
-    min-height: 100vh;
+    min-height: 100dvh;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
-
-  /* ------------------ DEMO PAGE ------------------ */
-  .demo-container { max-width:880px; margin:0 auto; padding:64px 24px 120px; }
-  .demo-badge {
-    display:inline-flex; align-items:center; gap:6px;
-    background:#d1fae5; color:var(--primary-deep);
-    padding:5px 12px; border-radius:999px;
-    font-size:12px; font-weight:600; letter-spacing:0.4px; text-transform:uppercase;
-  }
-  .demo-badge::before {
-    content:""; width:6px; height:6px; border-radius:50%; background:var(--primary);
-  }
-  .demo-container h1 {
-    font-size: clamp(28px, 4vw, 44px);
-    margin: 16px 0 12px;
-    letter-spacing: -0.02em;
-  }
-  .demo-lead { color: var(--text-muted); font-size:17px; max-width:60ch; }
-  .demo-grid {
-    margin-top:36px; display:grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap:14px;
-  }
-  .demo-card {
-    background:#fff; border:1px solid var(--border);
-    border-radius:14px; padding:18px;
-    transition: transform 200ms ease, box-shadow 200ms ease;
-  }
-  .demo-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-  }
-  .demo-card h3 { margin:0 0 6px; font-size:15px; }
-  .demo-card p  { margin:0; color: var(--text-muted); font-size:14px; }
-  .demo-actions { display:flex; gap:10px; margin-top:28px; flex-wrap:wrap; }
-  .demo-btn {
-    border:none; cursor:pointer; font:inherit;
-    padding:11px 18px; border-radius:12px; font-weight:600; font-size:14px;
-    transition: transform 150ms ease, filter 150ms ease;
-  }
-  .demo-btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
-    color:#fff; box-shadow: 0 6px 16px -6px rgba(16,185,129,.5);
-  }
-  .demo-btn-primary:hover { filter: brightness(1.05); }
-  .demo-btn-ghost { background:transparent; color:var(--text); border:1px solid var(--border); }
-  .demo-btn-ghost:hover { background: var(--surface-2); }
-  .demo-btn:active { transform: scale(0.97); }
-  code { background: var(--surface-2); padding:2px 6px; border-radius:6px; font-size:13px; }
+  /* When embedded in an iframe with transparent background allowed */
+  body.cbw-transparent { background: transparent; }
 
   /* ============================================================
      WIDGET
@@ -210,11 +164,21 @@
     box-shadow: var(--shadow-lg);
     display: flex; flex-direction: column;
     overflow: hidden;
-    opacity: 0; transform: scale(0); pointer-events: none;
+    opacity: 0;
+    transform: scale(0.4) translateY(16px);
     transform-origin: 100% 100%;
+    pointer-events: none;
+    transition: opacity 280ms cubic-bezier(0.55,0.06,0.68,0.19),
+                transform 280ms cubic-bezier(0.55,0.06,0.68,0.19);
   }
   .cbw-root[data-position="left"] .cbw-panel { left:0; right:auto; transform-origin: 0 100%; }
-  .cbw-root[data-open="true"] .cbw-panel { pointer-events: auto; }
+  .cbw-root[data-open="true"] .cbw-panel {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+    transition: opacity 480ms cubic-bezier(0.22,0.61,0.36,1),
+                transform 520ms cubic-bezier(0.22,0.61,0.36,1);
+  }
 
   /* ---------- HEADER ---------- */
   .cbw-header {
@@ -657,42 +621,6 @@
 <body>
 
 <!-- ============================================================
-     DEMO PAGE
-     ============================================================ -->
-<main class="demo-container">
-  <span class="demo-badge">demo</span>
-  <h1>Klientský chatbot — preview</h1>
-  <p class="demo-lead">
-    Ukážková stránka pre vstavaný chat widget v emerald palete s cenovou
-    ponukou (s progress barom), kalkulačkou pre fotovoltaiku, kontaktným
-    dropdownom a animovaným robotom. Všetko inline — jeden HTML súbor.
-  </p>
-
-  <div class="demo-actions">
-    <button class="demo-btn demo-btn-primary" onclick="window.Chatbot && window.Chatbot.open()">
-      Otvoriť chat
-    </button>
-    <button class="demo-btn demo-btn-ghost" onclick="window.Chatbot && window.Chatbot.send('Ahoj')">
-      Pošli „Ahoj"
-    </button>
-  </div>
-
-  <div class="demo-grid">
-    <div class="demo-card"><h3>Cool robot</h3><p>Animovaný SVG s blikajúcimi očami, anténou, líčkami a jemným bobom.</p></div>
-    <div class="demo-card"><h3>Cenová ponuka</h3><p>Chip s progress barom — postupne sa plní, ako bot zbiera odpovede.</p></div>
-    <div class="demo-card"><h3>Kalkulačka</h3><p>Veľkosť, mesačná elektrina, pokrytie strechy → odhad.</p></div>
-    <div class="demo-card"><h3>Glowing input</h3><p>Pri písaní rotuje farebný gradient okolo composera.</p></div>
-    <div class="demo-card"><h3>Click animácie</h3><p>Ripple efekt na ikonkách v hlavičke + chip kliky.</p></div>
-    <div class="demo-card"><h3>Mobile-ready</h3><p>VisualViewport pin + plnoplošný mód.</p></div>
-  </div>
-
-  <p style="margin-top:40px;color:var(--text-muted);font-size:13px;">
-    Tip: widget komunikuje s <code>/api/chat</code>, <code>/api/lead</code>
-    a <code>/api/config</code>. Bez backendu beží v fallback režime.
-  </p>
-</main>
-
-<!-- ============================================================
      WIDGET DOM
      ============================================================ -->
 <div class="cbw-root" id="cbwRoot" data-position="right" data-open="false" data-unread="false" data-keyboard="false">
@@ -979,7 +907,8 @@
   const ICON_SOUND_OFF = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
 
   // ---------- sound ----------
-  let muted = localStorage.getItem(MUTE_KEY) !== '0'; // muted by default
+  let muted = true; // muted by default
+  try { muted = localStorage.getItem(MUTE_KEY) !== '0'; } catch (_) {}
   let audioCtx = null;
   function playSound(kind) {
     if (muted) return;
@@ -1022,7 +951,7 @@
   soundBtn.addEventListener('click', e => {
     spawnRipple(soundBtn, e);
     muted = !muted;
-    localStorage.setItem(MUTE_KEY, muted ? '1' : '0');
+    try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch (_) {}
     syncSoundIcon();
   });
 
@@ -1057,7 +986,6 @@
   let leadDone  = !!saved.leadDone;
   let busy = false;
   let firstOpen = history.length === 0;
-  let currentAnim = null;
 
   // Quote flow stage 0..4
   let quoteStage = 0;
@@ -1107,40 +1035,25 @@
     input.style.height = Math.min(input.scrollHeight, 120) + 'px';
   }
 
-  // ---------- genie animation ----------
+  // ---------- open/close ----------
   function togglePanel(open) {
     const next = open == null ? root.dataset.open !== 'true' : !!open;
     if (next === (root.dataset.open === 'true')) return;
-    if (currentAnim) { currentAnim.cancel(); currentAnim = null; }
     root.dataset.open = next ? 'true' : 'false';
 
     if (next) {
       root.dataset.unread = 'false';
-      currentAnim = panel.animate([
-        { transform: 'scale(0)',    opacity: 0 },
-        { transform: 'scale(0.18)', opacity: 0.45, offset: 0.18 },
-        { transform: 'scale(0.55)', opacity: 0.8,  offset: 0.5 },
-        { transform: 'scale(0.88)', opacity: 0.96, offset: 0.8 },
-        { transform: 'scale(1)',    opacity: 1 }
-      ], { duration: 540, easing: 'cubic-bezier(0.22,0.61,0.36,1)', fill: 'forwards' });
-      currentAnim.onfinish = () => {
-        currentAnim = null;
-        if (firstOpen) {
-          firstOpen = false;
-          appendBubble('bot', cfg.welcome_message || 'Ahoj! Som virtuálny asistent. Ako vám môžem pomôcť?');
-        }
-        if (!matchMedia('(max-width:480px)').matches) input.focus();
-      };
+      if (firstOpen) {
+        firstOpen = false;
+        setTimeout(() => {
+          appendBubble('bot', (cfg && cfg.welcome_message) || 'Ahoj! Som virtuálny asistent. Ako vám môžem pomôcť?');
+        }, 540);
+      }
+      if (!matchMedia('(max-width:480px)').matches) {
+        setTimeout(() => { try { input.focus(); } catch (_) {} }, 540);
+      }
     } else {
-      currentAnim = panel.animate([
-        { transform: 'scale(1)',   opacity: 1 },
-        { transform: 'scale(0.6)', opacity: 0.5, offset: 0.4 },
-        { transform: 'scale(0)',   opacity: 0 }
-      ], { duration: 320, easing: 'cubic-bezier(0.55,0.06,0.68,0.19)', fill: 'forwards' });
-      currentAnim.onfinish = () => {
-        currentAnim = null;
-        closeMenu(); closeLead(); closeCalc();
-      };
+      closeMenu(); closeLead(); closeCalc();
     }
   }
 
