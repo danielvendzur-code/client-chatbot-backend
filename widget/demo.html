@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-visual" />
-  <title>Klientský chatbot — Prémiová koža & Čisté otváranie</title>
+  <title>Klientský chatbot — Špecialista na sťahovanie</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,6 +15,7 @@
       --primary-hover: #022c22;
       --primary-deep: #020617;
       --accent: #10b981;
+      --accent-hover: #059669;
       --bg: #ffffff;
       --surface: #f8fafc;
       --surface-2: #f1f5f9;
@@ -99,27 +100,18 @@
     @keyframes cbw-scan { 0% { transform: translate(-3px, -2px); } 100% { transform: translate(3px, -2px); } }
     @keyframes cbw-bounce-action { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-3px); } }
 
-    /* ---------- PANEL (ČISTÉ OTVÁRANIE BEZ ROTÁCIE) ---------- */
+    /* ---------- PANEL (ČISTÉ OTVÁRANIE) ---------- */
     .cbw-panel {
       position: absolute; bottom: 88px; right: 0;
       width: min(390px, calc(100vw - 32px)); height: min(640px, calc(100vh - 120px));
       background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
       box-shadow: 0 24px 60px -16px rgba(2, 44, 34, 0.3), 0 8px 24px -10px rgba(15, 23, 42, 0.15);
       display: flex; flex-direction: column; overflow: hidden;
-      
-      /* Stav pred otvorením: čisto posunuté nadol a jemne zmenšené */
-      opacity: 0;
-      transform: translateY(40px) scale(0.95);
-      transform-origin: bottom right;
-      pointer-events: none;
-      transition: transform 0.4s var(--transition), opacity 0.3s ease-out;
+      opacity: 0; transform: translateY(40px) scale(0.95); transform-origin: bottom right;
+      pointer-events: none; transition: transform 0.4s var(--transition), opacity 0.3s ease-out;
     }
-
     .cbw-root[data-open="true"] .cbw-panel {
-      /* Stav po otvorení */
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
+      opacity: 1; transform: translateY(0) scale(1); pointer-events: auto;
       transition: transform 0.5s var(--transition), opacity 0.4s ease-in;
     }
 
@@ -161,49 +153,59 @@
     .cbw-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
     .cbw-chip:hover { background: var(--surface-2); transform: translateY(-1px); border-color: var(--primary); }
     .cbw-chip-highlight { border-color: transparent !important; font-weight: 600; }
-    
-    .cbw-chip-quote .cbw-chip-progress { position: absolute; bottom: 0; left: 0; height: 3px; width: 0%; background: var(--accent); transition: width 600ms ease; }
-    .cbw-chip-quote[data-stage="0"] .cbw-chip-progress { width: 0%; }
-    .cbw-chip-quote[data-stage="1"] .cbw-chip-progress { width: 25%; }
-    .cbw-chip-quote[data-stage="2"] .cbw-chip-progress { width: 50%; }
-    .cbw-chip-quote[data-stage="3"] .cbw-chip-progress { width: 75%; }
-    .cbw-chip-quote[data-stage="4"] .cbw-chip-progress { width: 100%; }
 
-    /* ---------- FORMS ---------- */
+    /* ---------- KALKULAČKA & INTERAKTÍVNE BOXY ---------- */
     .cbw-form { display: none; margin: 4px 14px 10px; padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 20px -10px rgba(15, 23, 42, 0.1); animation: cbw-balloon-in 0.4s var(--transition); transform-origin: top center; }
     .cbw-form[data-open="true"] { display: block; }
     .cbw-form-head { display: flex; justify-content: space-between; margin-bottom: 10px; }
     .cbw-form-title { font-size: 14px; font-weight: 700; margin: 0; }
-    .cbw-form-subtitle { font-size: 12px; color: var(--text-muted); margin: 2px 0 0; }
     .cbw-form-close { cursor: pointer; background: none; border: none; font-size: 18px; color: var(--text-muted); }
+    
     .cbw-field { width: 100%; padding: 9px 12px; margin-bottom: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font: inherit; font-size: 13.5px; }
     .cbw-field:focus { border-color: var(--primary); outline: none; }
     textarea.cbw-field { resize: vertical; min-height: 64px; }
+    
     .cbw-form-submit { width: 100%; padding: 11px; border: none; border-radius: 10px; color: #fff; font: inherit; font-weight: 600; cursor: pointer; transition: filter 150ms ease, transform 150ms ease; }
     .cbw-form-submit:hover { filter: brightness(1.1); }
     .cbw-form-submit:active { transform: scale(0.98); }
+    .cbw-form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
     .cbw-calc-progress { height: 6px; border-radius: 999px; background: var(--surface-2); margin-bottom: 12px; overflow: hidden; }
     .cbw-calc-progress-bar { height: 100%; background: var(--accent); border-radius: 999px; width: 33%; transition: width 500ms ease; }
     .cbw-calc-step { display: none; animation: cbw-balloon-in 0.3s var(--transition); }
     .cbw-calc-step[data-active="true"] { display: block; }
-    .cbw-calc-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-    .cbw-calc-helper { font-size: 11.5px; color: var(--text-muted); margin: 4px 0 10px; }
-    .cbw-calc-actions { display: flex; gap: 8px; margin-top: 6px; }
+    .cbw-calc-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+    
+    .cbw-calc-actions { display: flex; gap: 8px; margin-top: 10px; }
     .cbw-calc-back { flex: 0 0 auto; padding: 11px 16px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; }
-    .cbw-calc-result { background: var(--surface-2); border: 1px solid var(--accent); border-radius: 12px; padding: 14px; margin: 10px 0; text-align: center; }
-    .cbw-calc-result-value { font-size: 24px; font-weight: 700; color: var(--primary); margin: 4px 0 6px; }
+    
+    .cbw-calc-result { background: var(--surface-2); border: 1px solid var(--accent); border-radius: 12px; padding: 14px; margin: 10px 0 16px; text-align: center; }
+    .cbw-calc-result-value { font-size: 22px; font-weight: 700; color: var(--primary); margin: 4px 0; }
+
+    /* Nové interaktívne Boxy / Mriežka */
+    .cbw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .cbw-card {
+      border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 8px;
+      text-align: center; cursor: pointer; transition: all 150ms ease;
+      background: var(--surface); color: var(--text);
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+    }
+    .cbw-card:hover { border-color: var(--accent); background: #fff; transform: translateY(-2px); }
+    .cbw-card.selected { border-color: var(--primary); background: var(--surface-2); box-shadow: 0 0 0 1px var(--primary); }
+    .cbw-card svg { width: 28px; height: 28px; color: var(--primary); }
+    .cbw-card-title { font-size: 12px; font-weight: 600; line-height: 1.2; }
 
     /* ---------- CONTACT BAR ---------- */
     .cbw-contact-bar { display: flex; gap: 6px; padding: 8px 12px; background: #fff; border-top: 1px solid var(--border); }
     .cbw-contact-bar:empty { display: none; }
     .cbw-contact-icon { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 8px; min-height: 40px; border-radius: 11px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); text-decoration: none; font-size: 12px; font-weight: 600; transition: all 200ms ease; }
     .cbw-contact-icon svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .cbw-contact-icon[data-kind="phone"]:hover { color: #f97316; border-color: rgba(249, 115, 22, 0.5); background: rgba(249, 115, 22, 0.08); box-shadow: 0 0 16px rgba(249, 115, 22, 0.35); }
-    .cbw-contact-icon[data-kind="whatsapp"]:hover { color: #16a34a; border-color: rgba(22, 163, 74, 0.5); background: rgba(22, 163, 74, 0.08); box-shadow: 0 0 16px rgba(22, 163, 74, 0.35); }
-    .cbw-contact-icon[data-kind="email"]:hover { color: #3b82f6; border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.08); box-shadow: 0 0 16px rgba(59, 130, 246, 0.35); }
+    .cbw-contact-icon[data-kind="phone"]:hover { color: #f97316; border-color: rgba(249, 115, 22, 0.5); background: rgba(249, 115, 22, 0.08); }
+    .cbw-contact-icon[data-kind="whatsapp"]:hover { color: #16a34a; border-color: rgba(22, 163, 74, 0.5); background: rgba(22, 163, 74, 0.08); }
+    .cbw-contact-icon[data-kind="email"]:hover { color: #3b82f6; border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.08); }
 
     /* ---------- COMPOSER ---------- */
-    .cbw-composer { border-top: 1px solid var(--border); background: #fff; padding: 10px 14px 12px; display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+    .cbw-composer { border-top: 1px solid var(--border); background: #fff; padding: 10px 14px 26px; display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0; position: relative; }
     .cbw-composer-wrap { flex: 1; position: relative; }
     .cbw-input { width: 100%; resize: none; border: 1px solid var(--border); outline: none; border-radius: 20px; padding: 10px 14px; font: inherit; font-size: 14.5px; line-height: 1.4; max-height: 120px; min-height: 42px; background: #ffffff; color: var(--text); transition: all 200ms ease; }
     .cbw-input::placeholder { color: var(--text-muted); }
@@ -213,6 +215,10 @@
     .cbw-send:hover:not(:disabled) { filter: brightness(1.1); }
     .cbw-send:disabled { opacity: 0.5; cursor: not-allowed; }
     .cbw-send svg { width: 18px; height: 18px; }
+
+    /* Vlastný Branding (Self-Promo) */
+    .cbw-promo { position: absolute; bottom: 6px; left: 0; width: 100%; text-align: center; font-size: 10px; color: var(--text-muted); opacity: 0.7; }
+    .cbw-promo a { color: var(--primary); text-decoration: none; font-weight: 600; }
 
     /* MOBILE */
     @media (max-width: 480px) {
@@ -275,14 +281,6 @@
 
     <!-- Quick chips -->
     <div class="cbw-chips" id="cbwChips">
-      <button class="cbw-chip cbw-chip-highlight cbw-chip-quote cbw-dynamic-green action-chip" id="cbwChipQuote" type="button" data-stage="0">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"/>
-          <polygon points="18 2 22 6 12 16 8 16 8 12 18 2"/>
-        </svg>
-        <span>Cenová ponuka</span>
-        <span class="cbw-chip-progress"></span>
-      </button>
       <button class="cbw-chip cbw-chip-highlight cbw-dynamic-green action-chip" id="cbwChipCalc" type="button">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="4" y="2" width="16" height="20" rx="2"/>
@@ -290,87 +288,152 @@
           <line x1="8" y1="10" x2="16" y2="10"/>
           <line x1="8" y1="14" x2="16" y2="14"/>
         </svg>
-        <span>Cenová kalkulačka</span>
+        <span>Kalkulačka služieb</span>
       </button>
-      <button class="cbw-chip action-chip" id="cbwChipContact" type="button">
-        <span>Zanechať kontakt</span>
+      <button class="cbw-chip action-chip" data-msg="Viete zabezpečiť odvoz starého nábytku?" type="button">
+        <span>Odvoz nábytku</span>
       </button>
-      <button class="cbw-chip action-chip" data-msg="Aké služby ponúkate?" type="button">
-        <span>Naše služby</span>
-      </button>
-      <button class="cbw-chip action-chip" data-msg="Povedzte mi o vašej firme." type="button">
-        <span>O nás</span>
-      </button>
-      <button class="cbw-chip action-chip" data-msg="Aké sú vaše otváracie hodiny?" type="button">
-        <span>Otváracie hodiny</span>
+      <button class="cbw-chip action-chip" data-msg="V akých lokalitách pôsobíte?" type="button">
+        <span>Lokality pôsobenia</span>
       </button>
     </div>
 
-    <!-- Forms -->
-    <form class="cbw-form" id="cbwLeadForm" data-open="false" novalidate>
-      <div class="cbw-form-head">
-        <div><h4 class="cbw-form-title">Zanechajte nám kontakt</h4></div>
-        <button type="button" class="cbw-form-close" id="cbwLeadClose">×</button>
-      </div>
-      <input class="cbw-field" id="cbwLeadName" type="text" placeholder="Vaše meno" />
-      <input class="cbw-field" id="cbwLeadEmail" type="email" placeholder="E-mail" />
-      <input class="cbw-field" id="cbwLeadPhone" type="tel" placeholder="Telefón (nepovinné)" />
-      <textarea class="cbw-field" id="cbwLeadMsg" rows="2" placeholder="Správa (nepovinné)"></textarea>
-      <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" id="cbwLeadSubmit">Odoslať</button>
-    </form>
-
+    <!-- Forms: DYNAMICKÁ KALKULAČKA -->
     <form class="cbw-form" id="cbwCalcForm" data-open="false" novalidate>
       <div class="cbw-form-head">
-        <div><h4 class="cbw-form-title">Cenová kalkulačka</h4></div>
+        <div><h4 class="cbw-form-title">Rýchla kalkulácia</h4></div>
         <button type="button" class="cbw-form-close" id="cbwCalcClose">×</button>
       </div>
-      <div class="cbw-calc-progress">
-        <div class="cbw-calc-progress-bar" id="cbwCalcProgress" style="width:33%"></div>
-      </div>
+      <div class="cbw-calc-progress"><div class="cbw-calc-progress-bar" id="cbwCalcProgress" style="width:25%"></div></div>
+      
+      <!-- Krok 1: Výber Služby -->
       <div class="cbw-calc-step" data-active="true" data-step="1">
-        <div class="cbw-calc-label">Aká je veľkosť strechy?</div>
-        <input class="cbw-field" id="cbwCalcSize" type="number" min="0" placeholder="napr. 60 m²" />
+        <div class="cbw-calc-label">Čo potrebujete vyriešiť?</div>
+        <div class="cbw-grid">
+          <div class="cbw-card" data-val="stahovanie" onclick="selectCard(this, 'service')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+            <div class="cbw-card-title">Sťahovanie</div>
+          </div>
+          <div class="cbw-card" data-val="vypratavanie" onclick="selectCard(this, 'service')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+            <div class="cbw-card-title">Vypratávanie</div>
+          </div>
+          <div class="cbw-card" data-val="preprava" onclick="selectCard(this, 'service')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            <div class="cbw-card-title">Len preprava</div>
+          </div>
+          <div class="cbw-card" data-val="ine" onclick="selectCard(this, 'service')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <div class="cbw-card-title">Iné/Špeciálne</div>
+          </div>
+        </div>
         <div class="cbw-calc-actions">
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" data-calc-next="2">Pokračovať</button>
+          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" id="btn-next-1" disabled>Pokračovať</button>
         </div>
       </div>
-      <div class="cbw-calc-step" data-step="2">
-        <div class="cbw-calc-label">Mesačná cena elektriny?</div>
-        <input class="cbw-field" id="cbwCalcElectricity" type="number" min="0" placeholder="napr. 120 €" />
+
+      <!-- Krok 2A: SŤAHOVANIE -->
+      <div class="cbw-calc-step" data-step="2-stahovanie">
+        <div class="cbw-calc-label">Aký je to zhruba objem?</div>
+        <div class="cbw-grid">
+          <div class="cbw-card" data-val="1izb" onclick="selectCard(this, 'size')"><div class="cbw-card-title">1-izb. byt</div></div>
+          <div class="cbw-card" data-val="2izb" onclick="selectCard(this, 'size')"><div class="cbw-card-title">2-izb. byt</div></div>
+          <div class="cbw-card" data-val="3izb" onclick="selectCard(this, 'size')"><div class="cbw-card-title">3-izb. byt</div></div>
+          <div class="cbw-card" data-val="dom" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Rodinný dom</div></div>
+        </div>
+        <div class="cbw-calc-label" style="margin-top:10px;">Je na mieste výťah?</div>
+        <div class="cbw-grid">
+          <div class="cbw-card" data-val="vytah_ano" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Áno</div></div>
+          <div class="cbw-card" data-val="vytah_nie" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Nie (schody)</div></div>
+        </div>
         <div class="cbw-calc-actions">
           <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" data-calc-next="3">Pokračovať</button>
+          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Zistiť cenu</button>
         </div>
       </div>
-      <div class="cbw-calc-step" data-step="3">
-        <div class="cbw-calc-label">Pokrytie strechy panelmi?</div>
-        <input class="cbw-field" id="cbwCalcCoverage" type="range" min="20" max="100" step="5" value="70" />
-        <p class="cbw-calc-helper" id="cbwCoverageVal">70 %</p>
+
+      <!-- Krok 2B: VYPRATÁVANIE -->
+      <div class="cbw-calc-step" data-step="2-vypratavanie">
+        <div class="cbw-calc-label">Aký priestor budeme vypratávať?</div>
+        <div class="cbw-grid">
+          <div class="cbw-card" data-val="pivnica" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Pivnica / Garáž</div></div>
+          <div class="cbw-card" data-val="byt" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Celý byt</div></div>
+          <div class="cbw-card" data-val="dom" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Celý dom</div></div>
+        </div>
+        <div class="cbw-calc-label" style="margin-top:10px;">Aké množstvo vecí tam je?</div>
+        <div class="cbw-grid">
+          <div class="cbw-card" data-val="malo" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Len pár kusov</div></div>
+          <div class="cbw-card" data-val="stredne" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Štandardne</div></div>
+          <div class="cbw-card" data-val="vela" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Až po strop</div></div>
+        </div>
         <div class="cbw-calc-actions">
-          <button type="button" class="cbw-calc-back" data-calc-back="2">Späť</button>
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" id="cbwCalcCompute">Vypočítať</button>
+          <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
+          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Zistiť cenu</button>
         </div>
       </div>
-      <div class="cbw-calc-step" data-step="4">
-        <div class="cbw-calc-result">
-          <div class="cbw-calc-result-value" id="cbwCalcResultPrice">—</div>
+
+      <!-- Krok 2C: PREPRAVA -->
+      <div class="cbw-calc-step" data-step="2-preprava">
+        <div class="cbw-calc-label">Odkiaľ a kam ideme?</div>
+        <div class="cbw-grid">
+          <div class="cbw-card" data-val="mesto" onclick="selectCard(this, 'size')"><div class="cbw-card-title">V rámci mesta</div></div>
+          <div class="cbw-card" data-val="mimo" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Do 50 km</div></div>
+          <div class="cbw-card" data-val="sr" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Celá SR</div></div>
         </div>
-        <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" id="cbwCalcLead">Mám záujem — zanechať kontakt</button>
-        <button type="button" class="cbw-calc-back" data-calc-back="1" style="width:100%; margin-top:8px;">Začať odznova</button>
+        <div class="cbw-calc-label" style="margin-top:10px;">Potrebujete aj zniesť/vyniesť nábytok?</div>
+        <div class="cbw-grid">
+          <div class="cbw-card" data-val="len_auto" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Nie, len auto</div></div>
+          <div class="cbw-card" data-val="aj_vynaska" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Áno, aj s nosením</div></div>
+        </div>
+        <div class="cbw-calc-actions">
+          <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
+          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Zistiť cenu</button>
+        </div>
+      </div>
+
+      <!-- Krok 2D: INÁ SLUŽBA -->
+      <div class="cbw-calc-step" data-step="2-ine">
+        <div class="cbw-calc-label">Popíšte nám, čo presne potrebujete:</div>
+        <textarea class="cbw-field" id="cbwCustomTask" rows="3" placeholder="Napr. demontáž starej linky..."></textarea>
+        <div class="cbw-calc-actions">
+          <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
+          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Prejsť na kontakt</button>
+        </div>
+      </div>
+
+      <!-- KROK 3: VÝSLEDOK & LEAD FORM -->
+      <div class="cbw-calc-step" data-step="3">
+        <div class="cbw-calc-result" id="cbwResultBox">
+          <div style="font-size:12px; color:var(--text-muted);">Orientačná cena:</div>
+          <div class="cbw-calc-result-value" id="cbwCalcResultPrice">—</div>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Zanechajte kontakt a my vám ju presne potvrdíme.</div>
+        </div>
+        <div class="cbw-calc-label">Zanechajte nám kontakt:</div>
+        <input class="cbw-field" id="cbwLeadName" type="text" placeholder="Vaše meno a priezvisko" />
+        <input class="cbw-field" id="cbwLeadPhone" type="tel" placeholder="Telefónne číslo" />
+        <input class="cbw-field" id="cbwLeadEmail" type="email" placeholder="E-mail (nepovinné)" />
+        
+        <div class="cbw-calc-actions">
+          <button type="button" class="cbw-calc-back" data-calc-back="1">Odznova</button>
+          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" id="cbwLeadSubmit">Odoslať dopyt</button>
+        </div>
       </div>
     </form>
 
+    <!-- Direct contact icons -->
     <div class="cbw-contact-bar" id="cbwContactBar"></div>
 
+    <!-- Composer -->
     <div class="cbw-composer">
       <div class="cbw-composer-wrap">
-        <textarea class="cbw-input" id="cbwInput" rows="1" placeholder="Napíš správu…"></textarea>
+        <textarea class="cbw-input" id="cbwInput" rows="1" placeholder="Napíšte nám..."></textarea>
       </div>
       <button class="cbw-send cbw-dynamic-green" id="cbwSend" type="button" disabled>
         <svg viewBox="0 0 24 24" fill="currentColor">
           <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
         </svg>
       </button>
+      <div class="cbw-promo">Powered by <a href="#" target="_blank">Tvoja_Firma</a></div>
     </div>
   </div>
 
@@ -395,6 +458,21 @@
 </div>
 
 <script>
+  // Kalkulačka State
+  let calcState = { service: null, size: null, extras: null };
+
+  // Helper pre označovanie kartičiek
+  window.selectCard = function(el, type) {
+    const parent = el.parentElement;
+    parent.querySelectorAll('.cbw-card').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    calcState[type] = el.dataset.val;
+
+    if(type === 'service') {
+      document.getElementById('btn-next-1').disabled = false;
+    }
+  };
+
   (function () {
     'use strict';
     
@@ -497,7 +575,7 @@
         setRobotState('greeting', 2500);
         if (messagesEl.children.length === 0) {
           setTimeout(() => {
-            appendBubble('bot', 'Ahoj! Som virtuálny asistent. Ako vám môžem pomôcť?');
+            appendBubble('bot', 'Dobrý deň! Sme experti na sťahovanie a vypratávanie. S čím vám môžeme pomôcť?');
             playSound();
           }, 500);
         }
@@ -509,8 +587,11 @@
       setTimeout(() => refreshBtn.classList.remove('cbw-spinning'), 740);
       setRobotState('greeting', 1500);
       messagesEl.innerHTML = '';
-      closeForms();
-      appendBubble('bot', 'Konverzácia bola obnovená. Ako vám môžem pomôcť?');
+      
+      const calcForm = document.getElementById('cbwCalcForm');
+      calcForm.dataset.open = 'false';
+      
+      appendBubble('bot', 'Konverzácia bola obnovená. S čím vám vieme pomôcť?');
       playSound();
     });
 
@@ -543,7 +624,7 @@
         setTimeout(() => {
           setRobotState('');
           hideTyping(typing);
-          appendBubble('bot', 'Ďakujem za správu! Tvoj podnet sme zaznamenali.');
+          appendBubble('bot', 'Ďakujeme za správu! Náš tím ju práve preveruje.');
           playSound();
         }, 2000);
       }, 1000);
@@ -562,69 +643,131 @@
       });
     });
 
-    const leadForm = document.getElementById('cbwLeadForm');
+    // ---------- Formular & Kalkulacka Logic ----------
     const calcForm = document.getElementById('cbwCalcForm');
     
-    function closeForms() { leadForm.dataset.open = 'false'; calcForm.dataset.open = 'false'; }
+    function closeForms() { 
+      calcForm.dataset.open = 'false'; 
+    }
     
-    document.getElementById('cbwLeadClose').addEventListener('click', closeForms);
     document.getElementById('cbwCalcClose').addEventListener('click', closeForms);
-    
-    document.getElementById('cbwChipContact').addEventListener('click', () => {
-      closeForms(); leadForm.dataset.open = 'true'; messagesEl.scrollTop = messagesEl.scrollHeight;
-    });
-
-    document.getElementById('cbwChipQuote').addEventListener('click', () => {
-      closeForms(); document.getElementById('cbwChipQuote').dataset.stage = "1";
-      setTimeout(() => {
-        appendBubble('bot', 'O aký typ projektu máte záujem? (napr. fotovoltika, web, iné)');
-        playSound();
-      }, 600);
-    });
 
     document.getElementById('cbwChipCalc').addEventListener('click', () => {
-      closeForms(); calcForm.dataset.open = 'true'; messagesEl.scrollTop = messagesEl.scrollHeight;
+      closeForms(); 
+      calcState = { service: null, size: null, extras: null };
+      document.querySelectorAll('.cbw-card').forEach(c => c.classList.remove('selected'));
+      document.getElementById('btn-next-1').disabled = true;
+      
+      calcForm.dataset.open = 'true'; 
+      showCalcStep('1');
+      messagesEl.scrollTop = messagesEl.scrollHeight;
     });
 
-    const calcSize = document.getElementById('cbwCalcSize');
-    const calcElec = document.getElementById('cbwCalcElectricity');
-    const calcCov = document.getElementById('cbwCalcCoverage');
+    window.computePrice = function() {
+      setRobotState('action', 1000);
+      let basePrice = 0; 
+      
+      if (calcState.service === 'stahovanie') {
+        if(calcState.size === '1izb') basePrice += 150;
+        else if(calcState.size === '2izb') basePrice += 250;
+        else if(calcState.size === '3izb') basePrice += 350;
+        else if(calcState.size === 'dom') basePrice += 500;
+        if(calcState.extras === 'vytah_nie') basePrice += 50; 
+      } 
+      else if (calcState.service === 'vypratavanie') {
+        if(calcState.size === 'pivnica') basePrice += 100;
+        else if(calcState.size === 'byt') basePrice += 300;
+        else if(calcState.size === 'dom') basePrice += 600;
+        if(calcState.extras === 'stredne') basePrice *= 1.5;
+        else if(calcState.extras === 'vela') basePrice *= 2;
+      }
+      else if (calcState.service === 'preprava') {
+        if(calcState.size === 'mesto') basePrice += 40;
+        else if(calcState.size === 'mimo') basePrice += 80;
+        else if(calcState.size === 'sr') basePrice += 150;
+        if(calcState.extras === 'aj_vynaska') basePrice += 30; 
+      }
+      
+      const resultBox = document.getElementById('cbwResultBox');
+      if (calcState.service === 'ine') {
+         resultBox.style.display = 'none';
+      } else {
+         resultBox.style.display = 'block';
+         document.getElementById('cbwCalcResultPrice').textContent = 'od ' + Math.round(basePrice).toLocaleString('sk-SK') + ' €';
+      }
+      
+      showCalcStep('3'); 
+      playSound();
+    }
     
     function showCalcStep(step) {
       calcForm.querySelectorAll('.cbw-calc-step').forEach(el => {
         el.dataset.active = el.dataset.step === String(step) ? 'true' : 'false';
       });
-      document.getElementById('cbwCalcProgress').style.width = (step <= 3 ? (step / 3) * 100 : 100) + '%';
+      let pct = 25;
+      if(step === '2-stahovanie' || step === '2-vypratavanie' || step === '2-preprava' || step === '2-ine') pct = 60;
+      if(step === '3') pct = 100;
+      document.getElementById('cbwCalcProgress').style.width = pct + '%';
     }
 
-    calcForm.querySelectorAll('[data-calc-next]').forEach(btn => {
-      btn.addEventListener('click', () => { setRobotState('action', 1000); showCalcStep(parseInt(btn.dataset.calcNext, 10)); });
+    document.getElementById('btn-next-1').addEventListener('click', () => { 
+      setRobotState('action', 1000); 
+      showCalcStep('2-' + calcState.service); 
     });
+
     calcForm.querySelectorAll('[data-calc-back]').forEach(btn => {
-      btn.addEventListener('click', () => showCalcStep(parseInt(btn.dataset.calcBack, 10)));
+      btn.addEventListener('click', () => {
+         const goBackTo = btn.dataset.calcBack;
+         if (goBackTo === '1') showCalcStep('1');
+         else if (goBackTo === '2') showCalcStep('2-' + calcState.service);
+      });
     });
-    calcCov.addEventListener('input', () => { document.getElementById('cbwCoverageVal').textContent = calcCov.value + ' %'; });
     
-    document.getElementById('cbwCalcCompute').addEventListener('click', () => {
-      setRobotState('action', 1000);
-      const usableArea = (+calcSize.value) * ((+calcCov.value) / 100);
-      document.getElementById('cbwCalcResultPrice').textContent = (Math.round((usableArea * 220) / 50) * 50).toLocaleString('sk-SK') + ' €';
-      showCalcStep(4); playSound();
-    });
-
-    document.getElementById('cbwCalcLead').addEventListener('click', () => {
-      appendBubble('bot', 'Kalkulačka — Odhad: ' + document.getElementById('cbwCalcResultPrice').textContent);
-      closeForms(); leadForm.dataset.open = 'true';
-    });
-
     document.getElementById('cbwLeadSubmit').addEventListener('click', () => {
-      setRobotState('action', 1500); closeForms();
-      appendBubble('bot', 'Ďakujeme, úspešne sme prijali vaše kontaktné údaje.');
-      playSound();
+      const name = document.getElementById('cbwLeadName').value;
+      const phone = document.getElementById('cbwLeadPhone').value;
+      const email = document.getElementById('cbwLeadEmail').value;
+      const customTask = document.getElementById('cbwCustomTask') ? document.getElementById('cbwCustomTask').value : '';
+      const price = document.getElementById('cbwCalcResultPrice').textContent;
+
+      if(!name || !phone) {
+         alert("Prosím vyplňte Meno a Telefón.");
+         return;
+      }
+
+      const btn = document.getElementById('cbwLeadSubmit');
+      btn.textContent = "Odosielam...";
+      btn.disabled = true;
+
+      // TU VLOŽ SVOJ WEBHOOK URL (napríklad z Make.com alebo Zapier)
+      const WEBHOOK_URL = 'https://tvoj-webhook-url.com/zadavaj';
+
+      const payload = {
+        sluzba: calcState.service,
+        velkost: calcState.size,
+        doplnky: calcState.extras,
+        vlastnyText: customTask,
+        odhadCeny: price,
+        klient: { meno: name, telefon: phone, email: email }
+      };
+
+      // Simulácia odoslania pre demo účely
+      setTimeout(() => {
+        dokonciOdoslanie(payload);
+      }, 1000);
+
+      function dokonciOdoslanie(data) {
+        setRobotState('action', 1500); 
+        closeForms();
+        appendBubble('bot', 'Ďakujeme, ' + name + '! Vašu požiadavku sme prijali, náš dispečer vás bude čoskoro kontaktovať.');
+        playSound();
+        btn.textContent = "Odoslať dopyt";
+        btn.disabled = false;
+      }
     });
 
     function applyConfig() {
-      const c = { phone: '+421900123456', whatsapp: '+421900123456', email: 'info@firma.sk' };
+      const c = { phone: '+421900123456', whatsapp: '+421900123456', email: 'info@stahovanie.sk' };
       if (c.phone) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="phone" href="tel:' + c.phone + '">' + ICON_PHONE + '<span>Zavolať</span></a>');
       if (c.whatsapp) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="whatsapp" href="https://wa.me/' + c.whatsapp.replace(/[^\d]/g,'') + '" target="_blank">' + ICON_WA + '<span>WhatsApp</span></a>');
       if (c.email) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="email" href="mailto:' + c.email + '">' + ICON_MAIL + '<span>Mail</span></a>');
