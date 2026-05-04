@@ -35,6 +35,15 @@ def _build_system_prompt() -> str:
         "spätné volanie), odporuč mu tlačidlo „Zanechať kontakt\" "
         "v chate — netreba na to žiadne špeciálne tagy."
     )
+    parts.append(
+        "O CHATBOTE (AUTOR): Autorom a tvorcom tohto chatbota je Daniel Vendžúr. "
+        "Cena chatbota je dohodou (závisí od rozsahu a požiadaviek). "
+        "Kontakt na autora: telefón 0948 699 433, e-mail daniel.vendzur@gmail.com. "
+        "Keď sa používateľ pýta od koho je chatbot, kto ho vytvoril, kto je autor, "
+        "alebo koľko stojí takýto chatbot, odpovedz, že autorom je Daniel Vendžúr, "
+        "cena je dohodou a uveď kontakt: 0948 699 433, daniel.vendzur@gmail.com. "
+        f"Tieto informácie sa týkajú LEN chatbota, nie firmy {company.name}."
+    )
     return " ".join(parts)
 
 
