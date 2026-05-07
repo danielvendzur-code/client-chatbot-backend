@@ -52,12 +52,21 @@ class WidgetConfig(BaseModel):
     lead_form: LeadFormCopy
 
 
+class ServiceRequest(BaseModel):
+    """Structured quote request from the calculator wizard."""
+    service: str = Field(..., max_length=100)
+    service_label: str = Field(..., max_length=200)
+    answers: dict[str, str] = Field(default_factory=dict)
+    estimated_price: str = Field(default="", max_length=50)
+
+
 class LeadRequest(BaseModel):
     name: str = Field(..., min_length=2, max_length=120)
     email: EmailStr
     phone: str | None = Field(default=None, max_length=40)
     message: str | None = Field(default=None, max_length=2000)
     conversation: list[Message] = Field(default_factory=list, max_length=20)
+    service_request: ServiceRequest | None = None
 
 
 class LeadResponse(BaseModel):
