@@ -1,232 +1,706 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-visual" />
-  <title>Klientský chatbot — Špecialista na sťahovanie</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,interactive-widget=resizes-visual" />
+<title>Klientský chatbot — Prémiová koža & Moderný robot</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --primary: #064e3b; /* Tmavá smaragdová zelená */
+    --primary-hover: #022c22;
+    --primary-deep: #020617;
+    --accent: #10b981;
+    --bg: #ffffff;
+    --surface: #f8fafc;
+    --surface-2: #f1f5f9;
+    --text: #0f172a;
+    --text-muted: #64748b;
+    --border: #cbd5e1;
+    --bot-bubble: #f1f5f9;      
+    --radius: 18px;
+    --transition: cubic-bezier(0.22,0.61,0.36,1);
+  }
+  * { box-sizing: border-box; }
+  *::before, *::after { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    font-family: 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
+    color: var(--text);
+    background: #f0fdf4;
+    min-height: 100dvh;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Prémiová koža — vertikálne tonálny base + 2 noise vrstvy (svetlé bumps + tmavé pores) */
+  .cbw-dynamic-green, .cbw-input:focus {
+    background-color: #054231 !important;
+    background-image:
+      /* Top edge highlight + bottom vignette */
+      linear-gradient(180deg,
+        rgba(255,255,255,0.20) 0%,
+        rgba(255,255,255,0.06) 10%,
+        rgba(255,255,255,0)    28%,
+        rgba(0,0,0,0)          72%,
+        rgba(0,0,0,0.22)       100%),
+      /* Soft top-left ambient highlight */
+      radial-gradient(ellipse 75% 55% at 28% 0%,
+        rgba(255,255,255,0.18) 0%,
+        rgba(255,255,255,0.05) 35%,
+        transparent 70%),
+      /* Light leather highlights — coarser noise, screen blend */
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 360 360' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='lh'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' seed='15' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.22 -0.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lh)'/%3E%3C/svg%3E"),
+      /* Pebbled grain — finer noise, multiply blend */
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='lp'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.05' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 -0.10'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lp)'/%3E%3C/svg%3E"),
+      /* Vertical emerald base — light at top, deep at bottom */
+      linear-gradient(180deg,
+        #0f7553 0%,
+        #0c6446 18%,
+        #095437 40%,
+        #064a32 60%,
+        #033b2a 80%,
+        #022820 100%) !important;
+    background-blend-mode: soft-light, soft-light, screen, multiply, normal !important;
+    background-size: auto, auto, 360px 360px, 320px 320px, auto !important;
+    color: #fff !important;
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.24),
+      inset 0 0 0 1px rgba(255,255,255,0.04),
+      inset 0 -2px 6px rgba(0,0,0,0.40),
+      0 6px 20px rgba(2, 44, 34, 0.50),
+      0 1px 3px rgba(0,0,0,0.25) !important;
+  }
+
+  /* ============================================================
+     WIDGET WAPPER
+     ============================================================ */
+  .cbw-root {
+    --z: 2147483000;
+    position: fixed; bottom: 24px; right: 24px;
+    z-index: var(--z);
+  }
+
+  .cbw-launcher {
+    position: relative; width: 72px; height: 72px;
+    border: none; cursor: pointer; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 250ms var(--transition), filter 200ms ease;
+  }
+  .cbw-launcher:hover { transform: translateY(-3px) scale(1.04); filter: brightness(1.1); }
+  .cbw-launcher:active { transform: scale(0.95); }
+  .cbw-root[data-open="true"] .cbw-launcher {
+    opacity: 0; pointer-events: none; transition: opacity 200ms ease 100ms;
+  }
+
+  /* Notifikačný odznak */
+  .cbw-badge {
+    position: absolute; top: -2px; right: 2px;
+    width: 24px; height: 24px; border-radius: 50%;
+    background: #ef4444; border: 2.5px solid #fff;
+    color: #fff; font-size: 12px; font-weight: bold;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; transform: scale(0);
+    animation: cbw-badge-appear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 5s forwards, cbw-pulse-badge 2s infinite 5s;
+  }
+  @keyframes cbw-badge-appear { 100% { opacity: 1; transform: scale(1); } }
+  @keyframes cbw-pulse-badge {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+    70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+  }
+
+  /* Zelené Konfety */
+  .cbw-confetti {
+    position: fixed; width: 6px; height: 6px; border-radius: 50%;
+    pointer-events: none; z-index: 2147483005;
+    animation: cbw-confetti-anim 0.6s ease-out forwards;
+  }
+  @keyframes cbw-confetti-anim {
+    0% { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
+  }
+
+  /* ---------- MODERNÝ ROBOT (BEZ ÚST, LEN OČI) ---------- */
+  .cbw-robot { width: 48px; height: 48px; display: block; overflow: visible; }
+  .cbw-robot.cbw-robot-sm { width: 36px; height: 36px; }
+  .cbw-robot-head, .cbw-eyes, .cbw-eye {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform-origin: 40px 44px; /* Stred hlavy */
+  }
+  .cbw-eye { transform-origin: center; transform-box: fill-box; }
   
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  .is-idle .cbw-robot-head { animation: cbw-bob 4s ease-in-out infinite; }
+  .is-idle .cbw-eye { animation: cbw-blink-cute 4s infinite; }
   
-  <style>
-    :root {
-      --primary: #064e3b; 
-      --primary-hover: #022c22;
-      --primary-deep: #020617;
-      --accent: #10b981;
-      --accent-hover: #059669;
-      --bg: #ffffff;
-      --surface: #f8fafc;
-      --surface-2: #f1f5f9;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --border: #cbd5e1;
-      --bot-bubble: #f1f5f9;      
-      --radius: 18px;
-      --transition: cubic-bezier(0.16, 1, 0.3, 1);
-    }
+  .is-greeting .cbw-robot-head { animation: cbw-nod 0.8s ease-in-out; }
+  .is-greeting .cbw-eye { transform: scaleY(1.2) scaleX(1.1); }
+  
+  .is-listening .cbw-robot-head { transform: rotate(-5deg) translateY(3px); animation: none; }
+  .is-listening .cbw-eyes { transform: translate(-2px, 3px); }
+  
+  .is-thinking .cbw-robot-head { transform: rotate(3deg) translateY(-2px); animation: none; }
+  .is-thinking .cbw-eyes { animation: cbw-scan 1.5s infinite alternate ease-in-out; }
+  
+  .is-action .cbw-robot-head { animation: cbw-bounce-action 0.5s ease; }
+  .is-action .cbw-eye { transform: scaleY(0.25) translateY(-2px); } /* Oči v tvare šťastného prižmúrenia */
+  
+  .is-talking .cbw-robot-head { animation: cbw-bob-fast 0.6s infinite alternate ease-in-out; }
 
-    * { box-sizing: border-box; }
-    *::before, *::after { box-sizing: border-box; }
-    html, body { margin: 0; padding: 0; }
-    body {
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-      color: var(--text); background: #f0fdf4; min-height: 100dvh;
-      line-height: 1.55; -webkit-font-smoothing: antialiased;
-    }
+  @keyframes cbw-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+  @keyframes cbw-bob-fast { 0% { transform: translateY(0); } 100% { transform: translateY(-2px); } }
+  @keyframes cbw-blink-cute { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+  @keyframes cbw-nod { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
+  @keyframes cbw-scan { 0% { transform: translate(-3px, -2px); } 100% { transform: translate(3px, -2px); } }
+  @keyframes cbw-bounce-action { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-3px); } }
 
-    /* Prémiový organický kožený vzor */
-    .cbw-dynamic-green, .cbw-input:focus, .cbw-msg.cbw-user, .cbw-form-submit {
-      background-color: var(--primary) !important;
-      background-image: 
-        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='leather'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0, 0 1 0 0 0, 0 0 1 0 0, 0 0 0 0.5 0' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23leather)'/%3E%3C/svg%3E"),
-        linear-gradient(145deg, #0f766e, #042f2e) !important;
-      background-blend-mode: overlay, normal !important; color: #fff !important;
-      box-shadow: 0 4px 15px rgba(2, 44, 34, 0.4); border: none !important;
-    }
-    .cbw-msg.cbw-user { box-shadow: 0 4px 10px rgba(2, 44, 34, 0.2); }
+  /* ---------- PANEL — GENIE OPEN/CLOSE ---------- */
+  /*
+   * The panel starts as a tiny dot at the launcher (right-bottom corner),
+   * grows into a thin vertical column (like genie smoke rising from a lamp),
+   * then unfurls horizontally into the full window. Close reverses it —
+   * collapses to a column, sucks down into the launcher, fades out.
+   * Two animations are toggled by JS via .cbw-opening / .cbw-closing classes
+   * so the initial render shows nothing (default = closed state).
+   */
+  .cbw-panel {
+    position: absolute; bottom: 88px; right: 0;
+    width: min(390px, calc(100vw - 32px)); height: min(640px, calc(100vh - 120px));
+    background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
+    box-shadow: 0 24px 60px -16px rgba(2,44,34,.3), 0 8px 24px -10px rgba(15,23,42,.15);
+    display: flex; flex-direction: column; overflow: hidden;
+    transform-origin: 100% 100%;
+    opacity: 0;
+    transform: scale(0);
+    filter: blur(8px);
+    pointer-events: none;
+    will-change: transform, opacity, filter;
+  }
+  .cbw-root[data-open="true"] .cbw-panel {
+    opacity: 1;
+    transform: scale(1);
+    filter: blur(0);
+    pointer-events: auto;
+  }
+  .cbw-panel.cbw-opening {
+    animation: cbw-genie-open 1300ms cubic-bezier(0.22, 1.0, 0.36, 1) forwards;
+  }
+  .cbw-panel.cbw-closing {
+    animation: cbw-genie-close 850ms cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
+    pointer-events: none;
+  }
 
-    /* ============================================================
-       WIDGET WRAPPER
-       ============================================================ */
-    .cbw-root { position: fixed; bottom: 24px; right: 24px; z-index: 2147483000; }
+  /* OPEN — 17 keyframes: rising column → horizontal unfurl → settle */
+  @keyframes cbw-genie-open {
+    0%   { opacity: 0;    transform: scale(0);                                  filter: blur(12px); }
+    3%   { opacity: 0.25; transform: scaleX(0.04) scaleY(0.04);                 filter: blur(11px); }
+    7%   { opacity: 0.45; transform: scaleX(0.045) scaleY(0.10);                filter: blur(10px); }
+    12%  { opacity: 0.55; transform: scaleX(0.05)  scaleY(0.18);                filter: blur(8px); }
+    18%  { opacity: 0.65; transform: scaleX(0.055) scaleY(0.30);                filter: blur(6.5px); }
+    25%  { opacity: 0.72; transform: scaleX(0.06)  scaleY(0.44);                filter: blur(5px); }
+    33%  { opacity: 0.80; transform: scaleX(0.07)  scaleY(0.60);                filter: blur(3.5px); }
+    41%  { opacity: 0.86; transform: scaleX(0.09)  scaleY(0.74);                filter: blur(2.5px); }
+    49%  { opacity: 0.90; transform: scaleX(0.14)  scaleY(0.86);                filter: blur(1.5px); }
+    57%  { opacity: 0.93; transform: scaleX(0.24)  scaleY(0.94);                filter: blur(1px); }
+    65%  { opacity: 0.95; transform: scaleX(0.40)  scaleY(0.99);                filter: blur(0.5px); }
+    73%  { opacity: 0.97; transform: scaleX(0.60)  scaleY(1.02);                filter: blur(0); }
+    81%  { opacity: 0.99; transform: scaleX(0.80)  scaleY(1.01);                filter: blur(0); }
+    88%  { opacity: 1;    transform: scaleX(0.95)  scaleY(1.005);               filter: blur(0); }
+    93%  { opacity: 1;    transform: scaleX(1.02)  scaleY(0.998);               filter: blur(0); }
+    97%  { opacity: 1;    transform: scaleX(0.998) scaleY(1.001);               filter: blur(0); }
+    100% { opacity: 1;    transform: scale(1);                                  filter: blur(0); }
+  }
 
-    .cbw-launcher {
-      position: relative; width: 72px; height: 72px; border: none; cursor: pointer;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      transition: transform 250ms var(--transition), filter 200ms ease;
-    }
-    .cbw-launcher:hover { transform: translateY(-3px) scale(1.04); filter: brightness(1.1); }
-    .cbw-launcher:active { transform: scale(0.95); }
-    .cbw-root[data-open="true"] .cbw-launcher { opacity: 0; pointer-events: none; transition: opacity 200ms ease 100ms; }
+  /* CLOSE — 13 keyframes: collapse width → shrink column → vanish into launcher */
+  @keyframes cbw-genie-close {
+    0%   { opacity: 1;    transform: scale(1);                                  filter: blur(0); }
+    8%   { opacity: 1;    transform: scaleX(1.01)  scaleY(1.005);               filter: blur(0); }
+    18%  { opacity: 0.98; transform: scaleX(0.88)  scaleY(1.01);                filter: blur(0.5px); }
+    30%  { opacity: 0.95; transform: scaleX(0.62)  scaleY(1);                   filter: blur(1px); }
+    42%  { opacity: 0.90; transform: scaleX(0.36)  scaleY(0.97);                filter: blur(2px); }
+    54%  { opacity: 0.84; transform: scaleX(0.18)  scaleY(0.90);                filter: blur(3px); }
+    65%  { opacity: 0.74; transform: scaleX(0.08)  scaleY(0.78);                filter: blur(4.5px); }
+    74%  { opacity: 0.62; transform: scaleX(0.05)  scaleY(0.60);                filter: blur(6px); }
+    82%  { opacity: 0.48; transform: scaleX(0.045) scaleY(0.40);                filter: blur(8px); }
+    89%  { opacity: 0.30; transform: scaleX(0.04)  scaleY(0.20);                filter: blur(10px); }
+    95%  { opacity: 0.12; transform: scaleX(0.03)  scaleY(0.06);                filter: blur(11px); }
+    100% { opacity: 0;    transform: scale(0);                                  filter: blur(12px); }
+  }
 
-    .cbw-badge {
-      position: absolute; top: -2px; right: 2px; width: 24px; height: 24px; border-radius: 50%;
-      background: #ef4444; border: 2.5px solid #fff; color: #fff; font-size: 12px; font-weight: bold;
-      display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0);
-      animation: cbw-badge-appear 0.5s var(--transition) 5s forwards, cbw-pulse-badge 2s infinite 5s;
-    }
-    @keyframes cbw-badge-appear { 100% { opacity: 1; transform: scale(1); } }
-    @keyframes cbw-pulse-badge { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+  /* ---------- HEADER ---------- */
+  .cbw-header { position: relative; padding: 14px 14px 14px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+  .cbw-header-avatar {
+    position: relative; width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+    display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0,0,0,.15);
+  }
+  .cbw-header-avatar::after { content:""; position:absolute; width:11px; height:11px; bottom:-2px; right:-2px; background:var(--accent); border:2px solid #0f172a; border-radius:50%; }
+  .cbw-title-wrap { flex:1; min-width:0; line-height:1.2; }
+  .cbw-title { font-weight:700; font-size:15.5px; text-shadow: 0 1px 2px rgba(0,0,0,0.4); }
+  .cbw-subtitle { font-size:12px; opacity:.92; display:flex; align-items:center; gap:6px; margin-top:1px; }
+  .cbw-subtitle::before { content:""; width:6px; height:6px; border-radius:50%; background:var(--accent); box-shadow: 0 0 8px #fff; }
+  .cbw-actions { display:flex; gap:2px; align-items:center; }
+  .cbw-icon-btn { background: transparent; border: none; color:#fff; cursor: pointer; padding: 8px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: background 150ms ease; }
+  .cbw-icon-btn:hover { background: rgba(255,255,255,.2); }
+  .cbw-icon-btn svg { width:18px; height:18px; transition: transform 200ms ease; }
 
-    .cbw-confetti {
-      position: fixed; width: 6px; height: 6px; border-radius: 50%; pointer-events: none; z-index: 2147483005;
-      animation: cbw-confetti-anim 0.6s ease-out forwards;
-    }
-    @keyframes cbw-confetti-anim { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
+  /* Refresh — full-rotation spin on click */
+  #cbwRefresh.cbw-spinning svg {
+    animation: cbw-spin-360 720ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes cbw-spin-360 {
+    0%   { transform: rotate(0deg)   scale(1); }
+    50%  { transform: rotate(180deg) scale(1.12); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
 
-    /* ---------- MODERNÝ ROBOT ---------- */
-    .cbw-robot { width: 48px; height: 48px; display: block; overflow: visible; }
-    .cbw-robot-head, .cbw-eyes, .cbw-eye { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: 40px 44px; }
-    .cbw-eye { transform-origin: center; transform-box: fill-box; }
-    
-    .is-idle .cbw-robot-head { animation: cbw-bob 4s ease-in-out infinite; }
-    .is-idle .cbw-eye { animation: cbw-blink-cute 4s infinite; }
-    .is-greeting .cbw-robot-head { animation: cbw-nod 0.8s ease-in-out; }
-    .is-greeting .cbw-eye { transform: scaleY(1.2) scaleX(1.1); }
-    .is-listening .cbw-robot-head { transform: rotate(-5deg) translateY(3px); animation: none; }
-    .is-listening .cbw-eyes { transform: translate(-2px, 3px); }
-    .is-thinking .cbw-robot-head { transform: rotate(3deg) translateY(-2px); animation: none; }
-    .is-thinking .cbw-eyes { animation: cbw-scan 1.5s infinite alternate ease-in-out; }
-    .is-action .cbw-robot-head { animation: cbw-bounce-action 0.5s ease; }
-    .is-action .cbw-eye { transform: scaleY(0.25) translateY(-2px); }
-    .is-talking .cbw-robot-head { animation: cbw-bob-fast 0.6s infinite alternate ease-in-out; }
+  /* ---------- MESSAGES ---------- */
+  .cbw-messages { flex:1; padding: 16px 14px; overflow-y: auto; background: var(--surface); display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
+  .cbw-messages::-webkit-scrollbar { width: 6px; }
+  .cbw-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
+  
+  .cbw-msg { 
+    max-width: 85%; padding: 10px 14px; border-radius: 14px; 
+    font-size: 14px; line-height: 1.5; word-wrap: break-word; white-space: pre-wrap; 
+    animation: cbw-balloon-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both; 
+    transform-origin: bottom center;
+  }
+  
+  @keyframes cbw-balloon-in { 
+    0% { opacity: 0; transform: scale(0.4) translateY(20px); filter: blur(4px); } 
+    60% { opacity: 1; transform: scale(1.05) translateY(-2px); filter: blur(0); }
+    100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
+  }
+  
+  .cbw-msg.cbw-bot { align-self: flex-start; background: var(--bot-bubble); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; transform-origin: bottom left; }
+  .cbw-msg.cbw-user { align-self: flex-end; background: #0f766e; color: #fff; border-bottom-right-radius: 4px; transform-origin: bottom right; }
 
-    @keyframes cbw-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-    @keyframes cbw-bob-fast { 0% { transform: translateY(0); } 100% { transform: translateY(-2px); } }
-    @keyframes cbw-blink-cute { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
-    @keyframes cbw-nod { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
-    @keyframes cbw-scan { 0% { transform: translate(-3px, -2px); } 100% { transform: translate(3px, -2px); } }
-    @keyframes cbw-bounce-action { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-3px); } }
+  .cbw-typing { align-self:flex-start; display:inline-flex; gap:5px; padding:13px 16px; border-radius:14px; border-bottom-left-radius:4px; animation: cbw-balloon-in 0.4s ease both; transform-origin: bottom left; }
+  .cbw-typing span { width:7px; height:7px; border-radius:50%; background: #fff; opacity:.95; box-shadow: 0 0 6px rgba(255,255,255,.8); animation: cbw-bounce 1.2s infinite ease-in-out; }
+  .cbw-typing span:nth-child(2) { animation-delay:.15s; } .cbw-typing span:nth-child(3) { animation-delay:.3s; }
 
-    /* ---------- PANEL (ČISTÉ OTVÁRANIE) ---------- */
-    .cbw-panel {
-      position: absolute; bottom: 88px; right: 0;
-      width: min(390px, calc(100vw - 32px)); height: min(640px, calc(100vh - 120px));
-      background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
-      box-shadow: 0 24px 60px -16px rgba(2, 44, 34, 0.3), 0 8px 24px -10px rgba(15, 23, 42, 0.15);
-      display: flex; flex-direction: column; overflow: hidden;
-      opacity: 0; transform: translateY(40px) scale(0.95); transform-origin: bottom right;
-      pointer-events: none; transition: transform 0.4s var(--transition), opacity 0.3s ease-out;
-    }
-    .cbw-root[data-open="true"] .cbw-panel {
-      opacity: 1; transform: translateY(0) scale(1); pointer-events: auto;
-      transition: transform 0.5s var(--transition), opacity 0.4s ease-in;
-    }
+  /* ---------- CHIPS ---------- */
+  .cbw-chips { display:flex; flex-wrap:wrap; gap:6px; padding: 0 14px 10px; background: var(--surface); }
+  .cbw-chip { border: 1px solid var(--border); background: #fff; color: var(--text); padding: 7px 12px; border-radius: 999px; font: inherit; font-size: 12.5px; cursor: pointer; position: relative; overflow: hidden; transition: all 150ms ease; display: inline-flex; align-items: center; gap: 6px; }
+  .cbw-chip svg { width:14px; height:14px; flex-shrink:0; }
+  .cbw-chip:hover { background: var(--surface-2); transform: translateY(-1px); border-color: var(--primary); }
+  
+  .cbw-chip-highlight { border-color: transparent !important; font-weight: 600; }
+  .cbw-chip-quote .cbw-chip-progress { position: absolute; bottom: 0; left: 0; height: 3px; width: 0%; background: rgba(255,255,255,0.7); transition: width 600ms var(--transition); }
+  .cbw-chip-quote[data-stage="0"] .cbw-chip-progress { width: 0%; }
+  .cbw-chip-quote[data-stage="1"] .cbw-chip-progress { width: 25%; }
+  .cbw-chip-quote[data-stage="2"] .cbw-chip-progress { width: 50%; }
+  .cbw-chip-quote[data-stage="3"] .cbw-chip-progress { width: 75%; }
+  .cbw-chip-quote[data-stage="4"] .cbw-chip-progress { width: 100%; }
 
-    /* ---------- HEADER ---------- */
-    .cbw-header { position: relative; padding: 14px 14px 14px 16px; display: flex; align-items: center; gap: 12px; flex-shrink: 0; border-bottom: 1px solid rgba(0, 0, 0, 0.1); }
-    .cbw-header-avatar { position: relative; width: 48px; height: 48px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); border: 1px solid rgba(255, 255, 255, 0.3); display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); }
-    .cbw-header-avatar::after { content: ""; position: absolute; width: 11px; height: 11px; bottom: -2px; right: -2px; background: var(--accent); border: 2px solid #0f172a; border-radius: 50%; }
-    .cbw-title-wrap { flex: 1; min-width: 0; line-height: 1.2; }
-    .cbw-title { font-weight: 700; font-size: 15.5px; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); }
-    .cbw-subtitle { font-size: 12px; opacity: 0.92; display: flex; align-items: center; gap: 6px; margin-top: 1px; }
-    .cbw-subtitle::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px #fff; }
-    
-    .cbw-actions { display: flex; gap: 2px; align-items: center; }
-    .cbw-icon-btn { background: transparent; border: none; color: #fff; cursor: pointer; padding: 8px; border-radius: 10px; display: flex; align-items: center; justify-content: center; transition: background 150ms ease; }
-    .cbw-icon-btn:hover { background: rgba(255, 255, 255, 0.2); }
-    .cbw-icon-btn svg { width: 18px; height: 18px; transition: transform 200ms ease; }
+  /* ---------- FORMS ---------- */
+  .cbw-form { display:none; margin: 4px 14px 10px; padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 20px -10px rgba(15,23,42,.1); animation: cbw-balloon-in 0.4s var(--transition); transform-origin: top center; }
+  .cbw-form[data-open="true"] { display: block; }
+  .cbw-form-head { display:flex; justify-content:space-between; margin-bottom:10px; }
+  .cbw-form-title { font-size:14px; font-weight:700; margin:0; }
+  .cbw-form-subtitle { font-size:12px; color: var(--text-muted); margin:2px 0 0; }
+  .cbw-form-close { cursor:pointer; background:none; border:none; font-size:18px; color: var(--text-muted); }
+  .cbw-field { width: 100%; padding: 9px 12px; margin-bottom: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font: inherit; font-size: 13.5px; }
+  .cbw-field:focus { border-color: var(--primary); outline: none; }
+  textarea.cbw-field { resize:vertical; min-height:64px; }
+  .cbw-form-submit { width:100%; padding:11px; background: #0f766e; border:none; border-radius:10px; color:#fff; font:inherit; font-weight:600; cursor:pointer; transition: 150ms ease; }
+  .cbw-form-submit:hover { background: var(--primary-hover); }
+  .cbw-calc-progress { height:6px; border-radius:999px; background: var(--surface-2); margin-bottom: 12px; overflow: hidden; }
+  .cbw-calc-progress-bar { height: 100%; background: var(--accent); border-radius: 999px; width: 33%; transition: width 500ms var(--transition); }
+  .cbw-calc-step { display:none; animation: cbw-balloon-in 0.3s var(--transition); }
+  .cbw-calc-step[data-active="true"] { display:block; }
+  .cbw-calc-label { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .cbw-calc-helper { font-size:11.5px; color: var(--text-muted); margin: 4px 0 10px; }
+  .cbw-calc-actions { display:flex; gap:8px; margin-top:6px; }
+  .cbw-calc-back { flex: 0 0 auto; padding: 11px 16px; background: var(--surface-2); border:1px solid var(--border); border-radius:10px; font:inherit; font-size:13.5px; font-weight:600; cursor:pointer; }
+  .cbw-calc-result { background: var(--surface-2); border: 1px solid var(--accent); border-radius: 12px; padding: 14px; margin: 10px 0; text-align: center; }
+  .cbw-calc-result-value { font-size: 24px; font-weight: 700; color: #0f766e; margin: 4px 0 6px; }
 
-    #cbwRefresh.cbw-spinning svg { animation: cbw-spin-360 720ms ease-in-out; }
-    @keyframes cbw-spin-360 { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(1.12); } 100% { transform: rotate(360deg) scale(1); } }
+  /* ---------- CONTACT BAR ---------- */
+  .cbw-contact-bar { display: flex; gap: 6px; padding: 8px 12px; background: #fff; border-top: 1px solid var(--border); }
+  .cbw-contact-bar:empty { display: none; }
+  .cbw-contact-icon { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 8px; min-height: 40px; border-radius: 11px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); text-decoration: none; font-size: 12px; font-weight: 600; transition: all 200ms ease; }
+  .cbw-contact-icon svg { width: 16px; height: 16px; flex-shrink: 0; }
+  .cbw-contact-icon[data-kind="phone"]:hover { color: #f97316; border-color: rgba(249,115,22,.5); background: rgba(249,115,22,.08); }
+  .cbw-contact-icon[data-kind="whatsapp"]:hover { color: #16a34a; border-color: rgba(22,163,74,.5); background: rgba(22,163,74,.08); }
+  .cbw-contact-icon[data-kind="email"]:hover { color: #3b82f6; border-color: rgba(59,130,246,.5); background: rgba(59,130,246,.08); }
 
-    /* ---------- MESSAGES ---------- */
-    .cbw-messages { flex: 1; padding: 16px 14px; overflow-y: auto; background: var(--surface); display: flex; flex-direction: column; gap: 10px; scroll-behavior: smooth; }
-    .cbw-messages::-webkit-scrollbar { width: 6px; }
-    .cbw-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
-    
-    .cbw-msg { max-width: 85%; padding: 10px 14px; border-radius: 14px; font-size: 14px; line-height: 1.5; word-wrap: break-word; white-space: pre-wrap; animation: cbw-balloon-in 0.5s var(--transition) both; transform-origin: bottom center; }
-    @keyframes cbw-balloon-in { 0% { opacity: 0; transform: scale(0.4) translateY(20px); filter: blur(4px); } 100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
-    
-    .cbw-msg.cbw-bot { align-self: flex-start; background: var(--bot-bubble); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; transform-origin: bottom left; }
-    .cbw-msg.cbw-user { align-self: flex-end; border-bottom-right-radius: 4px; transform-origin: bottom right; }
+  /* ---------- STICKY CTA (always visible during chat) ---------- */
+  .cbw-cta-bar {
+    flex-shrink: 0;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, #ffffff 0%, var(--surface) 100%);
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    z-index: 3;
+  }
+  .cbw-cta-btn {
+    width: 100%;
+    display: flex; align-items: center; gap: 12px;
+    padding: 13px 16px;
+    border-radius: 14px;
+    border: none; cursor: pointer;
+    font: inherit; font-size: 15px; font-weight: 700;
+    text-align: left;
+    color: #fff;
+    position: relative; overflow: hidden;
+    transition: transform 200ms ease, filter 200ms ease;
+  }
+  .cbw-cta-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
+  .cbw-cta-btn:active { transform: scale(0.98); }
+  .cbw-cta-btn::before {
+    content: "";
+    position: absolute; inset: 0;
+    background: linear-gradient(120deg,
+      transparent 0%, transparent 35%,
+      rgba(255,255,255,0.32) 50%,
+      transparent 65%, transparent 100%);
+    transform: translateX(-100%);
+    animation: cbw-cta-shine 4.5s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes cbw-cta-shine {
+    0%, 70%, 100% { transform: translateX(-100%); }
+    35%           { transform: translateX(100%); }
+  }
+  .cbw-cta-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.18);
+    border: 1px solid rgba(255,255,255,0.30);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.30);
+    animation: cbw-cta-pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes cbw-cta-pulse {
+    0%, 100% { box-shadow: inset 0 1px 0 rgba(255,255,255,0.30), 0 0 0 0 rgba(255,255,255,0); }
+    50%      { box-shadow: inset 0 1px 0 rgba(255,255,255,0.30), 0 0 0 6px rgba(255,255,255,0.06); }
+  }
+  .cbw-cta-icon svg { width: 20px; height: 20px; color: #fff; }
+  .cbw-cta-text { flex: 1; line-height: 1.25; }
+  .cbw-cta-text small { display: block; font-size: 11.5px; font-weight: 500; opacity: 0.88; margin-top: 1px; }
+  .cbw-cta-arrow { width: 20px; height: 20px; color: #fff; opacity: 0.85; transition: transform 220ms ease; flex-shrink: 0; }
+  .cbw-cta-btn:hover .cbw-cta-arrow { transform: translateX(4px); }
 
-    .cbw-typing { align-self: flex-start; display: inline-flex; gap: 5px; padding: 13px 16px; border-radius: 14px; border-bottom-left-radius: 4px; animation: cbw-balloon-in 0.4s ease both; transform-origin: bottom left; }
-    .cbw-typing span { width: 7px; height: 7px; border-radius: 50%; background: #fff; opacity: 0.95; box-shadow: 0 0 6px rgba(255, 255, 255, 0.8); animation: cbw-bounce 1.2s infinite ease-in-out; }
-    .cbw-typing span:nth-child(2) { animation-delay: 0.15s; } .cbw-typing span:nth-child(3) { animation-delay: 0.3s; }
+  /* Hide CTA bar when calc is active (already inside calc) */
+  .cbw-root.cbw-calc-active .cbw-cta-bar,
+  .cbw-root.cbw-calc-active .cbw-messages,
+  .cbw-root.cbw-calc-active .cbw-chips { display: none !important; }
+  /* Subtle fade for chips while user is typing */
+  .cbw-root.cbw-typing-active .cbw-chips { opacity: 0.4; pointer-events: none; transition: opacity 240ms ease; }
 
-    /* ---------- CHIPS ---------- */
-    .cbw-chips { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 14px 10px; background: var(--surface); }
-    .cbw-chip { border: 1px solid var(--border); background: #fff; color: var(--text); padding: 7px 12px; border-radius: 999px; font: inherit; font-size: 12.5px; cursor: pointer; position: relative; overflow: hidden; transition: all 150ms ease; display: inline-flex; align-items: center; gap: 6px; }
-    .cbw-chip svg { width: 14px; height: 14px; flex-shrink: 0; }
-    .cbw-chip:hover { background: var(--surface-2); transform: translateY(-1px); border-color: var(--primary); }
-    .cbw-chip-highlight { border-color: transparent !important; font-weight: 600; }
+  /* ---------- CALCULATOR — service cards + multi-step wizard ---------- */
+  .cbw-calc-wizard {
+    display: none;
+    flex-direction: column;
+    flex: 1;
+    background: var(--surface);
+    overflow: hidden;
+  }
+  .cbw-calc-wizard[data-open="true"] { display: flex; }
+  .cbw-calc-head {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 14px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .cbw-calc-head-back {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: 1px solid var(--border); background: #fff; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text); transition: all 150ms ease;
+    flex-shrink: 0;
+  }
+  .cbw-calc-head-back:hover { background: var(--surface); }
+  .cbw-calc-head-back svg { width: 16px; height: 16px; }
+  .cbw-calc-head-info { flex: 1; line-height: 1.2; }
+  .cbw-calc-head-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .cbw-calc-head-step  { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+  .cbw-calc-head-x {
+    width: 32px; height: 32px; border-radius: 8px;
+    border: none; background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); transition: background 150ms ease;
+  }
+  .cbw-calc-head-x:hover { background: var(--surface); color: var(--text); }
+  .cbw-calc-head-x svg { width: 16px; height: 16px; }
 
-    /* ---------- KALKULAČKA & INTERAKTÍVNE BOXY ---------- */
-    .cbw-form { display: none; margin: 4px 14px 10px; padding: 14px; background: #fff; border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 8px 20px -10px rgba(15, 23, 42, 0.1); animation: cbw-balloon-in 0.4s var(--transition); transform-origin: top center; }
-    .cbw-form[data-open="true"] { display: block; }
-    .cbw-form-head { display: flex; justify-content: space-between; margin-bottom: 10px; }
-    .cbw-form-title { font-size: 14px; font-weight: 700; margin: 0; }
-    .cbw-form-close { cursor: pointer; background: none; border: none; font-size: 18px; color: var(--text-muted); }
-    
-    .cbw-field { width: 100%; padding: 9px 12px; margin-bottom: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; font: inherit; font-size: 13.5px; }
-    .cbw-field:focus { border-color: var(--primary); outline: none; }
-    textarea.cbw-field { resize: vertical; min-height: 64px; }
-    
-    .cbw-form-submit { width: 100%; padding: 11px; border: none; border-radius: 10px; color: #fff; font: inherit; font-weight: 600; cursor: pointer; transition: filter 150ms ease, transform 150ms ease; }
-    .cbw-form-submit:hover { filter: brightness(1.1); }
-    .cbw-form-submit:active { transform: scale(0.98); }
-    .cbw-form-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+  .cbw-calc-bar {
+    height: 4px; background: var(--surface-2);
+    flex-shrink: 0;
+  }
+  .cbw-calc-bar > span {
+    display: block; height: 100%;
+    background: linear-gradient(90deg, var(--accent), #14b8a6);
+    border-radius: 0 4px 4px 0;
+    transition: width 480ms cubic-bezier(0.22,1,0.36,1);
+    box-shadow: 0 0 8px rgba(20,184,166,0.5);
+  }
 
-    .cbw-calc-progress { height: 6px; border-radius: 999px; background: var(--surface-2); margin-bottom: 12px; overflow: hidden; }
-    .cbw-calc-progress-bar { height: 100%; background: var(--accent); border-radius: 999px; width: 33%; transition: width 500ms ease; }
-    .cbw-calc-step { display: none; animation: cbw-balloon-in 0.3s var(--transition); }
-    .cbw-calc-step[data-active="true"] { display: block; }
-    .cbw-calc-label { font-size: 13px; font-weight: 600; margin-bottom: 8px; }
-    
-    .cbw-calc-actions { display: flex; gap: 8px; margin-top: 10px; }
-    .cbw-calc-back { flex: 0 0 auto; padding: 11px 16px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 10px; font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; }
-    
-    .cbw-calc-result { background: var(--surface-2); border: 1px solid var(--accent); border-radius: 12px; padding: 14px; margin: 10px 0 16px; text-align: center; }
-    .cbw-calc-result-value { font-size: 22px; font-weight: 700; color: var(--primary); margin: 4px 0; }
+  .cbw-calc-body {
+    flex: 1;
+    padding: 18px 16px 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .cbw-calc-body::-webkit-scrollbar { width: 6px; }
+  .cbw-calc-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 6px; }
 
-    /* Nové interaktívne Boxy / Mriežka */
-    .cbw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-    .cbw-card {
-      border: 1.5px solid var(--border); border-radius: 12px; padding: 12px 8px;
-      text-align: center; cursor: pointer; transition: all 150ms ease;
-      background: var(--surface); color: var(--text);
-      display: flex; flex-direction: column; align-items: center; gap: 6px;
-    }
-    .cbw-card:hover { border-color: var(--accent); background: #fff; transform: translateY(-2px); }
-    .cbw-card.selected { border-color: var(--primary); background: var(--surface-2); box-shadow: 0 0 0 1px var(--primary); }
-    .cbw-card svg { width: 28px; height: 28px; color: var(--primary); }
-    .cbw-card-title { font-size: 12px; font-weight: 600; line-height: 1.2; }
+  .cbw-calc-prompt {
+    font-size: 17px; font-weight: 700;
+    color: var(--text); line-height: 1.3;
+    margin: 0 0 4px;
+  }
+  .cbw-calc-hint {
+    font-size: 12.5px; color: var(--text-muted);
+    margin: 0 0 14px;
+  }
 
-    /* ---------- CONTACT BAR ---------- */
-    .cbw-contact-bar { display: flex; gap: 6px; padding: 8px 12px; background: #fff; border-top: 1px solid var(--border); }
-    .cbw-contact-bar:empty { display: none; }
-    .cbw-contact-icon { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 9px 8px; min-height: 40px; border-radius: 11px; border: 1px solid var(--border); background: var(--surface); color: var(--text-muted); text-decoration: none; font-size: 12px; font-weight: 600; transition: all 200ms ease; }
-    .cbw-contact-icon svg { width: 16px; height: 16px; flex-shrink: 0; }
-    .cbw-contact-icon[data-kind="phone"]:hover { color: #f97316; border-color: rgba(249, 115, 22, 0.5); background: rgba(249, 115, 22, 0.08); }
-    .cbw-contact-icon[data-kind="whatsapp"]:hover { color: #16a34a; border-color: rgba(22, 163, 74, 0.5); background: rgba(22, 163, 74, 0.08); }
-    .cbw-contact-icon[data-kind="email"]:hover { color: #3b82f6; border-color: rgba(59, 130, 246, 0.5); background: rgba(59, 130, 246, 0.08); }
+  /* Service cards (step 1) */
+  .cbw-svc-grid {
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 4px;
+  }
+  .cbw-svc-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 14px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease, background 200ms ease;
+    position: relative; overflow: hidden;
+  }
+  .cbw-svc-card:hover {
+    transform: translateY(-2px);
+    border-color: #0f766e;
+    background: #f0fdfa;
+    box-shadow: 0 8px 24px -10px rgba(2, 44, 34, 0.30);
+  }
+  .cbw-svc-card:active { transform: scale(0.99); }
+  .cbw-svc-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #d1fae5, #a7f3d0);
+    border: 1px solid #86efac;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: #064e3b;
+    transition: all 250ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .cbw-svc-card:hover .cbw-svc-icon {
+    background: linear-gradient(145deg, #064e3b, #022c22);
+    color: #d1fae5;
+    transform: scale(1.06) rotate(-3deg);
+    box-shadow: 0 6px 16px -6px rgba(2, 44, 34, 0.55);
+  }
+  .cbw-svc-icon svg { width: 30px; height: 30px; }
+  .cbw-svc-text { flex: 1; min-width: 0; }
+  .cbw-svc-title { font-size: 14.5px; font-weight: 700; color: var(--text); }
+  .cbw-svc-sub   { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .cbw-svc-card .cbw-svc-arrow {
+    width: 20px; height: 20px; color: var(--text-muted);
+    transition: transform 220ms ease, color 200ms ease;
+    flex-shrink: 0;
+  }
+  .cbw-svc-card:hover .cbw-svc-arrow { color: #0f766e; transform: translateX(4px); }
 
-    /* ---------- COMPOSER ---------- */
-    .cbw-composer { border-top: 1px solid var(--border); background: #fff; padding: 10px 14px 26px; display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0; position: relative; }
-    .cbw-composer-wrap { flex: 1; position: relative; }
-    .cbw-input { width: 100%; resize: none; border: 1px solid var(--border); outline: none; border-radius: 20px; padding: 10px 14px; font: inherit; font-size: 14.5px; line-height: 1.4; max-height: 120px; min-height: 42px; background: #ffffff; color: var(--text); transition: all 200ms ease; }
-    .cbw-input::placeholder { color: var(--text-muted); }
-    .cbw-input:focus { border-color: #022c22; box-shadow: 0 0 0 3px rgba(17, 94, 89, 0.2); }
-    .cbw-input:focus::placeholder { color: rgba(255, 255, 255, 0.7); }
-    .cbw-send { width: 42px; height: 42px; border-radius: 50%; border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: transform 150ms ease, filter 150ms ease; flex-shrink: 0; }
-    .cbw-send:hover:not(:disabled) { filter: brightness(1.1); }
-    .cbw-send:disabled { opacity: 0.5; cursor: not-allowed; }
-    .cbw-send svg { width: 18px; height: 18px; }
+  /* Hover icon-specific animations */
+  .cbw-svc-card:hover .cbw-anim-truck-body { animation: cbw-truck-bounce 0.6s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-wheel      { animation: cbw-wheel-spin 0.7s linear infinite; transform-origin: center; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-broom      { animation: cbw-broom-sweep 0.9s ease-in-out infinite alternate; transform-origin: 50% 90%; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-spark      { animation: cbw-spark-pop 1.1s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-window     { animation: cbw-window-blink 1.4s ease-in-out infinite; }
+  .cbw-svc-card:hover .cbw-anim-recycle    { animation: cbw-recycle-rotate 1.5s linear infinite; transform-origin: 50% 50%; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-key        { animation: cbw-key-press 1.0s ease-in-out infinite; transform-origin: 50% 0%; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-key-2      { animation-delay: 0.2s; }
+  .cbw-svc-card:hover .cbw-anim-key-3      { animation-delay: 0.4s; }
 
-    /* Vlastný Branding (Self-Promo) */
-    .cbw-promo { position: absolute; bottom: 6px; left: 0; width: 100%; text-align: center; font-size: 10px; color: var(--text-muted); opacity: 0.7; }
-    .cbw-promo a { color: var(--primary); text-decoration: none; font-weight: 600; }
+  @keyframes cbw-truck-bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-1.5px); } }
+  @keyframes cbw-wheel-spin   { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes cbw-broom-sweep  { 0% { transform: rotate(-12deg); } 100% { transform: rotate(12deg); } }
+  @keyframes cbw-spark-pop    { 0%, 100% { opacity: 0; transform: scale(0.4); } 50% { opacity: 1; transform: scale(1.1); } }
+  @keyframes cbw-window-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  @keyframes cbw-recycle-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes cbw-key-press    { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(2px); } }
 
-    /* MOBILE */
-    @media (max-width: 480px) {
-      .cbw-root { bottom: 16px; right: 16px; }
-      .cbw-launcher { width: 62px; height: 62px; }
-      .cbw-root[data-open="true"] .cbw-panel { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100dvh !important; border-radius: 0 !important; }
-    }
-  </style>
+  /* Question inputs — radio cards */
+  .cbw-q-cards {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .cbw-q-cards.cbw-q-cards-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .cbw-q-card {
+    padding: 12px 10px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    text-align: center;
+    cursor: pointer;
+    font: inherit; font-size: 13px; font-weight: 600;
+    color: var(--text);
+    transition: all 180ms ease;
+    line-height: 1.25;
+  }
+  .cbw-q-card:hover { border-color: #0f766e; background: #f0fdfa; }
+  .cbw-q-card[aria-pressed="true"] {
+    border-color: #064e3b;
+    background: linear-gradient(145deg, #064e3b, #022c22);
+    color: #fff;
+    box-shadow: 0 4px 12px -4px rgba(2,44,34,0.45);
+  }
+  .cbw-q-card small { display: block; font-weight: 500; font-size: 11px; opacity: 0.8; margin-top: 2px; }
+
+  /* Question — multi-select chips */
+  .cbw-q-multi { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cbw-q-chip {
+    padding: 8px 12px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 999px;
+    cursor: pointer;
+    font: inherit; font-size: 13px; font-weight: 500;
+    color: var(--text);
+    transition: all 160ms ease;
+  }
+  .cbw-q-chip:hover { border-color: #0f766e; background: #f0fdfa; }
+  .cbw-q-chip[aria-pressed="true"] {
+    border-color: #064e3b;
+    background: linear-gradient(145deg, #064e3b, #022c22);
+    color: #fff;
+    box-shadow: 0 3px 10px -4px rgba(2,44,34,0.45);
+  }
+
+  /* Question — toggle (yes/no) */
+  .cbw-q-toggle { display: flex; gap: 8px; }
+  .cbw-q-toggle .cbw-q-card { flex: 1; }
+
+  /* Question — text/number/date */
+  .cbw-q-input {
+    width: 100%;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font: inherit; font-size: 14.5px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 180ms ease, box-shadow 180ms ease;
+  }
+  .cbw-q-input::placeholder { color: var(--text-muted); }
+  .cbw-q-input:focus {
+    border-color: #064e3b;
+    box-shadow: 0 0 0 3px rgba(6,78,59,0.15);
+  }
+
+  /* Question — group (sub-fields) */
+  .cbw-q-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .cbw-q-group-item label { display: block; font-size: 11.5px; color: var(--text-muted); font-weight: 600; margin-bottom: 4px; }
+
+  /* Wizard footer (Back / Next) */
+  .cbw-calc-foot {
+    display: flex; gap: 8px;
+    padding: 12px 14px;
+    background: #fff;
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .cbw-calc-foot button {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font: inherit; font-size: 14px; font-weight: 600;
+    cursor: pointer;
+    transition: all 180ms ease;
+    border: 1.5px solid var(--border);
+    background: #fff;
+    color: var(--text);
+  }
+  .cbw-calc-foot .cbw-calc-back-btn:hover { background: var(--surface-2); }
+  .cbw-calc-foot .cbw-calc-next-btn {
+    flex: 2;
+    border: none;
+    color: #fff;
+  }
+  .cbw-calc-foot .cbw-calc-next-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .cbw-calc-foot .cbw-calc-next-btn:hover:not(:disabled) { filter: brightness(1.08); }
+
+  /* Summary */
+  .cbw-sum-card {
+    background: #fff;
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .cbw-sum-row {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 6px 0;
+    font-size: 13px;
+    border-bottom: 1px dashed var(--border);
+  }
+  .cbw-sum-row:last-child { border-bottom: none; }
+  .cbw-sum-row > span:first-child { color: var(--text-muted); }
+  .cbw-sum-row > span:last-child  { color: var(--text); font-weight: 600; text-align: right; max-width: 60%; }
+  .cbw-sum-price {
+    margin: 12px 0 14px;
+    padding: 16px;
+    border-radius: 14px;
+    text-align: center;
+    color: #fff;
+    /* leather background applied via class */
+  }
+  .cbw-sum-price-label { font-size: 12px; opacity: 0.85; margin-bottom: 4px; }
+  .cbw-sum-price-value { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; }
+  .cbw-sum-price-note  { font-size: 11px; opacity: 0.78; margin-top: 4px; }
+
+  /* Thank-you screen */
+  .cbw-thanks {
+    text-align: center;
+    padding: 24px 16px;
+  }
+  .cbw-thanks-emoji {
+    font-size: 48px; margin-bottom: 12px;
+    animation: cbw-thanks-pop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes cbw-thanks-pop { 0% { transform: scale(0); } 60% { transform: scale(1.18); } 100% { transform: scale(1); } }
+  .cbw-thanks-title { font-size: 20px; font-weight: 800; color: var(--text); margin-bottom: 6px; }
+  .cbw-thanks-text  { font-size: 14px; color: var(--text-muted); margin-bottom: 18px; line-height: 1.5; }
+
+  /* ---------- COMPOSER & ZMENA FARIEB INPUT BOXU ---------- */
+  .cbw-composer { border-top: 1px solid var(--border); background: #fff; padding: 10px 14px 12px; display: flex; align-items: flex-end; gap: 8px; flex-shrink: 0; }
+  .cbw-composer-wrap { flex: 1; position: relative; }
+  
+  .cbw-input { 
+    width: 100%; resize: none; border: 1px solid var(--border); outline: none; 
+    border-radius: 20px; padding: 10px 14px; font: inherit; font-size: 14.5px; 
+    line-height: 1.4; max-height: 120px; min-height: 42px; 
+    background: #ffffff; color: var(--text); transition: all 200ms ease; 
+  }
+  .cbw-input::placeholder { color: var(--text-muted); }
+  
+  /* Po kliknutí sa input zmení na prémiovú kožu s bielym textom */
+  .cbw-input:focus { border-color: #022c22; box-shadow: 0 0 0 3px rgba(17,94,89,0.2); }
+  .cbw-input:focus::placeholder { color: rgba(255,255,255,0.7); }
+  
+  .cbw-send { width: 42px; height: 42px; border-radius: 50%; border: none; color:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; transition: transform 150ms ease, filter 150ms ease; flex-shrink: 0; }
+  .cbw-send:hover:not(:disabled) { filter: brightness(1.1); }
+  .cbw-send:disabled { opacity:.5; cursor:not-allowed; }
+  .cbw-send svg { width:18px; height:18px; }
+
+  /* MOBILE */
+  @media (max-width: 480px) {
+    .cbw-root { bottom:16px; right:16px; }
+    .cbw-launcher { width:62px; height:62px; }
+    .cbw-root[data-open="true"] .cbw-panel { position: fixed !important; inset: 0 !important; width: 100vw !important; height: 100dvh !important; border-radius: 0 !important; }
+  }
+</style>
 </head>
 <body>
 
@@ -237,15 +711,25 @@
     
     <div class="cbw-header cbw-dynamic-green">
       <div class="cbw-header-avatar" aria-hidden="true">
-        <!-- MODERNÝ ROBOT -->
+        
+        <!-- NOVÝ MODERNÝ ROBOT (TVAR CHAT BUBLINKY, BEZ ÚST) -->
         <svg class="cbw-robot is-idle" viewBox="0 0 80 80" fill="none">
           <g class="cbw-robot-head">
+            <!-- Bočné ušká -->
             <path d="M 15 36 A 6 6 0 0 0 15 52 Z" fill="#fff"/>
             <path d="M 65 36 A 6 6 0 0 1 65 52 Z" fill="#fff"/>
+            
+            <!-- Anténka -->
             <line x1="40" y1="12" x2="40" y2="24" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
             <circle cx="40" cy="10" r="4.5" fill="#fff"/>
+            
+            <!-- Hlavná bublinka (Tvar hlavy s chvostíkom dole napravo) -->
             <path d="M26 22 C10 22 12 36 12 44 C12 56 16 64 30 64 L40 64 L40 76 L50 64 L54 64 C66 64 68 56 68 44 C68 36 70 22 54 22 Z" fill="#fff"/>
+            
+            <!-- Priezor (Visor), tmavozelený -->
             <path d="M28 28 C16 28 18 38 18 44 C18 52 22 56 32 56 L48 56 C58 56 62 52 62 44 C62 38 64 28 52 28 Z" fill="#022c22"/>
+            
+            <!-- Oči (Zoskupené pre prirodzenú animáciu žmurkania a pohybu) -->
             <g class="cbw-eyes">
               <rect class="cbw-eye" x="31" y="38" width="6" height="10" rx="3" fill="#fff"/>
               <rect class="cbw-eye" x="43" y="38" width="6" height="10" rx="3" fill="#fff"/>
@@ -269,156 +753,94 @@
         </button>
         <button class="cbw-icon-btn" id="cbwClose" type="button" aria-label="Zavrieť">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-            <line x1="18" y1="6" x2="6" y2="18"/>
-            <line x1="6" y1="6" x2="18" y2="18"/>
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
           </svg>
         </button>
       </div>
     </div>
 
-    <!-- Messages -->
-    <div class="cbw-messages" id="cbwMessages" role="log" aria-live="polite"></div>
-
-    <!-- Quick chips -->
-    <div class="cbw-chips" id="cbwChips">
-      <button class="cbw-chip cbw-chip-highlight cbw-dynamic-green action-chip" id="cbwChipCalc" type="button">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="4" y="2" width="16" height="20" rx="2"/>
-          <line x1="8" y1="6" x2="16" y2="6"/>
-          <line x1="8" y1="10" x2="16" y2="10"/>
-          <line x1="8" y1="14" x2="16" y2="14"/>
+    <!-- Sticky CTA — always visible during chat -->
+    <div class="cbw-cta-bar" id="cbwCtaBar">
+      <button class="cbw-cta-btn cbw-dynamic-green" id="cbwOpenCalc" type="button">
+        <span class="cbw-cta-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="3"/>
+            <line x1="8" y1="6" x2="16" y2="6"/>
+            <circle cx="8.5" cy="11.5" r="0.6"/>
+            <circle cx="12" cy="11.5" r="0.6"/>
+            <circle cx="15.5" cy="11.5" r="0.6"/>
+            <circle cx="8.5" cy="15" r="0.6"/>
+            <circle cx="12" cy="15" r="0.6"/>
+            <line x1="8" y1="18.5" x2="16" y2="18.5"/>
+          </svg>
+        </span>
+        <span class="cbw-cta-text">
+          Spočítať cenu zdarma
+          <small>Sťahovanie · Vypratávanie · Likvidácia</small>
+        </span>
+        <svg class="cbw-cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"/>
         </svg>
-        <span>Kalkulačka služieb</span>
-      </button>
-      <button class="cbw-chip action-chip" data-msg="Viete zabezpečiť odvoz starého nábytku?" type="button">
-        <span>Odvoz nábytku</span>
-      </button>
-      <button class="cbw-chip action-chip" data-msg="V akých lokalitách pôsobíte?" type="button">
-        <span>Lokality pôsobenia</span>
       </button>
     </div>
 
-    <!-- Forms: DYNAMICKÁ KALKULAČKA -->
-    <form class="cbw-form" id="cbwCalcForm" data-open="false" novalidate>
+    <!-- Messages -->
+    <div class="cbw-messages" id="cbwMessages" role="log" aria-live="polite"></div>
+
+    <!-- Quick chips (FAQ) -->
+    <div class="cbw-chips" id="cbwChips">
+      <button class="cbw-chip action-chip" data-msg="Aké služby ponúkate?" type="button">
+        <span>Naše služby</span>
+      </button>
+      <button class="cbw-chip action-chip" data-msg="Povedzte mi o vašej firme." type="button">
+        <span>O nás</span>
+      </button>
+      <button class="cbw-chip action-chip" data-msg="Aké sú vaše otváracie hodiny?" type="button">
+        <span>Otváracie hodiny</span>
+      </button>
+      <button class="cbw-chip action-chip" id="cbwChipContact" type="button">
+        <span>Zanechať kontakt</span>
+      </button>
+    </div>
+
+    <!-- Lead form (simple contact, separate from calculator flow) -->
+    <form class="cbw-form" id="cbwLeadForm" data-open="false" novalidate>
       <div class="cbw-form-head">
-        <div><h4 class="cbw-form-title">Rýchla kalkulácia</h4></div>
-        <button type="button" class="cbw-form-close" id="cbwCalcClose">×</button>
+        <div><h4 class="cbw-form-title">Zanechajte nám kontakt</h4></div>
+        <button type="button" class="cbw-form-close" id="cbwLeadClose">×</button>
       </div>
-      <div class="cbw-calc-progress"><div class="cbw-calc-progress-bar" id="cbwCalcProgress" style="width:25%"></div></div>
-      
-      <!-- Krok 1: Výber Služby -->
-      <div class="cbw-calc-step" data-active="true" data-step="1">
-        <div class="cbw-calc-label">Čo potrebujete vyriešiť?</div>
-        <div class="cbw-grid">
-          <div class="cbw-card" data-val="stahovanie" onclick="selectCard(this, 'service')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-            <div class="cbw-card-title">Sťahovanie</div>
-          </div>
-          <div class="cbw-card" data-val="vypratavanie" onclick="selectCard(this, 'service')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-            <div class="cbw-card-title">Vypratávanie</div>
-          </div>
-          <div class="cbw-card" data-val="preprava" onclick="selectCard(this, 'service')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
-            <div class="cbw-card-title">Len preprava</div>
-          </div>
-          <div class="cbw-card" data-val="ine" onclick="selectCard(this, 'service')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-            <div class="cbw-card-title">Iné/Špeciálne</div>
-          </div>
-        </div>
-        <div class="cbw-calc-actions">
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" id="btn-next-1" disabled>Pokračovať</button>
-        </div>
-      </div>
-
-      <!-- Krok 2A: SŤAHOVANIE -->
-      <div class="cbw-calc-step" data-step="2-stahovanie">
-        <div class="cbw-calc-label">Aký je to zhruba objem?</div>
-        <div class="cbw-grid">
-          <div class="cbw-card" data-val="1izb" onclick="selectCard(this, 'size')"><div class="cbw-card-title">1-izb. byt</div></div>
-          <div class="cbw-card" data-val="2izb" onclick="selectCard(this, 'size')"><div class="cbw-card-title">2-izb. byt</div></div>
-          <div class="cbw-card" data-val="3izb" onclick="selectCard(this, 'size')"><div class="cbw-card-title">3-izb. byt</div></div>
-          <div class="cbw-card" data-val="dom" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Rodinný dom</div></div>
-        </div>
-        <div class="cbw-calc-label" style="margin-top:10px;">Je na mieste výťah?</div>
-        <div class="cbw-grid">
-          <div class="cbw-card" data-val="vytah_ano" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Áno</div></div>
-          <div class="cbw-card" data-val="vytah_nie" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Nie (schody)</div></div>
-        </div>
-        <div class="cbw-calc-actions">
-          <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Zistiť cenu</button>
-        </div>
-      </div>
-
-      <!-- Krok 2B: VYPRATÁVANIE -->
-      <div class="cbw-calc-step" data-step="2-vypratavanie">
-        <div class="cbw-calc-label">Aký priestor budeme vypratávať?</div>
-        <div class="cbw-grid">
-          <div class="cbw-card" data-val="pivnica" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Pivnica / Garáž</div></div>
-          <div class="cbw-card" data-val="byt" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Celý byt</div></div>
-          <div class="cbw-card" data-val="dom" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Celý dom</div></div>
-        </div>
-        <div class="cbw-calc-label" style="margin-top:10px;">Aké množstvo vecí tam je?</div>
-        <div class="cbw-grid">
-          <div class="cbw-card" data-val="malo" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Len pár kusov</div></div>
-          <div class="cbw-card" data-val="stredne" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Štandardne</div></div>
-          <div class="cbw-card" data-val="vela" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Až po strop</div></div>
-        </div>
-        <div class="cbw-calc-actions">
-          <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Zistiť cenu</button>
-        </div>
-      </div>
-
-      <!-- Krok 2C: PREPRAVA -->
-      <div class="cbw-calc-step" data-step="2-preprava">
-        <div class="cbw-calc-label">Odkiaľ a kam ideme?</div>
-        <div class="cbw-grid">
-          <div class="cbw-card" data-val="mesto" onclick="selectCard(this, 'size')"><div class="cbw-card-title">V rámci mesta</div></div>
-          <div class="cbw-card" data-val="mimo" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Do 50 km</div></div>
-          <div class="cbw-card" data-val="sr" onclick="selectCard(this, 'size')"><div class="cbw-card-title">Celá SR</div></div>
-        </div>
-        <div class="cbw-calc-label" style="margin-top:10px;">Potrebujete aj zniesť/vyniesť nábytok?</div>
-        <div class="cbw-grid">
-          <div class="cbw-card" data-val="len_auto" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Nie, len auto</div></div>
-          <div class="cbw-card" data-val="aj_vynaska" onclick="selectCard(this, 'extras')"><div class="cbw-card-title">Áno, aj s nosením</div></div>
-        </div>
-        <div class="cbw-calc-actions">
-          <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Zistiť cenu</button>
-        </div>
-      </div>
-
-      <!-- Krok 2D: INÁ SLUŽBA -->
-      <div class="cbw-calc-step" data-step="2-ine">
-        <div class="cbw-calc-label">Popíšte nám, čo presne potrebujete:</div>
-        <textarea class="cbw-field" id="cbwCustomTask" rows="3" placeholder="Napr. demontáž starej linky..."></textarea>
-        <div class="cbw-calc-actions">
-          <button type="button" class="cbw-calc-back" data-calc-back="1">Späť</button>
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" onclick="computePrice()">Prejsť na kontakt</button>
-        </div>
-      </div>
-
-      <!-- KROK 3: VÝSLEDOK & LEAD FORM -->
-      <div class="cbw-calc-step" data-step="3">
-        <div class="cbw-calc-result" id="cbwResultBox">
-          <div style="font-size:12px; color:var(--text-muted);">Orientačná cena:</div>
-          <div class="cbw-calc-result-value" id="cbwCalcResultPrice">—</div>
-          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Zanechajte kontakt a my vám ju presne potvrdíme.</div>
-        </div>
-        <div class="cbw-calc-label">Zanechajte nám kontakt:</div>
-        <input class="cbw-field" id="cbwLeadName" type="text" placeholder="Vaše meno a priezvisko" />
-        <input class="cbw-field" id="cbwLeadPhone" type="tel" placeholder="Telefónne číslo" />
-        <input class="cbw-field" id="cbwLeadEmail" type="email" placeholder="E-mail (nepovinné)" />
-        
-        <div class="cbw-calc-actions">
-          <button type="button" class="cbw-calc-back" data-calc-back="1">Odznova</button>
-          <button type="button" class="cbw-form-submit cbw-dynamic-green action-btn" id="cbwLeadSubmit">Odoslať dopyt</button>
-        </div>
-      </div>
+      <input class="cbw-field" id="cbwLeadName" type="text" placeholder="Vaše meno" />
+      <input class="cbw-field" id="cbwLeadEmail" type="email" placeholder="E-mail" />
+      <input class="cbw-field" id="cbwLeadPhone" type="tel" placeholder="Telefón (nepovinné)" />
+      <textarea class="cbw-field" id="cbwLeadMsg" rows="2" placeholder="Správa (nepovinné)"></textarea>
+      <button type="button" class="cbw-form-submit action-btn" id="cbwLeadSubmit">Odoslať</button>
     </form>
+
+    <!-- Calculator wizard — services → questions → summary → contact → done -->
+    <div class="cbw-calc-wizard" id="cbwCalcWizard" data-open="false">
+      <div class="cbw-calc-head">
+        <button class="cbw-calc-head-back" id="cbwCalcBack" type="button" aria-label="Späť" style="visibility:hidden">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <div class="cbw-calc-head-info">
+          <div class="cbw-calc-head-title" id="cbwCalcTitle">Cenová kalkulačka</div>
+          <div class="cbw-calc-head-step"  id="cbwCalcStep">Vyberte službu</div>
+        </div>
+        <button class="cbw-calc-head-x" id="cbwCalcExit" type="button" aria-label="Zatvoriť kalkulačku">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="cbw-calc-bar"><span id="cbwCalcBarFill" style="width:5%"></span></div>
+      <div class="cbw-calc-body" id="cbwCalcBody"></div>
+      <div class="cbw-calc-foot" id="cbwCalcFoot" style="display:none">
+        <button type="button" class="cbw-calc-back-btn" id="cbwCalcPrev">Späť</button>
+        <button type="button" class="cbw-calc-next-btn cbw-dynamic-green" id="cbwCalcNext" disabled>Pokračovať</button>
+      </div>
+    </div>
 
     <!-- Direct contact icons -->
     <div class="cbw-contact-bar" id="cbwContactBar"></div>
@@ -426,14 +848,11 @@
     <!-- Composer -->
     <div class="cbw-composer">
       <div class="cbw-composer-wrap">
-        <textarea class="cbw-input" id="cbwInput" rows="1" placeholder="Napíšte nám..."></textarea>
+        <textarea class="cbw-input" id="cbwInput" rows="1" placeholder="Napíš správu…"></textarea>
       </div>
       <button class="cbw-send cbw-dynamic-green" id="cbwSend" type="button" disabled>
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
       </button>
-      <div class="cbw-promo">Powered by <a href="#" target="_blank">Tvoja_Firma</a></div>
     </div>
   </div>
 
@@ -458,324 +877,890 @@
 </div>
 
 <script>
-  // Kalkulačka State
-  let calcState = { service: null, size: null, extras: null };
+(function () {
+  'use strict';
+  
+  const root = document.getElementById('cbwRoot');
+  const launcher = document.getElementById('cbwLauncher');
+  const closeBtn = document.getElementById('cbwClose');
+  const refreshBtn = document.getElementById('cbwRefresh');
+  const messagesEl = document.getElementById('cbwMessages');
+  const input = document.getElementById('cbwInput');
+  const sendBtn = document.getElementById('cbwSend');
+  const contactBar = document.getElementById('cbwContactBar');
+  const robots = () => document.querySelectorAll('.cbw-robot');
+  const soundBtn = document.getElementById('cbwSound');
+  const soundIcon = document.getElementById('cbwSoundIcon');
+  const badge = document.getElementById('cbwBadge');
 
-  // Helper pre označovanie kartičiek
-  window.selectCard = function(el, type) {
-    const parent = el.parentElement;
-    parent.querySelectorAll('.cbw-card').forEach(c => c.classList.remove('selected'));
-    el.classList.add('selected');
-    calcState[type] = el.dataset.val;
+  const ICON_PHONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
+  const ICON_WA = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+  const ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
+  const ICON_SOUND_ON = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
+  const ICON_SOUND_OFF = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
 
-    if(type === 'service') {
-      document.getElementById('btn-next-1').disabled = false;
+  // ---------- Zvuk & Robot ----------
+  let muted = true;
+  let audioCtx = null;
+  function playSound() {
+    if (muted) return;
+    try {
+      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
+      const t = audioCtx.currentTime;
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.connect(g); g.connect(audioCtx.destination);
+      o.frequency.setValueAtTime(620, t);
+      o.frequency.linearRampToValueAtTime(820, t + 0.1);
+      g.gain.setValueAtTime(0.05, t);
+      g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
+      o.start(t); o.stop(t + 0.15);
+    } catch (_) {}
+  }
+  function syncSoundIcon() { soundIcon.innerHTML = muted ? ICON_SOUND_OFF : ICON_SOUND_ON; }
+  syncSoundIcon();
+  soundBtn.addEventListener('click', () => { muted = !muted; syncSoundIcon(); });
+
+  let robotStateTimer = null;
+  function setRobotState(state, duration = null) {
+    robots().forEach(r => {
+      r.classList.remove('is-idle', 'is-greeting', 'is-listening', 'is-thinking', 'is-action', 'is-talking');
+      r.classList.add(state ? `is-${state}` : 'is-idle');
+    });
+    if (duration) {
+      clearTimeout(robotStateTimer);
+      robotStateTimer = setTimeout(() => setRobotState(''), duration);
     }
+  }
+
+  // ---------- Zelené Konfety ----------
+  function spawnConfetti(el) {
+    const rect = el.getBoundingClientRect();
+    const colors = ['#0f766e', '#14b8a6', '#059669', '#34d399'];
+    for(let i = 0; i < 8; i++) {
+      const conf = document.createElement('div');
+      conf.className = 'cbw-confetti';
+      conf.style.left = (rect.left + rect.width / 2) + 'px';
+      conf.style.top = (rect.top + rect.height / 2) + 'px';
+      const dx = (Math.random() - 0.5) * 80;
+      const dy = (Math.random() - 0.5) * 80 - 20;
+      conf.style.setProperty('--dx', dx + 'px');
+      conf.style.setProperty('--dy', dy + 'px');
+      conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      document.body.appendChild(conf);
+      setTimeout(() => conf.remove(), 600);
+    }
+  }
+
+  // ---------- Chat Logic ----------
+  function appendBubble(role, text) {
+    const bubble = document.createElement('div');
+    bubble.className = 'cbw-msg cbw-' + role;
+    bubble.textContent = text;
+    messagesEl.appendChild(bubble);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return bubble;
+  }
+
+  function showTyping() {
+    setRobotState('talking');
+    const dots = document.createElement('div');
+    dots.className = 'cbw-typing cbw-dynamic-green'; 
+    dots.innerHTML = '<span></span><span></span><span></span>';
+    messagesEl.appendChild(dots);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+    return dots;
+  }
+
+  function hideTyping(el) {
+    if (el) el.remove();
+  }
+
+  const panelEl = document.getElementById('cbwPanel');
+  let animTimer = null;
+  function togglePanel(open) {
+    const next = open == null ? root.dataset.open !== 'true' : !!open;
+    if (next === (root.dataset.open === 'true')) return;
+
+    clearTimeout(animTimer);
+    panelEl.classList.remove('cbw-opening', 'cbw-closing');
+
+    if (next) {
+      // Force reflow so the animation restarts cleanly even on rapid toggle
+      void panelEl.offsetWidth;
+      panelEl.classList.add('cbw-opening');
+      root.dataset.open = 'true';
+      animTimer = setTimeout(() => panelEl.classList.remove('cbw-opening'), 1300);
+
+      if (badge) badge.remove();
+      setRobotState('greeting', 2500);
+      if (messagesEl.children.length === 0) {
+        setTimeout(() => {
+          appendBubble('bot', 'Ahoj! Som virtuálny asistent. Ako vám môžem pomôcť?');
+          playSound();
+        }, 900);
+      }
+    } else {
+      panelEl.classList.add('cbw-closing');
+      // Keep data-open=true for the duration of the close animation so the
+      // panel keeps its visible CSS rules; flip to false at the end so the
+      // default (scale 0) takes over without a flash.
+      animTimer = setTimeout(() => {
+        panelEl.classList.remove('cbw-closing');
+        root.dataset.open = 'false';
+      }, 850);
+    }
+  }
+
+  refreshBtn.addEventListener('click', () => {
+    refreshBtn.classList.add('cbw-spinning');
+    setTimeout(() => refreshBtn.classList.remove('cbw-spinning'), 740);
+    setRobotState('greeting', 1500);
+    messagesEl.innerHTML = '';
+    closeForms();
+    appendBubble('bot', 'Konverzácia bola obnovená. Ako vám môžem pomôcť?');
+    playSound();
+  });
+
+  launcher.addEventListener('click', () => togglePanel(true));
+  closeBtn.addEventListener('click', () => togglePanel(false));
+  
+  let typingTimer;
+  input.addEventListener('focus', () => {
+    input.classList.add('cbw-dynamic-green');
+  });
+  input.addEventListener('blur', () => {
+    if(!input.value.trim()) input.classList.remove('cbw-dynamic-green');
+  });
+
+  input.addEventListener('input', () => {
+    sendBtn.disabled = !input.value.trim();
+    setRobotState('listening');
+    clearTimeout(typingTimer);
+    typingTimer = setTimeout(() => setRobotState(''), 1000);
+  });
+
+  sendBtn.addEventListener('click', () => {
+    const text = input.value.trim();
+    if (!text) return;
+    input.value = '';
+    input.classList.remove('cbw-dynamic-green');
+    sendBtn.disabled = true;
+    appendBubble('user', text);
+    playSound();
+    
+    setRobotState('thinking');
+    setTimeout(() => {
+      const typing = showTyping();
+      setTimeout(() => {
+        setRobotState('');
+        hideTyping(typing);
+        appendBubble('bot', 'Ďakujem za správu! Tvoj podnet sme zaznamenali.');
+        playSound();
+      }, 2000);
+    }, 1000);
+  });
+
+  document.querySelectorAll('.action-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      spawnConfetti(btn);
+      setRobotState('action', 1500);
+      if(btn.dataset.msg) {
+        input.value = btn.dataset.msg;
+        input.classList.add('cbw-dynamic-green');
+        sendBtn.disabled = false;
+        sendBtn.click();
+      }
+    });
+  });
+
+  // ---------- Lead form (simple chip-driven) ----------
+  const leadForm = document.getElementById('cbwLeadForm');
+  function closeLead() { leadForm.dataset.open = 'false'; }
+  document.getElementById('cbwLeadClose').addEventListener('click', closeLead);
+  document.getElementById('cbwChipContact').addEventListener('click', () => {
+    leadForm.dataset.open = 'true';
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  });
+  document.getElementById('cbwLeadSubmit').addEventListener('click', async () => {
+    const name  = document.getElementById('cbwLeadName').value.trim();
+    const email = document.getElementById('cbwLeadEmail').value.trim();
+    const phone = document.getElementById('cbwLeadPhone').value.trim();
+    const msg   = document.getElementById('cbwLeadMsg').value.trim();
+    if (name.length < 2 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    setRobotState('action', 1500);
+    closeLead();
+    try {
+      await fetch(window.location.origin + '/api/lead', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, phone: phone || null, message: msg || null })
+      });
+    } catch (_) {}
+    appendBubble('bot', 'Ďakujeme, úspešne sme prijali vaše kontaktné údaje. Ozveme sa vám čo najskôr.');
+    playSound();
+  });
+
+  /* ============================================================
+     CALCULATOR WIZARD — sťahovanie / vypratávanie / odpad / klavír
+     ============================================================ */
+
+  // ---------- Service catalog (placeholder data; the business owner
+  //            can tweak labels, prices and questions later) ----------
+  const SERVICES = [
+    {
+      id: 'moving_home',
+      title: 'Sťahovanie domácnosti',
+      sub:   'Byt, dom, izba — komplexné sťahovanie',
+      base:  60,
+      icon:  iconTruck,
+      questions: [
+        { id: 'size', label: 'Aká je veľkosť domácnosti?', hint: 'Vyberte typ bytu alebo domu.', type: 'cards', cols: 2,
+          options: [
+            { value: '1izb', label: '1-izbový',  sub: '~25 m²',  mult: 0.7 },
+            { value: '2izb', label: '2-izbový',  sub: '~50 m²',  mult: 1.0 },
+            { value: '3izb', label: '3-izbový',  sub: '~75 m²',  mult: 1.4 },
+            { value: '4izb', label: '4-izbový+', sub: '~100 m²', mult: 1.8 },
+            { value: 'dom',  label: 'Rodinný dom', sub: '> 120 m²', mult: 2.4 },
+          ] },
+        { id: 'from_address', label: 'Z akej adresy sa sťahujete?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'to_address',   label: 'Kam sa sťahujete?',           type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'floors', label: 'Poschodie a výťah', type: 'group', sub: [
+            { id: 'floor_from', label: 'Z poschodia',     type: 'number', placeholder: '0' },
+            { id: 'floor_to',   label: 'Na poschodie',    type: 'number', placeholder: '0' },
+          ] },
+        { id: 'elevator', label: 'Je k dispozícii výťah?', type: 'cards', cols: 3,
+          options: [
+            { value: 'both', label: 'Áno, oboje' },
+            { value: 'one',  label: 'Iba jeden' },
+            { value: 'none', label: 'Bez výťahu', addPct: 0.20 },
+          ] },
+        { id: 'extras', label: 'Doplnkové služby?', hint: 'Vyberte čo všetko potrebujete.', type: 'multi',
+          options: [
+            { value: 'packing',     label: '📦 Balenie vecí',     add: 50 },
+            { value: 'disassembly', label: '🔧 Demontáž nábytku', add: 40 },
+            { value: 'piano',       label: '🎹 Klavír',            add: 100 },
+            { value: 'safe',        label: '🔒 Sejf',              add: 80 },
+            { value: 'aquarium',    label: '🐟 Akvárium',          add: 30 },
+            { value: 'kitchen',     label: '🍳 Kuchynská linka',   add: 60 },
+          ] },
+        { id: 'date', label: 'Plánovaný termín?', hint: 'Voliteľné.', type: 'date' },
+      ]
+    },
+    {
+      id: 'clearing',
+      title: 'Vypratávanie',
+      sub:   'Byt, pivnica, garáž, kancelária',
+      base:  80,
+      icon:  iconBroom,
+      questions: [
+        { id: 'space', label: 'Aký priestor vypratávate?', type: 'cards', cols: 2,
+          options: [
+            { value: 'flat',   label: 'Byt',          mult: 1.0 },
+            { value: 'house',  label: 'Rodinný dom',  mult: 1.8 },
+            { value: 'office', label: 'Kanceláriu',   mult: 1.3 },
+            { value: 'cellar', label: 'Pivnicu',      mult: 0.6 },
+            { value: 'garage', label: 'Garáž',        mult: 0.7 },
+            { value: 'attic',  label: 'Povala',       mult: 0.6 },
+          ] },
+        { id: 'area',     label: 'Veľkosť priestoru (m²)', hint: 'Pomáha presnejšie naceniť.', type: 'number', placeholder: 'napr. 60' },
+        { id: 'fullness', label: 'Aký je stav vecí v priestore?', type: 'cards', cols: 1,
+          options: [
+            { value: 'low',    label: 'Málo vecí',      sub: 'Pár predmetov, ľahké odvezenie',          mult: 0.7 },
+            { value: 'medium', label: 'Stredne plný',   sub: 'Bežne zariadená domácnosť',               mult: 1.0 },
+            { value: 'high',   label: 'Veľmi plný',     sub: 'Roky nahromadené veci, plné skrine',      mult: 1.6 },
+          ] },
+        { id: 'disposal', label: 'Likvidácia odpadu?', hint: 'Postaráme sa aj o triedenie a odvoz.', type: 'cards', cols: 2,
+          options: [
+            { value: 'yes',     label: 'Áno, všetko',     mult: 1.0 },
+            { value: 'partial', label: 'Niečo si nechám', mult: 0.85 },
+            { value: 'no',      label: 'Len vypratať',    mult: 0.7 },
+          ] },
+        { id: 'special', label: 'Špeciálne odpady?', type: 'multi',
+          options: [
+            { value: 'electro', label: '⚡ Elektroodpad',     add: 40 },
+            { value: 'paint',   label: '🎨 Farby/chémia',     add: 30 },
+            { value: 'oil',     label: '🛢️ Oleje',            add: 50 },
+          ] },
+        { id: 'address', label: 'Adresa priestoru?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
+      ]
+    },
+    {
+      id: 'office_moving',
+      title: 'Sťahovanie firmy',
+      sub:   'Kancelárie, obchody, prevádzky',
+      base:  200,
+      icon:  iconBuilding,
+      questions: [
+        { id: 'employees', label: 'Počet zamestnancov?', type: 'cards', cols: 2,
+          options: [
+            { value: '1-5',   label: '1 – 5',     mult: 0.6 },
+            { value: '5-15',  label: '5 – 15',    mult: 1.0 },
+            { value: '15-30', label: '15 – 30',   mult: 1.6 },
+            { value: '30+',   label: 'Viac ako 30', mult: 2.5 },
+          ] },
+        { id: 'rooms',     label: 'Počet miestností?', type: 'number', placeholder: 'napr. 5' },
+        { id: 'equipment', label: 'Aké vybavenie sťahujete?', type: 'multi',
+          options: [
+            { value: 'pc',      label: '💻 PC / IT',         add: 40 },
+            { value: 'archive', label: '🗄️ Archív',          add: 60 },
+            { value: 'heavy',   label: '⚙️ Ťažké stroje',    add: 150 },
+            { value: 'kitchen', label: '☕ Kuchynka',         add: 50 },
+          ] },
+        { id: 'when', label: 'Kedy by ste chceli sťahovať?', type: 'cards', cols: 3,
+          options: [
+            { value: 'workday', label: 'Pracovný deň', mult: 1.0 },
+            { value: 'weekend', label: 'Víkend',       mult: 1.3 },
+            { value: 'night',   label: 'V noci',       mult: 1.6 },
+          ] },
+        { id: 'from_address', label: 'Z akej adresy?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'to_address',   label: 'Kam?',           type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'date',         label: 'Plánovaný termín?', type: 'date' },
+      ]
+    },
+    {
+      id: 'waste',
+      title: 'Likvidácia odpadu',
+      sub:   'Stavebný, biologický, elektronický',
+      base:  50,
+      icon:  iconRecycle,
+      questions: [
+        { id: 'type', label: 'Typ odpadu?', type: 'cards', cols: 2,
+          options: [
+            { value: 'mixed',        label: 'Zmiešaný',     mult: 1.0 },
+            { value: 'construction', label: 'Stavebný',     mult: 1.5 },
+            { value: 'green',        label: 'Bio / zeleň',  mult: 0.8 },
+            { value: 'electro',      label: 'Elektroodpad', mult: 1.2 },
+            { value: 'hazardous',    label: 'Nebezpečný',   mult: 2.0 },
+          ] },
+        { id: 'volume', label: 'Odhadovaný objem (m³)?', hint: 'Pomôže presnejšie odhadnúť cenu.', type: 'number', placeholder: 'napr. 5' },
+        { id: 'access', label: 'Prístup pre nákladiak?', type: 'cards', cols: 2,
+          options: [
+            { value: 'yes',  label: 'Áno, k vchodu',     mult: 1.0 },
+            { value: 'no',   label: 'Iba pešo / ďaleko', mult: 1.3 },
+          ] },
+        { id: 'address', label: 'Adresa?',           type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
+      ]
+    },
+    {
+      id: 'piano',
+      title: 'Klavír / ťažké veci',
+      sub:   'Klavír, sejf, ťažký nábytok, stroj',
+      base:  120,
+      icon:  iconPiano,
+      questions: [
+        { id: 'item', label: 'Čo prevážate?', type: 'cards', cols: 2,
+          options: [
+            { value: 'piano',     label: '🎹 Klavír',  mult: 1.5 },
+            { value: 'safe',      label: '🔒 Sejf',     mult: 1.3 },
+            { value: 'sculpture', label: '🗿 Socha',    mult: 1.2 },
+            { value: 'machine',   label: '⚙️ Stroj',    mult: 1.4 },
+            { value: 'other',     label: 'Iné',         mult: 1.0 },
+          ] },
+        { id: 'weight', label: 'Hmotnosť (kg)?', type: 'cards', cols: 2,
+          options: [
+            { value: '50-100',  label: '50 – 100 kg',  mult: 0.8 },
+            { value: '100-200', label: '100 – 200 kg', mult: 1.0 },
+            { value: '200-400', label: '200 – 400 kg', mult: 1.5 },
+            { value: '400+',    label: 'Viac ako 400 kg', mult: 2.2 },
+          ] },
+        { id: 'floors', label: 'Z poschodia / na poschodie?', type: 'group', sub: [
+            { id: 'floor_from', label: 'Z',  type: 'number', placeholder: '0' },
+            { id: 'floor_to',   label: 'Na', type: 'number', placeholder: '0' },
+          ] },
+        { id: 'elevator', label: 'Je k dispozícii výťah?', type: 'cards', cols: 2,
+          options: [
+            { value: 'yes', label: 'Áno' },
+            { value: 'no',  label: 'Nie', addPct: 0.25 },
+          ] },
+        { id: 'from_address', label: 'Z akej adresy?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'to_address',   label: 'Kam?',           type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'date',         label: 'Plánovaný termín?', type: 'date' },
+      ]
+    },
+  ];
+
+  // ---------- Service icons (with hover-only animations) ----------
+  function iconTruck() {
+    return '<svg viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+      + '<rect class="cbw-anim-truck-body" x="2" y="8" width="22" height="16" rx="2"/>'
+      + '<path class="cbw-anim-truck-body" d="M24 12 L36 12 L42 18 L42 24 L24 24 Z"/>'
+      + '<circle class="cbw-anim-wheel" cx="11" cy="26" r="3"/>'
+      + '<circle class="cbw-anim-wheel" cx="35" cy="26" r="3"/>'
+      + '</svg>';
+  }
+  function iconBroom() {
+    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+      + '<g class="cbw-anim-broom">'
+      +   '<line x1="22" y1="4" x2="10" y2="16"/>'
+      +   '<path d="M9 17 L4 28 M11 18 L8 28 M13 19 L12 28 M15 20 L16 28 M17 21 L20 28"/>'
+      + '</g>'
+      + '<circle class="cbw-anim-spark" cx="6"  cy="6" r="1.4" fill="currentColor"/>'
+      + '<circle class="cbw-anim-spark" cx="26" cy="22" r="1.2" fill="currentColor" style="animation-delay:0.4s"/>'
+      + '<circle class="cbw-anim-spark" cx="22" cy="28" r="1"   fill="currentColor" style="animation-delay:0.8s"/>'
+      + '</svg>';
+  }
+  function iconBuilding() {
+    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+      + '<rect x="6" y="4" width="20" height="26" rx="1.5"/>'
+      + '<rect class="cbw-anim-window" x="9"  y="8"  width="4" height="4" fill="currentColor" opacity="0.85"/>'
+      + '<rect class="cbw-anim-window" x="15" y="8"  width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.3s"/>'
+      + '<rect class="cbw-anim-window" x="21" y="8"  width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.6s"/>'
+      + '<rect class="cbw-anim-window" x="9"  y="14" width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.9s"/>'
+      + '<rect class="cbw-anim-window" x="15" y="14" width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.45s"/>'
+      + '<rect class="cbw-anim-window" x="21" y="14" width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.15s"/>'
+      + '<rect x="13" y="22" width="6" height="8" fill="currentColor" opacity="0.15"/>'
+      + '</svg>';
+  }
+  function iconRecycle() {
+    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+      + '<g class="cbw-anim-recycle">'
+      +   '<path d="M16 4 L20 11 L12 11 Z"/>'
+      +   '<path d="M27 22 L19 22 L23 29 Z"/>'
+      +   '<path d="M5 22 L9 29 L13 22 Z"/>'
+      + '</g>'
+      + '</svg>';
+  }
+  function iconPiano() {
+    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+      + '<rect x="3" y="10" width="26" height="14" rx="1.5"/>'
+      + '<rect class="cbw-anim-key"   x="6"  y="10" width="3" height="11" fill="currentColor" opacity="0.12"/>'
+      + '<rect class="cbw-anim-key cbw-anim-key-2" x="14" y="10" width="3" height="11" fill="currentColor" opacity="0.12"/>'
+      + '<rect class="cbw-anim-key cbw-anim-key-3" x="22" y="10" width="3" height="11" fill="currentColor" opacity="0.12"/>'
+      + '<line x1="9.5"  y1="10" x2="9.5"  y2="24"/>'
+      + '<line x1="13"   y1="10" x2="13"   y2="24"/>'
+      + '<line x1="16.5" y1="10" x2="16.5" y2="24"/>'
+      + '<line x1="20"   y1="10" x2="20"   y2="24"/>'
+      + '<line x1="23.5" y1="10" x2="23.5" y2="24"/>'
+      + '</svg>';
+  }
+
+  // ---------- Wizard state ----------
+  const wiz = document.getElementById('cbwCalcWizard');
+  const wizBody  = document.getElementById('cbwCalcBody');
+  const wizFoot  = document.getElementById('cbwCalcFoot');
+  const wizPrev  = document.getElementById('cbwCalcPrev');
+  const wizNext  = document.getElementById('cbwCalcNext');
+  const wizBack  = document.getElementById('cbwCalcBack');
+  const wizExit  = document.getElementById('cbwCalcExit');
+  const wizTitle = document.getElementById('cbwCalcTitle');
+  const wizStep  = document.getElementById('cbwCalcStep');
+  const wizBar   = document.getElementById('cbwCalcBarFill');
+  const ctaBtn   = document.getElementById('cbwOpenCalc');
+
+  let wizState = {
+    service: null,    // service object once selected
+    answers: {},      // answers keyed by question id
+    qIndex:  -1,      // -1 = service-pick screen; 0..N-1 = question; N = summary; N+1 = thanks
   };
 
-  (function () {
-    'use strict';
-    
-    const root = document.getElementById('cbwRoot');
-    const launcher = document.getElementById('cbwLauncher');
-    const closeBtn = document.getElementById('cbwClose');
-    const refreshBtn = document.getElementById('cbwRefresh');
-    const messagesEl = document.getElementById('cbwMessages');
-    const input = document.getElementById('cbwInput');
-    const sendBtn = document.getElementById('cbwSend');
-    const contactBar = document.getElementById('cbwContactBar');
-    const robots = () => document.querySelectorAll('.cbw-robot');
-    const soundBtn = document.getElementById('cbwSound');
-    const soundIcon = document.getElementById('cbwSoundIcon');
-    const badge = document.getElementById('cbwBadge');
+  function openCalc() {
+    root.classList.add('cbw-calc-active');
+    wiz.dataset.open = 'true';
+    wizState = { service: null, answers: {}, qIndex: -1 };
+    renderWizard();
+    setRobotState('greeting', 1500);
+  }
+  function closeCalc() {
+    root.classList.remove('cbw-calc-active');
+    wiz.dataset.open = 'false';
+  }
+  ctaBtn.addEventListener('click', openCalc);
+  wizExit.addEventListener('click', closeCalc);
 
-    const ICON_PHONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
-    const ICON_WA = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
-    const ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-    const ICON_SOUND_ON = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-    const ICON_SOUND_OFF = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
+  // Total steps for progress bar:
+  //   1 (service pick) + N questions + 1 summary + 1 thanks = N+3
+  function totalSteps() {
+    if (!wizState.service) return 1;
+    return wizState.service.questions.length + 3;
+  }
+  function currentStepNumber() {
+    // service pick = 1, questions 2..N+1, summary N+2, thanks N+3
+    return wizState.qIndex + 2;
+  }
+  function setProgress() {
+    const pct = (currentStepNumber() / totalSteps()) * 100;
+    wizBar.style.width = pct + '%';
+  }
+  function setHeader(title, stepText) {
+    wizTitle.textContent = title;
+    wizStep.textContent  = stepText;
+    wizBack.style.visibility = (wizState.qIndex < 0) ? 'hidden' : 'visible';
+  }
 
-    let muted = true;
-    let audioCtx = null;
+  function renderWizard() {
+    wizBody.innerHTML = '';
+    wizFoot.style.display = 'none';
 
-    function playSound() {
-      if (muted) return;
-      try {
-        audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-        const t = audioCtx.currentTime;
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
-        o.connect(g); g.connect(audioCtx.destination);
-        o.frequency.setValueAtTime(620, t); o.frequency.linearRampToValueAtTime(820, t + 0.1);
-        g.gain.setValueAtTime(0.05, t); g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-        o.start(t); o.stop(t + 0.15);
-      } catch (_) {}
+    if (wizState.qIndex === -1) {
+      renderServicePicker();
+    } else if (wizState.qIndex < wizState.service.questions.length) {
+      renderQuestion();
+    } else if (wizState.qIndex === wizState.service.questions.length) {
+      renderSummary();
+    } else {
+      renderThanks();
     }
+    setProgress();
+  }
 
-    function syncSoundIcon() { soundIcon.innerHTML = muted ? ICON_SOUND_OFF : ICON_SOUND_ON; }
-    syncSoundIcon();
-    soundBtn.addEventListener('click', () => { muted = !muted; syncSoundIcon(); });
-
-    let robotStateTimer = null;
-    function setRobotState(state, duration = null) {
-      robots().forEach(r => {
-        r.classList.remove('is-idle', 'is-greeting', 'is-listening', 'is-thinking', 'is-action', 'is-talking');
-        r.classList.add(state ? `is-${state}` : 'is-idle');
+  function renderServicePicker() {
+    setHeader('Cenová kalkulačka', 'Krok 1 — vyberte službu');
+    const grid = document.createElement('div');
+    grid.className = 'cbw-svc-grid';
+    SERVICES.forEach(svc => {
+      const card = document.createElement('button');
+      card.className = 'cbw-svc-card';
+      card.type = 'button';
+      card.innerHTML =
+        '<span class="cbw-svc-icon">' + svc.icon() + '</span>'
+        + '<span class="cbw-svc-text"><span class="cbw-svc-title">' + svc.title + '</span><span class="cbw-svc-sub">' + svc.sub + '</span></span>'
+        + '<svg class="cbw-svc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+      card.addEventListener('click', () => {
+        spawnConfetti(card);
+        setRobotState('action', 800);
+        wizState.service = svc;
+        wizState.qIndex = 0;
+        renderWizard();
       });
-      if (duration) {
-        clearTimeout(robotStateTimer);
-        robotStateTimer = setTimeout(() => setRobotState(''), duration);
-      }
+      grid.appendChild(card);
+    });
+    const intro = document.createElement('p');
+    intro.className = 'cbw-calc-prompt';
+    intro.textContent = 'O akú službu máte záujem?';
+    const hint = document.createElement('p');
+    hint.className = 'cbw-calc-hint';
+    hint.textContent = 'Po výbere prejdeme niekoľkými otázkami a hneď uvidíte odhadovanú cenu.';
+    wizBody.appendChild(intro);
+    wizBody.appendChild(hint);
+    wizBody.appendChild(grid);
+  }
+
+  function renderQuestion() {
+    const q = wizState.service.questions[wizState.qIndex];
+    setHeader(wizState.service.title, 'Krok ' + (wizState.qIndex + 2) + ' z ' + (wizState.service.questions.length + 2));
+
+    const prompt = document.createElement('p');
+    prompt.className = 'cbw-calc-prompt';
+    prompt.textContent = q.label;
+    wizBody.appendChild(prompt);
+
+    if (q.hint) {
+      const hint = document.createElement('p');
+      hint.className = 'cbw-calc-hint';
+      hint.textContent = q.hint;
+      wizBody.appendChild(hint);
     }
 
-    function spawnConfetti(el) {
-      const rect = el.getBoundingClientRect();
-      const colors = ['#0f766e', '#14b8a6', '#059669', '#34d399'];
-      for (let i = 0; i < 8; i++) {
-        const conf = document.createElement('div');
-        conf.className = 'cbw-confetti';
-        conf.style.left = (rect.left + rect.width / 2) + 'px';
-        conf.style.top = (rect.top + rect.height / 2) + 'px';
-        const dx = (Math.random() - 0.5) * 80;
-        const dy = (Math.random() - 0.5) * 80 - 20;
-        conf.style.setProperty('--dx', dx + 'px');
-        conf.style.setProperty('--dy', dy + 'px');
-        conf.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-        document.body.appendChild(conf);
-        setTimeout(() => conf.remove(), 600);
-      }
+    if (q.type === 'cards') {
+      const grid = document.createElement('div');
+      grid.className = 'cbw-q-cards' + (q.cols === 3 ? ' cbw-q-cards-3' : '') + (q.cols === 1 ? ' cbw-q-cards-3' : '');
+      if (q.cols === 1) grid.style.gridTemplateColumns = '1fr';
+      q.options.forEach(opt => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cbw-q-card';
+        b.setAttribute('aria-pressed', wizState.answers[q.id] === opt.value ? 'true' : 'false');
+        b.innerHTML = opt.label + (opt.sub ? '<small>' + opt.sub + '</small>' : '');
+        b.addEventListener('click', () => {
+          wizState.answers[q.id] = opt.value;
+          grid.querySelectorAll('.cbw-q-card').forEach(c => c.setAttribute('aria-pressed', 'false'));
+          b.setAttribute('aria-pressed', 'true');
+          wizNext.disabled = false;
+        });
+        grid.appendChild(b);
+      });
+      wizBody.appendChild(grid);
+    } else if (q.type === 'multi') {
+      const wrap = document.createElement('div');
+      wrap.className = 'cbw-q-multi';
+      const sel = wizState.answers[q.id] || [];
+      q.options.forEach(opt => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cbw-q-chip';
+        b.setAttribute('aria-pressed', sel.includes(opt.value) ? 'true' : 'false');
+        b.textContent = opt.label;
+        b.addEventListener('click', () => {
+          const cur = wizState.answers[q.id] || [];
+          const i = cur.indexOf(opt.value);
+          if (i >= 0) cur.splice(i, 1); else cur.push(opt.value);
+          wizState.answers[q.id] = cur;
+          b.setAttribute('aria-pressed', cur.includes(opt.value) ? 'true' : 'false');
+        });
+        wrap.appendChild(b);
+      });
+      wizBody.appendChild(wrap);
+      wizNext.disabled = false; // multi-select is always optional
+    } else if (q.type === 'text' || q.type === 'number' || q.type === 'date') {
+      const inp = document.createElement('input');
+      inp.className = 'cbw-q-input';
+      inp.type = q.type === 'number' ? 'number' : (q.type === 'date' ? 'date' : 'text');
+      if (q.placeholder) inp.placeholder = q.placeholder;
+      if (wizState.answers[q.id] != null) inp.value = wizState.answers[q.id];
+      inp.addEventListener('input', () => {
+        wizState.answers[q.id] = inp.value;
+        wizNext.disabled = false;
+      });
+      wizBody.appendChild(inp);
+      // Optional fields are always passable; required ones gate Next.
+      wizNext.disabled = false;
+    } else if (q.type === 'group') {
+      const group = document.createElement('div');
+      group.className = 'cbw-q-group';
+      q.sub.forEach(sub => {
+        const item = document.createElement('div');
+        item.className = 'cbw-q-group-item';
+        const lab = document.createElement('label');
+        lab.textContent = sub.label;
+        const inp = document.createElement('input');
+        inp.className = 'cbw-q-input';
+        inp.type = sub.type || 'text';
+        if (sub.placeholder) inp.placeholder = sub.placeholder;
+        if (wizState.answers[sub.id] != null) inp.value = wizState.answers[sub.id];
+        inp.addEventListener('input', () => { wizState.answers[sub.id] = inp.value; });
+        item.appendChild(lab);
+        item.appendChild(inp);
+        group.appendChild(item);
+      });
+      wizBody.appendChild(group);
+      wizNext.disabled = false;
     }
 
-    function appendBubble(role, text) {
-      const bubble = document.createElement('div');
-      bubble.className = 'cbw-msg cbw-' + role + (role === 'user' ? ' cbw-dynamic-green' : '');
-      bubble.textContent = text;
-      messagesEl.appendChild(bubble);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-      return bubble;
-    }
+    wizFoot.style.display = 'flex';
+    wizPrev.textContent = wizState.qIndex === 0 ? 'Späť na výber' : 'Späť';
+    wizNext.textContent = (wizState.qIndex === wizState.service.questions.length - 1) ? 'Zobraziť cenu' : 'Pokračovať';
+  }
 
-    function showTyping() {
-      setRobotState('talking');
-      const dots = document.createElement('div');
-      dots.className = 'cbw-typing cbw-dynamic-green'; 
-      dots.innerHTML = '<span></span><span></span><span></span>';
-      messagesEl.appendChild(dots);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-      return dots;
-    }
+  function calculatePrice() {
+    const svc = wizState.service;
+    let price = svc.base;
+    let mult  = 1.0;
+    let pctAdd = 0;
+    let extras = 0;
 
-    function hideTyping(el) { if (el) el.remove(); }
-
-    function togglePanel(open) {
-      const next = open == null ? root.dataset.open !== 'true' : !!open;
-      root.dataset.open = next ? 'true' : 'false';
-      if (next) {
-        if (badge) badge.remove(); 
-        setRobotState('greeting', 2500);
-        if (messagesEl.children.length === 0) {
-          setTimeout(() => {
-            appendBubble('bot', 'Dobrý deň! Sme experti na sťahovanie a vypratávanie. S čím vám môžeme pomôcť?');
-            playSound();
-          }, 500);
+    svc.questions.forEach(q => {
+      const a = wizState.answers[q.id];
+      if (q.type === 'cards' && a) {
+        const opt = q.options.find(o => o.value === a);
+        if (opt) {
+          if (opt.mult)   mult  *= opt.mult;
+          if (opt.add)    extras += opt.add;
+          if (opt.addPct) pctAdd += opt.addPct;
+        }
+      } else if (q.type === 'multi' && Array.isArray(a)) {
+        a.forEach(v => {
+          const opt = q.options.find(o => o.value === v);
+          if (opt && opt.add) extras += opt.add;
+        });
+      } else if (q.type === 'number' && a) {
+        // For service-specific area/volume, scale lightly (placeholder logic)
+        const n = Number(a) || 0;
+        if (q.id === 'area' || q.id === 'volume') {
+          mult *= Math.max(0.6, Math.min(3.0, 0.6 + n / 50));
         }
       }
+    });
+
+    price = price * mult * (1 + pctAdd) + extras;
+    return Math.max(40, Math.round(price / 10) * 10);
+  }
+
+  function formatAnswer(q, a) {
+    if (a == null || a === '' || (Array.isArray(a) && !a.length)) return '—';
+    if (q.type === 'cards') {
+      const opt = q.options.find(o => o.value === a);
+      return opt ? opt.label : String(a);
     }
-
-    refreshBtn.addEventListener('click', () => {
-      refreshBtn.classList.add('cbw-spinning');
-      setTimeout(() => refreshBtn.classList.remove('cbw-spinning'), 740);
-      setRobotState('greeting', 1500);
-      messagesEl.innerHTML = '';
-      
-      const calcForm = document.getElementById('cbwCalcForm');
-      calcForm.dataset.open = 'false';
-      
-      appendBubble('bot', 'Konverzácia bola obnovená. S čím vám vieme pomôcť?');
-      playSound();
-    });
-
-    launcher.addEventListener('click', () => togglePanel(true));
-    closeBtn.addEventListener('click', () => togglePanel(false));
-    
-    let typingTimer;
-    input.addEventListener('focus', () => { input.classList.add('cbw-dynamic-green'); });
-    input.addEventListener('blur', () => { if (!input.value.trim()) input.classList.remove('cbw-dynamic-green'); });
-
-    input.addEventListener('input', () => {
-      sendBtn.disabled = !input.value.trim();
-      setRobotState('listening');
-      clearTimeout(typingTimer);
-      typingTimer = setTimeout(() => setRobotState(''), 1000);
-    });
-
-    sendBtn.addEventListener('click', () => {
-      const text = input.value.trim();
-      if (!text) return;
-      input.value = '';
-      input.classList.remove('cbw-dynamic-green');
-      sendBtn.disabled = true;
-      appendBubble('user', text);
-      playSound();
-      
-      setRobotState('thinking');
-      setTimeout(() => {
-        const typing = showTyping();
-        setTimeout(() => {
-          setRobotState('');
-          hideTyping(typing);
-          appendBubble('bot', 'Ďakujeme za správu! Náš tím ju práve preveruje.');
-          playSound();
-        }, 2000);
-      }, 1000);
-    });
-
-    document.querySelectorAll('.action-chip').forEach(btn => {
-      btn.addEventListener('click', () => {
-        spawnConfetti(btn);
-        setRobotState('action', 1500);
-        if (btn.dataset.msg) {
-          input.value = btn.dataset.msg;
-          input.classList.add('cbw-dynamic-green');
-          sendBtn.disabled = false;
-          sendBtn.click();
-        }
-      });
-    });
-
-    // ---------- Formular & Kalkulacka Logic ----------
-    const calcForm = document.getElementById('cbwCalcForm');
-    
-    function closeForms() { 
-      calcForm.dataset.open = 'false'; 
+    if (q.type === 'multi') {
+      return a.map(v => {
+        const opt = q.options.find(o => o.value === v);
+        return opt ? opt.label : v;
+      }).join(', ');
     }
-    
-    document.getElementById('cbwCalcClose').addEventListener('click', closeForms);
+    return String(a);
+  }
 
-    document.getElementById('cbwChipCalc').addEventListener('click', () => {
-      closeForms(); 
-      calcState = { service: null, size: null, extras: null };
-      document.querySelectorAll('.cbw-card').forEach(c => c.classList.remove('selected'));
-      document.getElementById('btn-next-1').disabled = true;
-      
-      calcForm.dataset.open = 'true'; 
-      showCalcStep('1');
-      messagesEl.scrollTop = messagesEl.scrollHeight;
-    });
+  function renderSummary() {
+    setHeader(wizState.service.title, 'Zhrnutie a kontaktné údaje');
+    const svc = wizState.service;
+    const price = calculatePrice();
 
-    window.computePrice = function() {
-      setRobotState('action', 1000);
-      let basePrice = 0; 
-      
-      if (calcState.service === 'stahovanie') {
-        if(calcState.size === '1izb') basePrice += 150;
-        else if(calcState.size === '2izb') basePrice += 250;
-        else if(calcState.size === '3izb') basePrice += 350;
-        else if(calcState.size === 'dom') basePrice += 500;
-        if(calcState.extras === 'vytah_nie') basePrice += 50; 
-      } 
-      else if (calcState.service === 'vypratavanie') {
-        if(calcState.size === 'pivnica') basePrice += 100;
-        else if(calcState.size === 'byt') basePrice += 300;
-        else if(calcState.size === 'dom') basePrice += 600;
-        if(calcState.extras === 'stredne') basePrice *= 1.5;
-        else if(calcState.extras === 'vela') basePrice *= 2;
-      }
-      else if (calcState.service === 'preprava') {
-        if(calcState.size === 'mesto') basePrice += 40;
-        else if(calcState.size === 'mimo') basePrice += 80;
-        else if(calcState.size === 'sr') basePrice += 150;
-        if(calcState.extras === 'aj_vynaska') basePrice += 30; 
-      }
-      
-      const resultBox = document.getElementById('cbwResultBox');
-      if (calcState.service === 'ine') {
-         resultBox.style.display = 'none';
+    // Summary rows
+    const sum = document.createElement('div');
+    sum.className = 'cbw-sum-card';
+    const headerRow = document.createElement('div');
+    headerRow.className = 'cbw-sum-row';
+    headerRow.innerHTML = '<span>Služba</span><span>' + svc.title + '</span>';
+    sum.appendChild(headerRow);
+
+    svc.questions.forEach(q => {
+      if (q.type === 'group') {
+        q.sub.forEach(sub => {
+          const v = wizState.answers[sub.id];
+          if (v == null || v === '') return;
+          const r = document.createElement('div');
+          r.className = 'cbw-sum-row';
+          r.innerHTML = '<span>' + sub.label + '</span><span>' + (v || '—') + '</span>';
+          sum.appendChild(r);
+        });
       } else {
-         resultBox.style.display = 'block';
-         document.getElementById('cbwCalcResultPrice').textContent = 'od ' + Math.round(basePrice).toLocaleString('sk-SK') + ' €';
+        const v = wizState.answers[q.id];
+        if (v == null || v === '' || (Array.isArray(v) && !v.length)) return;
+        const r = document.createElement('div');
+        r.className = 'cbw-sum-row';
+        r.innerHTML = '<span>' + q.label + '</span><span>' + formatAnswer(q, v) + '</span>';
+        sum.appendChild(r);
       }
-      
-      showCalcStep('3'); 
-      playSound();
+    });
+    wizBody.appendChild(sum);
+
+    // Price card
+    const priceCard = document.createElement('div');
+    priceCard.className = 'cbw-sum-price cbw-dynamic-green';
+    priceCard.innerHTML =
+      '<div class="cbw-sum-price-label">Odhadovaná cena</div>'
+      + '<div class="cbw-sum-price-value">' + price.toLocaleString('sk-SK') + ' €</div>'
+      + '<div class="cbw-sum-price-note">Orientačný odhad — presnú cenu vám potvrdí konateľ po obhliadke.</div>';
+    wizBody.appendChild(priceCard);
+
+    // Contact form
+    const form = document.createElement('div');
+    form.innerHTML =
+      '<p class="cbw-calc-prompt" style="font-size:15px;margin-bottom:8px">Vaše kontaktné údaje</p>'
+      + '<input class="cbw-q-input" id="cbwSumName"  type="text"  placeholder="Vaše meno" required style="margin-bottom:8px">'
+      + '<input class="cbw-q-input" id="cbwSumEmail" type="email" placeholder="E-mail"     required style="margin-bottom:8px">'
+      + '<input class="cbw-q-input" id="cbwSumPhone" type="tel"   placeholder="Telefón"             style="margin-bottom:8px">'
+      + '<textarea class="cbw-q-input" id="cbwSumMsg" rows="2" placeholder="Doplňujúca správa (nepovinné)"></textarea>';
+    wizBody.appendChild(form);
+
+    const sName  = document.getElementById('cbwSumName');
+    const sEmail = document.getElementById('cbwSumEmail');
+    function validate() {
+      const ok = sName.value.trim().length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sEmail.value.trim());
+      wizNext.disabled = !ok;
     }
-    
-    function showCalcStep(step) {
-      calcForm.querySelectorAll('.cbw-calc-step').forEach(el => {
-        el.dataset.active = el.dataset.step === String(step) ? 'true' : 'false';
+    sName.addEventListener('input',  validate);
+    sEmail.addEventListener('input', validate);
+    validate();
+
+    wizState._lastPrice = price;
+    wizFoot.style.display = 'flex';
+    wizPrev.textContent = 'Späť';
+    wizNext.textContent = 'Odoslať dopyt';
+  }
+
+  async function submitQuoteRequest() {
+    const svc = wizState.service;
+    const name  = (document.getElementById('cbwSumName')  || {}).value || '';
+    const email = (document.getElementById('cbwSumEmail') || {}).value || '';
+    const phone = (document.getElementById('cbwSumPhone') || {}).value || '';
+    const msg   = (document.getElementById('cbwSumMsg')   || {}).value || '';
+
+    // Build human-readable answers map for the email
+    const answersFlat = {};
+    svc.questions.forEach(q => {
+      if (q.type === 'group') {
+        q.sub.forEach(sub => {
+          const v = wizState.answers[sub.id];
+          if (v != null && v !== '') answersFlat[sub.label] = String(v);
+        });
+      } else {
+        const v = wizState.answers[q.id];
+        if (v == null || v === '' || (Array.isArray(v) && !v.length)) return;
+        answersFlat[q.label] = formatAnswer(q, v);
+      }
+    });
+
+    const payload = {
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim() || null,
+      message: msg.trim() || null,
+      service_request: {
+        service: svc.id,
+        service_label: svc.title,
+        answers: answersFlat,
+        estimated_price: wizState._lastPrice.toLocaleString('sk-SK') + ' €',
+      },
+    };
+
+    wizNext.disabled = true;
+    wizNext.textContent = 'Odosielam…';
+    try {
+      await fetch(window.location.origin + '/api/lead', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
       });
-      let pct = 25;
-      if(step === '2-stahovanie' || step === '2-vypratavanie' || step === '2-preprava' || step === '2-ine') pct = 60;
-      if(step === '3') pct = 100;
-      document.getElementById('cbwCalcProgress').style.width = pct + '%';
+    } catch (_) { /* best effort — still show thanks */ }
+
+    wizState.qIndex = wizState.service.questions.length + 1;
+    renderWizard();
+
+    // Mirror in chat (so when user closes the calc, the conversation has a trace)
+    appendBubble('user', 'Cenová ponuka: ' + svc.title);
+    appendBubble('bot',  'Ďakujeme, ' + (name.trim() || 'priateľu') + '! Vašu požiadavku sme prijali. Konateľ vás bude čo najskôr kontaktovať. Potvrdenie sme vám zaslali na e-mail.');
+    playSound();
+    setRobotState('action', 2000);
+  }
+
+  function renderThanks() {
+    setHeader(wizState.service.title, 'Hotovo');
+    const wrap = document.createElement('div');
+    wrap.className = 'cbw-thanks';
+    wrap.innerHTML =
+      '<div class="cbw-thanks-emoji">🎉</div>'
+      + '<div class="cbw-thanks-title">Ďakujeme!</div>'
+      + '<div class="cbw-thanks-text">Váš dopyt sme prijali a konateľ firmy vás bude čo najskôr kontaktovať.<br>Potvrdenie sme zaslali na váš e-mail.</div>';
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'cbw-calc-next-btn cbw-dynamic-green';
+    closeBtn.style.cssText = 'width:100%;padding:13px 16px;border:none;border-radius:12px;color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer;';
+    closeBtn.textContent = 'Späť do chatu';
+    closeBtn.addEventListener('click', closeCalc);
+    wrap.appendChild(closeBtn);
+    wizBody.appendChild(wrap);
+  }
+
+  // ---------- Wizard footer wiring ----------
+  wizPrev.addEventListener('click', () => {
+    if (wizState.qIndex === 0) {
+      wizState.service = null;
+      wizState.qIndex = -1;
+    } else {
+      wizState.qIndex -= 1;
     }
-
-    document.getElementById('btn-next-1').addEventListener('click', () => { 
-      setRobotState('action', 1000); 
-      showCalcStep('2-' + calcState.service); 
-    });
-
-    calcForm.querySelectorAll('[data-calc-back]').forEach(btn => {
-      btn.addEventListener('click', () => {
-         const goBackTo = btn.dataset.calcBack;
-         if (goBackTo === '1') showCalcStep('1');
-         else if (goBackTo === '2') showCalcStep('2-' + calcState.service);
-      });
-    });
-    
-    document.getElementById('cbwLeadSubmit').addEventListener('click', () => {
-      const name = document.getElementById('cbwLeadName').value;
-      const phone = document.getElementById('cbwLeadPhone').value;
-      const email = document.getElementById('cbwLeadEmail').value;
-      const customTask = document.getElementById('cbwCustomTask') ? document.getElementById('cbwCustomTask').value : '';
-      const price = document.getElementById('cbwCalcResultPrice').textContent;
-
-      if(!name || !phone) {
-         alert("Prosím vyplňte Meno a Telefón.");
-         return;
-      }
-
-      const btn = document.getElementById('cbwLeadSubmit');
-      btn.textContent = "Odosielam...";
-      btn.disabled = true;
-
-      // TU VLOŽ SVOJ WEBHOOK URL (napríklad z Make.com alebo Zapier)
-      const WEBHOOK_URL = 'https://tvoj-webhook-url.com/zadavaj';
-
-      const payload = {
-        sluzba: calcState.service,
-        velkost: calcState.size,
-        doplnky: calcState.extras,
-        vlastnyText: customTask,
-        odhadCeny: price,
-        klient: { meno: name, telefon: phone, email: email }
-      };
-
-      // Simulácia odoslania pre demo účely
-      setTimeout(() => {
-        dokonciOdoslanie(payload);
-      }, 1000);
-
-      function dokonciOdoslanie(data) {
-        setRobotState('action', 1500); 
-        closeForms();
-        appendBubble('bot', 'Ďakujeme, ' + name + '! Vašu požiadavku sme prijali, náš dispečer vás bude čoskoro kontaktovať.');
-        playSound();
-        btn.textContent = "Odoslať dopyt";
-        btn.disabled = false;
-      }
-    });
-
-    function applyConfig() {
-      const c = { phone: '+421900123456', whatsapp: '+421900123456', email: 'info@stahovanie.sk' };
-      if (c.phone) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="phone" href="tel:' + c.phone + '">' + ICON_PHONE + '<span>Zavolať</span></a>');
-      if (c.whatsapp) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="whatsapp" href="https://wa.me/' + c.whatsapp.replace(/[^\d]/g,'') + '" target="_blank">' + ICON_WA + '<span>WhatsApp</span></a>');
-      if (c.email) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="email" href="mailto:' + c.email + '">' + ICON_MAIL + '<span>Mail</span></a>');
-      document.querySelectorAll('.contact-click').forEach(btn => { btn.addEventListener('click', () => setRobotState('action', 1500)); });
+    renderWizard();
+  });
+  wizNext.addEventListener('click', () => {
+    if (wizState.qIndex < wizState.service.questions.length - 1) {
+      wizState.qIndex += 1;
+      renderWizard();
+    } else if (wizState.qIndex === wizState.service.questions.length - 1) {
+      // moving to summary
+      wizState.qIndex += 1;
+      renderWizard();
+    } else if (wizState.qIndex === wizState.service.questions.length) {
+      // submit
+      submitQuoteRequest();
     }
-    applyConfig();
+  });
+  wizBack.addEventListener('click', () => wizPrev.click());
 
-  })();
+  // ---------- Kontakty Init ----------
+  function applyConfig() {
+    const c = { phone: '+421900123456', whatsapp: '+421900123456', email: 'info@firma.sk' };
+    if (c.phone) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" href="tel:' + c.phone + '">' + ICON_PHONE + '<span>Zavolať</span></a>');
+    if (c.whatsapp) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" href="https://wa.me/' + c.whatsapp.replace(/[^\d]/g,'') + '" target="_blank">' + ICON_WA + '<span>WhatsApp</span></a>');
+    if (c.email) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="email" href="mailto:' + c.email + '">' + ICON_MAIL + '<span>Mail</span></a>');
+
+    document.querySelectorAll('.contact-click').forEach(btn => {
+      btn.addEventListener('click', () => setRobotState('action', 1500));
+    });
+  }
+  applyConfig();
+
+})();
 </script>
 
 </body>
