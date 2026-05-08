@@ -156,77 +156,32 @@
   @keyframes cbw-scan { 0% { transform: translate(-3px, -2px); } 100% { transform: translate(3px, -2px); } }
   @keyframes cbw-bounce-action { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-3px); } }
 
-  /* ---------- PANEL — GENIE OPEN/CLOSE ---------- */
+  /* ---------- PANEL — silky open/close (transform + opacity only) ---------- */
   /*
-   * The panel starts as a tiny dot at the launcher (right-bottom corner),
-   * grows into a thin vertical column (like genie smoke rising from a lamp),
-   * then unfurls horizontally into the full window. Close reverses it —
-   * collapses to a column, sucks down into the launcher, fades out.
-   * Two animations are toggled by JS via .cbw-opening / .cbw-closing classes
-   * so the initial render shows nothing (default = closed state).
+   * Avoid filter:blur and complex multi-keyframe animations during the open —
+   * those caused visible jank on slower devices. A single transition with an
+   * overshoot easing on transform feels lively without dropping frames.
    */
   .cbw-panel {
     position: absolute; bottom: 88px; right: 0;
-    width: min(390px, calc(100vw - 32px)); height: min(640px, calc(100vh - 120px));
+    width: min(390px, calc(100vw - 32px));
+    height: min(640px, calc(100vh - 120px));
     background: #fff; border-radius: var(--radius); border: 1px solid var(--border);
     box-shadow: 0 24px 60px -16px rgba(2,44,34,.3), 0 8px 24px -10px rgba(15,23,42,.15);
     display: flex; flex-direction: column; overflow: hidden;
     transform-origin: 100% 100%;
     opacity: 0;
-    transform: scale(0);
-    filter: blur(8px);
+    transform: scale(0.85) translateY(28px);
     pointer-events: none;
-    will-change: transform, opacity, filter;
+    will-change: transform, opacity;
+    transition:
+      transform 460ms cubic-bezier(0.22, 1.4, 0.36, 1),
+      opacity   320ms cubic-bezier(0.22, 1, 0.36, 1);
   }
   .cbw-root[data-open="true"] .cbw-panel {
     opacity: 1;
-    transform: scale(1);
-    filter: blur(0);
+    transform: scale(1) translateY(0);
     pointer-events: auto;
-  }
-  .cbw-panel.cbw-opening {
-    animation: cbw-genie-open 1300ms cubic-bezier(0.22, 1.0, 0.36, 1) forwards;
-  }
-  .cbw-panel.cbw-closing {
-    animation: cbw-genie-close 850ms cubic-bezier(0.55, 0.06, 0.68, 0.19) forwards;
-    pointer-events: none;
-  }
-
-  /* OPEN — 17 keyframes: rising column → horizontal unfurl → settle */
-  @keyframes cbw-genie-open {
-    0%   { opacity: 0;    transform: scale(0);                                  filter: blur(12px); }
-    3%   { opacity: 0.25; transform: scaleX(0.04) scaleY(0.04);                 filter: blur(11px); }
-    7%   { opacity: 0.45; transform: scaleX(0.045) scaleY(0.10);                filter: blur(10px); }
-    12%  { opacity: 0.55; transform: scaleX(0.05)  scaleY(0.18);                filter: blur(8px); }
-    18%  { opacity: 0.65; transform: scaleX(0.055) scaleY(0.30);                filter: blur(6.5px); }
-    25%  { opacity: 0.72; transform: scaleX(0.06)  scaleY(0.44);                filter: blur(5px); }
-    33%  { opacity: 0.80; transform: scaleX(0.07)  scaleY(0.60);                filter: blur(3.5px); }
-    41%  { opacity: 0.86; transform: scaleX(0.09)  scaleY(0.74);                filter: blur(2.5px); }
-    49%  { opacity: 0.90; transform: scaleX(0.14)  scaleY(0.86);                filter: blur(1.5px); }
-    57%  { opacity: 0.93; transform: scaleX(0.24)  scaleY(0.94);                filter: blur(1px); }
-    65%  { opacity: 0.95; transform: scaleX(0.40)  scaleY(0.99);                filter: blur(0.5px); }
-    73%  { opacity: 0.97; transform: scaleX(0.60)  scaleY(1.02);                filter: blur(0); }
-    81%  { opacity: 0.99; transform: scaleX(0.80)  scaleY(1.01);                filter: blur(0); }
-    88%  { opacity: 1;    transform: scaleX(0.95)  scaleY(1.005);               filter: blur(0); }
-    93%  { opacity: 1;    transform: scaleX(1.02)  scaleY(0.998);               filter: blur(0); }
-    97%  { opacity: 1;    transform: scaleX(0.998) scaleY(1.001);               filter: blur(0); }
-    100% { opacity: 1;    transform: scale(1);                                  filter: blur(0); }
-  }
-
-  /* CLOSE — 13 keyframes: collapse width → shrink column → vanish into launcher */
-  @keyframes cbw-genie-close {
-    0%   { opacity: 1;    transform: scale(1);                                  filter: blur(0); }
-    8%   { opacity: 1;    transform: scaleX(1.01)  scaleY(1.005);               filter: blur(0); }
-    18%  { opacity: 0.98; transform: scaleX(0.88)  scaleY(1.01);                filter: blur(0.5px); }
-    30%  { opacity: 0.95; transform: scaleX(0.62)  scaleY(1);                   filter: blur(1px); }
-    42%  { opacity: 0.90; transform: scaleX(0.36)  scaleY(0.97);                filter: blur(2px); }
-    54%  { opacity: 0.84; transform: scaleX(0.18)  scaleY(0.90);                filter: blur(3px); }
-    65%  { opacity: 0.74; transform: scaleX(0.08)  scaleY(0.78);                filter: blur(4.5px); }
-    74%  { opacity: 0.62; transform: scaleX(0.05)  scaleY(0.60);                filter: blur(6px); }
-    82%  { opacity: 0.48; transform: scaleX(0.045) scaleY(0.40);                filter: blur(8px); }
-    89%  { opacity: 0.30; transform: scaleX(0.04)  scaleY(0.20);                filter: blur(10px); }
-    95%  { opacity: 0.12; transform: scaleX(0.03)  scaleY(0.06);                filter: blur(11px); }
-    100% { opacity: 0;    transform: scale(0);                                  filter: blur(12px); }
   }
 
   /* ---------- HEADER ---------- */
@@ -274,7 +229,15 @@
     100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
   }
   
-  .cbw-msg.cbw-bot { align-self: flex-start; background: var(--bot-bubble); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; transform-origin: bottom left; }
+  .cbw-msg.cbw-bot {
+    align-self: flex-start;
+    background: linear-gradient(180deg, #ecfdf5, #d1fae5);
+    color: #064e3b;
+    border: 1px solid #86efac;
+    border-bottom-left-radius: 4px;
+    transform-origin: bottom left;
+    box-shadow: 0 2px 6px -2px rgba(2, 44, 34, 0.12);
+  }
   .cbw-msg.cbw-user { align-self: flex-end; background: #0f766e; color: #fff; border-bottom-right-radius: 4px; transform-origin: bottom right; }
 
   .cbw-typing { align-self:flex-start; display:inline-flex; gap:5px; padding:13px 16px; border-radius:14px; border-bottom-left-radius:4px; animation: cbw-balloon-in 0.4s ease both; transform-origin: bottom left; }
@@ -350,21 +313,6 @@
   }
   .cbw-cta-btn:hover { transform: translateY(-1px); filter: brightness(1.08); }
   .cbw-cta-btn:active { transform: scale(0.98); }
-  .cbw-cta-btn::before {
-    content: "";
-    position: absolute; inset: 0;
-    background: linear-gradient(120deg,
-      transparent 0%, transparent 35%,
-      rgba(255,255,255,0.32) 50%,
-      transparent 65%, transparent 100%);
-    transform: translateX(-100%);
-    animation: cbw-cta-shine 4.5s ease-in-out infinite;
-    pointer-events: none;
-  }
-  @keyframes cbw-cta-shine {
-    0%, 70%, 100% { transform: translateX(-100%); }
-    35%           { transform: translateX(100%); }
-  }
   .cbw-cta-icon {
     width: 36px; height: 36px;
     border-radius: 10px;
@@ -511,24 +459,92 @@
   }
   .cbw-svc-card:hover .cbw-svc-arrow { color: #0f766e; transform: translateX(4px); }
 
-  /* Hover icon-specific animations */
-  .cbw-svc-card:hover .cbw-anim-truck-body { animation: cbw-truck-bounce 0.6s ease-in-out infinite alternate; }
-  .cbw-svc-card:hover .cbw-anim-wheel      { animation: cbw-wheel-spin 0.7s linear infinite; transform-origin: center; transform-box: fill-box; }
-  .cbw-svc-card:hover .cbw-anim-broom      { animation: cbw-broom-sweep 0.9s ease-in-out infinite alternate; transform-origin: 50% 90%; transform-box: fill-box; }
-  .cbw-svc-card:hover .cbw-anim-spark      { animation: cbw-spark-pop 1.1s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
-  .cbw-svc-card:hover .cbw-anim-window     { animation: cbw-window-blink 1.4s ease-in-out infinite; }
-  .cbw-svc-card:hover .cbw-anim-recycle    { animation: cbw-recycle-rotate 1.5s linear infinite; transform-origin: 50% 50%; transform-box: fill-box; }
-  .cbw-svc-card:hover .cbw-anim-key        { animation: cbw-key-press 1.0s ease-in-out infinite; transform-origin: 50% 0%; transform-box: fill-box; }
-  .cbw-svc-card:hover .cbw-anim-key-2      { animation-delay: 0.2s; }
-  .cbw-svc-card:hover .cbw-anim-key-3      { animation-delay: 0.4s; }
+  /* Service icons (landscape) — slightly larger so animations have room */
+  .cbw-svc-icon { width: 72px; height: 54px; border-radius: 14px; padding: 4px; }
+  .cbw-svc-icon svg { width: 100%; height: 100%; }
 
-  @keyframes cbw-truck-bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-1.5px); } }
-  @keyframes cbw-wheel-spin   { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @keyframes cbw-broom-sweep  { 0% { transform: rotate(-12deg); } 100% { transform: rotate(12deg); } }
-  @keyframes cbw-spark-pop    { 0%, 100% { opacity: 0; transform: scale(0.4); } 50% { opacity: 1; transform: scale(1.1); } }
-  @keyframes cbw-window-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
-  @keyframes cbw-recycle-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-  @keyframes cbw-key-press    { 0%, 70%, 100% { transform: translateY(0); } 80% { transform: translateY(2px); } }
+  /* Hover-only animations on service icons */
+  .cbw-svc-card:hover .cbw-anim-truck-body,
+  .cbw-svc-card:hover .cbw-anim-truck-rev    { animation: cbw-bounce-soft .45s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-wheel        { animation: cbw-spin .7s linear infinite; transform-origin: center; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-house        { animation: cbw-fade-pulse 1.6s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-box-fly      { animation: cbw-box-fly 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-out-1        { animation: cbw-eject 1.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-out-2        { animation: cbw-eject 1.5s ease-in-out .2s infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-out-3        { animation: cbw-eject 1.5s ease-in-out .4s infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-broom        { animation: cbw-broom-sweep .85s ease-in-out infinite alternate; transform-origin: 100% 0; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-spark-pop    { animation: cbw-spark 1.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-fall-1       { animation: cbw-drop 1.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-fall-2       { animation: cbw-drop 1.5s ease-in-out .35s infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-fall-3       { animation: cbw-drop 1.5s ease-in-out .7s infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-lid          { animation: cbw-lid 1.5s ease-in-out infinite; transform-origin: 0 100%; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-recycle-spin { animation: cbw-spin 2s linear infinite; transform-origin: center; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-road         { animation: cbw-road-flow .55s linear infinite; }
+  .cbw-svc-card:hover .cbw-anim-smoke        { animation: cbw-smoke 1.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+  @keyframes cbw-bounce-soft { 0% { transform: translateY(0); } 100% { transform: translateY(-1.4px); } }
+  @keyframes cbw-spin        { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes cbw-fade-pulse  { 0% { opacity: 1; } 100% { opacity: .65; } }
+  @keyframes cbw-box-fly {
+    0%, 100% { transform: translate(0, 0); opacity: 1; }
+    35%      { transform: translate(8px, -2px); opacity: 1; }
+    50%      { transform: translate(8px, -2px); opacity: 0; }
+    51%      { transform: translate(0, 0); opacity: 0; }
+    65%      { transform: translate(0, 0); opacity: 1; }
+  }
+  @keyframes cbw-eject {
+    0%, 65%, 100% { transform: translate(0, 0) scale(1); opacity: .7; }
+    78%           { transform: translate(0, -10px) scale(.6); opacity: .15; }
+    82%           { transform: translate(0, 0) scale(1); opacity: 0; }
+    90%           { transform: translate(0, 0) scale(1); opacity: .7; }
+  }
+  @keyframes cbw-broom-sweep { 0% { transform: rotate(-10deg); } 100% { transform: rotate(10deg); } }
+  @keyframes cbw-spark { 0%, 100% { opacity: 0; transform: scale(.3); } 50% { opacity: 1; transform: scale(1.15); } }
+  @keyframes cbw-drop {
+    0%   { transform: translateY(0);   opacity: 0; }
+    8%   { opacity: .7; }
+    55%  { transform: translateY(20px); opacity: .7; }
+    65%  { opacity: 0; }
+    100% { transform: translateY(0);   opacity: 0; }
+  }
+  @keyframes cbw-lid { 0%, 30%, 100% { transform: rotate(0deg); } 14% { transform: rotate(-12deg); } }
+  @keyframes cbw-road-flow { from { transform: translateX(0); } to { transform: translateX(-12px); } }
+  @keyframes cbw-smoke {
+    0%   { transform: translate(0, 0) scale(1);    opacity: .45; }
+    60%  { transform: translate(2px, -6px) scale(1.4); opacity: 0; }
+    100% { transform: translate(0, 0) scale(1);    opacity: 0; }
+  }
+
+  /* Tone variants for option cards (semantic color-coding) */
+  .cbw-q-card[data-tone="good"]  { border-color: #86efac; background: #f0fdf4; color: #166534; }
+  .cbw-q-card[data-tone="good"]:hover { background: #dcfce7; border-color: #4ade80; color: #14532d; }
+  .cbw-q-card[data-tone="good"][aria-pressed="true"] {
+    background: linear-gradient(145deg, #16a34a, #14532d);
+    border-color: #14532d; color: #fff;
+    box-shadow: 0 4px 12px -4px rgba(20,83,45,0.45);
+  }
+  .cbw-q-card[data-tone="warn"]  { border-color: #fde68a; background: #fffbeb; color: #854d0e; }
+  .cbw-q-card[data-tone="warn"]:hover { background: #fef3c7; border-color: #facc15; color: #713f12; }
+  .cbw-q-card[data-tone="warn"][aria-pressed="true"] {
+    background: linear-gradient(145deg, #d97706, #78350f);
+    border-color: #78350f; color: #fff;
+    box-shadow: 0 4px 12px -4px rgba(120,53,15,0.45);
+  }
+  .cbw-q-card[data-tone="bad"]   { border-color: #fca5a5; background: #fef2f2; color: #991b1b; }
+  .cbw-q-card[data-tone="bad"]:hover { background: #fee2e2; border-color: #f87171; color: #7f1d1d; }
+  .cbw-q-card[data-tone="bad"][aria-pressed="true"] {
+    background: linear-gradient(145deg, #dc2626, #7f1d1d);
+    border-color: #7f1d1d; color: #fff;
+    box-shadow: 0 4px 12px -4px rgba(127,29,29,0.45);
+  }
+  .cbw-q-card-custom { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+  .cbw-q-card-custom svg { width: 14px; height: 14px; }
+  .cbw-q-custom-wrap { margin-top: 8px; animation: cbw-msg-in 220ms ease both; }
+
+  /* Multi-select chip — inline icon */
+  .cbw-q-chip { display: inline-flex; align-items: center; gap: 6px; }
+  .cbw-q-chip-ico { width: 16px; height: 16px; display: inline-flex; flex-shrink: 0; }
+  .cbw-q-chip-ico svg { width: 100%; height: 100%; }
 
   /* Question inputs — radio cards */
   .cbw-q-cards {
@@ -976,39 +992,19 @@
     if (el) el.remove();
   }
 
-  const panelEl = document.getElementById('cbwPanel');
-  let animTimer = null;
   function togglePanel(open) {
     const next = open == null ? root.dataset.open !== 'true' : !!open;
     if (next === (root.dataset.open === 'true')) return;
-
-    clearTimeout(animTimer);
-    panelEl.classList.remove('cbw-opening', 'cbw-closing');
-
+    root.dataset.open = next ? 'true' : 'false';
     if (next) {
-      // Force reflow so the animation restarts cleanly even on rapid toggle
-      void panelEl.offsetWidth;
-      panelEl.classList.add('cbw-opening');
-      root.dataset.open = 'true';
-      animTimer = setTimeout(() => panelEl.classList.remove('cbw-opening'), 1300);
-
       if (badge) badge.remove();
       setRobotState('greeting', 2500);
       if (messagesEl.children.length === 0) {
         setTimeout(() => {
           appendBubble('bot', 'Ahoj! Som virtuálny asistent. Ako vám môžem pomôcť?');
           playSound();
-        }, 900);
+        }, 700);
       }
-    } else {
-      panelEl.classList.add('cbw-closing');
-      // Keep data-open=true for the duration of the close animation so the
-      // panel keeps its visible CSS rules; flip to false at the end so the
-      // default (scale 0) takes over without a flash.
-      animTimer = setTimeout(() => {
-        panelEl.classList.remove('cbw-closing');
-        root.dataset.open = 'false';
-      }, 850);
     }
   }
 
@@ -1104,44 +1100,57 @@
      CALCULATOR WIZARD — sťahovanie / vypratávanie / odpad / klavír
      ============================================================ */
 
-  // ---------- Service catalog (placeholder data; the business owner
-  //            can tweak labels, prices and questions later) ----------
+  // ---------- Tiny inline icons for multi-select options (replaces emojis) ----------
+  const ICN = {
+    box:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>',
+    tools:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    piano:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="1.5"/><line x1="6" y1="6" x2="6" y2="14"/><line x1="10" y1="6" x2="10" y2="14"/><line x1="14" y1="6" x2="14" y2="14"/><line x1="18" y1="6" x2="18" y2="14"/></svg>',
+    safe:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="14" cy="12" r="2.5"/><line x1="14" y1="9.5" x2="14" y2="7"/></svg>',
+    fish:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13c5-7 13-7 18 0-5 7-13 7-18 0z"/><circle cx="16" cy="13" r="0.8" fill="currentColor"/></svg>',
+    kitchen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="9"/><line x1="15" y1="9" x2="15" y2="21"/></svg>',
+    bolt:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
+    paint:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 11h2v8a2 2 0 0 1-2 2h-2"/><path d="M3 21V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v6H3"/><circle cx="9" cy="14" r="1"/></svg>',
+    barrel:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="2"/><path d="M3 5v14c0 1.1 4 2 9 2s9-.9 9-2V5"/></svg>',
+    plus:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  };
+
+  // ---------- Service catalog (4 services, placeholder pricing/questions) ----------
   const SERVICES = [
     {
-      id: 'moving_home',
-      title: 'Sťahovanie domácnosti',
+      id: 'moving',
+      title: 'Sťahovanie',
       sub:   'Byt, dom, izba — komplexné sťahovanie',
       base:  60,
-      icon:  iconTruck,
+      icon:  iconMoving,
       questions: [
-        { id: 'size', label: 'Aká je veľkosť domácnosti?', hint: 'Vyberte typ bytu alebo domu.', type: 'cards', cols: 2,
+        { id: 'size', label: 'Aká je veľkosť domácnosti?', type: 'cards', cols: 2, allowCustom: true,
           options: [
-            { value: '1izb', label: '1-izbový',  sub: '~25 m²',  mult: 0.7 },
-            { value: '2izb', label: '2-izbový',  sub: '~50 m²',  mult: 1.0 },
-            { value: '3izb', label: '3-izbový',  sub: '~75 m²',  mult: 1.4 },
-            { value: '4izb', label: '4-izbový+', sub: '~100 m²', mult: 1.8 },
-            { value: 'dom',  label: 'Rodinný dom', sub: '> 120 m²', mult: 2.4 },
+            { value: '1izb', label: '1-izbový byt',  sub: '~25 m²',  mult: 0.7 },
+            { value: '2izb', label: '2-izbový byt',  sub: '~50 m²',  mult: 1.0 },
+            { value: '3izb', label: '3-izbový byt',  sub: '~75 m²',  mult: 1.4 },
+            { value: '4izb', label: '4+ izbový byt', sub: '~100 m²', mult: 1.8 },
+            { value: 'dom',  label: 'Rodinný dom',   sub: '> 120 m²', mult: 2.4 },
           ] },
         { id: 'from_address', label: 'Z akej adresy sa sťahujete?', type: 'text', placeholder: 'Mesto, ulica' },
         { id: 'to_address',   label: 'Kam sa sťahujete?',           type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'floors', label: 'Poschodie a výťah', type: 'group', sub: [
-            { id: 'floor_from', label: 'Z poschodia',     type: 'number', placeholder: '0' },
-            { id: 'floor_to',   label: 'Na poschodie',    type: 'number', placeholder: '0' },
+        { id: 'floors', label: 'Poschodie', type: 'group', sub: [
+            { id: 'floor_from', label: 'Z poschodia',  type: 'number', placeholder: '0' },
+            { id: 'floor_to',   label: 'Na poschodie', type: 'number', placeholder: '0' },
           ] },
         { id: 'elevator', label: 'Je k dispozícii výťah?', type: 'cards', cols: 3,
           options: [
-            { value: 'both', label: 'Áno, oboje' },
-            { value: 'one',  label: 'Iba jeden' },
-            { value: 'none', label: 'Bez výťahu', addPct: 0.20 },
+            { value: 'both', label: 'Áno, oboje', tone: 'good' },
+            { value: 'one',  label: 'Iba jeden',  tone: 'warn' },
+            { value: 'none', label: 'Bez výťahu', tone: 'bad', addPct: 0.20 },
           ] },
-        { id: 'extras', label: 'Doplnkové služby?', hint: 'Vyberte čo všetko potrebujete.', type: 'multi',
+        { id: 'extras', label: 'Doplnkové služby?', type: 'multi',
           options: [
-            { value: 'packing',     label: '📦 Balenie vecí',     add: 50 },
-            { value: 'disassembly', label: '🔧 Demontáž nábytku', add: 40 },
-            { value: 'piano',       label: '🎹 Klavír',            add: 100 },
-            { value: 'safe',        label: '🔒 Sejf',              add: 80 },
-            { value: 'aquarium',    label: '🐟 Akvárium',          add: 30 },
-            { value: 'kitchen',     label: '🍳 Kuchynská linka',   add: 60 },
+            { value: 'packing',     label: 'Balenie vecí',     icon: 'box',     add: 50 },
+            { value: 'disassembly', label: 'Demontáž nábytku', icon: 'tools',   add: 40 },
+            { value: 'piano',       label: 'Klavír',            icon: 'piano',   add: 100 },
+            { value: 'safe',        label: 'Sejf',              icon: 'safe',    add: 80 },
+            { value: 'aquarium',    label: 'Akvárium',          icon: 'fish',    add: 30 },
+            { value: 'kitchen',     label: 'Kuchynská linka',   icon: 'kitchen', add: 60 },
           ] },
         { id: 'date', label: 'Plánovaný termín?', hint: 'Voliteľné.', type: 'date' },
       ]
@@ -1151,9 +1160,9 @@
       title: 'Vypratávanie',
       sub:   'Byt, pivnica, garáž, kancelária',
       base:  80,
-      icon:  iconBroom,
+      icon:  iconClearing,
       questions: [
-        { id: 'space', label: 'Aký priestor vypratávate?', type: 'cards', cols: 2,
+        { id: 'space', label: 'Aký priestor vypratávate?', type: 'cards', cols: 2, allowCustom: true,
           options: [
             { value: 'flat',   label: 'Byt',          mult: 1.0 },
             { value: 'house',  label: 'Rodinný dom',  mult: 1.8 },
@@ -1162,14 +1171,14 @@
             { value: 'garage', label: 'Garáž',        mult: 0.7 },
             { value: 'attic',  label: 'Povala',       mult: 0.6 },
           ] },
-        { id: 'area',     label: 'Veľkosť priestoru (m²)', hint: 'Pomáha presnejšie naceniť.', type: 'number', placeholder: 'napr. 60' },
-        { id: 'fullness', label: 'Aký je stav vecí v priestore?', type: 'cards', cols: 1,
+        { id: 'area', label: 'Veľkosť priestoru (m²)', type: 'number', placeholder: 'napr. 60' },
+        { id: 'fullness', label: 'Stav vecí v priestore', type: 'cards', cols: 1,
           options: [
-            { value: 'low',    label: 'Málo vecí',      sub: 'Pár predmetov, ľahké odvezenie',          mult: 0.7 },
-            { value: 'medium', label: 'Stredne plný',   sub: 'Bežne zariadená domácnosť',               mult: 1.0 },
-            { value: 'high',   label: 'Veľmi plný',     sub: 'Roky nahromadené veci, plné skrine',      mult: 1.6 },
+            { value: 'low',    label: 'Málo vecí',    sub: 'Pár predmetov, ľahké odvezenie',     mult: 0.7, tone: 'good' },
+            { value: 'medium', label: 'Stredne plný', sub: 'Bežne zariadená domácnosť',          mult: 1.0, tone: 'warn' },
+            { value: 'high',   label: 'Veľmi plný',   sub: 'Roky nahromadené veci, plné skrine', mult: 1.6, tone: 'bad' },
           ] },
-        { id: 'disposal', label: 'Likvidácia odpadu?', hint: 'Postaráme sa aj o triedenie a odvoz.', type: 'cards', cols: 2,
+        { id: 'disposal', label: 'Likvidácia odpadu?', type: 'cards', cols: 3,
           options: [
             { value: 'yes',     label: 'Áno, všetko',     mult: 1.0 },
             { value: 'partial', label: 'Niečo si nechám', mult: 0.85 },
@@ -1177,102 +1186,68 @@
           ] },
         { id: 'special', label: 'Špeciálne odpady?', type: 'multi',
           options: [
-            { value: 'electro', label: '⚡ Elektroodpad',     add: 40 },
-            { value: 'paint',   label: '🎨 Farby/chémia',     add: 30 },
-            { value: 'oil',     label: '🛢️ Oleje',            add: 50 },
+            { value: 'electro', label: 'Elektroodpad', icon: 'bolt',   add: 40 },
+            { value: 'paint',   label: 'Farby/chémia', icon: 'paint',  add: 30 },
+            { value: 'oil',     label: 'Oleje',        icon: 'barrel', add: 50 },
           ] },
         { id: 'address', label: 'Adresa priestoru?', type: 'text', placeholder: 'Mesto, ulica' },
         { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
       ]
     },
     {
-      id: 'office_moving',
-      title: 'Sťahovanie firmy',
-      sub:   'Kancelárie, obchody, prevádzky',
-      base:  200,
-      icon:  iconBuilding,
-      questions: [
-        { id: 'employees', label: 'Počet zamestnancov?', type: 'cards', cols: 2,
-          options: [
-            { value: '1-5',   label: '1 – 5',     mult: 0.6 },
-            { value: '5-15',  label: '5 – 15',    mult: 1.0 },
-            { value: '15-30', label: '15 – 30',   mult: 1.6 },
-            { value: '30+',   label: 'Viac ako 30', mult: 2.5 },
-          ] },
-        { id: 'rooms',     label: 'Počet miestností?', type: 'number', placeholder: 'napr. 5' },
-        { id: 'equipment', label: 'Aké vybavenie sťahujete?', type: 'multi',
-          options: [
-            { value: 'pc',      label: '💻 PC / IT',         add: 40 },
-            { value: 'archive', label: '🗄️ Archív',          add: 60 },
-            { value: 'heavy',   label: '⚙️ Ťažké stroje',    add: 150 },
-            { value: 'kitchen', label: '☕ Kuchynka',         add: 50 },
-          ] },
-        { id: 'when', label: 'Kedy by ste chceli sťahovať?', type: 'cards', cols: 3,
-          options: [
-            { value: 'workday', label: 'Pracovný deň', mult: 1.0 },
-            { value: 'weekend', label: 'Víkend',       mult: 1.3 },
-            { value: 'night',   label: 'V noci',       mult: 1.6 },
-          ] },
-        { id: 'from_address', label: 'Z akej adresy?', type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'to_address',   label: 'Kam?',           type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'date',         label: 'Plánovaný termín?', type: 'date' },
-      ]
-    },
-    {
       id: 'waste',
-      title: 'Likvidácia odpadu',
-      sub:   'Stavebný, biologický, elektronický',
+      title: 'Likvidácia',
+      sub:   'Stavebný, biologický, elektronický odpad',
       base:  50,
-      icon:  iconRecycle,
+      icon:  iconWaste,
       questions: [
-        { id: 'type', label: 'Typ odpadu?', type: 'cards', cols: 2,
+        { id: 'type', label: 'Typ odpadu?', type: 'cards', cols: 2, allowCustom: true,
           options: [
             { value: 'mixed',        label: 'Zmiešaný',     mult: 1.0 },
-            { value: 'construction', label: 'Stavebný',     mult: 1.5 },
-            { value: 'green',        label: 'Bio / zeleň',  mult: 0.8 },
-            { value: 'electro',      label: 'Elektroodpad', mult: 1.2 },
-            { value: 'hazardous',    label: 'Nebezpečný',   mult: 2.0 },
+            { value: 'construction', label: 'Stavebný',     mult: 1.5, tone: 'warn' },
+            { value: 'green',        label: 'Bio / zeleň',  mult: 0.8, tone: 'good' },
+            { value: 'electro',      label: 'Elektroodpad', mult: 1.2, tone: 'warn' },
+            { value: 'hazardous',    label: 'Nebezpečný',   mult: 2.0, tone: 'bad' },
           ] },
         { id: 'volume', label: 'Odhadovaný objem (m³)?', hint: 'Pomôže presnejšie odhadnúť cenu.', type: 'number', placeholder: 'napr. 5' },
         { id: 'access', label: 'Prístup pre nákladiak?', type: 'cards', cols: 2,
           options: [
-            { value: 'yes',  label: 'Áno, k vchodu',     mult: 1.0 },
-            { value: 'no',   label: 'Iba pešo / ďaleko', mult: 1.3 },
+            { value: 'yes', label: 'Áno, k vchodu',     mult: 1.0, tone: 'good' },
+            { value: 'no',  label: 'Iba pešo / ďaleko', mult: 1.3, tone: 'bad' },
           ] },
         { id: 'address', label: 'Adresa?',           type: 'text', placeholder: 'Mesto, ulica' },
         { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
       ]
     },
     {
-      id: 'piano',
-      title: 'Klavír / ťažké veci',
-      sub:   'Klavír, sejf, ťažký nábytok, stroj',
-      base:  120,
-      icon:  iconPiano,
+      id: 'transport',
+      title: 'Odvoz',
+      sub:   'Preprava nábytku, klavíra, stroja…',
+      base:  70,
+      icon:  iconTransport,
       questions: [
-        { id: 'item', label: 'Čo prevážate?', type: 'cards', cols: 2,
+        { id: 'item', label: 'Čo prevážate?', type: 'cards', cols: 2, allowCustom: true,
           options: [
-            { value: 'piano',     label: '🎹 Klavír',  mult: 1.5 },
-            { value: 'safe',      label: '🔒 Sejf',     mult: 1.3 },
-            { value: 'sculpture', label: '🗿 Socha',    mult: 1.2 },
-            { value: 'machine',   label: '⚙️ Stroj',    mult: 1.4 },
-            { value: 'other',     label: 'Iné',         mult: 1.0 },
+            { value: 'furniture', label: 'Nábytok',         mult: 1.0 },
+            { value: 'appliance', label: 'Spotrebič',       mult: 0.9 },
+            { value: 'piano',     label: 'Klavír',          mult: 1.5 },
+            { value: 'safe',      label: 'Sejf',            mult: 1.3 },
+            { value: 'machine',   label: 'Stroj / paleta',  mult: 1.4 },
           ] },
-        { id: 'weight', label: 'Hmotnosť (kg)?', type: 'cards', cols: 2,
+        { id: 'distance', label: 'Vzdialenosť?', type: 'cards', cols: 1,
           options: [
-            { value: '50-100',  label: '50 – 100 kg',  mult: 0.8 },
-            { value: '100-200', label: '100 – 200 kg', mult: 1.0 },
-            { value: '200-400', label: '200 – 400 kg', mult: 1.5 },
-            { value: '400+',    label: 'Viac ako 400 kg', mult: 2.2 },
+            { value: 'city', label: 'V rámci mesta',     sub: 'do 30 km',    mult: 1.0, tone: 'good' },
+            { value: 'mid',  label: 'Stredná vzdialenosť', sub: '30 – 100 km', mult: 1.4, tone: 'warn' },
+            { value: 'long', label: 'Cez celé Slovensko', sub: '> 100 km',   mult: 1.9, tone: 'bad' },
           ] },
-        { id: 'floors', label: 'Z poschodia / na poschodie?', type: 'group', sub: [
-            { id: 'floor_from', label: 'Z',  type: 'number', placeholder: '0' },
-            { id: 'floor_to',   label: 'Na', type: 'number', placeholder: '0' },
+        { id: 'floors', label: 'Poschodie z / na', type: 'group', sub: [
+            { id: 'floor_from', label: 'Z poschodia',  type: 'number', placeholder: '0' },
+            { id: 'floor_to',   label: 'Na poschodie', type: 'number', placeholder: '0' },
           ] },
         { id: 'elevator', label: 'Je k dispozícii výťah?', type: 'cards', cols: 2,
           options: [
-            { value: 'yes', label: 'Áno' },
-            { value: 'no',  label: 'Nie', addPct: 0.25 },
+            { value: 'yes', label: 'Áno', tone: 'good' },
+            { value: 'no',  label: 'Nie', tone: 'bad', addPct: 0.20 },
           ] },
         { id: 'from_address', label: 'Z akej adresy?', type: 'text', placeholder: 'Mesto, ulica' },
         { id: 'to_address',   label: 'Kam?',           type: 'text', placeholder: 'Mesto, ulica' },
@@ -1281,58 +1256,107 @@
     },
   ];
 
-  // ---------- Service icons (with hover-only animations) ----------
-  function iconTruck() {
-    return '<svg viewBox="0 0 48 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-      + '<rect class="cbw-anim-truck-body" x="2" y="8" width="22" height="16" rx="2"/>'
-      + '<path class="cbw-anim-truck-body" d="M24 12 L36 12 L42 18 L42 24 L24 24 Z"/>'
-      + '<circle class="cbw-anim-wheel" cx="11" cy="26" r="3"/>'
-      + '<circle class="cbw-anim-wheel" cx="35" cy="26" r="3"/>'
+  // ---------- Animated service icons (4 detailed, hover-only animations) ----------
+  function iconMoving() {
+    return ''
+      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+      // House (left)
+      + '<g class="cbw-anim-house">'
+      +   '<path d="M2 22 L8 16 L14 22 L14 36 L2 36 Z"/>'
+      +   '<rect x="6" y="28" width="4" height="8" fill="currentColor" opacity="0.35"/>'
+      + '</g>'
+      // Box flying from house to truck
+      + '<g class="cbw-anim-box-fly">'
+      +   '<rect x="16" y="22" width="8" height="6" fill="currentColor" opacity="0.7"/>'
+      +   '<line x1="20" y1="22" x2="20" y2="28" opacity="0.4"/>'
+      + '</g>'
+      // Truck (right)
+      + '<g class="cbw-anim-truck-body">'
+      +   '<rect x="26" y="20" width="20" height="14" rx="1.5" fill="rgba(255,255,255,0.3)"/>'
+      +   '<path d="M46 24 L54 24 L60 30 L60 34 L46 34 Z" fill="rgba(255,255,255,0.3)"/>'
+      +   '<rect x="54" y="26" width="4" height="3" fill="currentColor" opacity="0.4"/>'
+      +   '<rect x="29" y="22" width="14" height="11" fill="currentColor" opacity="0.18"/>'
+      +   '<line x1="33" y1="22" x2="33" y2="33" opacity="0.5"/>'
+      + '</g>'
+      // Wheels
+      + '<g class="cbw-anim-wheel"><circle cx="33" cy="36" r="3"/><circle cx="33" cy="36" r="1" fill="currentColor"/></g>'
+      + '<g class="cbw-anim-wheel" style="animation-delay:.05s"><circle cx="55" cy="36" r="3"/><circle cx="55" cy="36" r="1" fill="currentColor"/></g>'
       + '</svg>';
   }
-  function iconBroom() {
-    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
+  function iconClearing() {
+    return ''
+      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+      // Room outline
+      + '<rect x="6" y="14" width="40" height="28" rx="2" fill="rgba(255,255,255,0.22)"/>'
+      + '<line x1="6" y1="22" x2="46" y2="22"/>'
+      // Items inside that fly up & out
+      + '<g class="cbw-anim-out-1"><circle cx="14" cy="34" r="2.4" fill="currentColor" opacity="0.7"/></g>'
+      + '<g class="cbw-anim-out-2"><rect x="22" y="32" width="5" height="5" fill="currentColor" opacity="0.7"/></g>'
+      + '<g class="cbw-anim-out-3"><path d="M32 36 L36 32 L36 38 Z" fill="currentColor" opacity="0.7"/></g>'
+      // Sparkles for cleanliness
+      + '<g class="cbw-anim-spark-pop">'
+      +   '<path d="M52 8 L52.8 6.4 L53.6 8 L55.2 8.8 L53.6 9.6 L52.8 11.2 L52 9.6 L50.4 8.8 Z" fill="currentColor"/>'
+      + '</g>'
+      + '<g class="cbw-anim-spark-pop" style="animation-delay:.4s">'
+      +   '<path d="M58 18 L58.6 16.8 L59.2 18 L60.4 18.6 L59.2 19.2 L58.6 20.4 L58 19.2 L56.8 18.6 Z" fill="currentColor"/>'
+      + '</g>'
+      // Broom
       + '<g class="cbw-anim-broom">'
-      +   '<line x1="22" y1="4" x2="10" y2="16"/>'
-      +   '<path d="M9 17 L4 28 M11 18 L8 28 M13 19 L12 28 M15 20 L16 28 M17 21 L20 28"/>'
-      + '</g>'
-      + '<circle class="cbw-anim-spark" cx="6"  cy="6" r="1.4" fill="currentColor"/>'
-      + '<circle class="cbw-anim-spark" cx="26" cy="22" r="1.2" fill="currentColor" style="animation-delay:0.4s"/>'
-      + '<circle class="cbw-anim-spark" cx="22" cy="28" r="1"   fill="currentColor" style="animation-delay:0.8s"/>'
-      + '</svg>';
-  }
-  function iconBuilding() {
-    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-      + '<rect x="6" y="4" width="20" height="26" rx="1.5"/>'
-      + '<rect class="cbw-anim-window" x="9"  y="8"  width="4" height="4" fill="currentColor" opacity="0.85"/>'
-      + '<rect class="cbw-anim-window" x="15" y="8"  width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.3s"/>'
-      + '<rect class="cbw-anim-window" x="21" y="8"  width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.6s"/>'
-      + '<rect class="cbw-anim-window" x="9"  y="14" width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.9s"/>'
-      + '<rect class="cbw-anim-window" x="15" y="14" width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.45s"/>'
-      + '<rect class="cbw-anim-window" x="21" y="14" width="4" height="4" fill="currentColor" opacity="0.85" style="animation-delay:0.15s"/>'
-      + '<rect x="13" y="22" width="6" height="8" fill="currentColor" opacity="0.15"/>'
-      + '</svg>';
-  }
-  function iconRecycle() {
-    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-      + '<g class="cbw-anim-recycle">'
-      +   '<path d="M16 4 L20 11 L12 11 Z"/>'
-      +   '<path d="M27 22 L19 22 L23 29 Z"/>'
-      +   '<path d="M5 22 L9 29 L13 22 Z"/>'
+      +   '<line x1="50" y1="6" x2="42" y2="14"/>'
+      +   '<path d="M40 16 L37 22 M42 16 L41 22 M44 17 L44 22 M46 18 L48 22"/>'
       + '</g>'
       + '</svg>';
   }
-  function iconPiano() {
-    return '<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'
-      + '<rect x="3" y="10" width="26" height="14" rx="1.5"/>'
-      + '<rect class="cbw-anim-key"   x="6"  y="10" width="3" height="11" fill="currentColor" opacity="0.12"/>'
-      + '<rect class="cbw-anim-key cbw-anim-key-2" x="14" y="10" width="3" height="11" fill="currentColor" opacity="0.12"/>'
-      + '<rect class="cbw-anim-key cbw-anim-key-3" x="22" y="10" width="3" height="11" fill="currentColor" opacity="0.12"/>'
-      + '<line x1="9.5"  y1="10" x2="9.5"  y2="24"/>'
-      + '<line x1="13"   y1="10" x2="13"   y2="24"/>'
-      + '<line x1="16.5" y1="10" x2="16.5" y2="24"/>'
-      + '<line x1="20"   y1="10" x2="20"   y2="24"/>'
-      + '<line x1="23.5" y1="10" x2="23.5" y2="24"/>'
+  function iconWaste() {
+    return ''
+      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+      // Falling items
+      + '<g class="cbw-anim-fall-1"><rect x="20" y="2" width="5" height="5" fill="currentColor" opacity="0.7"/></g>'
+      + '<g class="cbw-anim-fall-2"><circle cx="36" cy="5" r="2.5" fill="currentColor" opacity="0.6"/></g>'
+      + '<g class="cbw-anim-fall-3"><path d="M48 4 L51 1 L54 4 L51 7 Z" fill="currentColor" opacity="0.5"/></g>'
+      // Bin lid (opens slightly)
+      + '<g class="cbw-anim-lid">'
+      +   '<line x1="14" y1="18" x2="50" y2="18" stroke-width="2.5"/>'
+      +   '<line x1="22" y1="18" x2="22" y2="14" stroke-width="2"/>'
+      +   '<line x1="42" y1="18" x2="42" y2="14" stroke-width="2"/>'
+      +   '<line x1="22" y1="14" x2="42" y2="14" stroke-width="2"/>'
+      + '</g>'
+      // Bin body
+      + '<path d="M16 20 L18 44 L46 44 L48 20 Z" fill="rgba(255,255,255,0.22)"/>'
+      + '<line x1="22" y1="22" x2="22" y2="42"/>'
+      + '<line x1="32" y1="22" x2="32" y2="42"/>'
+      + '<line x1="42" y1="22" x2="42" y2="42"/>'
+      // Recycle arrows
+      + '<g class="cbw-anim-recycle-spin">'
+      +   '<path d="M28 28 L32 24 L36 28 M36 28 L34 28 L36 30"/>'
+      +   '<path d="M37 33 L33 37 L29 33 M29 33 L31 33 L29 31"/>'
+      + '</g>'
+      + '</svg>';
+  }
+  function iconTransport() {
+    return ''
+      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
+      // Road dashes
+      + '<g class="cbw-anim-road">'
+      +   '<line x1="2"  y1="44" x2="10" y2="44" stroke-width="2"/>'
+      +   '<line x1="14" y1="44" x2="22" y2="44" stroke-width="2"/>'
+      +   '<line x1="26" y1="44" x2="34" y2="44" stroke-width="2"/>'
+      +   '<line x1="38" y1="44" x2="46" y2="44" stroke-width="2"/>'
+      +   '<line x1="50" y1="44" x2="58" y2="44" stroke-width="2"/>'
+      + '</g>'
+      // Truck driving
+      + '<g class="cbw-anim-truck-rev">'
+      +   '<rect x="6" y="20" width="32" height="16" rx="1.5" fill="rgba(255,255,255,0.3)"/>'
+      +   '<path d="M38 24 L48 24 L56 30 L56 36 L38 36 Z" fill="rgba(255,255,255,0.3)"/>'
+      +   '<rect x="48" y="26" width="6" height="3" fill="currentColor" opacity="0.4"/>'
+      +   '<rect x="10" y="22" width="24" height="13" fill="currentColor" opacity="0.18"/>'
+      + '</g>'
+      // Wheels
+      + '<g class="cbw-anim-wheel"><circle cx="14" cy="38" r="3"/><circle cx="14" cy="38" r="1" fill="currentColor"/></g>'
+      + '<g class="cbw-anim-wheel" style="animation-delay:.05s"><circle cx="48" cy="38" r="3"/><circle cx="48" cy="38" r="1" fill="currentColor"/></g>'
+      // Smoke
+      + '<g class="cbw-anim-smoke"><circle cx="60" cy="20" r="2.5" fill="currentColor" opacity="0.45"/></g>'
+      + '<g class="cbw-anim-smoke" style="animation-delay:.4s"><circle cx="62" cy="14" r="2" fill="currentColor" opacity="0.35"/></g>'
       + '</svg>';
   }
 
@@ -1455,23 +1479,69 @@
 
     if (q.type === 'cards') {
       const grid = document.createElement('div');
-      grid.className = 'cbw-q-cards' + (q.cols === 3 ? ' cbw-q-cards-3' : '') + (q.cols === 1 ? ' cbw-q-cards-3' : '');
+      grid.className = 'cbw-q-cards' + (q.cols === 3 ? ' cbw-q-cards-3' : '');
       if (q.cols === 1) grid.style.gridTemplateColumns = '1fr';
+
+      // Custom answer panel (revealed when "Iné" is clicked, if allowed)
+      let customWrap = null;
+      let customInput = null;
+      if (q.allowCustom) {
+        customWrap = document.createElement('div');
+        customWrap.className = 'cbw-q-custom-wrap';
+        customWrap.style.display = 'none';
+        customInput = document.createElement('input');
+        customInput.className = 'cbw-q-input';
+        customInput.placeholder = 'Popíšte vašu situáciu…';
+        const existing = wizState.answers[q.id];
+        if (typeof existing === 'string' && existing.indexOf('__custom__:') === 0) {
+          customInput.value = existing.slice('__custom__:'.length);
+          customWrap.style.display = 'block';
+        }
+        customInput.addEventListener('input', () => {
+          wizState.answers[q.id] = '__custom__:' + customInput.value;
+          wizNext.disabled = !customInput.value.trim();
+        });
+        customWrap.appendChild(customInput);
+      }
+
       q.options.forEach(opt => {
         const b = document.createElement('button');
         b.type = 'button';
         b.className = 'cbw-q-card';
+        if (opt.tone) b.dataset.tone = opt.tone;
         b.setAttribute('aria-pressed', wizState.answers[q.id] === opt.value ? 'true' : 'false');
         b.innerHTML = opt.label + (opt.sub ? '<small>' + opt.sub + '</small>' : '');
         b.addEventListener('click', () => {
           wizState.answers[q.id] = opt.value;
           grid.querySelectorAll('.cbw-q-card').forEach(c => c.setAttribute('aria-pressed', 'false'));
           b.setAttribute('aria-pressed', 'true');
+          if (customWrap) customWrap.style.display = 'none';
           wizNext.disabled = false;
         });
         grid.appendChild(b);
       });
+
+      if (q.allowCustom) {
+        const cb = document.createElement('button');
+        cb.type = 'button';
+        cb.className = 'cbw-q-card cbw-q-card-custom';
+        const isCustom = typeof wizState.answers[q.id] === 'string'
+          && wizState.answers[q.id].indexOf('__custom__:') === 0;
+        cb.setAttribute('aria-pressed', isCustom ? 'true' : 'false');
+        cb.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span>Iné…</span>';
+        cb.addEventListener('click', () => {
+          grid.querySelectorAll('.cbw-q-card').forEach(c => c.setAttribute('aria-pressed', 'false'));
+          cb.setAttribute('aria-pressed', 'true');
+          customWrap.style.display = 'block';
+          setTimeout(() => customInput.focus(), 50);
+          wizState.answers[q.id] = '__custom__:' + (customInput.value || '');
+          wizNext.disabled = !customInput.value.trim();
+        });
+        grid.appendChild(cb);
+      }
+
       wizBody.appendChild(grid);
+      if (customWrap) wizBody.appendChild(customWrap);
     } else if (q.type === 'multi') {
       const wrap = document.createElement('div');
       wrap.className = 'cbw-q-multi';
@@ -1481,7 +1551,10 @@
         b.type = 'button';
         b.className = 'cbw-q-chip';
         b.setAttribute('aria-pressed', sel.includes(opt.value) ? 'true' : 'false');
-        b.textContent = opt.label;
+        const ico = (opt.icon && ICN[opt.icon])
+          ? '<span class="cbw-q-chip-ico">' + ICN[opt.icon] + '</span>'
+          : '';
+        b.innerHTML = ico + '<span>' + opt.label + '</span>';
         b.addEventListener('click', () => {
           const cur = wizState.answers[q.id] || [];
           const i = cur.indexOf(opt.value);
@@ -1570,6 +1643,10 @@
   function formatAnswer(q, a) {
     if (a == null || a === '' || (Array.isArray(a) && !a.length)) return '—';
     if (q.type === 'cards') {
+      if (typeof a === 'string' && a.indexOf('__custom__:') === 0) {
+        const v = a.slice('__custom__:'.length).trim();
+        return v ? 'Iné — ' + v : 'Iné';
+      }
       const opt = q.options.find(o => o.value === a);
       return opt ? opt.label : String(a);
     }
