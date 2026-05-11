@@ -214,7 +214,32 @@ def _render_customer_email(req: LeadRequest) -> tuple[str, str]:
     return subject, body
 
 
-def _send_via_resend(*, to: str, subject: str, html: str, reply_to: str | None = None, bcc: str | None = None) -> None:
+def _photo_attachments(req: LeadRequest) -> list[dict[str, str]]:
+    """Convert PhotoAttachment.data_url entries into Resend `attachments`."""
+    if not req.service_request or not req.service_request.photos:
+        return []
+    out: list[dict[str, str]] = []
+    for i, p in enumerate(req.service_request.photos, 1):
+        # data URL example: "data:image/jpeg;base64,XXXX"
+        b64 = p.data_url.split(",", 1)[-1] if "," in p.data_url else p.data_url
+        ext = (p.type.split("/", 1)[-1] or "jpg")[:8]
+        out.append({
+            "filename": p.name or f"foto-{i}.{ext}",
+            "content": b64,
+            "content_type": p.type or "image/jpeg",
+        })
+    return out
+
+
+def _send_via_resend(
+    *,
+    to: str,
+    subject: str,
+    html: str,
+    reply_to: str | None = None,
+    bcc: str | None = None,
+    attachments: list[dict[str, str]] | None = None,
+) -> None:
     """Single helper that wraps resend.Emails.send with our config."""
     cfg = settings.resend
     if not cfg.api_key:
@@ -235,6 +260,8 @@ def _send_via_resend(*, to: str, subject: str, html: str, reply_to: str | None =
         payload["reply_to"] = reply_to
     if bcc:
         payload["bcc"] = [bcc]
+    if attachments:
+        payload["attachments"] = attachments
     resend.Emails.send(payload)
 
 
@@ -249,6 +276,7 @@ async def _send_owner_notification(req: LeadRequest) -> None:
         html=html,
         reply_to=req.email,
         bcc=cfg.lead_bcc or None,
+        attachments=_photo_attachments(req),
     )
 
 

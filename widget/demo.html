@@ -3,25 +3,29 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,interactive-widget=resizes-visual" />
-<title>Klientský chatbot — Prémiová koža & Moderný robot</title>
+<title>Chat — odvoznabytku.sk</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --primary: #064e3b; /* Tmavá smaragdová zelená */
-    --primary-hover: #022c22;
-    --primary-deep: #020617;
-    --accent: #10b981;
+    --primary: #0284c7;          /* sky-600 */
+    --primary-hover: #0369a1;    /* sky-700 */
+    --primary-deep: #075985;     /* sky-800 */
+    --accent: #38bdf8;           /* sky-400 */
+    --accent-soft: #bae6fd;      /* sky-200 */
     --bg: #ffffff;
     --surface: #f8fafc;
-    --surface-2: #f1f5f9;
+    --surface-2: #f0f9ff;        /* sky-50 */
     --text: #0f172a;
     --text-muted: #64748b;
     --border: #cbd5e1;
-    --bot-bubble: #f1f5f9;      
+    --bot-bubble-bg: #e0f2fe;    /* sky-100 */
+    --bot-bubble-text: #075985;
+    --bot-bubble-border: #7dd3fc; /* sky-300 */
     --radius: 18px;
     --transition: cubic-bezier(0.22,0.61,0.36,1);
+    --glow: 0 0 24px rgba(2, 132, 199, 0.32);
   }
   * { box-sizing: border-box; }
   *::before, *::after { box-sizing: border-box; }
@@ -29,49 +33,22 @@
   body {
     font-family: 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif;
     color: var(--text);
-    background: #f0fdf4;
+    background: #f0f9ff;
     min-height: 100dvh;
     line-height: 1.55;
     -webkit-font-smoothing: antialiased;
   }
 
-  /* Prémiová koža — vertikálne tonálny base + 2 noise vrstvy (svetlé bumps + tmavé pores) */
+  /* Flat blue gradient for "branded" surfaces (header, CTA, send, user bubble) */
   .cbw-dynamic-green, .cbw-input:focus {
-    background-color: #054231 !important;
-    background-image:
-      /* Top edge highlight + bottom vignette */
-      linear-gradient(180deg,
-        rgba(255,255,255,0.20) 0%,
-        rgba(255,255,255,0.06) 10%,
-        rgba(255,255,255,0)    28%,
-        rgba(0,0,0,0)          72%,
-        rgba(0,0,0,0.22)       100%),
-      /* Soft top-left ambient highlight */
-      radial-gradient(ellipse 75% 55% at 28% 0%,
-        rgba(255,255,255,0.18) 0%,
-        rgba(255,255,255,0.05) 35%,
-        transparent 70%),
-      /* Light leather highlights — coarser noise, screen blend */
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 360 360' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='lh'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' seed='15' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.22 -0.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lh)'/%3E%3C/svg%3E"),
-      /* Pebbled grain — finer noise, multiply blend */
-      url("data:image/svg+xml,%3Csvg viewBox='0 0 320 320' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='lp'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.05' numOctaves='3' seed='8' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.55 -0.10'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lp)'/%3E%3C/svg%3E"),
-      /* Vertical emerald base — light at top, deep at bottom */
-      linear-gradient(180deg,
-        #0f7553 0%,
-        #0c6446 18%,
-        #095437 40%,
-        #064a32 60%,
-        #033b2a 80%,
-        #022820 100%) !important;
-    background-blend-mode: soft-light, soft-light, screen, multiply, normal !important;
-    background-size: auto, auto, 360px 360px, 320px 320px, auto !important;
+    background-color: var(--primary) !important;
+    background-image: linear-gradient(145deg, #0ea5e9 0%, #0284c7 50%, #075985 100%) !important;
     color: #fff !important;
     box-shadow:
-      inset 0 1.5px 0 rgba(255,255,255,0.24),
-      inset 0 0 0 1px rgba(255,255,255,0.04),
-      inset 0 -2px 6px rgba(0,0,0,0.40),
-      0 6px 20px rgba(2, 44, 34, 0.50),
-      0 1px 3px rgba(0,0,0,0.25) !important;
+      inset 0 1px 0 rgba(255,255,255,0.22),
+      inset 0 -1px 2px rgba(0,0,0,0.18),
+      0 6px 18px -6px rgba(2, 132, 199, 0.55) !important;
+    border: none !important;
   }
 
   /* ============================================================
@@ -123,38 +100,48 @@
     100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; }
   }
 
-  /* ---------- MODERNÝ ROBOT (BEZ ÚST, LEN OČI) ---------- */
+  /* ---------- BOX ROBOT (cardboard box with stuff poking out) ---------- */
   .cbw-robot { width: 48px; height: 48px; display: block; overflow: visible; }
   .cbw-robot.cbw-robot-sm { width: 36px; height: 36px; }
-  .cbw-robot-head, .cbw-eyes, .cbw-eye {
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    transform-origin: 40px 44px; /* Stred hlavy */
-  }
-  .cbw-eye { transform-origin: center; transform-box: fill-box; }
-  
-  .is-idle .cbw-robot-head { animation: cbw-bob 4s ease-in-out infinite; }
-  .is-idle .cbw-eye { animation: cbw-blink-cute 4s infinite; }
-  
-  .is-greeting .cbw-robot-head { animation: cbw-nod 0.8s ease-in-out; }
-  .is-greeting .cbw-eye { transform: scaleY(1.2) scaleX(1.1); }
-  
-  .is-listening .cbw-robot-head { transform: rotate(-5deg) translateY(3px); animation: none; }
-  .is-listening .cbw-eyes { transform: translate(-2px, 3px); }
-  
-  .is-thinking .cbw-robot-head { transform: rotate(3deg) translateY(-2px); animation: none; }
-  .is-thinking .cbw-eyes { animation: cbw-scan 1.5s infinite alternate ease-in-out; }
-  
-  .is-action .cbw-robot-head { animation: cbw-bounce-action 0.5s ease; }
-  .is-action .cbw-eye { transform: scaleY(0.25) translateY(-2px); } /* Oči v tvare šťastného prižmúrenia */
-  
-  .is-talking .cbw-robot-head { animation: cbw-bob-fast 0.6s infinite alternate ease-in-out; }
+  .cbw-robot-head { transition: transform .3s cubic-bezier(0.34, 1.56, 0.64, 1); transform-origin: 40px 50px; }
+  .cbw-eye, .cbw-eyes, .cbw-mouth { transition: transform .3s ease; transform-origin: center; transform-box: fill-box; }
+  .cbw-flap-left  { transform-origin: 40px 32px; transform-box: fill-box; transition: transform .3s ease; }
+  .cbw-flap-right { transform-origin: 40px 32px; transform-box: fill-box; transition: transform .3s ease; }
+  .cbw-stuff      { transform-origin: 40px 34px; transform-box: fill-box; transition: transform .3s ease; }
 
-  @keyframes cbw-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-  @keyframes cbw-bob-fast { 0% { transform: translateY(0); } 100% { transform: translateY(-2px); } }
-  @keyframes cbw-blink-cute { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
-  @keyframes cbw-nod { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(5px); } }
-  @keyframes cbw-scan { 0% { transform: translate(-3px, -2px); } 100% { transform: translate(3px, -2px); } }
-  @keyframes cbw-bounce-action { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05) translateY(-3px); } }
+  .is-idle .cbw-robot-head { animation: cbw-box-wobble 4s ease-in-out infinite; }
+  .is-idle .cbw-eye        { animation: cbw-blink-cute 4s infinite; }
+  .is-idle .cbw-stuff      { animation: cbw-stuff-jiggle 3s ease-in-out infinite; }
+
+  .is-greeting .cbw-robot-head { animation: cbw-box-hop .8s ease-in-out; }
+  .is-greeting .cbw-eye        { transform: scaleY(1.15) scaleX(1.1); }
+  .is-greeting .cbw-mouth      { transform: scaleY(1.4); }
+  .is-greeting .cbw-flap-left  { transform: rotate(-12deg); }
+  .is-greeting .cbw-flap-right { transform: rotate(12deg); }
+
+  .is-listening .cbw-robot-head { transform: rotate(-4deg) translateY(2px); animation: none; }
+  .is-listening .cbw-eyes       { transform: translate(-1px, 2px); }
+  .is-listening .cbw-mouth      { transform: scaleY(0.55); }
+
+  .is-thinking .cbw-robot-head { transform: rotate(3deg) translateY(-2px); animation: none; }
+  .is-thinking .cbw-eyes       { animation: cbw-scan 1.5s infinite alternate ease-in-out; }
+  .is-thinking .cbw-stuff      { animation: cbw-stuff-jiggle .9s ease-in-out infinite; }
+
+  .is-action .cbw-robot-head { animation: cbw-box-bounce .5s ease; }
+  .is-action .cbw-eye        { transform: scaleY(0.3) translateY(-1px); }
+  .is-action .cbw-mouth      { transform: scaleY(1.4) translateY(-1px); }
+
+  .is-talking .cbw-robot-head { animation: cbw-box-wobble-fast .6s infinite alternate ease-in-out; }
+  .is-talking .cbw-mouth      { animation: cbw-mouth-talk .35s infinite alternate ease-in-out; }
+
+  @keyframes cbw-box-wobble      { 0%,100% { transform: rotate(-1deg) translateY(0); } 50% { transform: rotate(1deg) translateY(-2px); } }
+  @keyframes cbw-box-wobble-fast { 0% { transform: rotate(-1.5deg) translateY(0); } 100% { transform: rotate(1.5deg) translateY(-1px); } }
+  @keyframes cbw-blink-cute      { 0%, 92%, 100% { transform: scaleY(1); } 96% { transform: scaleY(0.1); } }
+  @keyframes cbw-box-hop         { 0%,100% { transform: translateY(0); } 35% { transform: translateY(-4px) rotate(-3deg); } 65% { transform: translateY(-2px) rotate(3deg); } }
+  @keyframes cbw-scan            { 0% { transform: translate(-3px, 0); } 100% { transform: translate(3px, 0); } }
+  @keyframes cbw-box-bounce      { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.07) translateY(-3px); } }
+  @keyframes cbw-stuff-jiggle    { 0%,100% { transform: rotate(0deg) translateY(0); } 25% { transform: rotate(-2deg) translateY(-1px); } 75% { transform: rotate(2deg) translateY(-1px); } }
+  @keyframes cbw-mouth-talk      { 0% { transform: scaleY(0.5); } 100% { transform: scaleY(1.3); } }
 
   /* ---------- PANEL — silky open/close (transform + opacity only) ---------- */
   /*
@@ -231,14 +218,21 @@
   
   .cbw-msg.cbw-bot {
     align-self: flex-start;
-    background: linear-gradient(180deg, #ecfdf5, #d1fae5);
-    color: #064e3b;
-    border: 1px solid #86efac;
+    background: linear-gradient(180deg, var(--bot-bubble-bg), #cce9f9);
+    color: var(--bot-bubble-text);
+    border: 1px solid var(--bot-bubble-border);
     border-bottom-left-radius: 4px;
     transform-origin: bottom left;
-    box-shadow: 0 2px 6px -2px rgba(2, 44, 34, 0.12);
+    box-shadow: 0 2px 6px -2px rgba(2, 132, 199, 0.18);
   }
-  .cbw-msg.cbw-user { align-self: flex-end; background: #0f766e; color: #fff; border-bottom-right-radius: 4px; transform-origin: bottom right; }
+  .cbw-msg.cbw-user {
+    align-self: flex-end;
+    background: linear-gradient(145deg, #0ea5e9, #075985);
+    color: #fff;
+    border-bottom-right-radius: 4px;
+    transform-origin: bottom right;
+    box-shadow: 0 4px 12px -4px rgba(2, 132, 199, 0.45);
+  }
 
   .cbw-typing { align-self:flex-start; display:inline-flex; gap:5px; padding:13px 16px; border-radius:14px; border-bottom-left-radius:4px; animation: cbw-balloon-in 0.4s ease both; transform-origin: bottom left; }
   .cbw-typing span { width:7px; height:7px; border-radius:50%; background: #fff; opacity:.95; box-shadow: 0 0 6px rgba(255,255,255,.8); animation: cbw-bounce 1.2s infinite ease-in-out; }
@@ -481,6 +475,160 @@
   .cbw-svc-card:hover .cbw-anim-recycle-spin { animation: cbw-spin 2s linear infinite; transform-origin: center; transform-box: fill-box; }
   .cbw-svc-card:hover .cbw-anim-road         { animation: cbw-road-flow .55s linear infinite; }
   .cbw-svc-card:hover .cbw-anim-smoke        { animation: cbw-smoke 1.1s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+
+  /* Direction (odvoz/dovoz) + new category icon animations */
+  .cbw-svc-card:hover .cbw-anim-house        { animation: cbw-fade-pulse 1.6s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-house-dest   { animation: cbw-fade-pulse 1.6s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-box-out      { animation: cbw-pkg-out 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-box-in       { animation: cbw-pkg-in  1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-door         { animation: cbw-door-blink 1.4s ease-in-out infinite; }
+  .cbw-svc-card:hover .cbw-anim-motion       { animation: cbw-motion-flow .6s linear infinite; }
+  .cbw-svc-card:hover .cbw-anim-wardrobe     { animation: cbw-bounce-soft .55s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-door-l       { animation: cbw-door-open 2.4s ease-in-out infinite; transform-origin: 0 50%; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-knob         { animation: cbw-knob-pulse 1.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-sofa         { animation: cbw-bounce-soft .55s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-fridge       { animation: cbw-bounce-soft .55s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-fridge-light { animation: cbw-light-blink 2.4s ease-in-out infinite; }
+  .cbw-svc-card:hover .cbw-anim-fridge-door  { animation: cbw-fridge-door 2.4s ease-in-out infinite; transform-origin: 0 50%; transform-box: fill-box; }
+  .cbw-svc-card:hover .cbw-anim-snow         { animation: cbw-spin 4s linear infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-brick-1      { animation: cbw-drop 1.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-brick-2      { animation: cbw-drop 1.5s ease-in-out .35s infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-brick-3      { animation: cbw-drop 1.5s ease-in-out .7s infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-dust         { animation: cbw-spark 1.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-pallet       { animation: cbw-lift .9s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-forklift     { animation: cbw-bounce-soft .45s ease-in-out infinite alternate; }
+  .cbw-svc-card:hover .cbw-anim-other        { animation: cbw-other-pulse 2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-dot-1        { animation: cbw-spark 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-dot-2        { animation: cbw-spark 1.4s ease-in-out .25s infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-dot-3        { animation: cbw-spark 1.4s ease-in-out .5s  infinite; transform-box: fill-box; transform-origin: center; }
+  .cbw-svc-card:hover .cbw-anim-dot-4        { animation: cbw-spark 1.4s ease-in-out .75s infinite; transform-box: fill-box; transform-origin: center; }
+
+  @keyframes cbw-pkg-out {
+    0%, 100% { transform: translate(0, 0); opacity: 1; }
+    40%      { transform: translate(8px, -1px); opacity: 1; }
+    55%      { transform: translate(8px, -1px); opacity: 0; }
+    56%      { transform: translate(0, 0); opacity: 0; }
+    70%      { transform: translate(0, 0); opacity: 1; }
+  }
+  @keyframes cbw-pkg-in {
+    0%, 100% { transform: translate(0, 0); opacity: 1; }
+    40%      { transform: translate(10px, -1px); opacity: 1; }
+    55%      { transform: translate(10px, -1px); opacity: 0; }
+    56%      { transform: translate(0, 0); opacity: 0; }
+    70%      { transform: translate(0, 0); opacity: 1; }
+  }
+  @keyframes cbw-door-blink   { 0%, 70%, 100% { opacity: .5; } 78% { opacity: 1; } }
+  @keyframes cbw-motion-flow  { from { transform: translateX(0); } to { transform: translateX(-6px); } }
+  @keyframes cbw-door-open    { 0%, 60%, 100% { transform: scaleX(1); } 75%, 88% { transform: scaleX(0.25); } }
+  @keyframes cbw-knob-pulse   { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.4); } }
+  @keyframes cbw-light-blink  { 0%, 60%, 100% { opacity: 0; } 72%, 88% { opacity: 0.85; } }
+  @keyframes cbw-fridge-door  { 0%, 60%, 100% { transform: scaleX(1); } 75%, 90% { transform: scaleX(0.3); } }
+  @keyframes cbw-lift         { 0% { transform: translateY(0); } 100% { transform: translateY(-3px); } }
+  @keyframes cbw-other-pulse  { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+
+  /* Photo upload UI */
+  .cbw-photo-drop {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 10px 14px;
+    background: var(--surface-2);
+    border: 1.5px dashed var(--primary);
+    border-radius: 12px;
+    color: var(--primary-deep);
+    font-size: 13.5px; font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms ease;
+  }
+  .cbw-photo-drop:hover { background: var(--accent-soft); border-style: solid; }
+  .cbw-photo-drop svg { width: 18px; height: 18px; flex-shrink: 0; }
+  .cbw-photo-thumbs {
+    display: flex; flex-wrap: wrap; gap: 8px;
+    margin-top: 8px;
+  }
+  .cbw-photo-thumb {
+    position: relative;
+    width: 64px; height: 64px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: #fff;
+  }
+  .cbw-photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .cbw-photo-thumb button {
+    position: absolute; top: 2px; right: 2px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(15, 23, 42, 0.7);
+    color: #fff;
+    cursor: pointer;
+    font: bold 14px sans-serif;
+    line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cbw-photo-thumb button:hover { background: rgba(220, 38, 38, 0.85); }
+
+  /* GDPR note */
+  .cbw-gdpr {
+    font-size: 11.5px; color: var(--text-muted);
+    margin: 8px 0 0; line-height: 1.4;
+  }
+
+  /* Direction cards — slightly bigger */
+  .cbw-dir-card { padding: 18px 14px; }
+  .cbw-dir-card .cbw-svc-icon { width: 90px; height: 60px; }
+
+  /* Sticky call-now bar (above composer) */
+  .cbw-callbar {
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px;
+    background: linear-gradient(180deg, #f0f9ff, #e0f2fe);
+    border-top: 1px solid var(--bot-bubble-border);
+  }
+  .cbw-callbar-text {
+    flex: 1;
+    font-size: 12px;
+    color: var(--bot-bubble-text);
+    line-height: 1.3;
+  }
+  .cbw-callbar-text strong { display: block; font-size: 13px; color: var(--primary-deep); }
+  .cbw-callbar-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--primary);
+    color: #fff;
+    text-decoration: none;
+    font-size: 12.5px; font-weight: 700;
+    transition: filter 150ms ease, transform 150ms ease;
+    flex-shrink: 0;
+  }
+  .cbw-callbar-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+  .cbw-callbar-btn svg { width: 14px; height: 14px; }
+  .cbw-callbar:empty,
+  .cbw-root.cbw-calc-active .cbw-callbar { display: none; }
+
+  /* CTA helper text under the CTA bar */
+  .cbw-cta-hint {
+    margin: 6px 4px 0;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+  .cbw-cta-hint::before {
+    content: ""; display: inline-block;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #22c55e;
+    margin-right: 5px; vertical-align: middle;
+    animation: cbw-online-dot 2s ease-in-out infinite;
+  }
+  @keyframes cbw-online-dot {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.5); }
+    50%      { box-shadow: 0 0 0 5px rgba(34, 197, 94, 0); }
+  }
+
+  /* Invalid field state (used by phone/name/email validators) */
+  .cbw-invalid { border-color: #f87171 !important; box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18) !important; }
 
   @keyframes cbw-bounce-soft { 0% { transform: translateY(0); } 100% { transform: translateY(-1.4px); } }
   @keyframes cbw-spin        { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
@@ -727,29 +875,41 @@
     
     <div class="cbw-header cbw-dynamic-green">
       <div class="cbw-header-avatar" aria-hidden="true">
-        
-        <!-- NOVÝ MODERNÝ ROBOT (TVAR CHAT BUBLINKY, BEZ ÚST) -->
+        <!-- BOX ROBOT — animated cardboard box with items poking out -->
         <svg class="cbw-robot is-idle" viewBox="0 0 80 80" fill="none">
           <g class="cbw-robot-head">
-            <!-- Bočné ušká -->
-            <path d="M 15 36 A 6 6 0 0 0 15 52 Z" fill="#fff"/>
-            <path d="M 65 36 A 6 6 0 0 1 65 52 Z" fill="#fff"/>
-            
-            <!-- Anténka -->
-            <line x1="40" y1="12" x2="40" y2="24" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-            <circle cx="40" cy="10" r="4.5" fill="#fff"/>
-            
-            <!-- Hlavná bublinka (Tvar hlavy s chvostíkom dole napravo) -->
-            <path d="M26 22 C10 22 12 36 12 44 C12 56 16 64 30 64 L40 64 L40 76 L50 64 L54 64 C66 64 68 56 68 44 C68 36 70 22 54 22 Z" fill="#fff"/>
-            
-            <!-- Priezor (Visor), tmavozelený -->
-            <path d="M28 28 C16 28 18 38 18 44 C18 52 22 56 32 56 L48 56 C58 56 62 52 62 44 C62 38 64 28 52 28 Z" fill="#022c22"/>
-            
-            <!-- Oči (Zoskupené pre prirodzenú animáciu žmurkania a pohybu) -->
-            <g class="cbw-eyes">
-              <rect class="cbw-eye" x="31" y="38" width="6" height="10" rx="3" fill="#fff"/>
-              <rect class="cbw-eye" x="43" y="38" width="6" height="10" rx="3" fill="#fff"/>
+            <!-- Stuff sticking out of the top of the box -->
+            <g class="cbw-stuff">
+              <!-- Lamp (left) -->
+              <line x1="22" y1="18" x2="22" y2="32" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+              <path d="M17 18 L27 18 L25 12 L19 12 Z" fill="#fef3c7" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+              <!-- Book/box (middle right) -->
+              <rect x="38" y="20" width="14" height="14" rx="1" fill="#fde68a" stroke="#fff" stroke-width="1.4"/>
+              <line x1="42" y1="20" x2="42" y2="34" stroke="#fff" stroke-width="1.2"/>
+              <!-- Plush ears (right) -->
+              <ellipse cx="60" cy="22" rx="3" ry="4" fill="#fca5a5" stroke="#fff" stroke-width="1.4"/>
+              <ellipse cx="66" cy="22" rx="3" ry="4" fill="#fca5a5" stroke="#fff" stroke-width="1.4"/>
             </g>
+            <!-- Top flaps of the cardboard box (slightly open) -->
+            <path class="cbw-flap-left"  d="M12 32 L40 28 L40 36 L12 36 Z" fill="#cbd5e1" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+            <path class="cbw-flap-right" d="M68 32 L40 28 L40 36 L68 36 Z" fill="#cbd5e1" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+            <!-- Main box body -->
+            <path d="M12 36 L68 36 L66 66 L14 66 Z" fill="#e2e8f0" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
+            <!-- Tape strip -->
+            <rect x="36" y="36" width="8" height="30" fill="#94a3b8" opacity="0.6"/>
+            <!-- Vertical seam line -->
+            <line x1="40" y1="36" x2="40" y2="66" stroke="#94a3b8" stroke-width="1" opacity="0.5"/>
+            <!-- Eyes (drawn on box) -->
+            <g class="cbw-eyes">
+              <ellipse class="cbw-eye" cx="28" cy="50" rx="3" ry="4" fill="#0f172a"/>
+              <ellipse class="cbw-eye" cx="52" cy="50" rx="3" ry="4" fill="#0f172a"/>
+              <circle cx="28.7" cy="48.6" r="1" fill="#fff"/>
+              <circle cx="52.7" cy="48.6" r="1" fill="#fff"/>
+            </g>
+            <!-- Smile -->
+            <path class="cbw-mouth" d="M32 58 Q40 62 48 58" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+            <!-- Tiny "FRAGILE" label -->
+            <text x="40" y="74" text-anchor="middle" fill="#fff" opacity="0.6" font-size="6" font-family="monospace" font-weight="700" letter-spacing="0.5">BOX</text>
           </g>
         </svg>
       </div>
@@ -758,9 +918,6 @@
         <div class="cbw-subtitle">online</div>
       </div>
       <div class="cbw-actions">
-        <button class="cbw-icon-btn" id="cbwSound" type="button" aria-label="Stíšiť">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="cbwSoundIcon"></svg>
-        </button>
         <button class="cbw-icon-btn" id="cbwRefresh" type="button" aria-label="Reštartovať chat">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <polyline points="23 4 23 10 17 10"></polyline>
@@ -792,12 +949,13 @@
         </span>
         <span class="cbw-cta-text">
           Spočítať cenu zdarma
-          <small>Sťahovanie · Vypratávanie · Likvidácia</small>
+          <small>Odvoz / dovoz nábytku, zariadenia, materiálu…</small>
         </span>
         <svg class="cbw-cta-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
           <polyline points="9 18 15 12 9 6"/>
         </svg>
       </button>
+      <p class="cbw-cta-hint">Bratislava · zvyčajne reagujeme do 30 minút</p>
     </div>
 
     <!-- Messages -->
@@ -861,6 +1019,9 @@
     <!-- Direct contact icons -->
     <div class="cbw-contact-bar" id="cbwContactBar"></div>
 
+    <!-- Sticky 'Zavolaj teraz' bar -->
+    <div class="cbw-callbar" id="cbwCallBar"></div>
+
     <!-- Composer -->
     <div class="cbw-composer">
       <div class="cbw-composer-wrap">
@@ -876,16 +1037,26 @@
   <button class="cbw-launcher cbw-dynamic-green" id="cbwLauncher" type="button" aria-label="Otvoriť chat">
     <svg class="cbw-robot is-idle" viewBox="0 0 80 80" fill="none">
       <g class="cbw-robot-head">
-        <path d="M 15 36 A 6 6 0 0 0 15 52 Z" fill="#fff"/>
-        <path d="M 65 36 A 6 6 0 0 1 65 52 Z" fill="#fff"/>
-        <line x1="40" y1="12" x2="40" y2="24" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
-        <circle cx="40" cy="10" r="4.5" fill="#fff"/>
-        <path d="M26 22 C10 22 12 36 12 44 C12 56 16 64 30 64 L40 64 L40 76 L50 64 L54 64 C66 64 68 56 68 44 C68 36 70 22 54 22 Z" fill="#fff"/>
-        <path d="M28 28 C16 28 18 38 18 44 C18 52 22 56 32 56 L48 56 C58 56 62 52 62 44 C62 38 64 28 52 28 Z" fill="#022c22"/>
-        <g class="cbw-eyes">
-          <rect class="cbw-eye" x="31" y="38" width="6" height="10" rx="3" fill="#fff"/>
-          <rect class="cbw-eye" x="43" y="38" width="6" height="10" rx="3" fill="#fff"/>
+        <g class="cbw-stuff">
+          <line x1="22" y1="18" x2="22" y2="32" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <path d="M17 18 L27 18 L25 12 L19 12 Z" fill="#fef3c7" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+          <rect x="38" y="20" width="14" height="14" rx="1" fill="#fde68a" stroke="#fff" stroke-width="1.4"/>
+          <line x1="42" y1="20" x2="42" y2="34" stroke="#fff" stroke-width="1.2"/>
+          <ellipse cx="60" cy="22" rx="3" ry="4" fill="#fca5a5" stroke="#fff" stroke-width="1.4"/>
+          <ellipse cx="66" cy="22" rx="3" ry="4" fill="#fca5a5" stroke="#fff" stroke-width="1.4"/>
         </g>
+        <path class="cbw-flap-left"  d="M12 32 L40 28 L40 36 L12 36 Z" fill="#cbd5e1" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+        <path class="cbw-flap-right" d="M68 32 L40 28 L40 36 L68 36 Z" fill="#cbd5e1" stroke="#fff" stroke-width="1.4" stroke-linejoin="round"/>
+        <path d="M12 36 L68 36 L66 66 L14 66 Z" fill="#e2e8f0" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/>
+        <rect x="36" y="36" width="8" height="30" fill="#94a3b8" opacity="0.6"/>
+        <line x1="40" y1="36" x2="40" y2="66" stroke="#94a3b8" stroke-width="1" opacity="0.5"/>
+        <g class="cbw-eyes">
+          <ellipse class="cbw-eye" cx="28" cy="50" rx="3" ry="4" fill="#0f172a"/>
+          <ellipse class="cbw-eye" cx="52" cy="50" rx="3" ry="4" fill="#0f172a"/>
+          <circle cx="28.7" cy="48.6" r="1" fill="#fff"/>
+          <circle cx="52.7" cy="48.6" r="1" fill="#fff"/>
+        </g>
+        <path class="cbw-mouth" d="M32 58 Q40 62 48 58" stroke="#0f172a" stroke-width="1.8" stroke-linecap="round" fill="none"/>
       </g>
     </svg>
     <span class="cbw-badge" id="cbwBadge">1</span>
@@ -905,37 +1076,14 @@
   const sendBtn = document.getElementById('cbwSend');
   const contactBar = document.getElementById('cbwContactBar');
   const robots = () => document.querySelectorAll('.cbw-robot');
-  const soundBtn = document.getElementById('cbwSound');
-  const soundIcon = document.getElementById('cbwSoundIcon');
   const badge = document.getElementById('cbwBadge');
 
   const ICON_PHONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>';
   const ICON_WA = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
   const ICON_MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>';
-  const ICON_SOUND_ON = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
-  const ICON_SOUND_OFF = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/>';
 
-  // ---------- Zvuk & Robot ----------
-  let muted = true;
-  let audioCtx = null;
-  function playSound() {
-    if (muted) return;
-    try {
-      audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-      const t = audioCtx.currentTime;
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.connect(g); g.connect(audioCtx.destination);
-      o.frequency.setValueAtTime(620, t);
-      o.frequency.linearRampToValueAtTime(820, t + 0.1);
-      g.gain.setValueAtTime(0.05, t);
-      g.gain.exponentialRampToValueAtTime(0.001, t + 0.15);
-      o.start(t); o.stop(t + 0.15);
-    } catch (_) {}
-  }
-  function syncSoundIcon() { soundIcon.innerHTML = muted ? ICON_SOUND_OFF : ICON_SOUND_ON; }
-  syncSoundIcon();
-  soundBtn.addEventListener('click', () => { muted = !muted; syncSoundIcon(); });
+  // Sound disabled — no-op stub kept so existing call sites still work
+  function playSound() {}
 
   let robotStateTimer = null;
   function setRobotState(state, duration = null) {
@@ -1115,25 +1263,54 @@
   };
 
   // ---------- Service catalog (4 services, placeholder pricing/questions) ----------
+  const DIRECTIONS = [
+    { id: 'odvoz', title: 'Odvoz', sub: 'Vyvezieme od vás staré veci', icon: iconOdvoz },
+    { id: 'dovoz', title: 'Dovoz', sub: 'Privezieme tovar / nábytok k vám', icon: iconDovoz },
+  ];
+
   const SERVICES = [
     {
-      id: 'moving',
-      title: 'Sťahovanie',
-      sub:   'Byt, dom, izba — komplexné sťahovanie',
-      base:  60,
-      icon:  iconMoving,
+      id: 'furniture',
+      title: 'Nábytok',
+      sub:   'Sedačky, skrine, postele, stoly…',
+      base:  50,
+      icon:  iconFurniture,
+      directions: ['odvoz', 'dovoz'],
       questions: [
-        { id: 'size', label: 'Aká je veľkosť domácnosti?', type: 'cards', cols: 2, allowCustom: true,
+        { id: 'item_kind', label: 'Aký typ nábytku?', type: 'cards', cols: 2, allowCustom: true,
           options: [
-            { value: '1izb', label: '1-izbový byt',  sub: '~25 m²',  mult: 0.7 },
-            { value: '2izb', label: '2-izbový byt',  sub: '~50 m²',  mult: 1.0 },
-            { value: '3izb', label: '3-izbový byt',  sub: '~75 m²',  mult: 1.4 },
-            { value: '4izb', label: '4+ izbový byt', sub: '~100 m²', mult: 1.8 },
-            { value: 'dom',  label: 'Rodinný dom',   sub: '> 120 m²', mult: 2.4 },
+            { value: 'sofa',     label: 'Sedačka',      mult: 1.2 },
+            { value: 'wardrobe', label: 'Skriňa',       mult: 1.1 },
+            { value: 'bed',      label: 'Posteľ',       mult: 1.0 },
+            { value: 'table',    label: 'Stôl + stoličky', mult: 1.0 },
+            { value: 'mixed',    label: 'Viac kusov',   mult: 1.5 },
           ] },
-        { id: 'from_address', label: 'Z akej adresy sa sťahujete?', type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'to_address',   label: 'Kam sa sťahujete?',           type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'floors', label: 'Poschodie', type: 'group', sub: [
+        { id: 'quantity', label: 'Počet kusov?', type: 'number', placeholder: 'napr. 2' },
+        { id: 'service_extra_odvoz', label: 'Potrebná demontáž?', type: 'cards', cols: 2, onlyDir: 'odvoz',
+          options: [
+            { value: 'yes', label: 'Áno, rozobrať',  add: 30 },
+            { value: 'no',  label: 'Nie, vcelku',    tone: 'good' },
+          ] },
+        { id: 'service_extra_dovoz', label: 'Potrebná montáž?', type: 'cards', cols: 2, onlyDir: 'dovoz',
+          options: [
+            { value: 'yes', label: 'Áno, zostaviť', add: 40 },
+            { value: 'no',  label: 'Nie, len doviezť', tone: 'good' },
+          ] },
+        { id: 'store', label: 'Z akej predajne?', type: 'cards', cols: 2, onlyDir: 'dovoz', allowCustom: true,
+          options: [
+            { value: 'momax',   label: 'Mömax' },
+            { value: 'ikea',    label: 'IKEA' },
+            { value: 'jysk',    label: 'JYSK' },
+            { value: 'kika',    label: 'Kika' },
+          ] },
+        { id: 'remove_old', label: 'Odvezieme aj starý nábytok?', type: 'cards', cols: 2, onlyDir: 'dovoz',
+          options: [
+            { value: 'yes', label: 'Áno, prosím', add: 40, tone: 'good' },
+            { value: 'no',  label: 'Nie, ďakujem' },
+          ] },
+        { id: 'from_address', label: 'Z akej adresy?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'to_address',   label: 'Kam doručiť?',  type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'floors', label: 'Poschodie z / na', type: 'group', sub: [
             { id: 'floor_from', label: 'Z poschodia',  type: 'number', placeholder: '0' },
             { id: 'floor_to',   label: 'Na poschodie', type: 'number', placeholder: '0' },
           ] },
@@ -1143,220 +1320,310 @@
             { value: 'one',  label: 'Iba jeden',  tone: 'warn' },
             { value: 'none', label: 'Bez výťahu', tone: 'bad', addPct: 0.20 },
           ] },
-        { id: 'extras', label: 'Doplnkové služby?', type: 'multi',
-          options: [
-            { value: 'packing',     label: 'Balenie vecí',     icon: 'box',     add: 50 },
-            { value: 'disassembly', label: 'Demontáž nábytku', icon: 'tools',   add: 40 },
-            { value: 'piano',       label: 'Klavír',            icon: 'piano',   add: 100 },
-            { value: 'safe',        label: 'Sejf',              icon: 'safe',    add: 80 },
-            { value: 'aquarium',    label: 'Akvárium',          icon: 'fish',    add: 30 },
-            { value: 'kitchen',     label: 'Kuchynská linka',   icon: 'kitchen', add: 60 },
-          ] },
         { id: 'date', label: 'Plánovaný termín?', hint: 'Voliteľné.', type: 'date' },
       ]
     },
     {
-      id: 'clearing',
-      title: 'Vypratávanie',
-      sub:   'Byt, pivnica, garáž, kancelária',
-      base:  80,
-      icon:  iconClearing,
+      id: 'appliance',
+      title: 'Zariadenie / spotrebič',
+      sub:   'Chladnička, práčka, sušička, sporák…',
+      base:  45,
+      icon:  iconAppliance,
+      directions: ['odvoz', 'dovoz'],
       questions: [
-        { id: 'space', label: 'Aký priestor vypratávate?', type: 'cards', cols: 2, allowCustom: true,
+        { id: 'item_kind', label: 'Aký spotrebič?', type: 'cards', cols: 2, allowCustom: true,
           options: [
-            { value: 'flat',   label: 'Byt',          mult: 1.0 },
-            { value: 'house',  label: 'Rodinný dom',  mult: 1.8 },
-            { value: 'office', label: 'Kanceláriu',   mult: 1.3 },
-            { value: 'cellar', label: 'Pivnicu',      mult: 0.6 },
-            { value: 'garage', label: 'Garáž',        mult: 0.7 },
-            { value: 'attic',  label: 'Povala',       mult: 0.6 },
+            { value: 'fridge',  label: 'Chladnička',      mult: 1.3 },
+            { value: 'washer',  label: 'Práčka',          mult: 1.0 },
+            { value: 'dryer',   label: 'Sušička',         mult: 1.0 },
+            { value: 'stove',   label: 'Sporák / rúra',   mult: 1.1 },
+            { value: 'dishw',   label: 'Umývačka',        mult: 1.0 },
+            { value: 'mixed',   label: 'Viac kusov',      mult: 1.6 },
           ] },
-        { id: 'area', label: 'Veľkosť priestoru (m²)', type: 'number', placeholder: 'napr. 60' },
-        { id: 'fullness', label: 'Stav vecí v priestore', type: 'cards', cols: 1,
+        { id: 'quantity', label: 'Počet kusov?', type: 'number', placeholder: 'napr. 1' },
+        { id: 'disconnect', label: 'Treba odpojiť od prípojok?', type: 'cards', cols: 2, onlyDir: 'odvoz',
           options: [
-            { value: 'low',    label: 'Málo vecí',    sub: 'Pár predmetov, ľahké odvezenie',     mult: 0.7, tone: 'good' },
-            { value: 'medium', label: 'Stredne plný', sub: 'Bežne zariadená domácnosť',          mult: 1.0, tone: 'warn' },
-            { value: 'high',   label: 'Veľmi plný',   sub: 'Roky nahromadené veci, plné skrine', mult: 1.6, tone: 'bad' },
+            { value: 'yes', label: 'Áno', add: 25 },
+            { value: 'no',  label: 'Nie, je odpojený', tone: 'good' },
           ] },
-        { id: 'disposal', label: 'Likvidácia odpadu?', type: 'cards', cols: 3,
+        { id: 'install', label: 'Inštalácia na mieste?', type: 'cards', cols: 2, onlyDir: 'dovoz',
           options: [
-            { value: 'yes',     label: 'Áno, všetko',     mult: 1.0 },
-            { value: 'partial', label: 'Niečo si nechám', mult: 0.85 },
-            { value: 'no',      label: 'Len vypratať',    mult: 0.7 },
+            { value: 'yes', label: 'Áno, prosím', add: 40 },
+            { value: 'no',  label: 'Nie, sám si to spravím', tone: 'good' },
           ] },
-        { id: 'special', label: 'Špeciálne odpady?', type: 'multi',
+        { id: 'eco', label: 'Ekologická likvidácia?', type: 'cards', cols: 2, onlyDir: 'odvoz',
           options: [
-            { value: 'electro', label: 'Elektroodpad', icon: 'bolt',   add: 40 },
-            { value: 'paint',   label: 'Farby/chémia', icon: 'paint',  add: 30 },
-            { value: 'oil',     label: 'Oleje',        icon: 'barrel', add: 50 },
+            { value: 'yes', label: 'Áno (v cene)',  tone: 'good' },
+            { value: 'no',  label: 'Nie, len odviesť' },
           ] },
-        { id: 'address', label: 'Adresa priestoru?', type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
-      ]
-    },
-    {
-      id: 'waste',
-      title: 'Likvidácia',
-      sub:   'Stavebný, biologický, elektronický odpad',
-      base:  50,
-      icon:  iconWaste,
-      questions: [
-        { id: 'type', label: 'Typ odpadu?', type: 'cards', cols: 2, allowCustom: true,
+        { id: 'remove_old', label: 'Odvezieme aj starý spotrebič?', type: 'cards', cols: 2, onlyDir: 'dovoz',
           options: [
-            { value: 'mixed',        label: 'Zmiešaný',     mult: 1.0 },
-            { value: 'construction', label: 'Stavebný',     mult: 1.5, tone: 'warn' },
-            { value: 'green',        label: 'Bio / zeleň',  mult: 0.8, tone: 'good' },
-            { value: 'electro',      label: 'Elektroodpad', mult: 1.2, tone: 'warn' },
-            { value: 'hazardous',    label: 'Nebezpečný',   mult: 2.0, tone: 'bad' },
+            { value: 'yes', label: 'Áno, prosím', add: 30, tone: 'good' },
+            { value: 'no',  label: 'Nie, ďakujem' },
           ] },
-        { id: 'volume', label: 'Odhadovaný objem (m³)?', hint: 'Pomôže presnejšie odhadnúť cenu.', type: 'number', placeholder: 'napr. 5' },
-        { id: 'access', label: 'Prístup pre nákladiak?', type: 'cards', cols: 2,
-          options: [
-            { value: 'yes', label: 'Áno, k vchodu',     mult: 1.0, tone: 'good' },
-            { value: 'no',  label: 'Iba pešo / ďaleko', mult: 1.3, tone: 'bad' },
-          ] },
-        { id: 'address', label: 'Adresa?',           type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
-      ]
-    },
-    {
-      id: 'transport',
-      title: 'Odvoz',
-      sub:   'Preprava nábytku, klavíra, stroja…',
-      base:  70,
-      icon:  iconTransport,
-      questions: [
-        { id: 'item', label: 'Čo prevážate?', type: 'cards', cols: 2, allowCustom: true,
-          options: [
-            { value: 'furniture', label: 'Nábytok',         mult: 1.0 },
-            { value: 'appliance', label: 'Spotrebič',       mult: 0.9 },
-            { value: 'piano',     label: 'Klavír',          mult: 1.5 },
-            { value: 'safe',      label: 'Sejf',            mult: 1.3 },
-            { value: 'machine',   label: 'Stroj / paleta',  mult: 1.4 },
-          ] },
-        { id: 'distance', label: 'Vzdialenosť?', type: 'cards', cols: 1,
-          options: [
-            { value: 'city', label: 'V rámci mesta',     sub: 'do 30 km',    mult: 1.0, tone: 'good' },
-            { value: 'mid',  label: 'Stredná vzdialenosť', sub: '30 – 100 km', mult: 1.4, tone: 'warn' },
-            { value: 'long', label: 'Cez celé Slovensko', sub: '> 100 km',   mult: 1.9, tone: 'bad' },
-          ] },
+        { id: 'from_address', label: 'Z akej adresy?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'to_address',   label: 'Kam doručiť?',  type: 'text', placeholder: 'Mesto, ulica' },
         { id: 'floors', label: 'Poschodie z / na', type: 'group', sub: [
             { id: 'floor_from', label: 'Z poschodia',  type: 'number', placeholder: '0' },
             { id: 'floor_to',   label: 'Na poschodie', type: 'number', placeholder: '0' },
           ] },
-        { id: 'elevator', label: 'Je k dispozícii výťah?', type: 'cards', cols: 2,
+        { id: 'elevator', label: 'Je k dispozícii výťah?', type: 'cards', cols: 3,
+          options: [
+            { value: 'both', label: 'Áno, oboje', tone: 'good' },
+            { value: 'one',  label: 'Iba jeden',  tone: 'warn' },
+            { value: 'none', label: 'Bez výťahu', tone: 'bad', addPct: 0.20 },
+          ] },
+        { id: 'date', label: 'Plánovaný termín?', type: 'date' },
+      ]
+    },
+    {
+      id: 'construction',
+      title: 'Stavebný odpad',
+      sub:   'Suť, drevo, kov, zmesný odpad',
+      base:  70,
+      icon:  iconConstruction,
+      directions: ['odvoz'],
+      questions: [
+        { id: 'waste_type', label: 'Typ stavebného odpadu?', type: 'cards', cols: 2, allowCustom: true,
+          options: [
+            { value: 'rubble',   label: 'Suť / tehly',  mult: 1.0 },
+            { value: 'wood',     label: 'Drevo',        mult: 0.9 },
+            { value: 'metal',    label: 'Kov',          mult: 1.2, tone: 'warn' },
+            { value: 'mixed',    label: 'Zmesný',       mult: 1.1 },
+          ] },
+        { id: 'volume', label: 'Odhadovaný objem (m³)?', hint: 'Pomôže presnejšie naceniť.', type: 'number', placeholder: 'napr. 5' },
+        { id: 'bags', label: 'Alebo počet BIG-bagov?', type: 'number', placeholder: 'napr. 3' },
+        { id: 'access', label: 'Prístup pre nákladiak?', type: 'cards', cols: 2,
+          options: [
+            { value: 'yes', label: 'Áno, k vchodu',     tone: 'good' },
+            { value: 'no',  label: 'Iba pešo / ďaleko', tone: 'bad',  addPct: 0.30 },
+          ] },
+        { id: 'address', label: 'Adresa?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
+      ]
+    },
+    {
+      id: 'material',
+      title: 'Materiál / tovar',
+      sub:   'Z Hornbachu, OBI, Baumaxu, IKEA…',
+      base:  40,
+      icon:  iconMaterial,
+      directions: ['dovoz'],
+      questions: [
+        { id: 'goods', label: 'Čo prevážame?', type: 'text', placeholder: 'napr. obklady, drevo, palety…' },
+        { id: 'store', label: 'Z akej predajne?', type: 'cards', cols: 2, allowCustom: true,
+          options: [
+            { value: 'hornbach', label: 'Hornbach' },
+            { value: 'obi',      label: 'OBI' },
+            { value: 'baumax',   label: 'Baumax' },
+            { value: 'ikea',     label: 'IKEA' },
+          ] },
+        { id: 'volume_est', label: 'Odhad objemu / hmotnosti', type: 'cards', cols: 2,
+          options: [
+            { value: 'small',  label: 'Menšie balenia', sub: 'do 50 kg',       mult: 0.8, tone: 'good' },
+            { value: 'medium', label: 'Bežná dodávka',  sub: '50 – 300 kg',     mult: 1.0 },
+            { value: 'large',  label: 'Palety',         sub: '300+ kg / palety', mult: 1.6, tone: 'warn' },
+          ] },
+        { id: 'carry_in', label: 'Vynáška do bytu / domu?', type: 'cards', cols: 2,
+          options: [
+            { value: 'yes', label: 'Áno, prosím',         add: 30 },
+            { value: 'no',  label: 'Stačí pred vchod',    tone: 'good' },
+          ] },
+        { id: 'to_address', label: 'Kam doručiť?', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'floors', label: 'Na poschodie', type: 'number', placeholder: '0' },
+        { id: 'elevator', label: 'Je výťah?', type: 'cards', cols: 2,
           options: [
             { value: 'yes', label: 'Áno', tone: 'good' },
             { value: 'no',  label: 'Nie', tone: 'bad', addPct: 0.20 },
           ] },
-        { id: 'from_address', label: 'Z akej adresy?', type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'to_address',   label: 'Kam?',           type: 'text', placeholder: 'Mesto, ulica' },
-        { id: 'date',         label: 'Plánovaný termín?', type: 'date' },
+        { id: 'date', label: 'Plánovaný termín?', type: 'date' },
+      ]
+    },
+    {
+      id: 'other',
+      title: 'Iné…',
+      sub:   'Niečo iné? Popíšte vašu požiadavku',
+      base:  50,
+      icon:  iconOther,
+      directions: ['odvoz', 'dovoz'],
+      questions: [
+        { id: 'description', label: 'Popíšte čo potrebujete', hint: 'Čím podrobnejšie, tým presnejší odhad.', type: 'textarea', placeholder: 'Napr. odviesť starý gauč z 3. poschodia, alebo doviezť kvety zo záhradníctva…' },
+        { id: 'address', label: 'Adresa', type: 'text', placeholder: 'Mesto, ulica' },
+        { id: 'date',    label: 'Plánovaný termín?', type: 'date' },
       ]
     },
   ];
 
-  // ---------- Animated service icons (4 detailed, hover-only animations) ----------
-  function iconMoving() {
+  // ---------- Animated direction + category icons ----------
+  function iconOdvoz() {
+    // Truck loading boxes, driving AWAY (to the right)
     return ''
-      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
-      // House (left)
+      + '<svg viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
+      // House on the left (source of items)
       + '<g class="cbw-anim-house">'
-      +   '<path d="M2 22 L8 16 L14 22 L14 36 L2 36 Z"/>'
-      +   '<rect x="6" y="28" width="4" height="8" fill="currentColor" opacity="0.35"/>'
+      +   '<path d="M3 30 L11 20 L19 30 L19 46 L3 46 Z" fill="rgba(255,255,255,0.5)"/>'
+      +   '<rect x="8" y="36" width="6" height="10" fill="currentColor" opacity="0.35"/>'
       + '</g>'
-      // Box flying from house to truck
-      + '<g class="cbw-anim-box-fly">'
-      +   '<rect x="16" y="22" width="8" height="6" fill="currentColor" opacity="0.7"/>'
-      +   '<line x1="20" y1="22" x2="20" y2="28" opacity="0.4"/>'
+      // Box leaving house, flying into truck
+      + '<g class="cbw-anim-box-out">'
+      +   '<rect x="22" y="28" width="9" height="9" rx="0.5" fill="#fde68a" stroke="currentColor" stroke-width="1.4"/>'
+      +   '<line x1="22" y1="32.5" x2="31" y2="32.5" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>'
       + '</g>'
-      // Truck (right)
+      // Truck on the right
       + '<g class="cbw-anim-truck-body">'
-      +   '<rect x="26" y="20" width="20" height="14" rx="1.5" fill="rgba(255,255,255,0.3)"/>'
-      +   '<path d="M46 24 L54 24 L60 30 L60 34 L46 34 Z" fill="rgba(255,255,255,0.3)"/>'
-      +   '<rect x="54" y="26" width="4" height="3" fill="currentColor" opacity="0.4"/>'
-      +   '<rect x="29" y="22" width="14" height="11" fill="currentColor" opacity="0.18"/>'
-      +   '<line x1="33" y1="22" x2="33" y2="33" opacity="0.5"/>'
+      +   '<rect x="33" y="24" width="24" height="20" rx="1.5" fill="rgba(255,255,255,0.35)"/>'
+      +   '<path d="M57 28 L66 28 L74 36 L74 44 L57 44 Z" fill="rgba(255,255,255,0.35)"/>'
+      +   '<rect x="66" y="30" width="6" height="3.5" fill="currentColor" opacity="0.4"/>'
+      +   '<rect x="36" y="27" width="18" height="14" fill="currentColor" opacity="0.16"/>'
+      +   '<rect x="42" y="29" width="9" height="8" rx="0.5" fill="#fde68a" stroke="currentColor" stroke-width="1.2"/>'
       + '</g>'
       // Wheels
-      + '<g class="cbw-anim-wheel"><circle cx="33" cy="36" r="3"/><circle cx="33" cy="36" r="1" fill="currentColor"/></g>'
-      + '<g class="cbw-anim-wheel" style="animation-delay:.05s"><circle cx="55" cy="36" r="3"/><circle cx="55" cy="36" r="1" fill="currentColor"/></g>'
+      + '<g class="cbw-anim-wheel"><circle cx="40" cy="46" r="3.2"/><circle cx="40" cy="46" r="1" fill="currentColor"/></g>'
+      + '<g class="cbw-anim-wheel" style="animation-delay:.05s"><circle cx="67" cy="46" r="3.2"/><circle cx="67" cy="46" r="1" fill="currentColor"/></g>'
+      // Motion lines coming from behind
+      + '<g class="cbw-anim-motion"><line x1="30" y1="36" x2="24" y2="36" stroke-width="1.2"/><line x1="29" y1="40" x2="22" y2="40" stroke-width="1.2"/></g>'
       + '</svg>';
   }
-  function iconClearing() {
+  function iconDovoz() {
+    // Truck DELIVERING — driving in from the left, package flying to the house door
     return ''
-      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
-      // Room outline
-      + '<rect x="6" y="14" width="40" height="28" rx="2" fill="rgba(255,255,255,0.22)"/>'
-      + '<line x1="6" y1="22" x2="46" y2="22"/>'
-      // Items inside that fly up & out
-      + '<g class="cbw-anim-out-1"><circle cx="14" cy="34" r="2.4" fill="currentColor" opacity="0.7"/></g>'
-      + '<g class="cbw-anim-out-2"><rect x="22" y="32" width="5" height="5" fill="currentColor" opacity="0.7"/></g>'
-      + '<g class="cbw-anim-out-3"><path d="M32 36 L36 32 L36 38 Z" fill="currentColor" opacity="0.7"/></g>'
-      // Sparkles for cleanliness
-      + '<g class="cbw-anim-spark-pop">'
-      +   '<path d="M52 8 L52.8 6.4 L53.6 8 L55.2 8.8 L53.6 9.6 L52.8 11.2 L52 9.6 L50.4 8.8 Z" fill="currentColor"/>'
-      + '</g>'
-      + '<g class="cbw-anim-spark-pop" style="animation-delay:.4s">'
-      +   '<path d="M58 18 L58.6 16.8 L59.2 18 L60.4 18.6 L59.2 19.2 L58.6 20.4 L58 19.2 L56.8 18.6 Z" fill="currentColor"/>'
-      + '</g>'
-      // Broom
-      + '<g class="cbw-anim-broom">'
-      +   '<line x1="50" y1="6" x2="42" y2="14"/>'
-      +   '<path d="M40 16 L37 22 M42 16 L41 22 M44 17 L44 22 M46 18 L48 22"/>'
-      + '</g>'
-      + '</svg>';
-  }
-  function iconWaste() {
-    return ''
-      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
-      // Falling items
-      + '<g class="cbw-anim-fall-1"><rect x="20" y="2" width="5" height="5" fill="currentColor" opacity="0.7"/></g>'
-      + '<g class="cbw-anim-fall-2"><circle cx="36" cy="5" r="2.5" fill="currentColor" opacity="0.6"/></g>'
-      + '<g class="cbw-anim-fall-3"><path d="M48 4 L51 1 L54 4 L51 7 Z" fill="currentColor" opacity="0.5"/></g>'
-      // Bin lid (opens slightly)
-      + '<g class="cbw-anim-lid">'
-      +   '<line x1="14" y1="18" x2="50" y2="18" stroke-width="2.5"/>'
-      +   '<line x1="22" y1="18" x2="22" y2="14" stroke-width="2"/>'
-      +   '<line x1="42" y1="18" x2="42" y2="14" stroke-width="2"/>'
-      +   '<line x1="22" y1="14" x2="42" y2="14" stroke-width="2"/>'
-      + '</g>'
-      // Bin body
-      + '<path d="M16 20 L18 44 L46 44 L48 20 Z" fill="rgba(255,255,255,0.22)"/>'
-      + '<line x1="22" y1="22" x2="22" y2="42"/>'
-      + '<line x1="32" y1="22" x2="32" y2="42"/>'
-      + '<line x1="42" y1="22" x2="42" y2="42"/>'
-      // Recycle arrows
-      + '<g class="cbw-anim-recycle-spin">'
-      +   '<path d="M28 28 L32 24 L36 28 M36 28 L34 28 L36 30"/>'
-      +   '<path d="M37 33 L33 37 L29 33 M29 33 L31 33 L29 31"/>'
-      + '</g>'
-      + '</svg>';
-  }
-  function iconTransport() {
-    return ''
-      + '<svg viewBox="0 0 64 48" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">'
-      // Road dashes
-      + '<g class="cbw-anim-road">'
-      +   '<line x1="2"  y1="44" x2="10" y2="44" stroke-width="2"/>'
-      +   '<line x1="14" y1="44" x2="22" y2="44" stroke-width="2"/>'
-      +   '<line x1="26" y1="44" x2="34" y2="44" stroke-width="2"/>'
-      +   '<line x1="38" y1="44" x2="46" y2="44" stroke-width="2"/>'
-      +   '<line x1="50" y1="44" x2="58" y2="44" stroke-width="2"/>'
-      + '</g>'
-      // Truck driving
+      + '<svg viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
+      // Truck on the left, arriving
       + '<g class="cbw-anim-truck-rev">'
-      +   '<rect x="6" y="20" width="32" height="16" rx="1.5" fill="rgba(255,255,255,0.3)"/>'
-      +   '<path d="M38 24 L48 24 L56 30 L56 36 L38 36 Z" fill="rgba(255,255,255,0.3)"/>'
-      +   '<rect x="48" y="26" width="6" height="3" fill="currentColor" opacity="0.4"/>'
-      +   '<rect x="10" y="22" width="24" height="13" fill="currentColor" opacity="0.18"/>'
+      +   '<rect x="3" y="24" width="24" height="20" rx="1.5" fill="rgba(255,255,255,0.35)"/>'
+      +   '<path d="M27 28 L36 28 L40 36 L40 44 L27 44 Z" fill="rgba(255,255,255,0.35)"/>'
+      +   '<rect x="29" y="30" width="6" height="3.5" fill="currentColor" opacity="0.4"/>'
+      +   '<rect x="6" y="27" width="18" height="14" fill="currentColor" opacity="0.16"/>'
       + '</g>'
       // Wheels
-      + '<g class="cbw-anim-wheel"><circle cx="14" cy="38" r="3"/><circle cx="14" cy="38" r="1" fill="currentColor"/></g>'
-      + '<g class="cbw-anim-wheel" style="animation-delay:.05s"><circle cx="48" cy="38" r="3"/><circle cx="48" cy="38" r="1" fill="currentColor"/></g>'
-      // Smoke
-      + '<g class="cbw-anim-smoke"><circle cx="60" cy="20" r="2.5" fill="currentColor" opacity="0.45"/></g>'
-      + '<g class="cbw-anim-smoke" style="animation-delay:.4s"><circle cx="62" cy="14" r="2" fill="currentColor" opacity="0.35"/></g>'
+      + '<g class="cbw-anim-wheel"><circle cx="10" cy="46" r="3.2"/><circle cx="10" cy="46" r="1" fill="currentColor"/></g>'
+      + '<g class="cbw-anim-wheel" style="animation-delay:.05s"><circle cx="37" cy="46" r="3.2"/><circle cx="37" cy="46" r="1" fill="currentColor"/></g>'
+      // Package flying from truck to house
+      + '<g class="cbw-anim-box-in">'
+      +   '<rect x="42" y="30" width="9" height="9" rx="0.5" fill="#fde68a" stroke="currentColor" stroke-width="1.4"/>'
+      +   '<line x1="42" y1="34.5" x2="51" y2="34.5" stroke="currentColor" stroke-width="1.2" opacity="0.55"/>'
+      + '</g>'
+      // House (destination) on the right
+      + '<g class="cbw-anim-house-dest">'
+      +   '<path d="M61 30 L69 20 L77 30 L77 46 L61 46 Z" fill="rgba(255,255,255,0.5)"/>'
+      +   '<rect class="cbw-anim-door" x="66" y="36" width="6" height="10" fill="currentColor" opacity="0.5"/>'
+      + '</g>'
+      + '</svg>';
+  }
+  function iconFurniture() {
+    // Sofa / wardrobe with opening doors
+    return ''
+      + '<svg viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
+      // Wardrobe (left)
+      + '<g class="cbw-anim-wardrobe">'
+      +   '<rect x="6" y="10" width="28" height="40" rx="1.5" fill="rgba(255,255,255,0.4)"/>'
+      +   '<line x1="20" y1="10" x2="20" y2="50"/>'
+      +   '<circle class="cbw-anim-knob" cx="17" cy="30" r="1.2" fill="currentColor"/>'
+      +   '<circle class="cbw-anim-knob" cx="23" cy="30" r="1.2" fill="currentColor"/>'
+      // Opening left door
+      +   '<rect class="cbw-anim-door-l" x="6" y="10" width="14" height="40" fill="rgba(255,255,255,0.7)" stroke="currentColor" stroke-width="1.4"/>'
+      + '</g>'
+      // Sofa (right)
+      + '<g class="cbw-anim-sofa">'
+      +   '<rect x="40" y="28" width="34" height="14" rx="2" fill="rgba(255,255,255,0.4)"/>'
+      +   '<rect x="40" y="22" width="34" height="10" rx="2" fill="rgba(255,255,255,0.6)"/>'
+      +   '<rect x="38" y="26" width="4" height="18" rx="1.5" fill="rgba(255,255,255,0.5)"/>'
+      +   '<rect x="72" y="26" width="4" height="18" rx="1.5" fill="rgba(255,255,255,0.5)"/>'
+      +   '<rect x="42" y="42" width="2" height="6"/>'
+      +   '<rect x="70" y="42" width="2" height="6"/>'
+      + '</g>'
+      + '</svg>';
+  }
+  function iconAppliance() {
+    // Fridge with opening door + light blink
+    return ''
+      + '<svg viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
+      // Fridge body
+      + '<g class="cbw-anim-fridge">'
+      +   '<rect x="22" y="6" width="36" height="46" rx="2" fill="rgba(255,255,255,0.4)"/>'
+      +   '<line x1="22" y1="22" x2="58" y2="22"/>'
+      +   '<rect x="54" y="12" width="2" height="6" rx="0.5" fill="currentColor" opacity="0.6"/>'
+      +   '<rect x="54" y="28" width="2" height="6" rx="0.5" fill="currentColor" opacity="0.6"/>'
+      // Inside (light)
+      +   '<rect class="cbw-anim-fridge-light" x="26" y="26" width="22" height="22" fill="#fde68a" opacity="0"/>'
+      // Door opening
+      +   '<rect class="cbw-anim-fridge-door" x="22" y="22" width="36" height="30" rx="1" fill="rgba(255,255,255,0.7)" stroke="currentColor" stroke-width="1.4"/>'
+      + '</g>'
+      // Snowflake
+      + '<g class="cbw-anim-snow">'
+      +   '<line x1="40" y1="10" x2="40" y2="18"/>'
+      +   '<line x1="36" y1="14" x2="44" y2="14"/>'
+      +   '<line x1="37" y1="11" x2="43" y2="17"/>'
+      +   '<line x1="43" y1="11" x2="37" y2="17"/>'
+      + '</g>'
+      + '</svg>';
+  }
+  function iconConstruction() {
+    // Bricks falling into a container
+    return ''
+      + '<svg viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
+      // Falling bricks
+      + '<g class="cbw-anim-brick-1"><rect x="20" y="2" width="10" height="5" fill="currentColor" opacity="0.65"/></g>'
+      + '<g class="cbw-anim-brick-2"><rect x="38" y="2" width="10" height="5" fill="currentColor" opacity="0.55"/></g>'
+      + '<g class="cbw-anim-brick-3"><rect x="56" y="2" width="10" height="5" fill="currentColor" opacity="0.5"/></g>'
+      // Container body
+      + '<path d="M8 22 L72 22 L66 50 L14 50 Z" fill="rgba(255,255,255,0.5)" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>'
+      + '<line x1="14" y1="32" x2="66" y2="32"/>'
+      + '<line x1="14" y1="42" x2="66" y2="42"/>'
+      + '<line x1="32" y1="22" x2="32" y2="50"/>'
+      + '<line x1="48" y1="22" x2="48" y2="50"/>'
+      // Dust particles
+      + '<g class="cbw-anim-dust">'
+      +   '<circle cx="22" cy="26" r="1.4" fill="currentColor" opacity="0.5"/>'
+      +   '<circle cx="58" cy="28" r="1.2" fill="currentColor" opacity="0.45"/>'
+      + '</g>'
+      + '</svg>';
+  }
+  function iconMaterial() {
+    // Pallet being lifted by a forklift
+    return ''
+      + '<svg viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">'
+      // Pallet + boxes
+      + '<g class="cbw-anim-pallet">'
+      +   '<rect x="38" y="20" width="34" height="16" rx="0.5" fill="rgba(255,255,255,0.5)"/>'
+      +   '<line x1="38" y1="28" x2="72" y2="28"/>'
+      +   '<line x1="50" y1="20" x2="50" y2="36"/>'
+      +   '<line x1="60" y1="20" x2="60" y2="36"/>'
+      +   '<rect x="40" y="10" width="14" height="10" rx="0.5" fill="#fde68a" stroke="currentColor" stroke-width="1.2"/>'
+      +   '<rect x="56" y="14" width="14" height="6"  rx="0.5" fill="#fde68a" stroke="currentColor" stroke-width="1.2"/>'
+      + '</g>'
+      // Pallet bottom slats
+      + '<g class="cbw-anim-pallet">'
+      +   '<rect x="38" y="36" width="34" height="3" fill="rgba(255,255,255,0.6)" stroke="currentColor" stroke-width="1.2"/>'
+      +   '<rect x="40" y="39" width="3" height="5" fill="rgba(255,255,255,0.6)" stroke="currentColor" stroke-width="1"/>'
+      +   '<rect x="52" y="39" width="3" height="5" fill="rgba(255,255,255,0.6)" stroke="currentColor" stroke-width="1"/>'
+      +   '<rect x="67" y="39" width="3" height="5" fill="rgba(255,255,255,0.6)" stroke="currentColor" stroke-width="1"/>'
+      + '</g>'
+      // Forklift
+      + '<g class="cbw-anim-forklift">'
+      +   '<rect x="6" y="24" width="14" height="14" rx="1" fill="rgba(255,255,255,0.5)"/>'
+      +   '<rect x="9" y="26" width="8" height="6" fill="currentColor" opacity="0.35"/>'
+      +   '<line x1="20" y1="42" x2="40" y2="42" stroke-width="2"/>'
+      +   '<line x1="20" y1="46" x2="40" y2="46" stroke-width="2"/>'
+      + '</g>'
+      // Wheels
+      + '<g class="cbw-anim-wheel"><circle cx="10" cy="44" r="2.4"/><circle cx="10" cy="44" r=".8" fill="currentColor"/></g>'
+      + '<g class="cbw-anim-wheel" style="animation-delay:.05s"><circle cx="17" cy="44" r="2.4"/><circle cx="17" cy="44" r=".8" fill="currentColor"/></g>'
+      + '</svg>';
+  }
+  function iconOther() {
+    // Big question mark with pulsing dots
+    return ''
+      + '<svg viewBox="0 0 80 56" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">'
+      + '<g class="cbw-anim-other">'
+      +   '<circle cx="40" cy="28" r="20" fill="rgba(255,255,255,0.4)"/>'
+      +   '<path d="M32 24 a8 8 0 0 1 16 0 c0 5 -8 6 -8 12" stroke-width="2.4"/>'
+      +   '<circle cx="40" cy="42" r="1.6" fill="currentColor"/>'
+      + '</g>'
+      + '<g class="cbw-anim-dot-1"><circle cx="14" cy="14" r="1.6" fill="currentColor" opacity="0.5"/></g>'
+      + '<g class="cbw-anim-dot-2"><circle cx="66" cy="14" r="1.6" fill="currentColor" opacity="0.5"/></g>'
+      + '<g class="cbw-anim-dot-3"><circle cx="20" cy="48" r="1.6" fill="currentColor" opacity="0.5"/></g>'
+      + '<g class="cbw-anim-dot-4"><circle cx="60" cy="48" r="1.6" fill="currentColor" opacity="0.5"/></g>'
       + '</svg>';
   }
 
@@ -1373,18 +1640,64 @@
   const wizBar   = document.getElementById('cbwCalcBarFill');
   const ctaBtn   = document.getElementById('cbwOpenCalc');
 
+  /*
+   * Wizard state:
+   *   qIndex = -2  → pick direction (odvoz / dovoz)
+   *   qIndex = -1  → pick service category
+   *   qIndex 0..N-1 → service question (with onlyDir filter applied)
+   *   qIndex = N   → summary + contact form
+   *   qIndex = N+1 → thank-you screen
+   */
+  const RESUME_KEY = 'cbw_calc_resume_v1';
   let wizState = {
-    service: null,    // service object once selected
-    answers: {},      // answers keyed by question id
-    qIndex:  -1,      // -1 = service-pick screen; 0..N-1 = question; N = summary; N+1 = thanks
+    direction: null,  // 'odvoz' | 'dovoz'
+    service:   null,
+    answers:   {},
+    qIndex:    -2,
   };
+
+  function persistResume() {
+    try {
+      if (wizState.qIndex < 0 || wizState.qIndex >= (wizState.service ? wizState.service.questions.length + 2 : 0)) {
+        localStorage.removeItem(RESUME_KEY);
+        return;
+      }
+      localStorage.setItem(RESUME_KEY, JSON.stringify({
+        direction: wizState.direction,
+        serviceId: wizState.service && wizState.service.id,
+        answers:   wizState.answers,
+        qIndex:    wizState.qIndex,
+      }));
+    } catch (_) {}
+  }
+  function loadResume() {
+    try {
+      const raw = localStorage.getItem(RESUME_KEY);
+      if (!raw) return null;
+      const d = JSON.parse(raw);
+      if (!d || !d.direction || !d.serviceId) return null;
+      const svc = SERVICES.find(s => s.id === d.serviceId);
+      if (!svc) return null;
+      return { direction: d.direction, service: svc, answers: d.answers || {}, qIndex: typeof d.qIndex === 'number' ? d.qIndex : 0 };
+    } catch (_) { return null; }
+  }
 
   function openCalc() {
     root.classList.add('cbw-calc-active');
     wiz.dataset.open = 'true';
-    wizState = { service: null, answers: {}, qIndex: -1 };
+    const resumed = loadResume();
+    if (resumed && confirmResume()) {
+      wizState = { direction: resumed.direction, service: resumed.service, answers: resumed.answers, qIndex: resumed.qIndex };
+    } else {
+      wizState = { direction: null, service: null, answers: {}, qIndex: -2 };
+    }
     renderWizard();
     setRobotState('greeting', 1500);
+  }
+  function confirmResume() {
+    // Lightweight resume — silent if there's saved progress for the same session.
+    // Could be replaced with a small banner; keeping it simple for now.
+    return true;
   }
   function closeCalc() {
     root.classList.remove('cbw-calc-active');
@@ -1393,15 +1706,20 @@
   ctaBtn.addEventListener('click', openCalc);
   wizExit.addEventListener('click', closeCalc);
 
-  // Total steps for progress bar:
-  //   1 (service pick) + N questions + 1 summary + 1 thanks = N+3
+  // Skip questions whose onlyDir does not match the chosen direction.
+  function visibleQuestions() {
+    if (!wizState.service) return [];
+    return wizState.service.questions.filter(q => !q.onlyDir || q.onlyDir === wizState.direction);
+  }
+
+  // Steps: 1 (direction) + 1 (service) + Nvisible (questions) + 1 (summary) + 1 (thanks)
   function totalSteps() {
-    if (!wizState.service) return 1;
-    return wizState.service.questions.length + 3;
+    if (!wizState.service) return 1 + 1;
+    return 2 + visibleQuestions().length + 2;
   }
   function currentStepNumber() {
-    // service pick = 1, questions 2..N+1, summary N+2, thanks N+3
-    return wizState.qIndex + 2;
+    // direction = 1, service = 2, questions 3..N+2, summary N+3, thanks N+4
+    return wizState.qIndex + 3;
   }
   function setProgress() {
     const pct = (currentStepNumber() / totalSteps()) * 100;
@@ -1410,16 +1728,24 @@
   function setHeader(title, stepText) {
     wizTitle.textContent = title;
     wizStep.textContent  = stepText;
-    wizBack.style.visibility = (wizState.qIndex < 0) ? 'hidden' : 'visible';
+    wizBack.style.visibility = (wizState.qIndex <= -2) ? 'hidden' : 'visible';
   }
 
   function renderWizard() {
     wizBody.innerHTML = '';
     wizFoot.style.display = 'none';
 
-    if (wizState.qIndex === -1) {
+    if (wizState.qIndex === -2) {
+      renderDirectionPicker();
+    } else if (wizState.qIndex === -1) {
       renderServicePicker();
     } else if (wizState.qIndex < wizState.service.questions.length) {
+      // Skip onlyDir-filtered questions automatically
+      const q = wizState.service.questions[wizState.qIndex];
+      if (q.onlyDir && q.onlyDir !== wizState.direction) {
+        wizState.qIndex += 1;
+        return renderWizard();
+      }
       renderQuestion();
     } else if (wizState.qIndex === wizState.service.questions.length) {
       renderSummary();
@@ -1427,43 +1753,83 @@
       renderThanks();
     }
     setProgress();
+    persistResume();
   }
 
-  function renderServicePicker() {
-    setHeader('Cenová kalkulačka', 'Krok 1 — vyberte službu');
+  function renderDirectionPicker() {
+    setHeader('Cenová kalkulačka', 'Krok 1 — odvoz alebo dovoz?');
+    const intro = document.createElement('p');
+    intro.className = 'cbw-calc-prompt';
+    intro.textContent = 'Čo pre vás zariadime?';
+    const hint = document.createElement('p');
+    hint.className = 'cbw-calc-hint';
+    hint.textContent = 'Vyberte smer — odviezť staré veci, alebo doviezť nový tovar.';
+    wizBody.appendChild(intro);
+    wizBody.appendChild(hint);
+
     const grid = document.createElement('div');
     grid.className = 'cbw-svc-grid';
-    SERVICES.forEach(svc => {
+    DIRECTIONS.forEach(dir => {
       const card = document.createElement('button');
-      card.className = 'cbw-svc-card';
+      card.className = 'cbw-svc-card cbw-dir-card';
       card.type = 'button';
       card.innerHTML =
-        '<span class="cbw-svc-icon">' + svc.icon() + '</span>'
-        + '<span class="cbw-svc-text"><span class="cbw-svc-title">' + svc.title + '</span><span class="cbw-svc-sub">' + svc.sub + '</span></span>'
+        '<span class="cbw-svc-icon">' + dir.icon() + '</span>'
+        + '<span class="cbw-svc-text"><span class="cbw-svc-title">' + dir.title + '</span><span class="cbw-svc-sub">' + dir.sub + '</span></span>'
         + '<svg class="cbw-svc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
       card.addEventListener('click', () => {
         spawnConfetti(card);
         setRobotState('action', 800);
-        wizState.service = svc;
-        wizState.qIndex = 0;
+        wizState.direction = dir.id;
+        wizState.qIndex = -1;
         renderWizard();
       });
       grid.appendChild(card);
     });
+    wizBody.appendChild(grid);
+  }
+
+  function renderServicePicker() {
+    const dirLabel = wizState.direction === 'odvoz' ? 'Odvoz' : 'Dovoz';
+    setHeader(dirLabel, 'Krok 2 — vyberte kategóriu');
     const intro = document.createElement('p');
     intro.className = 'cbw-calc-prompt';
-    intro.textContent = 'O akú službu máte záujem?';
+    intro.textContent = 'Čo bude predmetom ' + (wizState.direction === 'odvoz' ? 'odvozu' : 'dovozu') + '?';
     const hint = document.createElement('p');
     hint.className = 'cbw-calc-hint';
-    hint.textContent = 'Po výbere prejdeme niekoľkými otázkami a hneď uvidíte odhadovanú cenu.';
+    hint.textContent = 'Vyberte kategóriu, alebo „Iné…" a popíšte to vlastnými slovami.';
     wizBody.appendChild(intro);
     wizBody.appendChild(hint);
+
+    const grid = document.createElement('div');
+    grid.className = 'cbw-svc-grid';
+    SERVICES
+      .filter(svc => !svc.directions || svc.directions.indexOf(wizState.direction) >= 0)
+      .forEach(svc => {
+        const card = document.createElement('button');
+        card.className = 'cbw-svc-card';
+        card.type = 'button';
+        card.innerHTML =
+          '<span class="cbw-svc-icon">' + svc.icon() + '</span>'
+          + '<span class="cbw-svc-text"><span class="cbw-svc-title">' + svc.title + '</span><span class="cbw-svc-sub">' + svc.sub + '</span></span>'
+          + '<svg class="cbw-svc-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>';
+        card.addEventListener('click', () => {
+          spawnConfetti(card);
+          setRobotState('action', 800);
+          wizState.service = svc;
+          wizState.qIndex = 0;
+          renderWizard();
+        });
+        grid.appendChild(card);
+      });
     wizBody.appendChild(grid);
   }
 
   function renderQuestion() {
     const q = wizState.service.questions[wizState.qIndex];
-    setHeader(wizState.service.title, 'Krok ' + (wizState.qIndex + 2) + ' z ' + (wizState.service.questions.length + 2));
+    const vis = visibleQuestions();
+    const visIdx = vis.indexOf(q) + 1; // 1-based
+    setHeader(wizState.service.title, 'Krok ' + (visIdx + 2) + ' z ' + (vis.length + 3));
 
     const prompt = document.createElement('p');
     prompt.className = 'cbw-calc-prompt';
@@ -1599,6 +1965,18 @@
       });
       wizBody.appendChild(group);
       wizNext.disabled = false;
+    } else if (q.type === 'textarea') {
+      const ta = document.createElement('textarea');
+      ta.className = 'cbw-q-input';
+      ta.rows = 4;
+      if (q.placeholder) ta.placeholder = q.placeholder;
+      if (wizState.answers[q.id] != null) ta.value = wizState.answers[q.id];
+      ta.addEventListener('input', () => {
+        wizState.answers[q.id] = ta.value;
+        wizNext.disabled = !ta.value.trim();
+      });
+      wizBody.appendChild(ta);
+      wizNext.disabled = !(wizState.answers[q.id] && wizState.answers[q.id].trim());
     }
 
     wizFoot.style.display = 'flex';
@@ -1614,6 +1992,7 @@
     let extras = 0;
 
     svc.questions.forEach(q => {
+      if (q.onlyDir && q.onlyDir !== wizState.direction) return;
       const a = wizState.answers[q.id];
       if (q.type === 'cards' && a) {
         const opt = q.options.find(o => o.value === a);
@@ -1628,10 +2007,12 @@
           if (opt && opt.add) extras += opt.add;
         });
       } else if (q.type === 'number' && a) {
-        // For service-specific area/volume, scale lightly (placeholder logic)
         const n = Number(a) || 0;
-        if (q.id === 'area' || q.id === 'volume') {
+        if (q.id === 'area' || q.id === 'volume' || q.id === 'bags') {
           mult *= Math.max(0.6, Math.min(3.0, 0.6 + n / 50));
+        }
+        if (q.id === 'quantity' && n > 1) {
+          mult *= 1 + (n - 1) * 0.35;
         }
       }
     });
@@ -1660,19 +2041,24 @@
   }
 
   function renderSummary() {
-    setHeader(wizState.service.title, 'Zhrnutie a kontaktné údaje');
+    setHeader(wizState.service.title, 'Zhrnutie a kontakt');
     const svc = wizState.service;
     const price = calculatePrice();
 
     // Summary rows
     const sum = document.createElement('div');
     sum.className = 'cbw-sum-card';
+    const dirRow = document.createElement('div');
+    dirRow.className = 'cbw-sum-row';
+    dirRow.innerHTML = '<span>Smer</span><span>' + (wizState.direction === 'odvoz' ? 'Odvoz' : 'Dovoz') + '</span>';
+    sum.appendChild(dirRow);
     const headerRow = document.createElement('div');
     headerRow.className = 'cbw-sum-row';
-    headerRow.innerHTML = '<span>Služba</span><span>' + svc.title + '</span>';
+    headerRow.innerHTML = '<span>Kategória</span><span>' + svc.title + '</span>';
     sum.appendChild(headerRow);
 
     svc.questions.forEach(q => {
+      if (q.onlyDir && q.onlyDir !== wizState.direction) return;
       if (q.type === 'group') {
         q.sub.forEach(sub => {
           const v = wizState.answers[sub.id];
@@ -1697,29 +2083,88 @@
     const priceCard = document.createElement('div');
     priceCard.className = 'cbw-sum-price cbw-dynamic-green';
     priceCard.innerHTML =
-      '<div class="cbw-sum-price-label">Odhadovaná cena</div>'
+      '<div class="cbw-sum-price-label">Orientačná cena</div>'
       + '<div class="cbw-sum-price-value">' + price.toLocaleString('sk-SK') + ' €</div>'
-      + '<div class="cbw-sum-price-note">Orientačný odhad — presnú cenu vám potvrdí konateľ po obhliadke.</div>';
+      + '<div class="cbw-sum-price-note">Konečnú cenu vám potvrdí konateľ po krátkom telefonáte / obhliadke.</div>';
     wizBody.appendChild(priceCard);
+
+    // Photos upload (optional)
+    const photoBlock = document.createElement('div');
+    photoBlock.style.cssText = 'margin-bottom:10px;';
+    photoBlock.innerHTML =
+      '<p class="cbw-calc-prompt" style="font-size:14px;margin-bottom:6px">Fotky (voliteľné)</p>'
+      + '<p class="cbw-calc-hint" style="margin-bottom:6px">Pomôžete nám presnejšie naceniť. Max. 3 fotky.</p>'
+      + '<label for="cbwSumPhotos" class="cbw-photo-drop">'
+      +   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>'
+      +   '<span>Vybrať fotky</span>'
+      + '</label>'
+      + '<input id="cbwSumPhotos" type="file" accept="image/*" multiple style="display:none">'
+      + '<div id="cbwPhotoThumbs" class="cbw-photo-thumbs"></div>';
+    wizBody.appendChild(photoBlock);
+
+    const photoInput = document.getElementById('cbwSumPhotos');
+    const photoThumbs = document.getElementById('cbwPhotoThumbs');
+    wizState._photos = wizState._photos || [];
+    function renderThumbs() {
+      photoThumbs.innerHTML = '';
+      wizState._photos.forEach((p, i) => {
+        const t = document.createElement('div');
+        t.className = 'cbw-photo-thumb';
+        t.innerHTML = '<img src="' + p.url + '" alt=""><button type="button" aria-label="Odstrániť" data-idx="' + i + '">×</button>';
+        photoThumbs.appendChild(t);
+      });
+      photoThumbs.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => {
+          wizState._photos.splice(+btn.dataset.idx, 1);
+          renderThumbs();
+        });
+      });
+    }
+    photoInput.addEventListener('change', () => {
+      const files = Array.from(photoInput.files || []).slice(0, 3 - wizState._photos.length);
+      files.forEach(f => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          wizState._photos.push({ name: f.name, type: f.type, size: f.size, url: reader.result });
+          renderThumbs();
+        };
+        reader.readAsDataURL(f);
+      });
+      photoInput.value = '';
+    });
+    renderThumbs();
 
     // Contact form
     const form = document.createElement('div');
     form.innerHTML =
-      '<p class="cbw-calc-prompt" style="font-size:15px;margin-bottom:8px">Vaše kontaktné údaje</p>'
+      '<p class="cbw-calc-prompt" style="font-size:15px;margin:6px 0 8px">Vaše kontaktné údaje</p>'
       + '<input class="cbw-q-input" id="cbwSumName"  type="text"  placeholder="Vaše meno" required style="margin-bottom:8px">'
       + '<input class="cbw-q-input" id="cbwSumEmail" type="email" placeholder="E-mail"     required style="margin-bottom:8px">'
-      + '<input class="cbw-q-input" id="cbwSumPhone" type="tel"   placeholder="Telefón"             style="margin-bottom:8px">'
-      + '<textarea class="cbw-q-input" id="cbwSumMsg" rows="2" placeholder="Doplňujúca správa (nepovinné)"></textarea>';
+      + '<input class="cbw-q-input" id="cbwSumPhone" type="tel"   placeholder="Telefón (napr. +421 9XX XXX XXX)" required style="margin-bottom:8px">'
+      + '<textarea class="cbw-q-input" id="cbwSumMsg" rows="2" placeholder="Doplňujúca správa (nepovinné)"></textarea>'
+      + '<p class="cbw-gdpr">Odoslaním súhlasíte so spracovaním vašich kontaktných údajov za účelom vybavenia dopytu. Údaje neposkytujeme tretím stranám.</p>';
     wizBody.appendChild(form);
 
     const sName  = document.getElementById('cbwSumName');
     const sEmail = document.getElementById('cbwSumEmail');
+    const sPhone = document.getElementById('cbwSumPhone');
+    function isSkPhoneValid(v) {
+      // Accepts +421 9XX XXX XXX, 09XX XXX XXX, with optional spaces / hyphens
+      const cleaned = v.replace(/[\s\-]/g, '');
+      return /^(?:\+421|421|0)9\d{8}$/.test(cleaned);
+    }
     function validate() {
-      const ok = sName.value.trim().length >= 2 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sEmail.value.trim());
-      wizNext.disabled = !ok;
+      const nameOk  = sName.value.trim().length >= 2;
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(sEmail.value.trim());
+      const phoneOk = isSkPhoneValid(sPhone.value.trim());
+      sName.classList.toggle('cbw-invalid',  !nameOk  && sName.value.length > 0);
+      sEmail.classList.toggle('cbw-invalid', !emailOk && sEmail.value.length > 0);
+      sPhone.classList.toggle('cbw-invalid', !phoneOk && sPhone.value.length > 0);
+      wizNext.disabled = !(nameOk && emailOk && phoneOk);
     }
     sName.addEventListener('input',  validate);
     sEmail.addEventListener('input', validate);
+    sPhone.addEventListener('input', validate);
     validate();
 
     wizState._lastPrice = price;
@@ -1736,8 +2181,9 @@
     const msg   = (document.getElementById('cbwSumMsg')   || {}).value || '';
 
     // Build human-readable answers map for the email
-    const answersFlat = {};
+    const answersFlat = { 'Smer': wizState.direction === 'odvoz' ? 'Odvoz' : 'Dovoz' };
     svc.questions.forEach(q => {
+      if (q.onlyDir && q.onlyDir !== wizState.direction) return;
       if (q.type === 'group') {
         q.sub.forEach(sub => {
           const v = wizState.answers[sub.id];
@@ -1750,6 +2196,10 @@
       }
     });
 
+    const photos = (wizState._photos || []).map(p => ({
+      name: p.name, type: p.type, size: p.size, data_url: p.url,
+    }));
+
     const payload = {
       name: name.trim(),
       email: email.trim(),
@@ -1757,9 +2207,10 @@
       message: msg.trim() || null,
       service_request: {
         service: svc.id,
-        service_label: svc.title,
+        service_label: (wizState.direction === 'odvoz' ? 'Odvoz — ' : 'Dovoz — ') + svc.title,
         answers: answersFlat,
         estimated_price: wizState._lastPrice.toLocaleString('sk-SK') + ' €',
+        photos: photos,
       },
     };
 
@@ -1771,6 +2222,9 @@
         body: JSON.stringify(payload),
       });
     } catch (_) { /* best effort — still show thanks */ }
+
+    // Clear resume state after successful submit
+    try { localStorage.removeItem(RESUME_KEY); } catch (_) {}
 
     wizState.qIndex = wizState.service.questions.length + 1;
     renderWizard();
@@ -1800,36 +2254,64 @@
   }
 
   // ---------- Wizard footer wiring ----------
-  wizPrev.addEventListener('click', () => {
-    if (wizState.qIndex === 0) {
+  function stepBackOnce() {
+    if (wizState.qIndex <= -2) return;
+    if (wizState.qIndex === -1) {
+      wizState.direction = null;
+      wizState.qIndex = -2;
+    } else if (wizState.qIndex === 0) {
       wizState.service = null;
       wizState.qIndex = -1;
     } else {
-      wizState.qIndex -= 1;
+      // Skip backward over onlyDir-filtered questions
+      do { wizState.qIndex -= 1; }
+      while (wizState.qIndex >= 0
+             && wizState.service.questions[wizState.qIndex].onlyDir
+             && wizState.service.questions[wizState.qIndex].onlyDir !== wizState.direction);
     }
+  }
+  wizPrev.addEventListener('click', () => {
+    stepBackOnce();
     renderWizard();
   });
   wizNext.addEventListener('click', () => {
+    if (!wizState.service) return;
     if (wizState.qIndex < wizState.service.questions.length - 1) {
       wizState.qIndex += 1;
       renderWizard();
     } else if (wizState.qIndex === wizState.service.questions.length - 1) {
-      // moving to summary
       wizState.qIndex += 1;
       renderWizard();
     } else if (wizState.qIndex === wizState.service.questions.length) {
-      // submit
       submitQuoteRequest();
     }
   });
   wizBack.addEventListener('click', () => wizPrev.click());
 
-  // ---------- Kontakty Init ----------
+  // ---------- Kontakty Init (odvoznabytku.sk) ----------
   function applyConfig() {
-    const c = { phone: '+421900123456', whatsapp: '+421900123456', email: 'info@firma.sk' };
-    if (c.phone) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" href="tel:' + c.phone + '">' + ICON_PHONE + '<span>Zavolať</span></a>');
-    if (c.whatsapp) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" href="https://wa.me/' + c.whatsapp.replace(/[^\d]/g,'') + '" target="_blank">' + ICON_WA + '<span>WhatsApp</span></a>');
-    if (c.email) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" data-kind="email" href="mailto:' + c.email + '">' + ICON_MAIL + '<span>Mail</span></a>');
+    const c = { phone: '+421948841313', whatsapp: '+421948841313', email: 'info@odvoznabytku.sk' };
+
+    if (c.phone) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" href="tel:' + c.phone + '" data-kind="phone">' + ICON_PHONE + '<span>Zavolať</span></a>');
+    if (c.whatsapp) {
+      const wa = c.whatsapp.replace(/[^\d]/g, '');
+      const waMsg = encodeURIComponent('Dobrý deň, mám záujem o vašu službu.');
+      contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" href="https://wa.me/' + wa + '?text=' + waMsg + '" target="_blank" data-kind="whatsapp">' + ICON_WA + '<span>WhatsApp</span></a>');
+    }
+    if (c.email) contactBar.insertAdjacentHTML('beforeend', '<a class="cbw-contact-icon contact-click" href="mailto:' + c.email + '" data-kind="email">' + ICON_MAIL + '<span>Mail</span></a>');
+
+    // Sticky call bar (above composer)
+    const callBar = document.getElementById('cbwCallBar');
+    if (callBar && c.phone) {
+      callBar.innerHTML =
+        '<div class="cbw-callbar-text">'
+        +   '<strong>Radšej zavoláte?</strong>'
+        +   'Sme dostupní každý pracovný deň.'
+        + '</div>'
+        + '<a class="cbw-callbar-btn contact-click" href="tel:' + c.phone + '" data-kind="phone">'
+        +   ICON_PHONE + '<span>' + c.phone.replace(/^\+421/, '+421 ') + '</span>'
+        + '</a>';
+    }
 
     document.querySelectorAll('.contact-click').forEach(btn => {
       btn.addEventListener('click', () => setRobotState('action', 1500));
