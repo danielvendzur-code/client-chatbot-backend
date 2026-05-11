@@ -19,15 +19,18 @@ def _env(key: str, default: str) -> str:
 
 @dataclass
 class CompanyProfile:
-    """Identity and tone of the bot. Replace before going live."""
+    """Identity and tone of the bot. Defaults to odvoznabytku.sk."""
 
-    name: str = _env("COMPANY_NAME", "[Company Name]")
-    tagline: str = _env("COMPANY_TAGLINE", "[Short tagline / one-liner]")
-    website: str = _env("COMPANY_WEBSITE", "https://example.com")
-    contact_email: str = _env("COMPANY_EMAIL", "hello@example.com")
-    contact_phone: str = _env("COMPANY_PHONE", "")
-    contact_whatsapp: str = _env("COMPANY_WHATSAPP", "")
-    industry: str = _env("COMPANY_INDUSTRY", "")
+    name: str = _env("COMPANY_NAME", "odvoznabytku.sk")
+    tagline: str = _env(
+        "COMPANY_TAGLINE",
+        "Odvoz a dovoz nábytku, zariadenia a stavebného odpadu — Bratislava a okolie.",
+    )
+    website: str = _env("COMPANY_WEBSITE", "https://odvoznabytku.sk")
+    contact_email: str = _env("COMPANY_EMAIL", "info@odvoznabytku.sk")
+    contact_phone: str = _env("COMPANY_PHONE", "+421948841313")
+    contact_whatsapp: str = _env("COMPANY_WHATSAPP", "+421948841313")
+    industry: str = _env("COMPANY_INDUSTRY", "Sťahovanie, odvoz a dovoz nábytku")
     languages: tuple[str, ...] = ("sk", "en")
 
 
@@ -39,37 +42,38 @@ class BotPersona:
     avatar_initials: str = _env("BOT_INITIALS", "AI")
     welcome_message: str = _env(
         "BOT_WELCOME",
-        "Ahoj! Som virtuálny asistent. Ako ti môžem pomôcť?",
+        "Dobrý deň! Pomôžem vám rýchlo nacenit odvoz alebo dovoz. Stlačte „Spočítať cenu zdarma“ alebo sa ma rovno spýtajte.",
     )
     placeholder: str = _env("BOT_PLACEHOLDER", "Napíš správu…")
     suggested_questions: tuple[str, ...] = (
         "Čo ponúkate?",
         "Aké sú ceny?",
-        "Ako vás môžem kontaktovať?",
+        "V akých lokalitách pôsobíte?",
         "Otváracie hodiny",
     )
     system_prompt: str = (
-        "Si zdvorilý a stručný virtuálny asistent. "
+        "Si zdvorilý a stručný virtuálny asistent firmy odvoznabytku.sk. "
         "Odpovedaj v jazyku, v ktorom sa používateľ pýta. "
-        "Ak nepoznáš odpoveď, ponúkni kontakt na firmu."
+        "Ak nepoznáš odpoveď alebo má zákazník vážny záujem, odporuč mu "
+        "tlačidlo „Spočítať cenu zdarma“ v chate, prípadne telefónny kontakt."
     )
 
 
 @dataclass
 class Theme:
-    """Visual theme. Defaults to the Tailwind emerald palette."""
+    """Visual theme. Defaults to the Tailwind sky/blue palette for odvoznabytku.sk."""
 
-    primary: str = _env("THEME_PRIMARY", "#10b981")          # emerald-500
-    primary_hover: str = _env("THEME_PRIMARY_HOVER", "#059669")  # emerald-600
-    accent: str = _env("THEME_ACCENT", "#34d399")            # emerald-400
+    primary: str = _env("THEME_PRIMARY", "#0284c7")          # sky-600
+    primary_hover: str = _env("THEME_PRIMARY_HOVER", "#0369a1")  # sky-700
+    accent: str = _env("THEME_ACCENT", "#38bdf8")            # sky-400
     bg: str = _env("THEME_BG", "#ffffff")
-    surface: str = _env("THEME_SURFACE", "#f0fdf4")          # emerald-50
+    surface: str = _env("THEME_SURFACE", "#f0f9ff")          # sky-50
     text: str = _env("THEME_TEXT", "#0f172a")
     text_muted: str = _env("THEME_TEXT_MUTED", "#64748b")
-    border: str = _env("THEME_BORDER", "#d1fae5")            # emerald-100
-    user_bubble: str = _env("THEME_USER_BUBBLE", "#10b981")
-    bot_bubble: str = _env("THEME_BOT_BUBBLE", "#ecfdf5")    # emerald-50/100
-    radius: str = _env("THEME_RADIUS", "16px")
+    border: str = _env("THEME_BORDER", "#cbd5e1")
+    user_bubble: str = _env("THEME_USER_BUBBLE", "#0284c7")
+    bot_bubble: str = _env("THEME_BOT_BUBBLE", "#e0f2fe")    # sky-100
+    radius: str = _env("THEME_RADIUS", "18px")
     position: str = _env("THEME_POSITION", "right")
 
 

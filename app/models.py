@@ -52,12 +52,22 @@ class WidgetConfig(BaseModel):
     lead_form: LeadFormCopy
 
 
+class PhotoAttachment(BaseModel):
+    """Photo uploaded by the customer in the calculator summary step."""
+    name: str = Field(default="photo.jpg", max_length=200)
+    type: str = Field(default="image/jpeg", max_length=80)
+    size: int = Field(default=0)
+    # data URL: "data:image/jpeg;base64,XXXX"
+    data_url: str = Field(..., max_length=12_000_000)  # ~9 MB after base64 overhead
+
+
 class ServiceRequest(BaseModel):
     """Structured quote request from the calculator wizard."""
     service: str = Field(..., max_length=100)
     service_label: str = Field(..., max_length=200)
     answers: dict[str, str] = Field(default_factory=dict)
     estimated_price: str = Field(default="", max_length=50)
+    photos: list[PhotoAttachment] = Field(default_factory=list, max_length=5)
 
 
 class LeadRequest(BaseModel):
