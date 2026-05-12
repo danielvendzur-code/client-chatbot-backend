@@ -1603,6 +1603,301 @@
     .cbw-dir-visual { width: 90px; height: 70px; }
     .cbw-sum-price-value { font-size: 32px; }
   }
+
+
+  /* ============================================================
+     BLUE CALCULATOR OVERRIDES — clean, consistent calculator UI
+     ============================================================ */
+  .cbw-cta-btn.cbw-accent-gradient,
+  .cbw-small-btn.cbw-accent-gradient {
+    background-color: var(--primary) !important;
+    background-image: linear-gradient(135deg, #0ea5e9 0%, #0369a1 58%, #0c4a6e 100%) !important;
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.28),
+      inset 0 -1px 2px rgba(0,0,0,.18),
+      0 8px 24px -8px rgba(3,105,161,.55) !important;
+  }
+  .cbw-cta-hint::before { background: var(--primary-bright); }
+  .cbw-search-results {
+    background: var(--surface-blue) !important;
+    border-color: #bae6fd !important;
+  }
+  .cbw-search-results-label { color: var(--primary-deep) !important; }
+  .cbw-search-result-chip {
+    border-color: #93c5fd !important;
+    color: var(--primary-deep) !important;
+  }
+  .cbw-search-result-chip:hover {
+    background: var(--primary) !important;
+    color: #fff !important;
+  }
+  .cbw-selected-pill {
+    background: var(--surface-blue) !important;
+    border-color: #93c5fd !important;
+    color: var(--primary-deep) !important;
+  }
+  .cbw-selected-pill:hover { background: var(--primary) !important; color: #fff !important; }
+  .cbw-inline-warning {
+    background: var(--surface-blue) !important;
+    border-color: #bae6fd !important;
+    color: var(--primary-deep) !important;
+  }
+  .cbw-simple-help {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 12px 14px; margin: 0 0 12px;
+    border-radius: var(--radius-sm);
+    background: linear-gradient(135deg, #fff 0%, var(--surface-blue) 100%);
+    border: 1.5px solid #bae6fd;
+    color: var(--primary-deep);
+    font-size: 12.5px; font-weight: 700; line-height: 1.45;
+  }
+  .cbw-simple-help svg { width: 18px; height: 18px; flex: 0 0 auto; margin-top: 1px; }
+  .cbw-result-list.cbw-result-list-simple { max-height: 360px; }
+  .cbw-result-option.cbw-result-option-simple {
+    padding: 13px 12px;
+    border-width: 2px;
+  }
+  .cbw-result-option-simple .cbw-result-label { font-size: 14px; }
+  .cbw-custom-block {
+    margin-top: 12px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    background: #fff;
+    border: 1.5px solid var(--border);
+  }
+  .cbw-custom-title {
+    font-size: 12px; font-weight: 800; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: .04em; margin-bottom: 8px;
+  }
+
+
+  /* ============================================================
+     UX V3 — faster, clearer customer-first calculator
+     ============================================================ */
+  .cbw-cta-bar { padding-bottom: 12px !important; }
+  .cbw-cta-hint { display: none !important; }
+  .cbw-launcher-icon { width: 44px; height: 44px; }
+  .cbw-launcher-icon .cbw-bubble-mark,
+  .cbw-header-avatar .cbw-bubble-mark { transform-box: fill-box; transform-origin: center; }
+  .cbw-launcher:hover .cbw-bubble-mark { animation: cbw-van-bob 1.35s ease-in-out infinite; }
+  .cbw-dir-card[aria-pressed="true"] {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #ffffff 0%, var(--surface-blue) 100%);
+    box-shadow: 0 0 0 3px rgba(3,105,161,.12), var(--shadow-md);
+  }
+  .cbw-fast-search-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+    align-items: stretch;
+  }
+  .cbw-fast-search-row .cbw-search-box { min-width: 0; }
+  .cbw-fast-search-row .cbw-small-btn { min-width: 86px; }
+  .cbw-fast-note {
+    margin-top: -2px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 650;
+    line-height: 1.4;
+  }
+  .cbw-picked-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    border: 1.5px solid #bae6fd;
+    color: var(--primary-deep);
+    font-size: 12.5px;
+    font-weight: 800;
+    box-shadow: var(--shadow-sm);
+  }
+  .cbw-picked-bar strong { font-size: 13px; }
+  .cbw-result-list.cbw-result-list-simple { max-height: 300px !important; grid-template-columns: 1fr; }
+  .cbw-result-option.cbw-result-option-simple { min-height: 62px; padding: 11px 12px !important; }
+  .cbw-result-option-simple .cbw-result-label small {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+  }
+  .cbw-service-fast-add { display: grid; grid-template-columns: 1fr; gap: 8px; margin: 8px 0 12px; }
+  .cbw-service-fast-add .cbw-small-btn { width: 100%; }
+  .cbw-search-empty strong { color: var(--primary-deep); }
+  .cbw-calc-prompt { font-size: 21px; }
+  .cbw-calc-hint { margin-bottom: 12px; }
+  @media (max-width: 440px) {
+    .cbw-fast-search-row { grid-template-columns: 1fr; }
+    .cbw-fast-search-row .cbw-small-btn { width: 100%; }
+    .cbw-result-list.cbw-result-list-simple { max-height: 270px !important; }
+    .cbw-picked-bar { align-items: flex-start; flex-direction: column; }
+  }
+
+
+  /* ============================================================
+     UX V4 — quick room presets + cleaner non-robot launcher
+     ============================================================ */
+  .cbw-launcher-icon .cbw-helper-mark,
+  .cbw-header-avatar .cbw-helper-mark { transform-box: fill-box; transform-origin: center; }
+  .cbw-launcher:hover .cbw-helper-mark { animation: cbw-van-bob 1.35s ease-in-out infinite; }
+  .cbw-launcher-tip { display: none !important; }
+  .cbw-chips { display: none !important; }
+  .cbw-messages:empty { display: none !important; }
+  .cbw-root:not(.cbw-calc-active) .cbw-panel { height: auto; min-height: 0; }
+  .cbw-root:not(.cbw-calc-active) .cbw-composer { display: none; }
+  .cbw-root:not(.cbw-calc-active) .cbw-contact-bar { border-top: none; }
+
+  .cbw-preset-wrap {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .cbw-preset-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .cbw-preset-btn {
+    position: relative;
+    min-height: 68px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+    border-radius: var(--radius-sm);
+    border: 2px solid #bae6fd;
+    background: linear-gradient(135deg, #fff 0%, var(--surface-blue) 100%);
+    color: var(--text);
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    box-shadow: var(--shadow-sm);
+    transition: transform 180ms var(--bounce), border-color 180ms ease, box-shadow 220ms ease, background 180ms ease;
+  }
+  .cbw-preset-btn:hover {
+    transform: translateY(-2px);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    background: linear-gradient(135deg, var(--surface-blue) 0%, #fff 100%);
+  }
+  .cbw-preset-btn[aria-pressed="true"] {
+    border-color: var(--primary);
+    background: linear-gradient(135deg, #e0f2fe 0%, #fff 100%);
+    box-shadow: 0 0 0 3px rgba(3,105,161,.11), var(--shadow-md);
+  }
+  .cbw-preset-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    background: var(--primary);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 auto;
+  }
+  .cbw-preset-icon svg { width: 22px; height: 22px; }
+  .cbw-preset-text { min-width: 0; line-height: 1.25; }
+  .cbw-preset-title { display:block; font-size: 13.5px; font-weight: 850; letter-spacing: -.01em; }
+  .cbw-preset-sub { display:block; margin-top: 3px; color: var(--text-muted); font-size: 11px; font-weight: 600; }
+  .cbw-preset-badge {
+    position: absolute;
+    top: 7px;
+    right: 8px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--primary);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 900;
+    opacity: 0;
+    transform: scale(.7);
+    transition: all 180ms var(--bounce);
+  }
+  .cbw-preset-btn[aria-pressed="true"] .cbw-preset-badge { opacity: 1; transform: scale(1); }
+  .cbw-choice-divider {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    margin: 6px 0 2px;
+  }
+  .cbw-choice-divider::before,
+  .cbw-choice-divider::after { content:""; height:1px; background: var(--border); flex:1; }
+  .cbw-fast-search-row .cbw-q-input { min-height: 48px; }
+  .cbw-fast-search-row .cbw-small-btn { min-height: 48px; font-weight: 850; }
+  .cbw-result-list.cbw-result-list-simple { max-height: 250px !important; }
+  .cbw-calc-hint strong { color: var(--primary-deep); }
+  @media (max-width: 440px) {
+    .cbw-preset-grid { grid-template-columns: 1fr; }
+    .cbw-preset-btn { min-height: 60px; }
+    .cbw-result-list.cbw-result-list-simple { max-height: 220px !important; }
+  }
+
+
+  /* ============================================================
+     UX V5 — restore full chat + simple bubble-face launcher
+     ============================================================ */
+  .cbw-launcher-icon { width: 42px !important; height: 42px !important; }
+  .cbw-launcher-icon .cbw-face-mark,
+  .cbw-header-avatar .cbw-face-mark { transform-box: fill-box; transform-origin: center; }
+  .cbw-launcher:hover .cbw-face-mark { animation: cbw-van-bob 1.35s ease-in-out infinite; }
+
+  /* V4 hid too much of the chat. Keep calculator-first CTA, but restore conversation. */
+  .cbw-root:not(.cbw-calc-active) .cbw-panel {
+    height: min(680px, calc(100vh - 120px)) !important;
+    min-height: 520px !important;
+  }
+  .cbw-root:not(.cbw-calc-active) .cbw-messages {
+    display: flex !important;
+    flex: 1 !important;
+    min-height: 190px;
+  }
+  .cbw-root:not(.cbw-calc-active) .cbw-chips {
+    display: flex !important;
+  }
+  .cbw-root:not(.cbw-calc-active) .cbw-composer {
+    display: flex !important;
+  }
+  .cbw-root:not(.cbw-calc-active) .cbw-contact-bar {
+    border-top: 1px solid var(--border) !important;
+  }
+  .cbw-messages:empty { display: flex !important; }
+
+  /* Keep the annoying CTA hint removed, as requested earlier. */
+  .cbw-cta-hint { display: none !important; }
+
+  /* Make the one-tap room buttons visibly primary in the item step. */
+  .cbw-preset-wrap {
+    padding: 12px;
+    border: 1.5px solid #bae6fd;
+    background: linear-gradient(180deg, #ffffff 0%, var(--surface-blue) 100%);
+    border-radius: var(--radius-md);
+  }
+  .cbw-preset-btn {
+    min-height: 74px;
+    background: #fff;
+  }
+  .cbw-choice-divider {
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: .04em;
+    margin: 4px 0 2px;
+  }
+
 </style>
 </head>
 <body>
@@ -1618,14 +1913,11 @@
     <div class="cbw-header cbw-brand-gradient">
       <div class="cbw-header-avatar" aria-hidden="true">
         <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <g class="cbw-van-hdr">
-            <rect x="3" y="11" width="14" height="11" rx="1.5" fill="#fff"/>
-            <path d="M17 14 L23 14 L28 19 L28 22 L17 22 Z" fill="#fff" opacity="0.85"/>
-            <path d="M19 16 L22 16 L25 19 L19 19 Z" fill="#0c4a6e" opacity="0.7"/>
-            <circle cx="9" cy="24" r="2.5" fill="#0c4a6e"/>
-            <circle cx="23" cy="24" r="2.5" fill="#0c4a6e"/>
-            <circle cx="9" cy="24" r="1" fill="#fff"/>
-            <circle cx="23" cy="24" r="1" fill="#fff"/>
+          <g class="cbw-face-mark">
+            <path d="M5 12.2C5 7.7 8.7 4 13.2 4h5.9C23.5 4 27 7.5 27 11.9v3.5c0 4.4-3.5 7.9-7.9 7.9h-3.6l-5.1 4.1c-.8.6-1.9 0-1.8-1l.5-4.2C6.6 20.8 5 18.2 5 15.3v-3.1Z" fill="#fff"/>
+            <circle cx="13" cy="14" r="1.35" fill="#0c4a6e"/>
+            <circle cx="20" cy="14" r="1.35" fill="#0c4a6e"/>
+            <path d="M13.2 18.6c1.7 1.5 4.5 1.5 6.2 0" stroke="#0c4a6e" stroke-width="1.8" stroke-linecap="round"/>
           </g>
         </svg>
       </div>
@@ -1671,7 +1963,6 @@
           <polyline points="9 18 15 12 9 6"/>
         </svg>
       </button>
-      <div class="cbw-cta-hint">Vyplníte 4 – 6 jednoduchých krokov, dostanete cenu hneď</div>
     </div>
 
     <!-- Messages -->
@@ -1733,36 +2024,19 @@
   </div>
 
   <!-- ============================================================
-       LAUNCHER — simple delivery van icon
+       LAUNCHER — simple chat bubble face
        ============================================================ -->
   <button class="cbw-launcher cbw-brand-gradient" id="cbwLauncher" type="button" aria-label="Otvoriť chat">
     <svg class="cbw-launcher-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
-      <g class="cbw-van">
-        <!-- Van body -->
-        <rect x="4" y="16" width="22" height="16" rx="2" fill="#fff"/>
-        <!-- Van cab -->
-        <path d="M26 20 L34 20 L42 28 L42 32 L26 32 Z" fill="#fff" opacity="0.92"/>
-        <!-- Window -->
-        <path d="M28 22 L33 22 L37 26 L28 26 Z" fill="#0c4a6e" opacity="0.6"/>
-        <!-- Box detail on side of van -->
-        <rect x="8" y="20" width="6" height="6" rx="0.5" stroke="#0c4a6e" stroke-width="1.5" fill="none" opacity="0.7"/>
-        <line x1="11" y1="20" x2="11" y2="26" stroke="#0c4a6e" stroke-width="1" opacity="0.5"/>
-        <line x1="8" y1="23" x2="14" y2="23" stroke="#0c4a6e" stroke-width="1" opacity="0.5"/>
-        <!-- Wheels -->
-        <circle class="cbw-wheel-1" cx="12" cy="34" r="4" fill="#0c4a6e"/>
-        <circle class="cbw-wheel-2" cx="34" cy="34" r="4" fill="#0c4a6e"/>
-        <circle cx="12" cy="34" r="1.5" fill="#fff"/>
-        <circle cx="34" cy="34" r="1.5" fill="#fff"/>
-        <!-- Spokes (rotate with wheels) -->
-        <line class="cbw-wheel-1" x1="12" y1="30" x2="12" y2="38" stroke="#fff" stroke-width="1" opacity="0.4"/>
-        <line class="cbw-wheel-2" x1="34" y1="30" x2="34" y2="38" stroke="#fff" stroke-width="1" opacity="0.4"/>
-        <!-- Motion lines -->
-        <line x1="1" y1="22" x2="3" y2="22" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.7"/>
-        <line x1="1" y1="26" x2="3" y2="26" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.5"/>
+      <g class="cbw-face-mark">
+        <path d="M7 19.1C7 11.9 12.9 6 20.1 6h8.2C35.3 6 41 11.7 41 18.7v4.9C41 30.6 35.3 36.3 28.3 36.3h-5.1l-8.1 6.1c-1.2.9-2.8 0-2.6-1.5l.8-6.3C9.5 32.1 7 27.8 7 23v-3.9Z" fill="#fff"/>
+        <circle cx="20" cy="21" r="2.05" fill="#0c4a6e"/>
+        <circle cx="29" cy="21" r="2.05" fill="#0c4a6e"/>
+        <path d="M19.2 27.2c2.6 2.3 7.2 2.3 9.8 0" stroke="#0c4a6e" stroke-width="2.8" stroke-linecap="round"/>
       </g>
     </svg>
     <span class="cbw-badge" id="cbwBadge">1</span>
-    <span class="cbw-launcher-tip" id="cbwLauncherTip">Spočítajte si cenu odvozu za minútu</span>
+    <span class="cbw-launcher-tip" id="cbwLauncherTip">Rýchla cenová kalkulačka</span>
   </button>
 </div>
 
@@ -1844,8 +2118,8 @@
       root.classList.remove('cbw-has-unread');
       if (messagesEl.children.length === 0) {
         setTimeout(() => {
-          appendBubble('bot', 'Dobrý deň! Som tu, aby som vám pomohol s odvozom alebo dovozom. Vyskúšajte našu rýchlu cenovú kalkulačku alebo sa ma čokoľvek spýtajte.');
-        }, 400);
+          appendBubble('bot', 'Dobrý deň! Môžete si rýchlo vypočítať cenu odvozu/dovozu alebo mi napísať otázku.');
+        }, 300);
       }
     }
   }
@@ -1862,7 +2136,7 @@
     refreshBtn.classList.add('cbw-spinning');
     setTimeout(() => refreshBtn.classList.remove('cbw-spinning'), 740);
     messagesEl.innerHTML = '';
-    appendBubble('bot', 'Konverzácia bola obnovená. Ako vám môžem pomôcť?');
+    appendBubble('bot', 'Konverzácia bola obnovená. Môžete spustiť kalkulačku alebo sa opýtať na cenu, termín či služby.');
   });
 
   // ============================================================
@@ -1872,19 +2146,32 @@
     sendBtn.disabled = !input.value.trim();
   });
 
-  function sendUserMessage() {
+  async function sendUserMessage() {
     const text = input.value.trim();
     if (!text) return;
     input.value = '';
     sendBtn.disabled = true;
     appendBubble('user', text);
-    setTimeout(() => {
-      const typing = showTyping();
-      setTimeout(() => {
-        hideTyping(typing);
-        appendBubble('bot', 'Ďakujem za správu! Vašu otázku som odovzdal kolegom – ozvú sa vám čo najskôr. Ak chcete cenu hneď, vyskúšajte našu kalkulačku ⬆️');
-      }, 1400);
-    }, 600);
+    const typing = showTyping();
+    try {
+      let reply = '';
+      if (typeof CONFIG !== 'undefined' && CONFIG.chatEndpoint) {
+        const res = await fetch(CONFIG.chatEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: text, source: 'widget', companyName: CONFIG.companyName })
+        });
+        if (res.ok) {
+          const data = await res.json().catch(() => ({}));
+          reply = data.reply || data.message || data.answer || '';
+        }
+      }
+      hideTyping(typing);
+      appendBubble('bot', reply || botReplyFor(text));
+    } catch (err) {
+      hideTyping(typing);
+      appendBubble('bot', botReplyFor(text));
+    }
   }
   sendBtn.addEventListener('click', sendUserMessage);
   input.addEventListener('keydown', e => {
@@ -1956,21 +2243,17 @@
   // DIRECTION VISUAL ICONS — odvoz / dovoz with rich animations
   // ============================================================
   function iconOdvoz() {
-    // Pickup: van leaves house with packages
+    // Odvoz: house on the left, van leaves to the right.
     return ''
       + '<svg viewBox="0 0 110 80" fill="none" xmlns="http://www.w3.org/2000/svg">'
-      // House
       + '<path d="M8 50 L8 65 L26 65 L26 50" fill="#fbbf24" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
       + '<path d="M5 50 L17 38 L29 50 Z" fill="#dc2626" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
       + '<rect x="14" y="55" width="6" height="10" fill="#92400e"/>'
-      // Road
       + '<line class="cbw-dir-road-dash" x1="2" y1="72" x2="108" y2="72" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>'
-      // Packages flying out (animated)
       + '<rect class="cbw-dir-package cbw-dir-pkg-1" x="34" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
       + '<rect class="cbw-dir-package cbw-dir-pkg-2" x="44" y="58" width="6" height="6" rx="1" fill="#0369a1"/>'
       + '<rect class="cbw-dir-package cbw-dir-pkg-3" x="52" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
-      // Van (drives right)
-      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:10px;">'
+      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:16px;">'
       +   '<rect x="62" y="48" width="22" height="18" rx="1.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.8"/>'
       +   '<path d="M84 52 L94 52 L102 60 L102 66 L84 66 Z" fill="#fff" stroke="#0c4a6e" stroke-width="1.8" stroke-linejoin="round"/>'
       +   '<path d="M86 54 L92 54 L98 60 L86 60 Z" fill="#0c4a6e" opacity="0.7"/>'
@@ -1980,43 +2263,37 @@
       +   '<circle cx="70" cy="68" r="1.2" fill="#fff"/>'
       +   '<circle cx="94" cy="68" r="1.2" fill="#fff"/>'
       + '</g>'
-      // Arrow direction
-      + '<path d="M34 30 L46 30 M40 26 L46 30 L40 34" stroke="#0369a1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>'
+      + '<path d="M35 30 L53 30 M47 26 L53 30 L47 34" stroke="#0369a1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>'
       + '</svg>';
   }
 
   function iconDovoz() {
-    // Delivery: van arrives at house with packages
+    // Dovoz: house on the left, van arrives from the right, opposite direction.
     return ''
       + '<svg viewBox="0 0 110 80" fill="none" xmlns="http://www.w3.org/2000/svg">'
-      // House
-      + '<path d="M82 50 L82 65 L100 65 L100 50" fill="#fbbf24" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
-      + '<path d="M79 50 L91 38 L103 50 Z" fill="#16a34a" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
-      + '<rect x="88" y="55" width="6" height="10" fill="#92400e"/>'
-      // Road
+      + '<path d="M8 50 L8 65 L26 65 L26 50" fill="#fbbf24" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
+      + '<path d="M5 50 L17 38 L29 50 Z" fill="#16a34a" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
+      + '<rect x="14" y="55" width="6" height="10" fill="#92400e"/>'
       + '<line class="cbw-dir-road-dash" x1="2" y1="72" x2="108" y2="72" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>'
-      // Packages being delivered (animated, appearing near house)
-      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-1" x="50" y="56" width="8" height="8" rx="1" fill="#f59e0b"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-2" x="60" y="58" width="6" height="6" rx="1" fill="#d97706"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-3" x="68" y="56" width="8" height="8" rx="1" fill="#f59e0b"/>'
-      // Van (drives left, towards house, slightly)
-      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:-8px;">'
-      // Van pointing right - mirrored cab on left
-      +   '<rect x="26" y="48" width="22" height="18" rx="1.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.8"/>'
-      +   '<path d="M26 52 L16 52 L8 60 L8 66 L26 66 Z" fill="#fff" stroke="#0c4a6e" stroke-width="1.8" stroke-linejoin="round"/>'
-      +   '<path d="M24 54 L18 54 L12 60 L24 60 Z" fill="#0c4a6e" opacity="0.7"/>'
-      +   '<rect x="32" y="51" width="6" height="6" rx="0.5" stroke="#0c4a6e" stroke-width="1.2" fill="none"/>'
-      +   '<circle class="cbw-dir-wheel" cx="16" cy="68" r="3.5" fill="#0c4a6e"/>'
-      +   '<circle class="cbw-dir-wheel" cx="40" cy="68" r="3.5" fill="#0c4a6e"/>'
-      +   '<circle cx="16" cy="68" r="1.2" fill="#fff"/>'
-      +   '<circle cx="40" cy="68" r="1.2" fill="#fff"/>'
+      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-1" x="34" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
+      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-2" x="44" y="58" width="6" height="6" rx="1" fill="#0369a1"/>'
+      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-3" x="52" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
+      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:-18px;">'
+      +   '<rect x="64" y="48" width="22" height="18" rx="1.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.8"/>'
+      +   '<path d="M64 52 L54 52 L46 60 L46 66 L64 66 Z" fill="#fff" stroke="#0c4a6e" stroke-width="1.8" stroke-linejoin="round"/>'
+      +   '<path d="M62 54 L56 54 L50 60 L62 60 Z" fill="#0c4a6e" opacity="0.7"/>'
+      +   '<rect x="72" y="51" width="6" height="6" rx="0.5" stroke="#0c4a6e" stroke-width="1.2" fill="none"/>'
+      +   '<circle class="cbw-dir-wheel" cx="54" cy="68" r="3.5" fill="#0c4a6e"/>'
+      +   '<circle class="cbw-dir-wheel" cx="78" cy="68" r="3.5" fill="#0c4a6e"/>'
+      +   '<circle cx="54" cy="68" r="1.2" fill="#fff"/>'
+      +   '<circle cx="78" cy="68" r="1.2" fill="#fff"/>'
       + '</g>'
-      // Arrow direction (right toward house)
-      + '<path d="M58 30 L74 30 M68 26 L74 30 L68 34" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.5"/>'
+      + '<path d="M82 30 L52 30 M58 25 L52 30 L58 35" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>'
       + '</svg>';
   }
 
   // ============================================================
+  // SERVICE CATEGORY ICONS  // ============================================================
   // SERVICE CATEGORY ICONS — unified style
   // ============================================================
   const SVC_ICONS = {
@@ -2134,6 +2411,21 @@
   );
 
   // ============================================================
+  // QUICK PRESETS — one tap room/whole-space choices
+  // ============================================================
+  const QUICK_PRESETS = [
+    { id: 'living_room', title: 'Celá obývačka', sub: 'gauč, kreslá, TV, stolík, skrinky', service: 'furniture', directions: ['odvoz', 'dovoz'], itemIds: ['sofa', 'armchair', 'tv', 'table', 'dresser', 'boxes'], icon: 'sofa', quantity: 6 },
+    { id: 'bedroom', title: 'Celá spálňa', sub: 'posteľ, matrac, skriňa, komoda', service: 'furniture', directions: ['odvoz', 'dovoz'], itemIds: ['bed', 'mattress', 'wardrobe', 'dresser', 'boxes'], icon: 'bed', quantity: 5 },
+    { id: 'kitchen_room', title: 'Kuchyňa', sub: 'linka, stôl, spotrebiče', service: 'furniture', services: ['appliance'], directions: ['odvoz', 'dovoz'], itemIds: ['kitchen', 'table', 'chairs', 'fridge', 'oven', 'dishwasher'], icon: 'kitchen', quantity: 6 },
+    { id: 'basement_garage', title: 'Pivnica / garáž', sub: 'krabice, regály, náradie, pneumatiky', service: 'furniture', services: ['construction'], directions: ['odvoz'], itemIds: ['boxes', 'racks', 'tools', 'tires', 'bicycle', 'mixed'], icon: 'racks', quantity: 8 },
+    { id: 'full_flat', title: 'Vypratať byt / dom', sub: 'veľa rôznych vecí naraz', service: 'furniture', directions: ['odvoz'], itemIds: ['full_clearance', 'mixed', 'sofa', 'wardrobe', 'bed', 'boxes'], icon: 'full_clearance', quantity: 10 },
+    { id: 'appliances_set', title: 'Viac spotrebičov', sub: 'práčka, chladnička, sušička, rúra', service: 'appliance', directions: ['odvoz', 'dovoz'], itemIds: ['washer', 'fridge', 'dryer', 'oven', 'dishwasher'], icon: 'washer', quantity: 4 },
+    { id: 'construction_waste', title: 'Suť / stavebný odpad', sub: 'vrecia, drevo, zmiešaný odpad', service: 'construction', directions: ['odvoz'], itemIds: ['mixed', 'boxes', 'tools', 'paint'], icon: 'mixed', quantity: 8 },
+    { id: 'store_delivery', title: 'Dovoz z obchodu', sub: 'IKEA, Möbelix, OBI, Hornbach', service: 'material', directions: ['dovoz'], itemIds: ['ikea_delivery', 'pallet', 'doors_material'], icon: 'ikea_delivery', quantity: 3 },
+    { id: 'building_delivery', title: 'Materiál na stavbu', sub: 'dosky, dlažba, paleta, profily', service: 'material', directions: ['dovoz'], itemIds: ['building_material', 'tiles', 'pallet', 'doors_material'], icon: 'building_material', quantity: 4 }
+  ];
+
+  // ============================================================
   // WIZARD + LEAD STATE MACHINE — finished flow
   // ============================================================
   const calc = {
@@ -2149,10 +2441,10 @@
       service: '',
       items: [],
       quantity: 1,
-      access: '',
+      access: 'standard',
       floors: 0,
-      elevator: '',
-      parking: '',
+      elevator: 'yes',
+      parking: 'near',
       distance: 'city',
       date: '',
       cityFrom: '',
@@ -2255,6 +2547,88 @@
     return list.find(item => item.id === id) || null;
   }
 
+  const ITEM_ALIASES = {
+    sofa: 'gauc gauč gauce sedačka sedacka sedacky sedačky rohovka rozkladaci rozkladacia couch sofa',
+    armchair: 'kreslo kresla kreslá stolicka stolička taburet taburetka',
+    wardrobe: 'skrina skriňa skrine satnik šatník vstavaná vstavana posuvna posuvná',
+    dresser: 'komoda botnik botník skrinka zasuvky zásuvky',
+    bed: 'postel posteľ postele rošt rost lozko ložko manzelska manželská',
+    mattress: 'matrac matrace',
+    table: 'stol stôl stolik stolík jedalensky jedálenský konferencny konferenčný',
+    chairs: 'stolicky stoličky stolicka stolička kresla kancelarske kancelárske',
+    desk: 'pisaci písací kancelarsky kancelársky stol stôl',
+    shelves: 'police polica regal regál kniznica knižnica vitrína vitrina',
+    kitchen: 'kuchyna kuchyňa linka kuchynska kuchynská drez doska',
+    boxes: 'krabice krabica vrecia vrece baliky balíky tasky tašky',
+    fridge: 'chladnicka chladnička mraznicka mraznička americka americká',
+    washer: 'pracka práčka pralka prádelka washing machine',
+    dryer: 'susicka sušička',
+    dishwasher: 'umyvacka umývačka riadu mycka myčka',
+    oven: 'sporak sporák rura rúra pec truba',
+    tv: 'televizor telka tv monitor elektronika audio',
+    branches: 'konare konáre zelen zeleň bioodpad bio odpad',
+    pots: 'kvetinace kvetináče kamene kamen',
+    tires: 'pneumatiky gumy disky kolesa',
+    tools: 'naradie náradie stroje dielna',
+    paint: 'farby chemikalie chemikálie vedra vedrá riedidla riedidlá',
+    bicycle: 'bicykel bike bajk kocik kočík sport šport lyze lyže',
+    safe: 'trezor sejf',
+    piano: 'klavir klavír piano',
+    full_clearance: 'vypratanie vypratat vypratať pivnica garaz garáž byt dom celý priestor',
+    mixed: 'rozne rôzne vela veľa vsetko všetko miesane miešané',
+    ikea_delivery: 'ikea möbelix mobelix obi hornbach obchod tovar balik balík nabytok nábytok',
+    building_material: 'stavebny stavebný material materiál osb sadrokarton sadrokartón dosky profily',
+    tiles: 'dlazba dlažba obklad obklady kachlicky kachličky',
+    pallet: 'paleta palety velky veľký tovar naklad náklad',
+    doors_material: 'dvere dosky listy lišty dlhy dlhý material materiál'
+  };
+
+  function itemSearchText(item) {
+    return normalizeText([
+      item.id,
+      item.label,
+      item.sub,
+      item.cat,
+      (item.tags || []).join(' '),
+      ITEM_ALIASES[item.id] || ''
+    ].join(' '));
+  }
+
+  function itemMatchesQuery(item, q) {
+    const nq = normalizeText(q);
+    if (!nq) return true;
+    const text = itemSearchText(item);
+    const words = nq.split(/\s+/).filter(Boolean);
+    return words.every(word => text.includes(word));
+  }
+
+  function itemSearchScore(item, q) {
+    const nq = normalizeText(q);
+    const label = normalizeText(item.label);
+    const text = itemSearchText(item);
+    let score = 0;
+    if ((item.tags || []).includes('popular')) score += 8;
+    if (!nq) return score;
+    if (label === nq) score += 60;
+    if (label.startsWith(nq)) score += 35;
+    if (label.includes(nq)) score += 25;
+    if (text.includes(nq)) score += 15;
+    nq.split(/\s+/).filter(Boolean).forEach(word => {
+      if (label.includes(word)) score += 8;
+      else if (text.includes(word)) score += 4;
+    });
+    return score;
+  }
+
+  function serviceAllowedForDirection(serviceId) {
+    const svc = byId(SERVICES, serviceId);
+    return !calc.data.direction || !svc || svc.directions.includes(calc.data.direction);
+  }
+
+  function itemAllowedForDirection(item) {
+    return serviceAllowedForDirection(item.cat);
+  }
+
   function selectedService() {
     return byId(SERVICES, calc.data.service);
   }
@@ -2267,10 +2641,51 @@
     return calc.data.items || [];
   }
 
+
+  function getVisiblePresets() {
+    const dir = calc.data.direction;
+    const svc = calc.data.service;
+    return QUICK_PRESETS.filter(preset => {
+      const directionOk = !dir || (preset.directions || []).includes(dir);
+      const serviceOk = !svc || svc === 'other' || preset.service === svc || (preset.services || []).includes(svc);
+      return directionOk && serviceOk;
+    }).slice(0, 6);
+  }
+
+  function presetIsSelected(preset) {
+    const ids = preset.itemIds || [];
+    return ids.length > 0 && ids.every(id => isSelectedItem(id));
+  }
+
+  function mergeItems(items) {
+    const map = new Map();
+    selectedItems().forEach(item => map.set(item.id, item));
+    items.forEach(item => { if (item && item.id) map.set(item.id, item); });
+    calc.data.items = Array.from(map.values());
+  }
+
+  function applyPreset(presetId) {
+    const preset = QUICK_PRESETS.find(p => p.id === presetId);
+    if (!preset) return;
+    if (!calc.data.service || calc.data.service === 'other') calc.data.service = preset.service || 'furniture';
+    const items = (preset.itemIds || [])
+      .map(id => byId(ALL_ITEMS, id))
+      .filter(Boolean)
+      .filter(itemAllowedForDirection);
+    mergeItems(items);
+    if (preset.quantity) calc.data.quantity = Math.max(Number(calc.data.quantity) || 1, preset.quantity);
+    calc.search = '';
+    calc.filter = 'all';
+    renderCalc();
+  }
+
   function itemSearchPool() {
     const svc = selectedService();
-    if (!svc || svc.id === 'other') return ALL_ITEMS;
-    return ALL_ITEMS.filter(item => item.cat === svc.id || (calc.search && normalizeText(item.label + ' ' + item.sub).includes(normalizeText(calc.search))));
+    let pool = ALL_ITEMS.filter(itemAllowedForDirection);
+    if (svc && svc.id !== 'other' && !calc.search) {
+      pool = pool.filter(item => item.cat === svc.id);
+    }
+    return pool;
   }
 
   function filteredItems(limit) {
@@ -2280,12 +2695,15 @@
       pool = pool.filter(item => item.tags && item.tags.includes(calc.filter));
     }
     if (q) {
-      pool = pool.filter(item => normalizeText([item.label, item.sub, item.cat, (item.tags || []).join(' ')].join(' ')).includes(q));
+      pool = ALL_ITEMS.filter(item => itemAllowedForDirection(item) && itemMatchesQuery(item, q));
     }
     pool = pool.sort((a, b) => {
-      const aPop = (a.tags || []).includes('popular') ? 1 : 0;
-      const bPop = (b.tags || []).includes('popular') ? 1 : 0;
-      return bPop - aPop || a.label.localeCompare(b.label, 'sk');
+      const scoreDiff = itemSearchScore(b, q) - itemSearchScore(a, q);
+      if (scoreDiff) return scoreDiff;
+      const aSameCat = selectedService() && a.cat === selectedService().id ? 1 : 0;
+      const bSameCat = selectedService() && b.cat === selectedService().id ? 1 : 0;
+      if (bSameCat - aSameCat) return bSameCat - aSameCat;
+      return a.label.localeCompare(b.label, 'sk');
     });
     return limit ? pool.slice(0, limit) : pool;
   }
@@ -2305,9 +2723,10 @@
     renderCalc();
   }
 
-  function addCustomItem(label) {
+  function addCustomItem(label, targetStep) {
     const clean = String(label || '').trim();
     if (!clean) return;
+    if (!calc.data.service) calc.data.service = 'other';
     const custom = {
       id: 'custom_' + Date.now(),
       label: clean,
@@ -2320,7 +2739,9 @@
     };
     calc.data.items = selectedItems().concat(custom);
     calc.customText = '';
-    renderCalc();
+    calc.search = '';
+    if (typeof targetStep === 'number') goStep(targetStep);
+    else renderCalc();
   }
 
   function calculatePrice() {
@@ -2438,22 +2859,29 @@
 
   function renderStepService() {
     const q = normalizeText(calc.search);
+    const raw = String(calc.search || '').trim();
     const allowed = SERVICES.filter(svc => !calc.data.direction || svc.directions.includes(calc.data.direction));
-    const results = q ? ALL_ITEMS.filter(item => normalizeText(item.label + ' ' + item.sub).includes(q)).slice(0, 6) : [];
+    const results = q ? ALL_ITEMS
+      .filter(item => itemAllowedForDirection(item) && itemMatchesQuery(item, q))
+      .sort((a, b) => itemSearchScore(b, q) - itemSearchScore(a, q) || a.label.localeCompare(b.label, 'sk'))
+      .slice(0, 6) : [];
+    const dir = selectedDirection();
     return `
-      <h2 class="cbw-calc-prompt">Čo presne riešite?</h2>
-      <p class="cbw-calc-hint">Môžete vybrať kategóriu alebo rovno vyhľadať konkrétnu vec, napríklad „práčka“, „sedačka“, „suť“.</p>
+      <h2 class="cbw-calc-prompt">Čo chcete ${calc.data.direction === 'dovoz' ? 'doviezť' : 'odviezť'}?</h2>
+      <p class="cbw-calc-hint">Vyberte najbližší typ služby. Konkrétne veci, celú izbu alebo vlastný text vyberiete hneď v ďalšom kroku.</p>
       <div class="cbw-search-hero">
-        <input class="cbw-search-hero-input" id="cbwServiceSearch" value="${escapeHtml(calc.search)}" placeholder="Vyhľadať položku alebo službu…" autocomplete="off">
+        <input class="cbw-search-hero-input" id="cbwServiceSearch" value="${escapeHtml(calc.search)}" placeholder="Napr. gauč, práčka, skriňa, IKEA, suť…" autocomplete="off">
         <span class="cbw-search-hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
       </div>
+      ${raw ? `<div class="cbw-service-fast-add"><button type="button" class="cbw-small-btn cbw-brand-gradient" id="cbwAddServiceCustom">Pridať „${escapeHtml(raw)}“ ako vlastnú položku</button></div>` : ''}
       <div class="cbw-search-results" data-active="${results.length ? 'true' : 'false'}">
-        <div class="cbw-search-results-label">Rýchle výsledky</div>
+        <div class="cbw-search-results-label">Ťuknite na nájdenú vec</div>
         <div class="cbw-search-results-list">
           ${results.map(item => `<button type="button" class="cbw-search-result-chip" data-search-item="${item.id}">${escapeHtml(item.label)}</button>`).join('')}
         </div>
       </div>
-      <div class="cbw-svc-grid">
+      <div class="cbw-fast-note">Vyberte jednoduchú kategóriu nižšie. ${dir ? escapeHtml(dir.title) + ' je už nastavený.' : ''}</div>
+      <div class="cbw-svc-grid" style="margin-top:10px">
         ${allowed.map(svc => `
           <button type="button" class="cbw-svc-card" data-service="${svc.id}" aria-pressed="${calc.data.service === svc.id}">
             <span class="cbw-svc-icon-wrap">${svc.icon}</span>
@@ -2465,37 +2893,57 @@
   }
 
   function renderStepItems() {
-    const results = filteredItems();
+    const hasSearch = !!normalizeText(calc.search);
+    const raw = String(calc.search || '').trim();
+    const results = filteredItems(hasSearch ? 30 : 10);
     const selected = selectedItems();
-    const filters = [
-      ['all', 'Všetko'], ['popular', 'Najčastejšie'], ['home', 'Domácnosť'], ['appliances', 'Spotrebiče'],
-      ['garden', 'Záhrada'], ['storage', 'Pivnica/garáž'], ['heavy', 'Ťažké']
-    ];
+    const presets = getVisiblePresets();
     return `
-      <h2 class="cbw-calc-prompt">Čo máme odviezť alebo doviezť?</h2>
-      <p class="cbw-calc-hint">Vyberte aj viac položiek. Ak niečo nenájdete, pridajte vlastný názov.</p>
+      <h2 class="cbw-calc-prompt">Čo všetko sa má presunúť?</h2>
+      <p class="cbw-calc-hint"><strong>Najrýchlejšie:</strong> vyberte celý priestor jedným tlačidlom, alebo nižšie napíšte konkrétnu vec.</p>
       <div class="cbw-search-pick">
-        <div class="cbw-search-box"><input class="cbw-q-input cbw-search-input" id="cbwItemSearch" value="${escapeHtml(calc.search)}" placeholder="Hľadať: sedačka, práčka, suť, IKEA…" autocomplete="off"></div>
-        <div class="cbw-search-tools"><span class="cbw-search-count">Vybrané: ${selected.length}</span>${selected.length ? '<button type="button" class="cbw-clear-pick" id="cbwClearItems">Vymazať výber</button>' : ''}</div>
+        ${presets.length ? `
+          <div class="cbw-preset-wrap">
+            <div class="cbw-search-section-label">Rýchly výber — jedným klikom</div>
+            <div class="cbw-preset-grid">
+              ${presets.map(preset => `
+                <button type="button" class="cbw-preset-btn" data-preset="${escapeHtml(preset.id)}" aria-pressed="${presetIsSelected(preset)}">
+                  <span class="cbw-preset-icon">${itemIcon(preset.icon || 'mixed')}</span>
+                  <span class="cbw-preset-text">
+                    <span class="cbw-preset-title">${escapeHtml(preset.title)}</span>
+                    <span class="cbw-preset-sub">${escapeHtml(preset.sub)}</span>
+                  </span>
+                  <span class="cbw-preset-badge">✓</span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+          <div class="cbw-choice-divider">alebo vyberte konkrétne veci</div>
+        ` : ''}
+
+        <div class="cbw-fast-search-row">
+          <div class="cbw-search-box"><input class="cbw-q-input cbw-search-input" id="cbwItemSearch" value="${escapeHtml(calc.search)}" placeholder="Napr. gauč, práčka, skriňa, 10 vriec…" autocomplete="off"></div>
+          <button type="button" class="cbw-small-btn cbw-brand-gradient" id="cbwAddSearchAsItem" ${raw ? '' : 'disabled style="opacity:.45;cursor:not-allowed"'}>Pridať</button>
+        </div>
+        <div class="cbw-fast-note">Môžete ťuknúť na hotový balík, vybrať položky zo zoznamu alebo dopísať vlastnú vec.</div>
+
+        <div class="cbw-picked-bar">
+          <strong>${selected.length ? 'Vybrané: ' + selected.length + ' položiek' : 'Zatiaľ nič nevybrané'}</strong>
+          ${selected.length ? '<button type="button" class="cbw-clear-pick" id="cbwClearItems">Vymazať výber</button>' : ''}
+        </div>
         <div class="cbw-selected-pills">
-          ${selected.map(item => `<button type="button" class="cbw-selected-pill" data-remove-item="${item.id}">${escapeHtml(item.label)} <span>×</span></button>`).join('')}
+          ${selected.map(item => `<button type="button" class="cbw-selected-pill" data-remove-item="${escapeHtml(item.id)}" title="Odstrániť položku">${escapeHtml(item.label)} <span>×</span></button>`).join('')}
         </div>
-        <div class="cbw-search-filters">
-          ${filters.map(([id, label]) => `<button type="button" class="cbw-filter-chip" data-filter="${id}" aria-pressed="${calc.filter === id}">${label}</button>`).join('')}
-        </div>
-        <div class="cbw-custom-row">
-          <input class="cbw-q-input" id="cbwCustomItem" value="${escapeHtml(calc.customText)}" placeholder="Vlastná položka…">
-          <button type="button" class="cbw-small-btn cbw-accent-gradient" id="cbwAddCustom">Pridať</button>
-        </div>
-        <div class="cbw-search-section-label">Výsledky</div>
-        <div class="cbw-result-list">
+
+        <div class="cbw-search-section-label">${hasSearch ? 'Výsledky hľadania' : 'Najčastejšie konkrétne veci'}</div>
+        <div class="cbw-result-list cbw-result-list-simple">
           ${results.length ? results.map(item => `
-            <button type="button" class="cbw-result-option" data-item="${item.id}" aria-pressed="${isSelectedItem(item.id)}">
+            <button type="button" class="cbw-result-option cbw-result-option-simple" data-item="${escapeHtml(item.id)}" aria-pressed="${isSelectedItem(item.id)}">
               <span class="cbw-result-icon">${itemIcon(item.id)}</span>
               <span class="cbw-result-label">${escapeHtml(item.label)}<small>${escapeHtml(item.sub)}</small></span>
               <span class="cbw-result-check">${isSelectedItem(item.id) ? '✓' : '+'}</span>
             </button>
-          `).join('') : '<div class="cbw-search-empty">Nenašli sme presnú položku. Napíšte ju hore ako vlastnú položku a pokračujte.</div>'}
+          `).join('') : `<div class="cbw-search-empty"><strong>Vec nie je v zozname.</strong><br>Napíšte ju hore a kliknite na Pridať.</div>`}
         </div>
       </div>
     `;
@@ -2533,8 +2981,8 @@
       ['hard', 'Ťažký prístup', 'úzke schody, dvor, dlhé nosenie', 'bad']
     ];
     return `
-      <h2 class="cbw-calc-prompt">Aký je rozsah práce?</h2>
-      <p class="cbw-calc-hint">Tieto údaje najviac ovplyvnia cenu, hlavne poschodie, schody a vzdialenosť od auta.</p>
+      <h2 class="cbw-calc-prompt">Množstvo a prístup</h2>
+      <p class="cbw-calc-hint">Základ je prednastavený. Zmeňte len to, čo nesedí — napríklad schody, výťah alebo parkovanie ďalej od vchodu.</p>
       <div class="cbw-q-number-wrap">
         ${renderQuantityVisual()}
         <div class="cbw-q-group">
@@ -2683,22 +3131,62 @@
     bindCalcStepEvents();
   }
 
+
+  function rerenderKeepingFocus(inputId, value) {
+    calc.search = value;
+    renderCalc();
+    requestAnimationFrame(() => {
+      const el = document.getElementById(inputId);
+      if (!el) return;
+      el.focus();
+      const pos = String(value || '').length;
+      try { el.setSelectionRange(pos, pos); } catch (_) {}
+    });
+  }
+
   function bindCalcStepEvents() {
     bind('[data-direction]', 'click', e => setData('direction', e.currentTarget.dataset.direction, true));
     bind('[data-service]', 'click', e => setData('service', e.currentTarget.dataset.service, true));
     bind('[data-search-item]', 'click', e => {
       const item = byId(ALL_ITEMS, e.currentTarget.dataset.searchItem);
       if (!item) return;
+      const svc = byId(SERVICES, item.cat);
+      if (svc && calc.data.direction && !svc.directions.includes(calc.data.direction)) return;
       calc.data.service = item.cat;
-      calc.data.items = [item];
+      calc.data.items = isSelectedItem(item.id) ? selectedItems() : selectedItems().concat(item);
       calc.search = '';
+      calc.filter = 'all';
       goStep(2);
     });
     const svcSearch = document.getElementById('cbwServiceSearch');
-    if (svcSearch) svcSearch.addEventListener('input', e => { calc.search = e.target.value; renderCalc(); });
+    if (svcSearch) {
+      svcSearch.addEventListener('input', e => rerenderKeepingFocus('cbwServiceSearch', e.target.value));
+      svcSearch.addEventListener('keydown', e => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const first = filteredItems(1)[0];
+          if (first && itemMatchesQuery(first, svcSearch.value)) {
+            calc.data.service = first.cat;
+            calc.data.items = [first];
+            calc.search = '';
+            goStep(2);
+          } else {
+            addCustomItem(svcSearch.value, 2);
+          }
+        }
+      });
+    }
+    const addServiceCustom = document.getElementById('cbwAddServiceCustom');
+    if (addServiceCustom) addServiceCustom.addEventListener('click', () => addCustomItem((document.getElementById('cbwServiceSearch') || {}).value, 2));
     const itemSearch = document.getElementById('cbwItemSearch');
-    if (itemSearch) itemSearch.addEventListener('input', e => { calc.search = e.target.value; renderCalc(); });
+    if (itemSearch) {
+      itemSearch.addEventListener('input', e => rerenderKeepingFocus('cbwItemSearch', e.target.value));
+      itemSearch.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCustomItem(itemSearch.value); } });
+    }
+    const addSearchAsItem = document.getElementById('cbwAddSearchAsItem');
+    if (addSearchAsItem) addSearchAsItem.addEventListener('click', () => addCustomItem((document.getElementById('cbwItemSearch') || {}).value));
     bind('[data-filter]', 'click', e => { calc.filter = e.currentTarget.dataset.filter; renderCalc(); });
+    bind('[data-preset]', 'click', e => applyPreset(e.currentTarget.dataset.preset));
     bind('[data-item]', 'click', e => toggleItem(e.currentTarget.dataset.item));
     bind('[data-remove-item]', 'click', e => toggleItem(e.currentTarget.dataset.removeItem));
     const clearItems = document.getElementById('cbwClearItems');
@@ -2796,14 +3284,19 @@
         });
         if (!res.ok) throw new Error('API vrátilo stav ' + res.status);
       } else {
-        const saved = JSON.parse(localStorage.getItem('cbw_leads') || '[]');
-        saved.push(payload);
-        localStorage.setItem('cbw_leads', JSON.stringify(saved.slice(-20)));
-        console.info('[CBW] Lead endpoint nie je nastavený. Dopyt bol uložený lokálne.', payload);
+        try {
+          const saved = JSON.parse(localStorage.getItem('cbw_leads') || '[]');
+          saved.push(payload);
+          localStorage.setItem('cbw_leads', JSON.stringify(saved.slice(-20)));
+          console.info('[CBW] Lead endpoint nie je nastavený. Dopyt bol uložený lokálne.', payload);
+        } catch (storageErr) {
+          console.info('[CBW] Lead endpoint nie je nastavený a lokálne uloženie nie je dostupné v tomto prostredí.', payload);
+        }
       }
       calc.sending = false;
       spawnConfetti(calcEls.next);
       renderThanks();
+      appendBubble('bot', 'Ďakujeme, dopyt je pripravený. Ak chcete doplniť ďalšie informácie, napíšte ich sem do chatu.');
     } catch (err) {
       calc.sending = false;
       calc.error = 'Dopyt sa nepodarilo odoslať cez API. Skontrolujte endpoint alebo skúste odoslanie znova. Detail: ' + (err && err.message ? err.message : 'neznáma chyba');
@@ -2819,7 +3312,7 @@
     calc.error = '';
     calc.sending = false;
     calc.data = {
-      direction: '', service: '', items: [], quantity: 1, access: '', floors: 0, elevator: '', parking: '', distance: 'city',
+      direction: '', service: '', items: [], quantity: 1, access: 'standard', floors: 0, elevator: 'yes', parking: 'near', distance: 'city',
       date: '', cityFrom: '', cityTo: '', note: '', photos: [], name: '', phone: '', email: '', gdpr: false
     };
   }
@@ -2843,19 +3336,22 @@
   // Smarter canned answers for chips and common questions.
   function botReplyFor(text) {
     const q = normalizeText(text);
-    if (q.includes('cena') || q.includes('kolko') || q.includes('kalkul')) {
-      return 'Cenu vieme orientačne vypočítať hneď v kalkulačke. Zohľadní veci, množstvo, poschodie, výťah, parkovanie a vzdialenosť.';
+    if (q.includes('cen') || q.includes('kolko') || q.includes('kalkul') || q.includes('eur')) {
+      return 'Cenu vypočítame orientačne podľa vecí, množstva, poschodia, výťahu, parkovania a vzdialenosti. Najrýchlejšie je kliknúť na modré tlačidlo „Spočítať cenu za 1 minútu“.';
     }
-    if (q.includes('sluz') || q.includes('ponuk')) {
-      return 'Riešime odvoz starého nábytku, spotrebičov, vypratávanie pivníc/garáží, suť aj dovoz tovaru alebo nábytku z obchodu.';
+    if (q.includes('sluz') || q.includes('ponuk') || q.includes('odvoz') || q.includes('dovoz')) {
+      return 'Pomáhame s odvozom nábytku a spotrebičov, vypratávaním pivníc/garáží, odvozom sute a dovozom tovaru alebo nábytku z obchodov.';
     }
-    if (q.includes('hodin') || q.includes('otvar')) {
-      return 'Dopyt môžete poslať kedykoľvek. Presný termín sa potvrdzuje podľa dostupnosti auta a posádky.';
+    if (q.includes('hodin') || q.includes('otvar') || q.includes('kedy')) {
+      return 'Dopyt môžete poslať kedykoľvek. Termín sa potom potvrdí podľa dostupnosti auta a posádky.';
     }
     if (q.includes('foto') || q.includes('fotk')) {
-      return 'Fotky môžete pridať v kalkulačke v kroku „Termín a miesto“. Pomôžu presnejšie odhadnúť cenu.';
+      return 'Fotky môžete pridať v kalkulačke v kroku „Kde a kedy“. Pomôžu presnejšie odhadnúť cenu a náročnosť nosenia.';
     }
-    return 'Ďakujem za správu. Pre najrýchlejšiu odpoveď odporúčam vyplniť kalkulačku – z údajov sa dá hneď pripraviť orientačná cena.';
+    if (q.includes('kontakt') || q.includes('telefon') || q.includes('volat')) {
+      return 'Kontakt môžete nechať v kalkulačke. Ak je na webe nastavený telefón, zobrazí sa aj tlačidlo na zavolanie pod chatom.';
+    }
+    return 'Rozumiem. Najistejšie je vyplniť krátku kalkulačku — zistí veci, prístup, miesto a kontakt, potom pripraví orientačnú cenu.';
   }
 
   // ============================================================
