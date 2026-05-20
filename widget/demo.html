@@ -526,10 +526,26 @@ background: transparent; border: none;
 color: #fff; cursor: pointer;
 padding: 8px; border-radius: 10px;
 display: flex; align-items: center; justify-content: center;
-transition: background 150ms ease;
+transition: background 150ms ease, transform 150ms ease;
 }
 .cbw-icon-btn:hover { background: rgba(255, 255, 255, 0.2); }
 .cbw-icon-btn svg { width: 18px; height: 18px; transition: transform 200ms ease; }
+
+/* Make the chat close button stand out — bigger, red on hover */
+#cbwClose {
+  background: rgba(255, 255, 255, 0.16);
+  border: 1.5px solid rgba(255, 255, 255, 0.32);
+  padding: 9px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+#cbwClose svg { width: 20px; height: 20px; stroke-width: 2.6; }
+#cbwClose:hover {
+  background: rgba(220, 38, 38, 0.85);
+  border-color: rgba(220, 38, 38, 1);
+  transform: scale(1.06);
+}
+#cbwClose:active { transform: scale(0.94); }
 
 #cbwRefresh.cbw-spinning svg {
 animation: cbw-spin-360 720ms var(--bounce);
@@ -757,14 +773,17 @@ white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .cbw-calc-head-step { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
 .cbw-calc-head-x {
-width: 34px; height: 34px; border-radius: 10px;
-border: none; background: transparent; cursor: pointer;
+width: 40px; height: 40px; border-radius: 12px;
+border: 1.5px solid var(--border); background: #fff; cursor: pointer;
 display: flex; align-items: center; justify-content: center;
-color: var(--text-muted);
-transition: all 150ms ease;
+color: var(--text);
+transition: all 160ms ease;
+box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+flex-shrink: 0;
 }
-.cbw-calc-head-x:hover { background: var(--surface); color: var(--bad); }
-.cbw-calc-head-x svg { width: 16px; height: 16px; }
+.cbw-calc-head-x:hover { background: #fee2e2; border-color: #dc2626; color: #dc2626; transform: scale(1.05); }
+.cbw-calc-head-x:active { transform: scale(0.94); }
+.cbw-calc-head-x svg { width: 20px; height: 20px; stroke-width: 2.6; }
 
 /* Progress bar */
 .cbw-calc-bar {
@@ -886,6 +905,14 @@ position: relative; z-index: 1;
 .cbw-dir-card .cbw-dir-van { transform-box: fill-box; transform-origin: center; }
 .cbw-dir-card:hover .cbw-dir-van-anim {
 animation: cbw-dir-drive 2.4s ease-in-out infinite;
+}
+
+/* Worker carrying a box — gentle walking bob */
+.cbw-dir-card .cbw-dir-worker { transform-box: fill-box; transform-origin: center bottom; }
+.cbw-dir-card:hover .cbw-dir-worker { animation: cbw-dir-walk 0.6s ease-in-out infinite alternate; }
+@keyframes cbw-dir-walk {
+0% { transform: translateY(0) rotate(-1.5deg); }
+100% { transform: translateY(-2px) rotate(1.5deg); }
 }
 @keyframes cbw-dir-drive {
 0% { transform: translateX(0); }
@@ -4178,52 +4205,84 @@ padding: 9px 16px;
   // DIRECTION VISUAL ICONS — odvoz / dovoz with rich animations
   // ============================================================
   function iconOdvoz() {
-    // Odvoz: house on the left, van leaves to the right.
+    // Odvoz: human (with cap) picks up a colored package from the house and
+    // walks it to the van on the right. Everything in brand sky-blue palette.
     return ''
       + '<svg viewBox="0 0 110 80" fill="none" xmlns="http://www.w3.org/2000/svg">'
-      + '<path d="M8 50 L8 65 L26 65 L26 50" fill="#fbbf24" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
-      + '<path d="M5 50 L17 38 L29 50 Z" fill="#dc2626" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
-      + '<rect x="14" y="55" width="6" height="10" fill="#92400e"/>'
+      // House (brand colors)
+      + '<path d="M5 50 L17 38 L29 50 Z" fill="#0c4a6e" stroke="#0c4a6e" stroke-width="1.4" stroke-linejoin="round"/>'
+      + '<path d="M8 50 L8 65 L26 65 L26 50" fill="#e0f2fe" stroke="#0c4a6e" stroke-width="1.4" stroke-linejoin="round"/>'
+      + '<rect x="14" y="55" width="6" height="10" fill="#0c4a6e"/>'
+      + '<rect x="11" y="53" width="4" height="3" fill="#7dd3fc" stroke="#0c4a6e" stroke-width="0.6"/>'
+      // Road (dashed)
       + '<line class="cbw-dir-road-dash" x1="2" y1="72" x2="108" y2="72" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-1" x="34" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-2" x="44" y="58" width="6" height="6" rx="1" fill="#0369a1"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-3" x="52" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
-      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:16px;">'
-      +   '<rect x="62" y="48" width="22" height="18" rx="1.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.8"/>'
-      +   '<path d="M84 52 L94 52 L102 60 L102 66 L84 66 Z" fill="#fff" stroke="#0c4a6e" stroke-width="1.8" stroke-linejoin="round"/>'
-      +   '<path d="M86 54 L92 54 L98 60 L86 60 Z" fill="#0c4a6e" opacity="0.7"/>'
-      +   '<rect x="65" y="51" width="6" height="6" rx="0.5" stroke="#0c4a6e" stroke-width="1.2" fill="none"/>'
-      +   '<circle class="cbw-dir-wheel" cx="70" cy="68" r="3.5" fill="#0c4a6e"/>'
-      +   '<circle class="cbw-dir-wheel" cx="94" cy="68" r="3.5" fill="#0c4a6e"/>'
-      +   '<circle cx="70" cy="68" r="1.2" fill="#fff"/>'
-      +   '<circle cx="94" cy="68" r="1.2" fill="#fff"/>'
+      // Stack of packages near the house (waiting to be picked up)
+      + '<rect class="cbw-dir-package cbw-dir-pkg-1" x="34" y="58" width="8" height="8" rx="1" fill="#0ea5e9" stroke="#0c4a6e" stroke-width="0.8"/>'
+      + '<rect class="cbw-dir-package cbw-dir-pkg-2" x="34" y="50" width="8" height="8" rx="1" fill="#38bdf8" stroke="#0c4a6e" stroke-width="0.8"/>'
+      + '<rect class="cbw-dir-package cbw-dir-pkg-3" x="42" y="58" width="8" height="8" rx="1" fill="#0369a1" stroke="#0c4a6e" stroke-width="0.8"/>'
+      // Worker (stick figure) carrying a package toward the van
+      + '<g class="cbw-dir-worker">'
+      +   '<circle cx="55" cy="46" r="3.4" fill="#fde68a" stroke="#0c4a6e" stroke-width="1.2"/>'
+      +   '<path d="M52 43 L58 43 L58 41 L52 41 Z" fill="#0284c7" stroke="#0c4a6e" stroke-width="0.8"/>'  // cap
+      +   '<rect x="52" y="49" width="6" height="9" rx="1" fill="#0284c7" stroke="#0c4a6e" stroke-width="1"/>'
+      +   '<rect x="49" y="50" width="9" height="6" rx="0.8" fill="#fbbf24" stroke="#0c4a6e" stroke-width="0.8"/>'  // carried box
+      +   '<line x1="53" y1="58" x2="52" y2="66" stroke="#0c4a6e" stroke-width="1.5" stroke-linecap="round"/>'
+      +   '<line x1="57" y1="58" x2="58" y2="66" stroke="#0c4a6e" stroke-width="1.5" stroke-linecap="round"/>'
       + '</g>'
-      + '<path d="M35 30 L53 30 M47 26 L53 30 L47 34" stroke="#0369a1" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>'
+      // Van
+      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:14px;">'
+      +   '<rect x="68" y="46" width="22" height="20" rx="1.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.8"/>'
+      +   '<path d="M90 50 L100 50 L106 58 L106 66 L90 66 Z" fill="#0284c7" stroke="#0c4a6e" stroke-width="1.8" stroke-linejoin="round"/>'
+      +   '<path d="M92 52 L98 52 L103 58 L92 58 Z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="0.8"/>'
+      +   '<rect x="71" y="49" width="6" height="6" rx="0.5" stroke="#0c4a6e" stroke-width="1.2" fill="none"/>'
+      +   '<circle class="cbw-dir-wheel" cx="76" cy="68" r="3.5" fill="#0c4a6e"/>'
+      +   '<circle class="cbw-dir-wheel" cx="98" cy="68" r="3.5" fill="#0c4a6e"/>'
+      +   '<circle cx="76" cy="68" r="1.2" fill="#fff"/>'
+      +   '<circle cx="98" cy="68" r="1.2" fill="#fff"/>'
+      + '</g>'
+      // Direction arrow (out)
+      + '<path d="M35 24 L75 24 M67 19 L75 24 L67 29" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>'
       + '</svg>';
   }
 
   function iconDovoz() {
-    // Dovoz: house on the left, van arrives from the right, opposite direction.
+    // Dovoz: van arrives from the right, worker walks left carrying a
+    // package toward the house. Brand sky-blue palette throughout.
     return ''
       + '<svg viewBox="0 0 110 80" fill="none" xmlns="http://www.w3.org/2000/svg">'
-      + '<path d="M8 50 L8 65 L26 65 L26 50" fill="#fbbf24" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
-      + '<path d="M5 50 L17 38 L29 50 Z" fill="#16a34a" stroke="#92400e" stroke-width="1.5" stroke-linejoin="round"/>'
-      + '<rect x="14" y="55" width="6" height="10" fill="#92400e"/>'
+      // House (destination)
+      + '<path d="M5 50 L17 38 L29 50 Z" fill="#0c4a6e" stroke="#0c4a6e" stroke-width="1.4" stroke-linejoin="round"/>'
+      + '<path d="M8 50 L8 65 L26 65 L26 50" fill="#e0f2fe" stroke="#0c4a6e" stroke-width="1.4" stroke-linejoin="round"/>'
+      + '<rect x="14" y="55" width="6" height="10" fill="#0c4a6e"/>'
+      + '<rect x="11" y="53" width="4" height="3" fill="#7dd3fc" stroke="#0c4a6e" stroke-width="0.6"/>'
+      // Road
       + '<line class="cbw-dir-road-dash" x1="2" y1="72" x2="108" y2="72" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-1" x="34" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-2" x="44" y="58" width="6" height="6" rx="1" fill="#0369a1"/>'
-      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-3" x="52" y="56" width="8" height="8" rx="1" fill="#0ea5e9"/>'
-      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:-18px;">'
-      +   '<rect x="64" y="48" width="22" height="18" rx="1.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.8"/>'
-      +   '<path d="M64 52 L54 52 L46 60 L46 66 L64 66 Z" fill="#fff" stroke="#0c4a6e" stroke-width="1.8" stroke-linejoin="round"/>'
-      +   '<path d="M62 54 L56 54 L50 60 L62 60 Z" fill="#0c4a6e" opacity="0.7"/>'
-      +   '<rect x="72" y="51" width="6" height="6" rx="0.5" stroke="#0c4a6e" stroke-width="1.2" fill="none"/>'
-      +   '<circle class="cbw-dir-wheel" cx="54" cy="68" r="3.5" fill="#0c4a6e"/>'
-      +   '<circle class="cbw-dir-wheel" cx="78" cy="68" r="3.5" fill="#0c4a6e"/>'
-      +   '<circle cx="54" cy="68" r="1.2" fill="#fff"/>'
-      +   '<circle cx="78" cy="68" r="1.2" fill="#fff"/>'
+      // Worker carrying a package from van toward the house (facing left)
+      + '<g class="cbw-dir-worker">'
+      +   '<circle cx="55" cy="46" r="3.4" fill="#fde68a" stroke="#0c4a6e" stroke-width="1.2"/>'
+      +   '<path d="M52 43 L58 43 L58 41 L52 41 Z" fill="#0284c7" stroke="#0c4a6e" stroke-width="0.8"/>'
+      +   '<rect x="52" y="49" width="6" height="9" rx="1" fill="#0284c7" stroke="#0c4a6e" stroke-width="1"/>'
+      +   '<rect x="49" y="50" width="9" height="6" rx="0.8" fill="#fbbf24" stroke="#0c4a6e" stroke-width="0.8"/>'
+      +   '<line x1="53" y1="58" x2="52" y2="66" stroke="#0c4a6e" stroke-width="1.5" stroke-linecap="round"/>'
+      +   '<line x1="57" y1="58" x2="58" y2="66" stroke="#0c4a6e" stroke-width="1.5" stroke-linecap="round"/>'
       + '</g>'
-      + '<path d="M82 30 L52 30 M58 25 L52 30 L58 35" stroke="#16a34a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" opacity="0.65"/>'
+      // Packages waiting near the van (delivered next)
+      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-1" x="62" y="58" width="8" height="8" rx="1" fill="#0ea5e9" stroke="#0c4a6e" stroke-width="0.8"/>'
+      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-2" x="62" y="50" width="8" height="8" rx="1" fill="#38bdf8" stroke="#0c4a6e" stroke-width="0.8"/>'
+      + '<rect class="cbw-dir-package cbw-dir-pkg-deliver-3" x="70" y="58" width="8" height="8" rx="1" fill="#0369a1" stroke="#0c4a6e" stroke-width="0.8"/>'
+      // Van (arriving from the right — cab faces left)
+      + '<g class="cbw-dir-van cbw-dir-van-anim" style="--drive-x:-14px;">'
+      +   '<rect x="80" y="46" width="22" height="20" rx="1.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.8"/>'
+      +   '<path d="M80 50 L70 50 L64 58 L64 66 L80 66 Z" fill="#0284c7" stroke="#0c4a6e" stroke-width="1.8" stroke-linejoin="round"/>'
+      +   '<path d="M78 52 L72 52 L67 58 L78 58 Z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="0.8"/>'
+      +   '<rect x="86" y="49" width="6" height="6" rx="0.5" stroke="#0c4a6e" stroke-width="1.2" fill="none"/>'
+      +   '<circle class="cbw-dir-wheel" cx="72" cy="68" r="3.5" fill="#0c4a6e"/>'
+      +   '<circle class="cbw-dir-wheel" cx="96" cy="68" r="3.5" fill="#0c4a6e"/>'
+      +   '<circle cx="72" cy="68" r="1.2" fill="#fff"/>'
+      +   '<circle cx="96" cy="68" r="1.2" fill="#fff"/>'
+      + '</g>'
+      // Direction arrow (in)
+      + '<path d="M75 24 L35 24 M43 19 L35 24 L43 29" stroke="#0284c7" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.8"/>'
       + '</svg>';
   }
 
@@ -5215,9 +5274,25 @@ renderCalc();
 requestAnimationFrame(() => {
 const el = document.getElementById(inputId);
 if (!el) return;
-el.focus();
+el.focus({ preventScroll: true });
 const pos = String(value || '').length;
 try { el.setSelectionRange(pos, pos); } catch (_) {}
+});
+}
+
+/* Re-render the wizard but restore focus + caret to the given input
+   afterwards. Used by quantity/floors so the mobile keyboard doesn't
+   close between keystrokes. */
+function rerenderRestoringFocus(inputId) {
+const el = document.getElementById(inputId);
+const isNum = el && el.type === 'number';
+const cursorPos = (!isNum && el && typeof el.selectionStart === 'number') ? el.selectionStart : null;
+renderCalc();
+requestAnimationFrame(() => {
+const next = document.getElementById(inputId);
+if (!next) return;
+next.focus({ preventScroll: true });
+if (cursorPos != null) { try { next.setSelectionRange(cursorPos, cursorPos); } catch (_) {} }
 });
 }
 
@@ -5276,9 +5351,15 @@ customInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preven
 const customAdd = document.getElementById('cbwAddCustom');
 if (customAdd) customAdd.addEventListener('click', () => addCustomItem((document.getElementById('cbwCustomItem') || {}).value));
 const quantity = document.getElementById('cbwQuantity');
-if (quantity) quantity.addEventListener('input', e => { calc.data.quantity = Math.max(1, Number(e.target.value) || 1); renderCalc(); });
+if (quantity) quantity.addEventListener('input', e => {
+  calc.data.quantity = Math.max(1, Number(e.target.value) || 1);
+  rerenderRestoringFocus('cbwQuantity');
+});
 const floors = document.getElementById('cbwFloors');
-if (floors) floors.addEventListener('input', e => { calc.data.floors = Math.max(0, Number(e.target.value) || 0); renderCalc(); });
+if (floors) floors.addEventListener('input', e => {
+  calc.data.floors = Math.max(0, Number(e.target.value) || 0);
+  rerenderRestoringFocus('cbwFloors');
+});
 bind('[data-access]', 'click', e => setData('access', e.currentTarget.dataset.access));
 bind('[data-elevator]', 'click', e => setData('elevator', e.currentTarget.dataset.elevator));
 bind('[data-parking]', 'click', e => setData('parking', e.currentTarget.dataset.parking));
