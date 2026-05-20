@@ -587,12 +587,12 @@ transform-origin: bottom center;
 }
 .cbw-msg.cbw-bot {
 align-self: flex-start;
-background: linear-gradient(180deg, var(--bot-bubble-bg), #d8eefb);
+background: var(--bot-bubble-bg);
 color: var(--bot-bubble-text);
 border: 1px solid var(--bot-bubble-border);
 border-bottom-left-radius: 4px;
 transform-origin: bottom left;
-box-shadow: 0 2px 6px -2px rgba(2, 132, 199, 0.18);
+box-shadow: 0 2px 6px -2px rgba(15, 23, 42, 0.12);
 }
 .cbw-msg.cbw-user {
 align-self: flex-end;
@@ -2993,6 +2993,788 @@ padding: 9px 16px;
   }
 }
 
+/* ============================================================
+   SPACE-BASED MOVING / CLEARANCE PRICE LOGIC UI PATCH
+   ============================================================ */
+.cbw-space-panel {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  margin: 2px 0 4px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  background: linear-gradient(180deg, #ffffff 0%, #fffaf2 100%);
+  box-shadow: var(--shadow-sm);
+}
+
+.cbw-job-grid,
+.cbw-extra-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.cbw-job-card,
+.cbw-extra-card {
+  appearance: none;
+  width: 100%;
+  border: 1.5px solid var(--border);
+  background: #fff;
+  color: var(--text);
+  border-radius: 15px;
+  font: inherit;
+  cursor: pointer;
+  transition: transform 180ms var(--bounce), border-color 180ms ease, box-shadow 200ms ease, background 180ms ease;
+}
+
+.cbw-job-card {
+  min-height: 78px;
+  padding: 12px;
+  text-align: left;
+}
+
+.cbw-job-card-title {
+  display: block;
+  font-weight: 850;
+  font-size: 13.5px;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+}
+
+.cbw-job-card small {
+  display: block;
+  margin-top: 5px;
+  font-size: 11.5px;
+  line-height: 1.35;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.cbw-job-card:hover,
+.cbw-extra-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.cbw-job-card[aria-pressed="true"] {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, #fff 0%, var(--surface-blue) 100%);
+  box-shadow: 0 0 0 3px rgba(44, 52, 69, 0.12), var(--shadow-sm);
+}
+
+.cbw-space-area-row {
+  align-items: stretch;
+}
+
+.cbw-space-price-note {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3px;
+  padding: 12px;
+  border-radius: 13px;
+  background: #fff7e8;
+  border: 1px solid #fde2ad;
+  color: #7c4a03;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.cbw-space-price-note strong {
+  font-size: 12.5px;
+  color: #5f3900;
+}
+
+.cbw-extra-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  min-height: 72px;
+  padding: 11px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.cbw-extra-check {
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--border-strong);
+  border-radius: 7px;
+  background: #fff;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cbw-extra-card[aria-pressed="true"] {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, #ffffff 0%, #f4f6fa 100%);
+  box-shadow: 0 0 0 3px rgba(44, 52, 69, 0.11), var(--shadow-sm);
+}
+
+.cbw-extra-card[aria-pressed="true"] .cbw-extra-check {
+  background: var(--primary);
+  border-color: var(--primary);
+}
+
+.cbw-extra-card[aria-pressed="true"] .cbw-extra-check::after {
+  content: "";
+  width: 6px;
+  height: 10px;
+  border-right: 2.5px solid #fff;
+  border-bottom: 2.5px solid #fff;
+  transform: rotate(45deg) translate(-1px, -1px);
+  transform-origin: center;
+}
+
+.cbw-extra-copy strong {
+  display: block;
+  font-size: 12.8px;
+  font-weight: 850;
+  line-height: 1.2;
+  color: var(--text);
+}
+
+.cbw-extra-copy small {
+  display: block;
+  margin-top: 3px;
+  font-size: 11.2px;
+  line-height: 1.3;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.cbw-extra-price {
+  align-self: center;
+  justify-self: end;
+  padding: 4px 7px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #7c4a03;
+  font-size: 11px;
+  font-weight: 850;
+  white-space: nowrap;
+}
+
+/* Center checkmarks in all original card controls */
+.cbw-q-card[aria-pressed="true"]::after {
+  left: 24px !important;
+  top: 50% !important;
+  transform: translate(-50%, -58%) rotate(45deg) !important;
+  width: 6px !important;
+  height: 11px !important;
+}
+
+/* Prevent calculator visual overlap */
+.cbw-calc-body {
+  overscroll-behavior: contain;
+}
+.cbw-q-group,
+.cbw-scope-options,
+.cbw-place-options,
+.cbw-fast-search-row {
+  min-width: 0;
+}
+.cbw-q-card,
+.cbw-job-card,
+.cbw-extra-card,
+.cbw-result-option {
+  min-width: 0;
+}
+
+/* Mobile header fix: language switcher must not cover title */
+@media (max-width: 480px) {
+  .cbw-header {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto !important;
+    gap: 8px !important;
+    align-items: center !important;
+    padding: 11px 10px !important;
+    min-height: 64px !important;
+  }
+  .cbw-header-avatar.cbw-logo-avatar {
+    width: 74px !important;
+    height: 36px !important;
+    padding: 5px !important;
+  }
+  .cbw-title-wrap {
+    min-width: 0 !important;
+    overflow: hidden !important;
+  }
+  .cbw-title {
+    font-size: 13.5px !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+  .cbw-subtitle {
+    font-size: 10.5px !important;
+    margin-top: 1px !important;
+  }
+  .cbw-actions {
+    display: flex !important;
+    align-items: center !important;
+    gap: 2px !important;
+    min-width: 0 !important;
+  }
+  .cbw-lang-switch {
+    margin-right: 1px !important;
+    padding: 1px !important;
+    flex-shrink: 0 !important;
+  }
+  .cbw-lang-btn {
+    min-width: 23px !important;
+    padding: 4px 5px !important;
+    font-size: 9.5px !important;
+    letter-spacing: 0 !important;
+  }
+  .cbw-icon-btn,
+  #cbwClose {
+    width: 32px !important;
+    height: 32px !important;
+    padding: 6px !important;
+    border-radius: 10px !important;
+  }
+  .cbw-icon-btn svg,
+  #cbwClose svg {
+    width: 17px !important;
+    height: 17px !important;
+  }
+  .cbw-job-grid,
+  .cbw-extra-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .cbw-space-panel {
+    padding: 12px !important;
+  }
+  .cbw-extra-card {
+    grid-template-columns: 26px minmax(0, 1fr) auto !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .cbw-header-avatar.cbw-logo-avatar {
+    width: 64px !important;
+  }
+  .cbw-title {
+    font-size: 12.5px !important;
+  }
+  .cbw-subtitle {
+    display: none !important;
+  }
+  .cbw-lang-btn {
+    min-width: 21px !important;
+    padding: 3px 4px !important;
+    font-size: 9px !important;
+  }
+  .cbw-icon-btn,
+  #cbwClose {
+    width: 29px !important;
+    height: 29px !important;
+    padding: 5px !important;
+  }
+}
+
+
+/* ============================================================
+   FIX — Rozsah práce: slovenské texty, bez prekrývania prvkov
+   ============================================================ */
+.cbw-space-panel {
+  gap: 16px !important;
+  padding: 15px !important;
+  margin-top: 4px !important;
+  border-radius: 18px !important;
+  border: 1.5px solid #e0e4ec !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbf5 100%) !important;
+  box-shadow: 0 10px 26px -22px rgba(31, 38, 51, 0.55) !important;
+}
+.cbw-space-panel .cbw-search-section-label {
+  margin: 2px 0 -4px !important;
+  color: #2c3445 !important;
+  font-size: 11px !important;
+  font-weight: 900 !important;
+  letter-spacing: .055em !important;
+}
+.cbw-job-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+.cbw-extra-grid {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 9px !important;
+}
+.cbw-job-card {
+  position: relative !important;
+  min-height: 88px !important;
+  padding: 13px 13px 13px 14px !important;
+  border-radius: 16px !important;
+  border: 1.5px solid #d8dde8 !important;
+  background: #ffffff !important;
+  overflow: hidden !important;
+}
+.cbw-job-card::after {
+  content: "" !important;
+  position: absolute !important;
+  right: 12px !important;
+  top: 12px !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
+  border: 2px solid #cbd5e1 !important;
+  background: #fff !important;
+  box-sizing: border-box !important;
+}
+.cbw-job-card[aria-pressed="true"]::after {
+  border-color: #2c3445 !important;
+  background: radial-gradient(circle at center, #2c3445 0 43%, #fff 45% 100%) !important;
+}
+.cbw-job-card-title {
+  display: block !important;
+  padding-right: 24px !important;
+  color: #1f2633 !important;
+  font-size: 13.8px !important;
+  font-weight: 900 !important;
+  line-height: 1.18 !important;
+  overflow-wrap: anywhere !important;
+}
+.cbw-job-card small {
+  display: block !important;
+  margin-top: 6px !important;
+  color: #64748b !important;
+  font-size: 11.2px !important;
+  font-weight: 650 !important;
+  line-height: 1.32 !important;
+  overflow-wrap: anywhere !important;
+}
+.cbw-job-card:hover,
+.cbw-extra-card:hover {
+  transform: translateY(-1px) !important;
+  border-color: #fbb246 !important;
+  box-shadow: 0 8px 20px -16px rgba(31, 38, 51, 0.55) !important;
+}
+.cbw-job-card[aria-pressed="true"] {
+  border-color: #2c3445 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f4f6fa 100%) !important;
+  box-shadow: 0 0 0 3px rgba(44, 52, 69, 0.10) !important;
+}
+.cbw-space-area-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr) !important;
+  gap: 10px !important;
+  align-items: stretch !important;
+}
+.cbw-space-price-note {
+  min-width: 0 !important;
+  padding: 11px 12px !important;
+  border-radius: 14px !important;
+  background: #fff7e8 !important;
+  border: 1px solid #f6d7a4 !important;
+  color: #7c4a03 !important;
+}
+.cbw-extra-card {
+  display: grid !important;
+  grid-template-columns: 24px minmax(0, 1fr) !important;
+  align-items: center !important;
+  gap: 11px !important;
+  min-height: 66px !important;
+  padding: 12px 13px !important;
+  border-radius: 15px !important;
+  border: 1.5px solid #d8dde8 !important;
+  background: #ffffff !important;
+  overflow: visible !important;
+}
+.cbw-extra-check {
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 7px !important;
+  border: 2px solid #cbd5e1 !important;
+  background: #fff !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  justify-self: center !important;
+  margin: 0 !important;
+}
+.cbw-extra-card[aria-pressed="true"] .cbw-extra-check::after {
+  content: "" !important;
+  width: 6px !important;
+  height: 10px !important;
+  border-right: 2.4px solid #fff !important;
+  border-bottom: 2.4px solid #fff !important;
+  transform: rotate(45deg) translate(-1px, -1px) !important;
+}
+.cbw-extra-copy {
+  min-width: 0 !important;
+}
+.cbw-extra-copy strong {
+  font-size: 13px !important;
+  line-height: 1.18 !important;
+  font-weight: 900 !important;
+  color: #1f2633 !important;
+  overflow-wrap: anywhere !important;
+}
+.cbw-extra-copy small {
+  margin-top: 4px !important;
+  color: #64748b !important;
+  font-size: 11.3px !important;
+  line-height: 1.28 !important;
+  font-weight: 650 !important;
+  overflow-wrap: anywhere !important;
+}
+.cbw-extra-price {
+  display: none !important;
+}
+.cbw-extra-card[aria-pressed="true"] {
+  border-color: #2c3445 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f4f6fa 100%) !important;
+  box-shadow: 0 0 0 3px rgba(44, 52, 69, 0.10) !important;
+}
+.cbw-extra-card[aria-pressed="true"] .cbw-extra-check {
+  background: #2c3445 !important;
+  border-color: #2c3445 !important;
+}
+@media (max-width: 430px) {
+  .cbw-job-grid,
+  .cbw-space-area-row {
+    grid-template-columns: 1fr !important;
+  }
+  .cbw-job-card {
+    min-height: 76px !important;
+  }
+  .cbw-space-panel {
+    padding: 13px !important;
+  }
+}
+
+
+
+/* ============================================================
+   SURGICAL FIX — no reset: only overlap safety + stable inputs
+   ============================================================ */
+.cbw-calc-wizard,
+.cbw-calc-body,
+.cbw-space-panel {
+  min-width: 0 !important;
+  max-width: 100% !important;
+}
+.cbw-calc-body {
+  overflow-x: hidden !important;
+  padding-bottom: 26px !important;
+}
+.cbw-calc-foot {
+  position: relative !important;
+  z-index: 20 !important;
+  background: #fff !important;
+  box-shadow: 0 -8px 22px -24px rgba(31,38,51,.55) !important;
+}
+.cbw-job-card,
+.cbw-extra-card {
+  isolation: isolate !important;
+  max-width: 100% !important;
+}
+.cbw-job-card::after {
+  z-index: 2 !important;
+  pointer-events: none !important;
+}
+.cbw-job-card-title,
+.cbw-job-card small,
+.cbw-extra-copy,
+.cbw-extra-copy strong,
+.cbw-extra-copy small {
+  min-width: 0 !important;
+  max-width: 100% !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+.cbw-extra-card {
+  overflow: hidden !important;
+}
+.cbw-input {
+  min-width: 0 !important;
+}
+@media (max-width: 480px) {
+  .cbw-calc-body {
+    padding-bottom: calc(30px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  .cbw-calc-foot {
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
+  }
+}
+
+
+
+/* ============================================================
+   MINIMAL FLOW FIX — typ priestoru hore, bez prekrývania
+   ============================================================ */
+.cbw-space-top {
+  margin: 0 0 14px;
+  padding: 14px;
+  background: linear-gradient(180deg, #fff 0%, var(--surface-blue) 100%);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+.cbw-space-top .cbw-search-section-label {
+  margin: 0 0 10px;
+}
+.cbw-space-top .cbw-job-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin: 0;
+}
+.cbw-space-top .cbw-job-card {
+  min-height: 86px;
+  padding: 14px 38px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 4px;
+  overflow: visible;
+}
+.cbw-space-top .cbw-job-card::after {
+  top: 12px;
+  right: 12px;
+  left: auto;
+  transform: none;
+}
+.cbw-space-top .cbw-job-card[aria-pressed="true"]::after {
+  transform: none;
+}
+.cbw-space-top .cbw-job-card-title,
+.cbw-space-top .cbw-job-card small {
+  position: relative;
+  z-index: 2;
+}
+.cbw-space-top .cbw-job-card-title {
+  font-size: 14px;
+  line-height: 1.2;
+}
+.cbw-space-top .cbw-job-card small {
+  font-size: 11px;
+  line-height: 1.3;
+  max-width: 100%;
+}
+.cbw-space-panel .cbw-space-area-row {
+  margin-top: 0;
+}
+@media (max-width: 440px) {
+  .cbw-space-top {
+    padding: 12px;
+  }
+  .cbw-space-top .cbw-job-grid {
+    grid-template-columns: 1fr;
+  }
+  .cbw-space-top .cbw-job-card {
+    min-height: 72px;
+    padding: 13px 42px 13px 14px;
+  }
+}
+
+
+/* MINIMAL FIX 2026-05-20 — prevent Výťah / Parkovanie cards from overlapping */
+.cbw-scope-options {
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+}
+.cbw-scope-options .cbw-q-cards {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 10px !important;
+}
+.cbw-scope-options .cbw-q-card[data-compact="true"],
+.cbw-q-card[data-parking][data-compact="true"],
+.cbw-q-card[data-elevator][data-compact="true"] {
+  min-height: 70px !important;
+  padding: 14px 14px 14px 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  font-size: 15px !important;
+  line-height: 1.18 !important;
+  letter-spacing: 0 !important;
+  white-space: normal !important;
+  overflow: visible !important;
+  text-overflow: initial !important;
+}
+.cbw-scope-options .cbw-q-card[data-compact="true"]::before,
+.cbw-q-card[data-parking][data-compact="true"]::before,
+.cbw-q-card[data-elevator][data-compact="true"]::before {
+  left: 16px !important;
+  top: 50% !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+.cbw-scope-options .cbw-q-card[data-compact="true"][aria-pressed="true"]::after,
+.cbw-q-card[data-parking][data-compact="true"][aria-pressed="true"]::after,
+.cbw-q-card[data-elevator][data-compact="true"][aria-pressed="true"]::after {
+  left: 24px !important;
+  top: 50% !important;
+  width: 6px !important;
+  height: 11px !important;
+}
+@media (max-width: 360px) {
+  .cbw-scope-options .cbw-q-cards {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+
+
+/* SURGICAL FIX 2026-05-20 — centered checkmarks + stable compact controls */
+.cbw-q-card[aria-pressed="true"]::after {
+  left: 24px !important;
+  top: 50% !important;
+  width: 6px !important;
+  height: 11px !important;
+  transform: translate(-50%, -58%) rotate(45deg) !important;
+  transform-origin: center !important;
+  box-sizing: border-box !important;
+}
+.cbw-scope-options .cbw-q-card[data-compact="true"][aria-pressed="true"]::after,
+.cbw-place-options .cbw-q-card[data-compact="true"][aria-pressed="true"]::after,
+.cbw-q-card[data-parking][data-compact="true"][aria-pressed="true"]::after,
+.cbw-q-card[data-elevator][data-compact="true"][aria-pressed="true"]::after {
+  left: 28px !important;
+  top: 50% !important;
+  width: 6px !important;
+  height: 11px !important;
+  transform: translate(-50%, -58%) rotate(45deg) !important;
+  transform-origin: center !important;
+}
+.cbw-extra-check {
+  position: relative !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: 0 0 auto !important;
+}
+.cbw-extra-card[aria-pressed="true"] .cbw-extra-check::after {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  width: 6px !important;
+  height: 10px !important;
+  border-right: 2.4px solid #fff !important;
+  border-bottom: 2.4px solid #fff !important;
+  transform: translate(-50%, -58%) rotate(45deg) !important;
+  transform-origin: center !important;
+  box-sizing: border-box !important;
+}
+.cbw-extra-card[data-office-extra="true"] .cbw-extra-copy strong {
+  font-size: 12.8px !important;
+}
+@media (max-width: 390px) {
+  .cbw-extra-card {
+    grid-template-columns: 28px minmax(0, 1fr) !important;
+    padding: 12px 12px !important;
+  }
+  .cbw-extra-copy small {
+    font-size: 11px !important;
+  }
+}
+
+
+/* FINAL FIX — Dom/Byt/Kancelária flow + centered checks + closable desktop tip */
+.cbw-q-card[aria-pressed="true"]::after {
+  content: "✓" !important;
+  position: absolute !important;
+  left: 14px !important;
+  top: 50% !important;
+  width: 20px !important;
+  height: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: translateY(-50%) !important;
+  border: 0 !important;
+  color: #fff !important;
+  font-size: 13px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  z-index: 4 !important;
+  pointer-events: none !important;
+}
+.cbw-scope-options .cbw-q-card[data-compact="true"][aria-pressed="true"]::after,
+.cbw-place-options .cbw-q-card[data-compact="true"][aria-pressed="true"]::after,
+.cbw-q-card[data-parking][data-compact="true"][aria-pressed="true"]::after,
+.cbw-q-card[data-elevator][data-compact="true"][aria-pressed="true"]::after {
+  left: 16px !important;
+  width: 24px !important;
+  height: 24px !important;
+  transform: translateY(-50%) !important;
+}
+.cbw-extra-card[aria-pressed="true"] .cbw-extra-check::after {
+  content: "✓" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transform: none !important;
+  border: 0 !important;
+  color: #fff !important;
+  font-size: 14px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+}
+.cbw-root.cbw-tip-visible[data-open="false"] .cbw-launcher-tip {
+  pointer-events: auto !important;
+  padding-right: 31px !important;
+}
+.cbw-root.cbw-tip-dismissed .cbw-launcher-tip {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+.cbw-tip-close {
+  position: absolute !important;
+  top: 7px !important;
+  right: 7px !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 999px !important;
+  background: #f4f6fa !important;
+  border: 1px solid #d8dde8 !important;
+  color: #2c3445 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 16px !important;
+  font-weight: 900 !important;
+  line-height: 1 !important;
+  cursor: pointer !important;
+  z-index: 5 !important;
+  pointer-events: auto !important;
+}
+.cbw-tip-close:hover {
+  background: #fee2e2 !important;
+  border-color: #ef4444 !important;
+  color: #dc2626 !important;
+}
+@media (max-width: 640px), (hover: none) and (pointer: coarse) {
+  .cbw-root.cbw-tip-visible[data-open="false"] .cbw-launcher-tip,
+  .cbw-launcher-tip {
+    display: none !important;
+    opacity: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -3121,6 +3903,7 @@ padding: 9px 16px;
   <button class="cbw-launcher cbw-logo-launcher" id="cbwLauncher" type="button" aria-label="Otvoriť chat"><span class="cbw-logo-short" aria-hidden="true"><span class="cbw-logo-o">O</span><span class="cbw-logo-n">N</span></span>
     <span class="cbw-badge" id="cbwBadge">1</span>
     <span class="cbw-launcher-tip" id="cbwLauncherTip" aria-hidden="true">
+      <span class="cbw-tip-close" id="cbwLauncherTipClose" role="button" tabindex="0" aria-label="Zavrieť">×</span>
       <span class="cbw-tip-head">
         <span class="cbw-tip-avatar"><span class="cbw-tip-o">O</span><span class="cbw-tip-n">N</span></span>
         <span class="cbw-tip-copy">
@@ -3357,6 +4140,49 @@ padding: 9px 16px;
       parking_near: 'Blízko',
       parking_far: 'Ďalej',
       details_hint: 'Základ je prednastavený. Zmeňte len to, čo nesedí — napríklad schody, výťah alebo parkovanie ďalej od vchodu.',
+      details_hint_space: 'Najprv vyberte typ priestoru a približnú plochu. Potom zaškrtnite veci, ktoré prácu reálne sťažia alebo predĺžia.',
+      job_type_label: 'Typ priestoru / služby',
+      job_flat: 'Byt',
+      job_flat_sub: 'garsónka, 1–4 izbový byt',
+      job_house: 'Dom',
+      job_house_sub: 'rodinný dom, viac poschodí',
+      job_clearance: 'Vypratávanie',
+      job_clearance_sub: 'byt, dom, pivnica, garáž',
+      job_office: 'Firma / kancelária',
+      job_office_sub: 'kancelária, prevádzka, archív',
+      area_m2_label: 'Približná plocha m²',
+      area_m2_placeholder: 'napr. 65',
+      area_m2_why_title: 'Prečo sa pýtame na m²?',
+      area_m2_why_text: 'Plocha pomáha odhadnúť objem vecí, čas práce a počet ľudí.',
+      extras_label: 'Čo ešte treba započítať?',
+      extra_side_spaces: 'Vedľajšie priestory',
+      extra_side_spaces_sub: 'pivnica, garáž, povala alebo sklad',
+      extra_room_bedroom: 'Spálňa navyše',
+      extra_room_bedroom_sub: 'posteľ, matrac, skriňa, komody',
+      extra_room_kids: 'Detská izba',
+      extra_room_kids_sub: 'hračky, posteľ, skrinky, krabice',
+      extra_room_living: 'Obývačka navyše',
+      extra_room_living_sub: 'gauč, kreslá, TV, stolík, skrinky',
+      extra_stairs_no_lift: 'Schody bez výťahu',
+      extra_stairs_no_lift_sub: 'nosenie po schodoch, viac času',
+      extra_heavy_items: 'Ťažké kusy',
+      extra_heavy_items_sub: 'klavír, trezor, fitko alebo stroj',
+      extra_company_archive: 'Firemný archív / vybavenie',
+      extra_company_archive_sub: 'šanóny, stoly, IT, regály',
+      extra_office_rooms: 'Viac kancelárií / miestností',
+      extra_office_rooms_sub: 'viac tímov, zasadačka alebo recepcia',
+      extra_office_it: 'IT technika',
+      extra_office_it_sub: 'monitory, PC, tlačiarne, káble',
+      extra_office_furniture: 'Stoly, stoličky a regály navyše',
+      extra_office_furniture_sub: 'pracovné miesta, skrine, kovové regály',
+      extra_office_storage: 'Sklad / vedľajší priestor firmy',
+      extra_office_storage_sub: 'sklad, technická miestnosť, archív bokom',
+      no_extras: 'Bez príplatkov',
+      price_base_space: 'Základ podľa priestoru',
+      price_area: 'Plocha {m2} m²',
+      sum_label_job_type: 'Typ priestoru',
+      sum_label_area: 'Plocha',
+      sum_label_extras: 'Navyše',
       // Step Place
       place_hint: 'Stačí mesto alebo stručná adresa. Presnú cenu vám firma vie potvrdiť po kontrole údajov.',
       place_from: 'Odkiaľ odvážame?',
@@ -3536,6 +4362,49 @@ padding: 9px 16px;
       parking_near: 'Close',
       parking_far: 'Further',
       details_hint: 'Defaults are set. Change only what differs — e.g. stairs, elevator or parking further from entrance.',
+      details_hint_space: 'First choose the space type and approximate area. Then select anything that makes the work harder or longer.',
+      job_type_label: 'Space / service type',
+      job_flat: 'Flat',
+      job_flat_sub: 'studio or 1–4 room flat',
+      job_house: 'House',
+      job_house_sub: 'family house, multiple floors',
+      job_clearance: 'Clearance',
+      job_clearance_sub: 'flat, house, cellar, garage',
+      job_office: 'Company / office',
+      job_office_sub: 'office, premises, archive',
+      area_m2_label: 'Approximate area m²',
+      area_m2_placeholder: 'e.g. 65',
+      area_m2_why_title: 'Why m²?',
+      area_m2_why_text: 'Area helps estimate volume, work time and crew size.',
+      extras_label: 'What else should be included?',
+      extra_side_spaces: 'Side spaces',
+      extra_side_spaces_sub: 'cellar, garage, attic or storage',
+      extra_room_bedroom: 'Extra bedroom',
+      extra_room_bedroom_sub: 'bed, mattress, wardrobe, dressers',
+      extra_room_kids: 'Children’s room',
+      extra_room_kids_sub: 'toys, bed, cabinets, boxes',
+      extra_room_living: 'Extra living room',
+      extra_room_living_sub: 'sofa, chairs, TV, table, cabinets',
+      extra_stairs_no_lift: 'Stairs without elevator',
+      extra_stairs_no_lift_sub: 'carrying on stairs, more time',
+      extra_heavy_items: 'Heavy items',
+      extra_heavy_items_sub: 'piano, safe, gym equipment or machine',
+      extra_company_archive: 'Company archive / equipment',
+      extra_company_archive_sub: 'binders, desks, IT, shelves',
+      extra_office_rooms: 'More offices / rooms',
+      extra_office_rooms_sub: 'multiple teams, meeting room or reception',
+      extra_office_it: 'IT equipment',
+      extra_office_it_sub: 'monitors, PCs, printers, cables',
+      extra_office_furniture: 'Extra desks, chairs and shelves',
+      extra_office_furniture_sub: 'workstations, cabinets, metal shelves',
+      extra_office_storage: 'Company storage / side room',
+      extra_office_storage_sub: 'storage room, utility room, separate archive',
+      no_extras: 'No surcharges',
+      price_base_space: 'Base by space type',
+      price_area: 'Area {m2} m²',
+      sum_label_job_type: 'Space type',
+      sum_label_area: 'Area',
+      sum_label_extras: 'Extras',
       place_hint: 'A city or short address is enough. The exact price can be confirmed after checking the details.',
       place_from: 'Where are we picking up from?',
       place_from_delivery: 'Where do we deliver from? shop / address',
@@ -3712,6 +4581,49 @@ padding: 9px 16px;
       parking_near: 'Nah',
       parking_far: 'Weiter',
       details_hint: 'Standardwerte sind voreingestellt. Ändern Sie nur, was nicht stimmt — z. B. Treppe, Aufzug oder Parken weiter weg.',
+      details_hint_space: 'Wählen Sie zuerst Raumtyp und ungefähre Fläche. Danach markieren Sie alles, was die Arbeit erschwert oder verlängert.',
+      job_type_label: 'Raum- / Servicetyp',
+      job_flat: 'Wohnung',
+      job_flat_sub: 'Studio oder 1–4 Zimmer',
+      job_house: 'Haus',
+      job_house_sub: 'Familienhaus, mehrere Etagen',
+      job_clearance: 'Entrümpelung',
+      job_clearance_sub: 'Wohnung, Haus, Keller, Garage',
+      job_office: 'Firma / Büro',
+      job_office_sub: 'Büro, Betrieb, Archiv',
+      area_m2_label: 'Ungefähre Fläche m²',
+      area_m2_placeholder: 'z. B. 65',
+      area_m2_why_title: 'Warum m²?',
+      area_m2_why_text: 'Die Fläche hilft, Volumen, Arbeitszeit und Teamgröße einzuschätzen.',
+      extras_label: 'Was soll zusätzlich berücksichtigt werden?',
+      extra_side_spaces: 'Nebenräume',
+      extra_side_spaces_sub: 'Keller, Garage, Dachboden oder Lager',
+      extra_room_bedroom: 'Zusätzliches Schlafzimmer',
+      extra_room_bedroom_sub: 'Bett, Matratze, Schrank, Kommoden',
+      extra_room_kids: 'Kinderzimmer',
+      extra_room_kids_sub: 'Spielzeug, Bett, Schränke, Kisten',
+      extra_room_living: 'Zusätzliches Wohnzimmer',
+      extra_room_living_sub: 'Sofa, Sessel, TV, Tisch, Schränke',
+      extra_stairs_no_lift: 'Treppe ohne Aufzug',
+      extra_stairs_no_lift_sub: 'Tragen über Treppen, mehr Zeit',
+      extra_heavy_items: 'Schwere Stücke',
+      extra_heavy_items_sub: 'Klavier, Tresor, Fitnessgerät oder Maschine',
+      extra_company_archive: 'Firmenarchiv / Ausstattung',
+      extra_company_archive_sub: 'Ordner, Tische, IT, Regale',
+      extra_office_rooms: 'Mehr Büros / Räume',
+      extra_office_rooms_sub: 'mehrere Teams, Besprechungsraum oder Empfang',
+      extra_office_it: 'IT-Technik',
+      extra_office_it_sub: 'Monitore, PCs, Drucker, Kabel',
+      extra_office_furniture: 'Zusätzliche Tische, Stühle und Regale',
+      extra_office_furniture_sub: 'Arbeitsplätze, Schränke, Metallregale',
+      extra_office_storage: 'Firmalager / Nebenraum',
+      extra_office_storage_sub: 'Lager, Technikraum, separater Archivraum',
+      no_extras: 'Keine Zuschläge',
+      price_base_space: 'Basis nach Raumtyp',
+      price_area: 'Fläche {m2} m²',
+      sum_label_job_type: 'Raumtyp',
+      sum_label_area: 'Fläche',
+      sum_label_extras: 'Zusätzlich',
       place_hint: 'Stadt oder kurze Adresse genügt. Den exakten Preis kann die Firma nach Prüfung der Daten bestätigen.',
       place_from: 'Von wo holen wir ab?',
       place_from_delivery: 'Von wo liefern wir? Geschäft / Adresse',
@@ -3877,10 +4789,28 @@ padding: 9px 16px;
       en: ['Price or help?', 'Calculator + AI assistant.', 'Price calculator', 'AI assistant'],
       de: ['Preis oder Hilfe?', 'Rechner + KI-Assistent.', 'Preisrechner', 'KI-Assistent']
     }[LANG] || ['Cena alebo pomoc?', 'Kalkulačka aj AI asistent.', 'Cenová kalkulačka', 'AI asistent'];
-    return '<span class="cbw-tip-head">' +
+    return '<span class="cbw-tip-close" id="cbwLauncherTipClose" role="button" tabindex="0" aria-label="Zavrieť">×</span>' +
+      '<span class="cbw-tip-head">' +
       '<span class="cbw-tip-avatar"><span class="cbw-tip-o">O</span><span class="cbw-tip-n">N</span></span>' +
       '<span class="cbw-tip-copy"><span class="cbw-tip-title">' + copy[0] + '</span><span class="cbw-tip-sub">' + copy[1] + '</span></span>' +
       '</span><span class="cbw-tip-actions" aria-hidden="true"><span>' + copy[2] + '</span><span>' + copy[3] + '</span></span>';
+  }
+
+  function bindLauncherTipClose() {
+    const close = document.getElementById('cbwLauncherTipClose');
+    if (!close || close.dataset.bound === 'true') return;
+    close.dataset.bound = 'true';
+    const dismiss = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      clearTimeout(launcherTipTimer);
+      root.classList.remove('cbw-tip-visible');
+      root.classList.add('cbw-tip-dismissed');
+    };
+    close.addEventListener('click', dismiss);
+    close.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') dismiss(event);
+    });
   }
 
   // ============================================================
@@ -3892,7 +4822,10 @@ padding: 9px 16px;
     // Launcher
     if (launcher) launcher.setAttribute('aria-label', t('launcher_aria'));
     const tip = document.getElementById('cbwLauncherTip');
-    if (tip && typeof launcherTipHtml === 'function') tip.innerHTML = launcherTipHtml();
+    if (tip && typeof launcherTipHtml === 'function') {
+      tip.innerHTML = launcherTipHtml();
+      bindLauncherTipClose();
+    }
     // Header
     const titleEl = document.querySelector('.cbw-title');
     const subEl = document.querySelector('.cbw-subtitle');
@@ -4105,9 +5038,15 @@ padding: 9px 16px;
   input.addEventListener('focus', lockMobilePanelHeight);
   input.addEventListener('blur', () => {
     setTimeout(() => {
+      if (document.activeElement === input) return;
       if (root) root.style.removeProperty('--cbw-mobile-panel-height');
-    }, 150);
+    }, 180);
   });
+
+  function keepChatInputFocus() {
+    if (!input || root.classList.contains('cbw-calc-active') || root.dataset.open !== 'true') return;
+    try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
+  }
 
   async function sendUserMessage() {
     const text = input.value.trim();
@@ -4115,6 +5054,7 @@ padding: 9px 16px;
     input.value = '';
     sendBtn.disabled = true;
     appendBubble('user', text);
+    requestAnimationFrame(keepChatInputFocus);
     const typing = showTyping();
     try {
       let reply = '';
@@ -4131,9 +5071,11 @@ padding: 9px 16px;
       }
       hideTyping(typing);
       appendBubble('bot', reply || botReplyFor(text));
+      requestAnimationFrame(keepChatInputFocus);
     } catch (err) {
       hideTyping(typing);
       appendBubble('bot', botReplyFor(text));
+      requestAnimationFrame(keepChatInputFocus);
     }
   }
   sendBtn.addEventListener('click', sendUserMessage);
@@ -4601,6 +5543,9 @@ padding: 9px 16px;
       service: '',
       items: [],
       quantity: 1,
+      areaM2: '',
+      jobType: '',
+      extras: {},
       access: 'standard',
       floors: 0,
       elevator: 'yes',
@@ -4917,30 +5862,191 @@ padding: 9px 16px;
     else renderCalc();
   }
 
+
+  function isMovingOrClearanceServiceId(serviceId) {
+    return ['moving_flat', 'moving_office', 'clearance_flat', 'clearance_storage'].includes(serviceId) || calc.data.direction === 'stahovanie' || calc.data.direction === 'vypratavanie';
+  }
+
+  function inferJobTypeFromService(serviceId) {
+    if (serviceId === 'moving_office') return 'office';
+    if (serviceId === 'clearance_flat' || serviceId === 'clearance_storage') return 'clearance';
+    if (serviceId === 'moving_flat') return 'flat';
+    if (calc.data.direction === 'vypratavanie') return 'clearance';
+    if (calc.data.direction === 'stahovanie') return 'flat';
+    return '';
+  }
+
+  function applyServiceDefaults(serviceId) {
+    if (!isMovingOrClearanceServiceId(serviceId)) return;
+    const currentJob = calc.data.jobType;
+
+    // Dôležité: ak si zákazník hore vybral Byt / Dom / Kanceláriu,
+    // neskorší render kroku nesmie prepísať tento výber späť na všeobecné „vypratávanie“.
+    // Práve to spôsobovalo, že sa pri firme zobrazili domáce voľby ako detská izba.
+    if (serviceId === 'moving_office') {
+      calc.data.jobType = 'office';
+    } else if (serviceId === 'moving_flat') {
+      calc.data.jobType = ['flat', 'house'].includes(currentJob) ? currentJob : 'flat';
+    } else if (serviceId === 'clearance_flat') {
+      calc.data.jobType = ['flat', 'house', 'office'].includes(currentJob) ? currentJob : 'flat';
+    } else if (serviceId === 'clearance_storage') {
+      calc.data.jobType = ['office'].includes(currentJob) ? 'office' : 'clearance';
+    } else if (!currentJob) {
+      calc.data.jobType = inferJobTypeFromService(serviceId);
+    }
+
+    if (!Number(calc.data.areaM2)) {
+      if (calc.data.jobType === 'house') calc.data.areaM2 = 90;
+      else if (calc.data.jobType === 'office') calc.data.areaM2 = 70;
+      else if (calc.data.jobType === 'clearance') calc.data.areaM2 = 45;
+      else calc.data.areaM2 = 50;
+    }
+  }
+
+  function getJobTypeOptions() {
+    return [
+      { id: 'flat', title: t('job_flat'), sub: t('job_flat_sub'), base: 120, rate: 2.4 },
+      { id: 'house', title: t('job_house'), sub: t('job_house_sub'), base: 190, rate: 2.8 },
+      { id: 'clearance', title: t('job_clearance'), sub: t('job_clearance_sub'), base: 160, rate: 3.2 },
+      { id: 'office', title: t('job_office'), sub: t('job_office_sub'), base: 210, rate: 3.5 }
+    ];
+  }
+
+  function selectedJobType() {
+    const current = calc.data.jobType || inferJobTypeFromService(calc.data.service);
+    return byId(getJobTypeOptions(), current) || null;
+  }
+
+  function getExtraOptions() {
+    const d = calc.data || {};
+    const jobType = d.jobType || inferJobTypeFromService(d.service);
+    const isOffice = jobType === 'office' || d.service === 'moving_office';
+    const isHome = jobType === 'flat' || jobType === 'house' || d.service === 'moving_flat';
+    const isClearance = jobType === 'clearance' || d.service === 'clearance_storage' || (d.direction === 'vypratavanie' && !isOffice);
+
+    if (isOffice) {
+      return [
+        { id: 'office_rooms', title: t('extra_office_rooms'), sub: t('extra_office_rooms_sub'), price: 45, office: true },
+        { id: 'company_archive', title: t('extra_company_archive'), sub: t('extra_company_archive_sub'), price: 70, office: true },
+        { id: 'office_it', title: t('extra_office_it'), sub: t('extra_office_it_sub'), price: 40, office: true },
+        { id: 'office_furniture', title: t('extra_office_furniture'), sub: t('extra_office_furniture_sub'), price: 55, office: true },
+        { id: 'office_storage', title: t('extra_office_storage'), sub: t('extra_office_storage_sub'), price: 45, office: true },
+        { id: 'stairs_no_lift', title: t('extra_stairs_no_lift'), sub: t('extra_stairs_no_lift_sub'), price: 45, office: true },
+        { id: 'heavy_items', title: t('extra_heavy_items'), sub: t('extra_heavy_items_sub'), price: 85, office: true }
+      ];
+    }
+
+    const baseOptions = [
+      { id: 'side_spaces', title: t('extra_side_spaces'), sub: t('extra_side_spaces_sub'), price: 45 }
+    ];
+
+    const homeRoomOptions = isHome ? [
+      { id: 'room_bedroom', title: t('extra_room_bedroom'), sub: t('extra_room_bedroom_sub'), price: 20 },
+      { id: 'room_kids', title: t('extra_room_kids'), sub: t('extra_room_kids_sub'), price: 20 },
+      { id: 'room_living', title: t('extra_room_living'), sub: t('extra_room_living_sub'), price: 25 }
+    ] : [];
+
+    const difficultyOptions = [
+      { id: 'stairs_no_lift', title: t('extra_stairs_no_lift'), sub: t('extra_stairs_no_lift_sub'), price: 45 },
+      { id: 'heavy_items', title: t('extra_heavy_items'), sub: t('extra_heavy_items_sub'), price: 85 }
+    ];
+
+    const options = baseOptions.concat(homeRoomOptions, difficultyOptions);
+
+    if (isClearance) {
+      return options.concat([
+        { id: 'company_archive', title: t('extra_company_archive'), sub: t('extra_company_archive_sub'), price: 70 }
+      ]);
+    }
+
+    return options;
+  }
+
+  function pruneExtrasForCurrentContext() {
+    const allowed = new Set(getExtraOptions().map(extra => extra.id));
+    const current = calc.data.extras || {};
+    const next = {};
+    Object.keys(current).forEach(id => {
+      if (current[id] && allowed.has(id)) next[id] = true;
+    });
+    calc.data.extras = next;
+  }
+
+  function getSelectedExtras() {
+    const extras = calc.data.extras || {};
+    return getExtraOptions().filter(extra => !!extras[extra.id]);
+  }
+
+  function toggleExtra(id) {
+    calc.data.extras = Object.assign({}, calc.data.extras || {}, { [id]: !((calc.data.extras || {})[id]) });
+    renderCalc();
+  }
+
+  function formatJobType() {
+    const jt = selectedJobType();
+    return jt ? jt.title : '—';
+  }
+
+  function formatExtras() {
+    const selected = getSelectedExtras();
+    return selected.length ? selected.map(extra => extra.title).join(', ') : t('no_extras');
+  }
+
+  function isSpacePriceJob() {
+    return isMovingOrClearanceServiceId(calc.data.service);
+  }
+
+  function shouldSkipItemsStep() {
+    // Pri službách typu byt/dom/kancelária sa nepýtame na zbytočný medzi-krok s položkami.
+    // Po výbere priestoru ide zákazník rovno na plochu m² a relevantné príplatky.
+    return ['moving_flat', 'moving_office', 'clearance_flat', 'clearance_storage'].includes(calc.data.service);
+  }
+
   function calculatePrice() {
     const svc = selectedService() || { base: 50 };
     const items = selectedItems();
-    const quantity = Math.max(1, Number(calc.data.quantity) || 1);
+    const d = calc.data;
+    const quantity = Math.max(1, Number(d.quantity) || 1);
     const itemBase = items.reduce((sum, item) => sum + (Number(item.base) || 40), 0);
     const itemWeight = items.reduce((sum, item) => sum + (Number(item.weight) || 1), 0);
     const quantityMultiplier = quantity <= 1 ? 1 : 1 + Math.min(2.2, (quantity - 1) * 0.32);
 
     let total = Number(svc.base || 50) + itemBase * quantityMultiplier;
+    const breakdown = [];
 
-    if (calc.data.direction === 'dovoz') total += 10;
-    if (calc.data.access === 'stairs') total += 25;
-    if (calc.data.access === 'hard') total += 45;
-    if (calc.data.elevator === 'no') total += 20;
-    total += Math.max(0, Number(calc.data.floors) || 0) * 8;
-    if (calc.data.parking === 'far') total += 15;
-    if (calc.data.distance === 'near') total += 20;
-    if (calc.data.distance === 'far') total += 45;
+    if (isSpacePriceJob()) {
+      const area = Math.max(0, Number(d.areaM2) || 0);
+      const jobType = selectedJobType() || getJobTypeOptions()[0];
+      const baseByType = Number(jobType.base || 120);
+      const m2Rate = Number(jobType.rate || 2.6);
+      total = Math.max(Number(svc.base || 50), baseByType) + area * m2Rate + itemBase * 0.45;
+      breakdown.push({ label: t('price_base_space'), amount: Math.max(Number(svc.base || 50), baseByType) });
+      if (area) breakdown.push({ label: t('price_area').replace('{m2}', area), amount: area * m2Rate });
+
+      getSelectedExtras().forEach(extra => {
+        total += Number(extra.price || 0);
+        breakdown.push({ label: extra.title, amount: Number(extra.price || 0) });
+      });
+
+      if (d.jobType === 'office' || calc.data.service === 'moving_office') total += 45;
+      if ((d.extras || {}).stairs_no_lift) total += Math.max(0, Number(d.floors) || 0) * 12;
+      if ((d.extras || {}).company_archive && d.jobType !== 'office') total += 15;
+    }
+
+    if (d.direction === 'dovoz') total += 10;
+    if (d.access === 'stairs') total += 25;
+    if (d.access === 'hard') total += 45;
+    if (d.elevator === 'no') total += 20;
+    total += Math.max(0, Number(d.floors) || 0) * 8;
+    if (d.parking === 'far') total += 15;
+    if (d.distance === 'near') total += 20;
+    if (d.distance === 'far') total += 45;
     if (itemWeight * quantity > 3) total += 35;
     if (items.some(item => (item.tags || []).includes('heavy'))) total += 25;
 
     const min = roundTo5(total * 0.85);
     const max = roundTo5(total * 1.2);
-    return { min, max, mid: roundTo5((min + max) / 2), weight: itemWeight * quantity };
+    return { min, max, mid: roundTo5((min + max) / 2), weight: itemWeight * quantity, breakdown };
   }
 
   function validateStep(step) {
@@ -4948,7 +6054,10 @@ padding: 9px 16px;
     if (step === 0) return !!d.direction;
     if (step === 1) return !!d.service;
     if (step === 2) return selectedItems().length > 0 || d.service === 'other';
-    if (step === 3) return Number(d.quantity) >= 1 && !!d.access && !!d.elevator && !!d.parking;
+    if (step === 3) {
+      if (isSpacePriceJob() && Number(d.areaM2) <= 0) return false;
+      return Number(d.quantity) >= 1 && !!d.access && !!d.elevator && !!d.parking;
+    }
     if (step === 4) {
       if (!String(d.cityFrom || '').trim()) return false;
       if (d.direction === 'dovoz' && !String(d.cityTo || '').trim()) return false;
@@ -4981,7 +6090,12 @@ padding: 9px 16px;
 
   function goStep(nextStep) {
     calc.error = '';
-    calc.step = Math.max(0, Math.min(STEP_META.length - 1, nextStep));
+    const previousStep = calc.step;
+    let targetStep = Math.max(0, Math.min(STEP_META.length - 1, nextStep));
+    if (shouldSkipItemsStep() && targetStep === 2) {
+      targetStep = nextStep > previousStep ? 3 : 1;
+    }
+    calc.step = targetStep;
     renderCalc();
   }
 
@@ -4992,12 +6106,26 @@ padding: 9px 16px;
       if (svc && !svc.directions.includes(value)) {
         calc.data.service = '';
         calc.data.items = [];
+        calc.data.jobType = '';
+        calc.data.areaM2 = '';
+        calc.data.extras = {};
       }
     }
     if (key === 'service') {
       calc.data.items = selectedItems().filter(item => item.cat === value || item.custom);
       calc.search = '';
       calc.filter = 'all';
+      applyServiceDefaults(value);
+      pruneExtrasForCurrentContext();
+    }
+    if (key === 'jobType') {
+      if (!Number(calc.data.areaM2)) {
+        if (value === 'house') calc.data.areaM2 = 90;
+        else if (value === 'office') calc.data.areaM2 = 70;
+        else if (value === 'clearance') calc.data.areaM2 = 45;
+        else calc.data.areaM2 = 50;
+      }
+      pruneExtrasForCurrentContext();
     }
     if (autoNext) goStep(calc.step + 1);
     else renderCalc();
@@ -5009,6 +6137,51 @@ padding: 9px 16px;
 
   function renderCardFill() {
     return '<span class="cbw-fill" aria-hidden="true"></span>';
+  }
+
+  function shouldShowTopJobTypePicker() {
+    return calc.data.direction === 'stahovanie' || calc.data.direction === 'vypratavanie';
+  }
+
+  function getTopJobTypeOptions() {
+    return getJobTypeOptions().filter(job => ['flat', 'house', 'office'].includes(job.id));
+  }
+
+  function renderTopJobTypePicker() {
+    if (!shouldShowTopJobTypePicker()) return '';
+    const current = calc.data.jobType || inferJobTypeFromService(calc.data.service);
+    return `
+      <div class="cbw-space-top">
+        <div class="cbw-search-section-label">${escapeHtml(t('job_type_label'))}</div>
+        <div class="cbw-job-grid">
+          ${getTopJobTypeOptions().map(job => `
+            <button type="button" class="cbw-job-card" data-space-type="${escapeHtml(job.id)}" aria-pressed="${current === job.id}">
+              <span class="cbw-job-card-title">${escapeHtml(job.title)}</span>
+              <small>${escapeHtml(job.sub)}</small>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+  }
+
+  function selectTopJobType(jobType) {
+    calc.data.jobType = jobType;
+    if (calc.data.direction === 'stahovanie') {
+      calc.data.service = jobType === 'office' ? 'moving_office' : 'moving_flat';
+    } else if (calc.data.direction === 'vypratavanie') {
+      calc.data.service = 'clearance_flat';
+    }
+    if (!Number(calc.data.areaM2)) {
+      if (jobType === 'house') calc.data.areaM2 = 90;
+      else if (jobType === 'office') calc.data.areaM2 = 70;
+      else calc.data.areaM2 = 50;
+    }
+    calc.search = '';
+    calc.filter = 'all';
+    pruneExtrasForCurrentContext();
+    if (calc.data.direction === 'vypratavanie' || calc.data.direction === 'stahovanie') goStep(3);
+    else renderCalc();
   }
 
   function renderStepDirection() {
@@ -5047,6 +6220,7 @@ padding: 9px 16px;
     return `
       <h2 class="cbw-calc-prompt">${escapeHtml(prompt)}</h2>
       <p class="cbw-calc-hint">${escapeHtml(t('hint_service'))}</p>
+      ${renderTopJobTypePicker()}
       <div class="cbw-search-hero">
         <input class="cbw-search-hero-input" id="cbwServiceSearch" value="${escapeHtml(calc.search)}" placeholder="${escapeHtml(t('ph_search'))}" autocomplete="off">
         <span class="cbw-search-hero-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
@@ -5153,16 +6327,38 @@ padding: 9px 16px;
 
   function renderStepDetails() {
     const d = calc.data;
+    const showSpaceScope = isSpacePriceJob();
+    if (showSpaceScope) applyServiceDefaults(calc.data.service);
     const cards = [
       ['standard', t('access_standard'), t('access_standard_sub'), 'good'],
       ['stairs', t('access_stairs'), t('access_stairs_sub'), 'warn'],
       ['hard', t('access_hard'), t('access_hard_sub'), 'bad']
     ];
+    const extras = getExtraOptions();
     return `
       <h2 class="cbw-calc-prompt">${escapeHtml(t('prompt_scope'))}</h2>
-      <p class="cbw-calc-hint">${escapeHtml(t('details_hint'))}</p>
+      <p class="cbw-calc-hint">${escapeHtml(showSpaceScope ? t('details_hint_space') : t('details_hint'))}</p>
       <div class="cbw-q-number-wrap">
         ${renderQuantityVisual()}
+
+        ${showSpaceScope ? `
+          <div class="cbw-space-panel">
+            <div class="cbw-q-group cbw-space-area-row">
+              <div class="cbw-q-group-item"><label>${escapeHtml(t('area_m2_label'))}</label><input class="cbw-q-input" id="cbwAreaM2" type="number" min="1" max="1000" value="${escapeHtml(d.areaM2 || '')}" placeholder="${escapeHtml(t('area_m2_placeholder'))}"></div>
+              <div class="cbw-space-price-note"><strong>${escapeHtml(t('area_m2_why_title'))}</strong><span>${escapeHtml(t('area_m2_why_text'))}</span></div>
+            </div>
+            <div class="cbw-search-section-label">${escapeHtml(t('extras_label'))}</div>
+            <div class="cbw-extra-grid">
+              ${extras.map(extra => `
+                <button type="button" class="cbw-extra-card" data-extra="${escapeHtml(extra.id)}" data-office-extra="${extra.office ? 'true' : 'false'}" aria-pressed="${!!((d.extras || {})[extra.id])}">
+                  <span class="cbw-extra-check" aria-hidden="true"></span>
+                  <span class="cbw-extra-copy"><strong>${escapeHtml(extra.title)}</strong><small>${escapeHtml(extra.sub)} · +${escapeHtml(extra.price)} €</small></span>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        ` : ''}
+
         <div class="cbw-q-group">
           <div class="cbw-q-group-item"><label>${escapeHtml(t('details_quantity'))}</label><input class="cbw-q-input" id="cbwQuantity" type="number" min="1" max="99" value="${escapeHtml(d.quantity)}"></div>
           <div class="cbw-q-group-item"><label>${escapeHtml(t('details_floors'))}</label><input class="cbw-q-input" id="cbwFloors" type="number" min="0" max="30" value="${escapeHtml(d.floors)}"></div>
@@ -5225,7 +6421,9 @@ const price = calculatePrice();
 const dir = selectedDirection();
 const svc = selectedService();
 const items = selectedItems().map(item => localItem(item).label).join(', ') || t('summary_items');
-return `<h2 class="cbw-calc-prompt">${escapeHtml(t('prompt_summary'))}</h2> <p class="cbw-calc-hint">${escapeHtml(t('hint_summary'))}</p> <div class="cbw-sum-price cbw-brand-gradient"> <div class="cbw-sum-price-label">${escapeHtml(t('sum_price_label'))}</div> <div class="cbw-sum-price-value">${price.min}–${price.max} €</div> <div class="cbw-sum-price-note">${escapeHtml(t('sum_price_note'))}</div> </div> <div class="cbw-sum-card"> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_dir'))}</span><span>${escapeHtml(dir ? dir.title : '—')}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_service'))}</span><span>${escapeHtml(svc ? svc.title : '—')}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_items'))}</span><span>${escapeHtml(items)}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_quantity'))}</span><span>${escapeHtml(d.quantity)} ${escapeHtml(t('qty_unit'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_access'))}</span><span>${escapeHtml(d.access || '—')}, ${escapeHtml(t('details_floors').toLowerCase())} ${escapeHtml(d.floors || 0)}, ${escapeHtml(t('elevator').toLowerCase())} ${d.elevator === 'yes' ? t('yes').toLowerCase() : t('no').toLowerCase()}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_route'))}</span><span>${escapeHtml(d.cityFrom || '—')}${d.cityTo ? ' → ' + escapeHtml(d.cityTo) : ''}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_date'))}</span><span>${escapeHtml(d.date || t('date_arrange'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_contact'))}</span><span>${escapeHtml(d.name || '')} ${escapeHtml(d.phone || '')}</span></div> </div> <div class="cbw-inline-warning">${escapeHtml(t('sum_warning'))}</div> ${calc.error ?`<div class="cbw-submit-error">${escapeHtml(calc.error)}</div>`: ''}`;
+const showSpaceScope = isSpacePriceJob();
+const extrasText = formatExtras();
+return `<h2 class="cbw-calc-prompt">${escapeHtml(t('prompt_summary'))}</h2> <p class="cbw-calc-hint">${escapeHtml(t('hint_summary'))}</p> <div class="cbw-sum-price cbw-brand-gradient"> <div class="cbw-sum-price-label">${escapeHtml(t('sum_price_label'))}</div> <div class="cbw-sum-price-value">${price.min}–${price.max} €</div> <div class="cbw-sum-price-note">${escapeHtml(t('sum_price_note'))}</div> </div> <div class="cbw-sum-card"> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_dir'))}</span><span>${escapeHtml(dir ? dir.title : '—')}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_service'))}</span><span>${escapeHtml(svc ? svc.title : '—')}</span></div> ${showSpaceScope ? `<div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_job_type'))}</span><span>${escapeHtml(formatJobType())}</span></div><div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_area'))}</span><span>${escapeHtml(d.areaM2 || '—')} m²</span></div><div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_extras'))}</span><span>${escapeHtml(extrasText)}</span></div>` : ''} <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_items'))}</span><span>${escapeHtml(items)}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_quantity'))}</span><span>${escapeHtml(d.quantity)} ${escapeHtml(t('qty_unit'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_access'))}</span><span>${escapeHtml(d.access || '—')}, ${escapeHtml(t('details_floors').toLowerCase())} ${escapeHtml(d.floors || 0)}, ${escapeHtml(t('elevator').toLowerCase())} ${d.elevator === 'yes' ? t('yes').toLowerCase() : t('no').toLowerCase()}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_route'))}</span><span>${escapeHtml(d.cityFrom || '—')}${d.cityTo ? ' → ' + escapeHtml(d.cityTo) : ''}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_date'))}</span><span>${escapeHtml(d.date || t('date_arrange'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_contact'))}</span><span>${escapeHtml(d.name || '')} ${escapeHtml(d.phone || '')}</span></div> </div> <div class="cbw-inline-warning">${escapeHtml(t('sum_warning'))}</div> ${calc.error ?`<div class="cbw-submit-error">${escapeHtml(calc.error)}</div>`: ''}`;
 }
 
 function renderThanks() {
@@ -5352,14 +6550,25 @@ const customAdd = document.getElementById('cbwAddCustom');
 if (customAdd) customAdd.addEventListener('click', () => addCustomItem((document.getElementById('cbwCustomItem') || {}).value));
 const quantity = document.getElementById('cbwQuantity');
 if (quantity) quantity.addEventListener('input', e => {
-  calc.data.quantity = Math.max(1, Number(e.target.value) || 1);
-  rerenderRestoringFocus('cbwQuantity');
+  const raw = e.target.value;
+  calc.data.quantity = raw === '' ? '' : Math.max(1, Number(raw) || 1);
+  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
 });
 const floors = document.getElementById('cbwFloors');
 if (floors) floors.addEventListener('input', e => {
-  calc.data.floors = Math.max(0, Number(e.target.value) || 0);
-  rerenderRestoringFocus('cbwFloors');
+  const raw = e.target.value;
+  calc.data.floors = raw === '' ? '' : Math.max(0, Number(raw) || 0);
+  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
 });
+const areaM2 = document.getElementById('cbwAreaM2');
+if (areaM2) areaM2.addEventListener('input', e => {
+  const raw = e.target.value;
+  calc.data.areaM2 = raw === '' ? '' : Math.max(0, Number(raw) || 0);
+  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
+});
+bind('[data-space-type]', 'click', e => selectTopJobType(e.currentTarget.dataset.spaceType));
+bind('[data-job-type]', 'click', e => setData('jobType', e.currentTarget.dataset.jobType));
+bind('[data-extra]', 'click', e => toggleExtra(e.currentTarget.dataset.extra));
 bind('[data-access]', 'click', e => setData('access', e.currentTarget.dataset.access));
 bind('[data-elevator]', 'click', e => setData('elevator', e.currentTarget.dataset.elevator));
 bind('[data-parking]', 'click', e => setData('parking', e.currentTarget.dataset.parking));
@@ -5408,6 +6617,9 @@ companyName: CONFIG.companyName,
 createdAt: new Date().toISOString(),
 direction: calc.data.direction,
 service: selectedService(),
+jobType: calc.data.jobType || inferJobTypeFromService(calc.data.service),
+areaM2: calc.data.areaM2,
+extras: getSelectedExtras().map(extra => ({ id: extra.id, label: extra.title, price: extra.price })),
 items: selectedItems().map(item => ({ id: item.id, label: item.label, custom: !!item.custom })),
 quantity: calc.data.quantity,
 access: calc.data.access,
@@ -5469,7 +6681,7 @@ calc.customText = '';
 calc.error = '';
 calc.sending = false;
 calc.data = {
-direction: '', service: '', items: [], quantity: 1, access: 'standard', floors: 0, elevator: 'yes', parking: 'near', distance: 'city',
+direction: '', service: '', items: [], quantity: 1, areaM2: '', jobType: '', extras: {}, access: 'standard', floors: 0, elevator: 'yes', parking: 'near', distance: 'city',
 date: '', cityFrom: '', cityTo: '', note: '', photos: [], name: '', phone: '', email: '', gdpr: false
 };
 }
