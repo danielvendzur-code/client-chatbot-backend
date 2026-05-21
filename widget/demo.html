@@ -3775,6 +3775,90 @@ padding: 9px 16px;
   }
 }
 
+
+
+/* FINAL SURGICAL FIX — no jump on click, centered checks, solid bot bubble, clearer construction UI */
+.cbw-msg.cbw-bot {
+  background: #f6f7fa !important;
+  background-image: none !important;
+  color: #2c3445 !important;
+  border: 1px solid #d8dde8 !important;
+  border-left: 1px solid #d8dde8 !important;
+  box-shadow: 0 2px 6px -2px rgba(15, 23, 42, 0.12) !important;
+}
+.cbw-q-card::before {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+}
+.cbw-q-card[aria-pressed="true"]::before {
+  content: "✓" !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+}
+.cbw-q-card[aria-pressed="true"]::after {
+  content: none !important;
+  display: none !important;
+}
+.cbw-q-card[data-compact="true"]::before,
+.cbw-q-card[data-elevator]::before,
+.cbw-q-card[data-parking]::before {
+  width: 22px !important;
+  height: 22px !important;
+  left: 14px !important;
+}
+.cbw-q-card[data-compact="true"] {
+  padding-left: 48px !important;
+}
+.cbw-extra-check {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  line-height: 1 !important;
+}
+.cbw-extra-card[aria-pressed="true"] .cbw-extra-check::after {
+  content: "✓" !important;
+  position: static !important;
+  display: block !important;
+  width: auto !important;
+  height: auto !important;
+  inset: auto !important;
+  transform: none !important;
+  border: 0 !important;
+  color: #ffffff !important;
+  font-size: 14px !important;
+  font-weight: 950 !important;
+  line-height: 1 !important;
+}
+.cbw-result-check {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  line-height: 1 !important;
+}
+.cbw-svc-card[data-service="construction"] .cbw-svc-sub,
+.cbw-q-card[data-preset="construction_waste"] small {
+  line-height: 1.35 !important;
+}
+.cbw-result-option[data-item="rubble_bags"],
+.cbw-result-option[data-item="bricks_blocks"],
+.cbw-result-option[data-item="drywall_waste"],
+.cbw-result-option[data-item="wood_waste"],
+.cbw-result-option[data-item="metal_scrap"],
+.cbw-result-option[data-item="tiles_rubble"],
+.cbw-result-option[data-item="soil_stones"],
+.cbw-result-option[data-item="old_doors_windows"] {
+  border-color: #fde68a !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%) !important;
+}
+
 </style>
 </head>
 <body>
@@ -4038,7 +4122,7 @@ padding: 9px 16px;
       // Services
       svc_furniture: 'Nábytok', svc_furniture_sub: 'Sedačky, postele, skrine…',
       svc_appliance: 'Spotrebiče', svc_appliance_sub: 'Chladnička, práčka, TV…',
-      svc_construction: 'Odpad / suť', svc_construction_sub: 'Drevo, kov, zmesný',
+      svc_construction: 'Stavebný odpad / suť', svc_construction_sub: 'suť, tehly, sadrokartón, drevo, kov',
       svc_material: 'Materiál / tovar', svc_material_sub: 'Hornbach, OBI, IKEA…',
       svc_moving_flat: 'Sťahovanie bytu/domu', svc_moving_flat_sub: 'Kompletné sťahovanie',
       svc_moving_office: 'Sťahovanie kancelárie/firmy', svc_moving_office_sub: 'Kancelárie, firmy, prevádzky',
@@ -4054,7 +4138,7 @@ padding: 9px 16px;
       preset_basement: 'Pivnica / garáž', preset_basement_sub: 'krabice, regály, náradie, pneumatiky',
       preset_full_flat: 'Vypratať byt / dom', preset_full_flat_sub: 'veľa rôznych vecí naraz',
       preset_appliances: 'Viac spotrebičov', preset_appliances_sub: 'práčka, chladnička, sušička, rúra',
-      preset_construction: 'Suť / stavebný odpad', preset_construction_sub: 'vrecia, drevo, zmiešaný odpad',
+      preset_construction: 'Stavebný odpad — mix', preset_construction_sub: 'suť vo vreciach, tehly, sadrokartón, drevo, kov',
       preset_store: 'Dovoz z obchodu', preset_store_sub: 'IKEA, Möbelix, OBI, Hornbach',
       preset_building: 'Materiál na stavbu', preset_building_sub: 'dosky, dlažba, paleta, profily',
       preset_office: 'Kancelária', preset_office_sub: 'stoly, stoličky, archív, IT',
@@ -4124,7 +4208,7 @@ padding: 9px 16px;
       summary_total: 'Orientačná cena',
       summary_disclaimer: 'Finálnu cenu potvrdíme telefonicky podľa presných detailov.',
       // Step Details
-      details_quantity: 'Približný počet kusov / dávok',
+      details_quantity: 'Počet vecí alebo vriec',
       details_floors: 'Poschodie',
       details_access: 'Prístup',
       access_standard: 'Bežný prístup',
@@ -4266,7 +4350,7 @@ padding: 9px 16px;
       dir_vypratavanie: 'Clearance', dir_vypratavanie_sub: 'Flat, cellar, storage, garage',
       svc_furniture: 'Furniture', svc_furniture_sub: 'Sofas, beds, wardrobes…',
       svc_appliance: 'Appliances', svc_appliance_sub: 'Fridge, washer, TV…',
-      svc_construction: 'Waste / rubble', svc_construction_sub: 'Wood, metal, mixed',
+      svc_construction: 'Construction waste / rubble', svc_construction_sub: 'rubble, bricks, drywall, wood, metal',
       svc_material: 'Materials / goods', svc_material_sub: 'Hornbach, OBI, IKEA…',
       svc_moving_flat: 'Flat/house moving', svc_moving_flat_sub: 'Complete moving service',
       svc_moving_office: 'Office/company moving', svc_moving_office_sub: 'Offices, companies, premises',
@@ -4281,7 +4365,7 @@ padding: 9px 16px;
       preset_basement: 'Cellar / garage', preset_basement_sub: 'boxes, racks, tools, tires',
       preset_full_flat: 'Clear flat / house', preset_full_flat_sub: 'many different items at once',
       preset_appliances: 'Multiple appliances', preset_appliances_sub: 'washer, fridge, dryer, oven',
-      preset_construction: 'Rubble / construction waste', preset_construction_sub: 'bags, wood, mixed waste',
+      preset_construction: 'Mixed construction waste', preset_construction_sub: 'bagged rubble, bricks, drywall, wood, metal',
       preset_store: 'Delivery from shop', preset_store_sub: 'IKEA, Möbelix, OBI, Hornbach',
       preset_building: 'Building materials', preset_building_sub: 'boards, tiles, pallet, profiles',
       preset_office: 'Office', preset_office_sub: 'desks, chairs, archive, IT',
@@ -4346,7 +4430,7 @@ padding: 9px 16px;
       hint_summary: 'Double-check the basics before sending.',
       summary_total: 'Estimated price',
       summary_disclaimer: 'We will confirm the final price by phone based on exact details.',
-      details_quantity: 'Approximate number of pieces / loads',
+      details_quantity: 'Number of items or bags',
       details_floors: 'Floor',
       details_access: 'Access',
       access_standard: 'Standard access',
@@ -4485,7 +4569,7 @@ padding: 9px 16px;
       dir_vypratavanie: 'Entrümpelung', dir_vypratavanie_sub: 'Wohnung, Keller, Lager, Garage',
       svc_furniture: 'Möbel', svc_furniture_sub: 'Sofas, Betten, Schränke…',
       svc_appliance: 'Geräte', svc_appliance_sub: 'Kühlschrank, Waschmaschine, TV…',
-      svc_construction: 'Abfall / Bauschutt', svc_construction_sub: 'Holz, Metall, Gemischt',
+      svc_construction: 'Bauschutt / Bauabfall', svc_construction_sub: 'Schutt, Ziegel, Gipskarton, Holz, Metall',
       svc_material: 'Material / Waren', svc_material_sub: 'Hornbach, OBI, IKEA…',
       svc_moving_flat: 'Wohnung/Haus Umzug', svc_moving_flat_sub: 'Kompletter Umzug',
       svc_moving_office: 'Büro/Firma Umzug', svc_moving_office_sub: 'Büros, Firmen, Betriebe',
@@ -4500,7 +4584,7 @@ padding: 9px 16px;
       preset_basement: 'Keller / Garage', preset_basement_sub: 'Kisten, Regale, Werkzeug, Reifen',
       preset_full_flat: 'Wohnung / Haus entrümpeln', preset_full_flat_sub: 'viele verschiedene Sachen auf einmal',
       preset_appliances: 'Mehrere Geräte', preset_appliances_sub: 'Waschmaschine, Kühlschrank, Trockner, Ofen',
-      preset_construction: 'Bauschutt', preset_construction_sub: 'Säcke, Holz, gemischter Abfall',
+      preset_construction: 'Gemischter Bauschutt', preset_construction_sub: 'Schutt in Säcken, Ziegel, Gipskarton, Holz, Metall',
       preset_store: 'Lieferung aus Geschäft', preset_store_sub: 'IKEA, Möbelix, OBI, Hornbach',
       preset_building: 'Baumaterial', preset_building_sub: 'Bretter, Fliesen, Palette, Profile',
       preset_office: 'Büro', preset_office_sub: 'Schreibtische, Stühle, Archiv, IT',
@@ -4565,7 +4649,7 @@ padding: 9px 16px;
       hint_summary: 'Bitte überprüfen Sie die Angaben vor dem Senden.',
       summary_total: 'Geschätzter Preis',
       summary_disclaimer: 'Den finalen Preis bestätigen wir telefonisch nach genauen Details.',
-      details_quantity: 'Ungefähre Anzahl Stücke / Ladungen',
+      details_quantity: 'Anzahl der Sachen oder Säcke',
       details_floors: 'Stockwerk',
       details_access: 'Zugang',
       access_standard: 'Standard-Zugang',
@@ -4706,6 +4790,14 @@ padding: 9px 16px;
     tiles: { sk: ['Dlažba / obklad', 'ťažké balenia, kúpeľňa, kuchyňa'], en: ['Tiles', 'heavy packages, bathroom, kitchen'], de: ['Fliesen', 'schwere Pakete, Bad, Küche'] },
     pallet: { sk: ['Paleta / väčší tovar', 'nutné preveriť váhu a prístup'], en: ['Pallet / larger goods', 'check weight and access'], de: ['Palette / größere Ware', 'Gewicht und Zugang prüfen'] },
     doors_material: { sk: ['Dvere / dosky / lišty', 'dlhší materiál alebo balíky'], en: ['Doors / boards / strips', 'long material or packs'], de: ['Türen / Bretter / Leisten', 'langes Material oder Pakete'] },
+    rubble_bags: { sk: ['Suť vo vreciach', 'murivo, omietka, menšie búranie'], en: ['Bagged rubble', 'masonry, plaster, small demolition'], de: ['Schutt in Säcken', 'Mauerwerk, Putz, kleiner Abbruch'] },
+    bricks_blocks: { sk: ['Tehly / tvárnice / ytong', 'ťažký stavebný odpad'], en: ['Bricks / blocks', 'heavy construction waste'], de: ['Ziegel / Blöcke', 'schwerer Bauabfall'] },
+    drywall_waste: { sk: ['Sadrokartón / profily', 'dosky, kovové profily, odrezky'], en: ['Drywall / profiles', 'boards, metal profiles, offcuts'], de: ['Gipskarton / Profile', 'Platten, Metallprofile, Reste'] },
+    wood_waste: { sk: ['Drevo / dosky / parkety', 'laty, palety, stará podlaha'], en: ['Wood / boards / parquet', 'laths, pallets, old flooring'], de: ['Holz / Bretter / Parkett', 'Latten, Paletten, alter Boden'] },
+    metal_scrap: { sk: ['Kovový odpad', 'rúry, radiátory, profily, plechy'], en: ['Metal waste', 'pipes, radiators, profiles, sheets'], de: ['Metallschrott', 'Rohre, Heizkörper, Profile, Bleche'] },
+    tiles_rubble: { sk: ['Obklad / dlažba / sanita', 'kúpeľňa, kuchyňa, WC'], en: ['Tiles / sanitary ware', 'bathroom, kitchen, WC'], de: ['Fliesen / Sanitär', 'Bad, Küche, WC'] },
+    soil_stones: { sk: ['Zemina / kamene', 'ťažké vrecia, menšie množstvo'], en: ['Soil / stones', 'heavy bags, smaller amount'], de: ['Erde / Steine', 'schwere Säcke, kleinere Menge'] },
+    old_doors_windows: { sk: ['Okná / dvere / zárubne', 'staré stavebné prvky'], en: ['Windows / doors / frames', 'old building elements'], de: ['Fenster / Türen / Zargen', 'alte Bauelemente'] },
   };
 
   // Initial language is always Slovak; users can still switch it manually.
@@ -5378,6 +5470,14 @@ padding: 9px 16px;
     { id: 'tires', label: 'Pneumatiky / disky', sub: 'auto veci, diely', cat: 'construction', tags: ['storage'], weight: 0.6, base: 30 },
     { id: 'tools', label: 'Náradie / stroje', sub: 'pracovný stôl, stroje', cat: 'construction', tags: ['storage', 'heavy'], weight: 1.0, base: 50 },
     { id: 'paint', label: 'Farby / chemikálie', sub: 'vedrá, riedidlá', cat: 'construction', tags: ['storage'], weight: 0.5, base: 35 },
+    { id: 'rubble_bags', label: 'Suť vo vreciach', sub: 'murivo, omietka, menšie búranie', cat: 'construction', tags: ['popular', 'construction', 'heavy'], weight: 1.4, base: 65 },
+    { id: 'bricks_blocks', label: 'Tehly / tvárnice / ytong', sub: 'ťažký stavebný odpad', cat: 'construction', tags: ['construction', 'heavy'], weight: 1.8, base: 80 },
+    { id: 'drywall_waste', label: 'Sadrokartón / profily', sub: 'dosky, kovové profily, odrezky', cat: 'construction', tags: ['construction'], weight: 1.0, base: 55 },
+    { id: 'wood_waste', label: 'Drevo / dosky / parkety', sub: 'laty, palety, stará podlaha', cat: 'construction', tags: ['popular', 'construction'], weight: 0.9, base: 50 },
+    { id: 'metal_scrap', label: 'Kovový odpad', sub: 'rúry, radiátory, profily, plechy', cat: 'construction', tags: ['construction', 'heavy'], weight: 1.2, base: 60 },
+    { id: 'tiles_rubble', label: 'Obklad / dlažba / sanita', sub: 'kúpeľňa, kuchyňa, WC', cat: 'construction', tags: ['construction', 'heavy'], weight: 1.5, base: 75 },
+    { id: 'soil_stones', label: 'Zemina / kamene', sub: 'ťažké vrecia, menšie množstvo', cat: 'construction', tags: ['garden', 'construction', 'heavy'], weight: 1.6, base: 80 },
+    { id: 'old_doors_windows', label: 'Okná / dvere / zárubne', sub: 'staré stavebné prvky', cat: 'construction', tags: ['construction'], weight: 0.9, base: 50 },
     { id: 'bicycle', label: 'Bicykel / kočík / šport', sub: 'lyže, sane, športové', cat: 'furniture', tags: ['storage'], weight: 0.6, base: 30 },
     { id: 'safe', label: 'Trezor', sub: 'veľmi ťažký kus', cat: 'furniture', tags: ['heavy'], weight: 2.5, base: 150 },
     { id: 'piano', label: 'Klavír / piano', sub: 'individuálne nacenenie', cat: 'furniture', tags: ['heavy'], weight: 3.0, base: 200 },
@@ -5513,7 +5613,7 @@ padding: 9px 16px;
       { id: 'basement_garage', title: t('preset_basement'), sub: t('preset_basement_sub'), service: 'furniture', services: ['construction'], directions: ['odvoz', 'vypratavanie'], itemIds: ['boxes', 'racks', 'tools', 'tires', 'bicycle', 'mixed'], icon: 'racks', quantity: 8 },
       { id: 'full_flat', title: t('preset_full_flat'), sub: t('preset_full_flat_sub'), service: 'clearance_flat', directions: ['vypratavanie', 'odvoz'], itemIds: ['full_clearance', 'mixed', 'sofa', 'wardrobe', 'bed', 'boxes'], icon: 'full_clearance', quantity: 10 },
       { id: 'appliances_set', title: t('preset_appliances'), sub: t('preset_appliances_sub'), service: 'appliance', directions: ['odvoz', 'dovoz'], itemIds: ['washer', 'fridge', 'dryer', 'oven', 'dishwasher'], icon: 'washer', quantity: 4 },
-      { id: 'construction_waste', title: t('preset_construction'), sub: t('preset_construction_sub'), service: 'construction', directions: ['odvoz', 'vypratavanie'], itemIds: ['mixed', 'boxes', 'tools', 'paint'], icon: 'mixed', quantity: 8 },
+      { id: 'construction_waste', title: t('preset_construction'), sub: t('preset_construction_sub'), service: 'construction', directions: ['odvoz', 'vypratavanie'], itemIds: ['rubble_bags', 'bricks_blocks', 'drywall_waste', 'wood_waste', 'metal_scrap', 'tiles_rubble'], icon: 'rubble_bags', quantity: 8 },
       { id: 'store_delivery', title: t('preset_store'), sub: t('preset_store_sub'), service: 'material', directions: ['dovoz'], itemIds: ['ikea_delivery', 'pallet', 'doors_material'], icon: 'ikea_delivery', quantity: 3 },
       { id: 'building_delivery', title: t('preset_building'), sub: t('preset_building_sub'), service: 'material', directions: ['dovoz'], itemIds: ['building_material', 'tiles', 'pallet', 'doors_material'], icon: 'building_material', quantity: 4 }
     ];
@@ -5696,6 +5796,14 @@ padding: 9px 16px;
     mixed: 'rozne rôzne vela veľa vsetko všetko miesane miešané',
     ikea_delivery: 'ikea möbelix mobelix obi hornbach obchod tovar balik balík nabytok nábytok',
     building_material: 'stavebny stavebný material materiál osb sadrokarton sadrokartón dosky profily',
+    rubble_bags: 'sut suť vrecia murivo omietka buranie búranie stavebny stavebný odpad',
+    bricks_blocks: 'tehly tvarnice tvárnice ytong porfix murivo stavebny stavebný odpad',
+    drywall_waste: 'sadrokarton sadrokartón profily dosky odrezky stavebny stavebný odpad',
+    wood_waste: 'drevo dosky parkety palety laty stavebny stavebný odpad',
+    metal_scrap: 'kov kovovy kovový odpad rury rúry radiator radiátor profily plechy',
+    tiles_rubble: 'obklad dlazba dlažba sanita kupelna kúpeľňa wc stavebny stavebný odpad',
+    soil_stones: 'zemina kamene hlina zahrada záhrada vrecia tazke ťažké',
+    old_doors_windows: 'okna okná dvere zarubne zárubne stavebne stavebné prvky',
     tiles: 'dlazba dlažba obklad obklady kachlicky kachličky',
     pallet: 'paleta palety velky veľký tovar naklad náklad',
     doors_material: 'dvere dosky listy lišty dlhy dlhý material materiál'
@@ -5794,7 +5902,7 @@ padding: 9px 16px;
     if (preset.quantity) calc.data.quantity = Math.max(Number(calc.data.quantity) || 1, preset.quantity);
     calc.search = '';
     calc.filter = 'all';
-    renderCalc();
+    renderCalc({ preserveScroll: true });
   }
 
   function itemSearchPool() {
@@ -5838,7 +5946,7 @@ padding: 9px 16px;
     } else {
       calc.data.items = selectedItems().concat(item);
     }
-    renderCalc();
+    renderCalc({ preserveScroll: true });
   }
 
   function addCustomItem(label, targetStep) {
@@ -5859,7 +5967,7 @@ padding: 9px 16px;
     calc.customText = '';
     calc.search = '';
     if (typeof targetStep === 'number') goStep(targetStep);
-    else renderCalc();
+    else renderCalc({ preserveScroll: true });
   }
 
 
@@ -6128,7 +6236,7 @@ padding: 9px 16px;
       pruneExtrasForCurrentContext();
     }
     if (autoNext) goStep(calc.step + 1);
-    else renderCalc();
+    else renderCalc({ preserveScroll: true });
   }
 
   function bind(selector, eventName, handler) {
@@ -6441,8 +6549,11 @@ appendBubble('bot', t('thanks_send'));
 });
 }
 
-function renderCalc() {
+function renderCalc(options) {
 if (!calc.open) return;
+const renderOptions = options || {};
+const preserveScroll = !!renderOptions.preserveScroll;
+const previousScrollTop = calcEls.body ? calcEls.body.scrollTop : 0;
 addRuntimeStyles();
 const meta = STEP_META[calc.step] || STEP_META[0];
 calcEls.title.textContent = meta[0];
@@ -6462,13 +6573,18 @@ if (calc.step === 4) html = renderStepPlace();
 if (calc.step === 5) html = renderStepContact();
 if (calc.step === 6) html = renderStepSummary();
 calcEls.body.innerHTML = html;
-calcEls.body.scrollTop = 0;
+if (preserveScroll) {
+  calcEls.body.scrollTop = previousScrollTop;
+  requestAnimationFrame(() => { if (calcEls.body) calcEls.body.scrollTop = previousScrollTop; });
+} else {
+  calcEls.body.scrollTop = 0;
+}
 bindCalcStepEvents();
 }
 
 function rerenderKeepingFocus(inputId, value) {
 calc.search = value;
-renderCalc();
+renderCalc({ preserveScroll: true });
 requestAnimationFrame(() => {
 const el = document.getElementById(inputId);
 if (!el) return;
@@ -6535,12 +6651,12 @@ itemSearch.addEventListener('keydown', e => { if (e.key === 'Enter') { e.prevent
 }
 const addSearchAsItem = document.getElementById('cbwAddSearchAsItem');
 if (addSearchAsItem) addSearchAsItem.addEventListener('click', () => addCustomItem((document.getElementById('cbwItemSearch') || {}).value));
-bind('[data-filter]', 'click', e => { calc.filter = e.currentTarget.dataset.filter; renderCalc(); });
+bind('[data-filter]', 'click', e => { calc.filter = e.currentTarget.dataset.filter; renderCalc({ preserveScroll: true }); });
 bind('[data-preset]', 'click', e => applyPreset(e.currentTarget.dataset.preset));
 bind('[data-item]', 'click', e => toggleItem(e.currentTarget.dataset.item));
 bind('[data-remove-item]', 'click', e => toggleItem(e.currentTarget.dataset.removeItem));
 const clearItems = document.getElementById('cbwClearItems');
-if (clearItems) clearItems.addEventListener('click', () => { calc.data.items = []; renderCalc(); });
+if (clearItems) clearItems.addEventListener('click', () => { calc.data.items = []; renderCalc({ preserveScroll: true }); });
 const customInput = document.getElementById('cbwCustomItem');
 if (customInput) {
 customInput.addEventListener('input', e => { calc.customText = e.target.value; });
@@ -6589,7 +6705,7 @@ if (photoInput) photoInput.addEventListener('change', handlePhotos);
 bind('[data-remove-photo]', 'click', e => {
   const idx = Number(e.currentTarget.dataset.removePhoto);
   calc.data.photos.splice(idx, 1);
-  renderCalc();
+  renderCalc({ preserveScroll: true });
 });
 }
 
