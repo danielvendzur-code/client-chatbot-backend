@@ -1734,6 +1734,81 @@ position: relative;
 }
 
 /* ============================================================
+SPEEDOMETER PRICE GAUGE (summary)
+============================================================ */
+.cbw-gauge {
+position: relative;
+width: 100%;
+max-width: 300px;
+margin: 4px auto 2px;
+}
+.cbw-gauge svg { width: 100%; height: auto; display: block; overflow: visible; }
+.cbw-gauge-track { stroke: rgba(255,255,255,0.18); }
+.cbw-gauge-fill {
+stroke: url(#cbwGaugeGrad);
+stroke-linecap: round;
+transition: stroke-dashoffset 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+filter: drop-shadow(0 0 6px rgba(125, 211, 252, 0.6));
+}
+.cbw-gauge-needle {
+transform-box: view-box;
+transform-origin: 100px 100px;
+transition: transform 1.5s cubic-bezier(0.34, 1.3, 0.5, 1);
+}
+.cbw-gauge-hub { fill: #fff; }
+.cbw-gauge-ticks line { stroke: rgba(255,255,255,0.35); }
+.cbw-gauge-value {
+font-family: 'DM Serif Display', serif;
+font-size: 34px;
+font-weight: 400;
+letter-spacing: -0.01em;
+line-height: 1;
+margin-top: -6px;
+position: relative;
+}
+.cbw-gauge-range {
+font-size: 12px;
+opacity: 0.85;
+margin-top: 2px;
+letter-spacing: 0.02em;
+}
+.cbw-gauge-cap {
+display: inline-flex; align-items: center; gap: 5px;
+margin-top: 8px;
+font-size: 11px; font-weight: 700;
+text-transform: uppercase; letter-spacing: 0.04em;
+padding: 3px 10px; border-radius: 999px;
+background: rgba(255,255,255,0.16);
+}
+.cbw-gauge-cap::before {
+content: ""; width: 6px; height: 6px; border-radius: 50%;
+background: #4ade80; box-shadow: 0 0 6px #4ade80;
+animation: cbw-pulse-soft 1.6s ease-in-out infinite;
+}
+@keyframes cbw-pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+/* ============================================================
+DATE / URGENCY CHOICES (place step)
+============================================================ */
+.cbw-date-modes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 6px 0 4px; }
+.cbw-date-mode {
+border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+background: #fff; cursor: pointer; padding: 10px 8px;
+display: flex; flex-direction: column; align-items: center; gap: 4px;
+font: inherit; transition: all 160ms ease; text-align: center;
+}
+.cbw-date-mode small { font-size: 10.5px; color: var(--text-muted); font-weight: 600; }
+.cbw-date-mode-tag { font-size: 10px; font-weight: 800; letter-spacing: 0.03em; }
+.cbw-date-mode[data-tone="save"] .cbw-date-mode-tag { color: #16a34a; }
+.cbw-date-mode[data-tone="rush"] .cbw-date-mode-tag { color: #dc2626; }
+.cbw-date-mode svg { width: 22px; height: 22px; color: var(--primary); }
+.cbw-date-mode:hover { border-color: var(--primary); transform: translateY(-1px); }
+.cbw-date-mode[aria-pressed="true"] {
+border-color: var(--primary); background: var(--surface-blue);
+box-shadow: 0 0 0 2px var(--primary) inset, var(--shadow-sm);
+}
+
+/* ============================================================
 THANKS SCREEN
 ============================================================ */
 .cbw-thanks {
@@ -4274,6 +4349,17 @@ padding: 9px 16px;
       place_to: 'Kam to má ísť? nepovinné',
       place_to_delivery: 'Kam doručiť?',
       place_date: 'Preferovaný termín',
+      date_mode_label: 'Ako súri vám to?',
+      date_std: 'Štandard',
+      date_std_sub: 'Bežný termín',
+      date_flex: 'Som flexibilný',
+      date_flex_sub: 'Akýkoľvek deň',
+      date_flex_tag: '−10 %',
+      date_rush: 'Súrne / víkend',
+      date_rush_sub: 'Do 48 h alebo víkend',
+      date_rush_tag: '+15 %',
+      gauge_label: 'Odhadovaná cena',
+      gauge_cap: 'Cenu potvrdíme do 30 min',
       place_distance: 'Vzdialenosť',
       distance_city: 'V rámci mesta',
       distance_near: 'Okolie',
@@ -5652,6 +5738,7 @@ padding: 9px 16px;
       parking: 'near',
       distance: 'city',
       date: '',
+      dateMode: 'standard',
       cityFrom: '',
       cityTo: '',
       note: '',
@@ -6152,6 +6239,10 @@ padding: 9px 16px;
     if (itemWeight * quantity > 3) total += 35;
     if (items.some(item => (item.tags || []).includes('heavy'))) total += 25;
 
+    // Termínové naceňovanie: súrne/víkend +15 %, flexibilný −10 %
+    if (d.dateMode === 'rush') { total *= 1.15; breakdown.push({ label: t('date_rush'), amount: 0 }); }
+    else if (d.dateMode === 'flex') { total *= 0.90; breakdown.push({ label: t('date_flex'), amount: 0 }); }
+
     const min = roundTo5(total * 0.85);
     const max = roundTo5(total * 1.2);
     return { min, max, mid: roundTo5((min + max) / 2), weight: itemWeight * quantity, breakdown };
@@ -6409,6 +6500,79 @@ padding: 9px 16px;
     `;
   }
 
+  // Speedometer-style price gauge for the summary step.
+  function renderGauge(price) {
+    const scaleMax = Math.max(50, roundTo5(price.max * 1.25));
+    const frac = Math.max(0.04, Math.min(0.96, price.mid / scaleMax));
+    // 180° arc, radius 80, center (100,100). Length of half arc = π*r ≈ 251.3
+    const ARC = Math.PI * 80;
+    const dashOffset = ARC * (1 - frac);
+    const needleDeg = -90 + 180 * frac;
+    const ticks = [];
+    for (let i = 0; i <= 8; i++) {
+      const a = (Math.PI) * (i / 8) - Math.PI; // 180°→360°
+      const x1 = 100 + Math.cos(a) * 70, y1 = 100 + Math.sin(a) * 70;
+      const x2 = 100 + Math.cos(a) * 80, y2 = 100 + Math.sin(a) * 80;
+      ticks.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`);
+    }
+    return `
+      <div class="cbw-sum-price cbw-brand-gradient">
+        <div class="cbw-sum-price-label">${escapeHtml(t('gauge_label'))}</div>
+        <div class="cbw-gauge" data-min="${price.min}" data-max="${price.max}" data-mid="${price.mid}" data-deg="${needleDeg.toFixed(1)}" data-arc="${ARC.toFixed(1)}" data-off="${dashOffset.toFixed(1)}">
+          <svg viewBox="0 0 200 118" role="img" aria-label="${price.min}–${price.max} €">
+            <defs>
+              <linearGradient id="cbwGaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#bae6fd"/><stop offset="0.5" stop-color="#38bdf8"/><stop offset="1" stop-color="#fff"/>
+              </linearGradient>
+            </defs>
+            <path class="cbw-gauge-track" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="12" stroke-linecap="round"/>
+            <path class="cbw-gauge-fill" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="12"
+                  stroke-dasharray="${ARC.toFixed(1)}" stroke-dashoffset="${ARC.toFixed(1)}"/>
+            <g class="cbw-gauge-ticks">${ticks.join('')}</g>
+            <g class="cbw-gauge-needle" style="transform: rotate(-90deg)">
+              <line x1="100" y1="100" x2="100" y2="36" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
+            </g>
+            <circle class="cbw-gauge-hub" cx="100" cy="100" r="7"/>
+            <circle cx="100" cy="100" r="3" fill="#0c4a6e"/>
+          </svg>
+        </div>
+        <div class="cbw-gauge-value"><span id="cbwGaugeNum">${price.min}</span> – ${price.max} €</div>
+        <div class="cbw-gauge-cap">${escapeHtml(t('gauge_cap'))}</div>
+      </div>
+    `;
+  }
+
+  function animateGauge() {
+    const g = calcEls.body && calcEls.body.querySelector('.cbw-gauge');
+    if (!g) return;
+    const deg = Number(g.dataset.deg) || 0;
+    const off = Number(g.dataset.off) || 0;
+    const min = Number(g.dataset.min) || 0;
+    const mid = Number(g.dataset.mid) || min;
+    const fill = g.querySelector('.cbw-gauge-fill');
+    const needle = g.querySelector('.cbw-gauge-needle');
+    const numEl = document.getElementById('cbwGaugeNum');
+    requestAnimationFrame(() => {
+      if (fill) fill.style.strokeDashoffset = String(off);
+      if (needle) needle.style.transform = 'rotate(' + deg + 'deg)';
+    });
+    // Count-up from min→mid then settle showing the range's low bound
+    if (numEl) {
+      const target = mid;
+      const start = performance.now();
+      const dur = 1400;
+      const from = Math.max(0, Math.round(min * 0.4));
+      const tick = now => {
+        const p = Math.min(1, (now - start) / dur);
+        const eased = 1 - Math.pow(1 - p, 3);
+        numEl.textContent = String(roundTo5(from + (target - from) * eased));
+        if (p < 1) requestAnimationFrame(tick);
+        else numEl.textContent = String(min);
+      };
+      requestAnimationFrame(tick);
+    }
+  }
+
   function renderQuantityVisual() {
     const quantity = Math.max(1, Number(calc.data.quantity) || 1);
     const price = calculatePrice();
@@ -6428,7 +6592,7 @@ padding: 9px 16px;
             <circle class="cbw-dir-wheel" cx="25" cy="64" r="8" fill="#0c4a6e"/><circle class="cbw-dir-wheel" cx="120" cy="64" r="8" fill="#0c4a6e"/><circle cx="25" cy="64" r="3" fill="#fff"/><circle cx="120" cy="64" r="3" fill="#fff"/>
           </g>
         </svg>
-        <div class="cbw-qty-meta">Odhad záťaže: ${price.weight.toFixed(1)} bodu · orientačne ${price.min}–${price.max} €</div>
+        <div class="cbw-qty-meta">🚚 Naplnenie dodávky ~${Math.round(ratio * 100)} % · orientačne ${price.min}–${price.max} €</div>
       </div>
     `;
   }
@@ -6504,6 +6668,23 @@ padding: 9px 16px;
           <label class="cbw-field-label">${escapeHtml(isDelivery ? t('place_to_delivery') : t('place_to'))} ${isDelivery ? '<span class="cbw-required-star">*</span>' : ''}</label>
           <input class="cbw-q-input" id="cbwCityTo" value="${escapeHtml(d.cityTo)}" placeholder="${escapeHtml(t('ph_to'))}">
         </div>
+        <div>
+          <label class="cbw-field-label">${escapeHtml(t('date_mode_label'))}</label>
+          <div class="cbw-date-modes">
+            <button type="button" class="cbw-date-mode" data-datemode="flex" data-tone="save" aria-pressed="${d.dateMode === 'flex'}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M3 10h18"/><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M9 16l2 2 4-4"/></svg>
+              <span>${escapeHtml(t('date_flex'))}</span><small>${escapeHtml(t('date_flex_sub'))}</small><span class="cbw-date-mode-tag">${escapeHtml(t('date_flex_tag'))}</span>
+            </button>
+            <button type="button" class="cbw-date-mode" data-datemode="standard" aria-pressed="${d.dateMode === 'standard'}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+              <span>${escapeHtml(t('date_std'))}</span><small>${escapeHtml(t('date_std_sub'))}</small><span class="cbw-date-mode-tag">&nbsp;</span>
+            </button>
+            <button type="button" class="cbw-date-mode" data-datemode="rush" data-tone="rush" aria-pressed="${d.dateMode === 'rush'}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>
+              <span>${escapeHtml(t('date_rush'))}</span><small>${escapeHtml(t('date_rush_sub'))}</small><span class="cbw-date-mode-tag">${escapeHtml(t('date_rush_tag'))}</span>
+            </button>
+          </div>
+        </div>
         <div class="cbw-q-group cbw-place-options">
           <div><label class="cbw-field-label">${escapeHtml(t('place_date'))}</label><input class="cbw-q-input" id="cbwDate" type="date" value="${escapeHtml(d.date)}"></div>
           <div><label class="cbw-field-label">${escapeHtml(t('place_distance'))}</label><div class="cbw-q-cards cbw-q-cards-1"><button type="button" class="cbw-q-card" data-distance="city" data-compact="true" aria-pressed="${d.distance === 'city'}">${renderCardFill()}${escapeHtml(t('distance_city'))}</button><button type="button" class="cbw-q-card" data-distance="near" data-compact="true" aria-pressed="${d.distance === 'near'}">${renderCardFill()}${escapeHtml(t('distance_near'))}</button><button type="button" class="cbw-q-card" data-distance="far" data-compact="true" aria-pressed="${d.distance === 'far'}">${renderCardFill()}${escapeHtml(t('distance_far'))}</button></div></div>
@@ -6531,7 +6712,7 @@ const svc = selectedService();
 const items = selectedItems().map(item => localItem(item).label).join(', ') || t('summary_items');
 const showSpaceScope = isSpacePriceJob();
 const extrasText = formatExtras();
-return `<h2 class="cbw-calc-prompt">${escapeHtml(t('prompt_summary'))}</h2> <p class="cbw-calc-hint">${escapeHtml(t('hint_summary'))}</p> <div class="cbw-sum-price cbw-brand-gradient"> <div class="cbw-sum-price-label">${escapeHtml(t('sum_price_label'))}</div> <div class="cbw-sum-price-value">${price.min}–${price.max} €</div> <div class="cbw-sum-price-note">${escapeHtml(t('sum_price_note'))}</div> </div> <div class="cbw-sum-card"> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_dir'))}</span><span>${escapeHtml(dir ? dir.title : '—')}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_service'))}</span><span>${escapeHtml(svc ? svc.title : '—')}</span></div> ${showSpaceScope ? `<div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_job_type'))}</span><span>${escapeHtml(formatJobType())}</span></div><div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_area'))}</span><span>${escapeHtml(d.areaM2 || '—')} m²</span></div><div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_extras'))}</span><span>${escapeHtml(extrasText)}</span></div>` : ''} <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_items'))}</span><span>${escapeHtml(items)}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_quantity'))}</span><span>${escapeHtml(d.quantity)} ${escapeHtml(t('qty_unit'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_access'))}</span><span>${escapeHtml(d.access || '—')}, ${escapeHtml(t('details_floors').toLowerCase())} ${escapeHtml(d.floors || 0)}, ${escapeHtml(t('elevator').toLowerCase())} ${d.elevator === 'yes' ? t('yes').toLowerCase() : t('no').toLowerCase()}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_route'))}</span><span>${escapeHtml(d.cityFrom || '—')}${d.cityTo ? ' → ' + escapeHtml(d.cityTo) : ''}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_date'))}</span><span>${escapeHtml(d.date || t('date_arrange'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_contact'))}</span><span>${escapeHtml(d.name || '')} ${escapeHtml(d.phone || '')}</span></div> </div> <div class="cbw-inline-warning">${escapeHtml(t('sum_warning'))}</div> ${calc.error ?`<div class="cbw-submit-error">${escapeHtml(calc.error)}</div>`: ''}`;
+return `<h2 class="cbw-calc-prompt">${escapeHtml(t('prompt_summary'))}</h2> <p class="cbw-calc-hint">${escapeHtml(t('hint_summary'))}</p> ${renderGauge(price)} <div class="cbw-sum-card"> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_dir'))}</span><span>${escapeHtml(dir ? dir.title : '—')}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_service'))}</span><span>${escapeHtml(svc ? svc.title : '—')}</span></div> ${showSpaceScope ? `<div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_job_type'))}</span><span>${escapeHtml(formatJobType())}</span></div><div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_area'))}</span><span>${escapeHtml(d.areaM2 || '—')} m²</span></div><div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_extras'))}</span><span>${escapeHtml(extrasText)}</span></div>` : ''} <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_items'))}</span><span>${escapeHtml(items)}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_quantity'))}</span><span>${escapeHtml(d.quantity)} ${escapeHtml(t('qty_unit'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_access'))}</span><span>${escapeHtml(d.access || '—')}, ${escapeHtml(t('details_floors').toLowerCase())} ${escapeHtml(d.floors || 0)}, ${escapeHtml(t('elevator').toLowerCase())} ${d.elevator === 'yes' ? t('yes').toLowerCase() : t('no').toLowerCase()}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_route'))}</span><span>${escapeHtml(d.cityFrom || '—')}${d.cityTo ? ' → ' + escapeHtml(d.cityTo) : ''}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_date'))}</span><span>${escapeHtml(d.date || t('date_arrange'))}</span></div> <div class="cbw-sum-row"><span>${escapeHtml(t('sum_label_contact'))}</span><span>${escapeHtml(d.name || '')} ${escapeHtml(d.phone || '')}</span></div> </div> <div class="cbw-inline-warning">${escapeHtml(t('sum_warning'))}</div> ${calc.error ?`<div class="cbw-submit-error">${escapeHtml(calc.error)}</div>`: ''}`;
 }
 
 function renderThanks() {
@@ -6580,6 +6761,7 @@ if (preserveScroll) {
   calcEls.body.scrollTop = 0;
 }
 bindCalcStepEvents();
+if (calc.step === 6) animateGauge();
 }
 
 function rerenderKeepingFocus(inputId, value) {
@@ -6689,6 +6871,7 @@ bind('[data-access]', 'click', e => setData('access', e.currentTarget.dataset.ac
 bind('[data-elevator]', 'click', e => setData('elevator', e.currentTarget.dataset.elevator));
 bind('[data-parking]', 'click', e => setData('parking', e.currentTarget.dataset.parking));
 bind('[data-distance]', 'click', e => setData('distance', e.currentTarget.dataset.distance));
+bind('[data-datemode]', 'click', e => setData('dateMode', e.currentTarget.dataset.datemode));
 
 ['CityFrom', 'CityTo', 'Date', 'Note', 'Name', 'Phone', 'Email'].forEach(key => {
   const el = document.getElementById('cbw' + key);
