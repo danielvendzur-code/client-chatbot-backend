@@ -835,9 +835,28 @@ DIRECTION CARDS — odvoz vs dovoz with rich animations
 ============================================================ */
 .cbw-dir-grid {
 display: grid;
-grid-template-columns: 1fr;
-gap: 12px;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
 margin-bottom: 4px;
+}
+@media (min-width: 460px) { .cbw-dir-grid { grid-template-columns: 1fr 1fr; } }
+.cbw-dir-grid .cbw-dir-card {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  padding: 14px 14px 16px !important;
+  gap: 10px !important;
+}
+.cbw-dir-grid .cbw-dir-visual {
+  width: 100% !important;
+  height: 78px !important;
+}
+.cbw-dir-grid .cbw-dir-arrow { display: none; }
+.cbw-dir-grid .cbw-dir-title { font-size: 15px !important; }
+.cbw-dir-grid .cbw-dir-sub { font-size: 11.5px !important; }
+.cbw-dir-grid .cbw-dir-card[aria-pressed="true"] {
+  border-color: var(--primary) !important;
+  background: var(--surface-blue) !important;
+  box-shadow: 0 0 0 3px var(--primary) inset, var(--shadow-md) !important;
 }
 .cbw-dir-card {
 position: relative;
@@ -4190,10 +4209,10 @@ padding: 9px 16px;
       step6_title: 'Kontakt', step6_sub: 'Kam máme poslať ponuku?',
       step7_title: 'Súhrn a cena', step7_sub: 'Skontrolujte údaje a odošlite dopyt',
       // Directions
-      dir_odvoz: 'Odvoz', dir_odvoz_sub: 'Odvezieme od vás staré veci',
-      dir_dovoz: 'Dovoz', dir_dovoz_sub: 'Privezieme tovar / nábytok k vám',
-      dir_stahovanie: 'Sťahovanie', dir_stahovanie_sub: 'Byt, dom, kancelária, firma',
-      dir_vypratavanie: 'Vypratávanie', dir_vypratavanie_sub: 'Byt, pivnica, sklad, garáž',
+      dir_odvoz: 'Odvoz nábytku', dir_odvoz_sub: 'Sedačka, skriňa, spotrebič — odvezieme z bytu',
+      dir_dovoz: 'Vývoz odpadu', dir_dovoz_sub: 'Stavebný odpad, suť, zmesný odpad',
+      dir_stahovanie: 'Sťahovanie', dir_stahovanie_sub: 'Byt, dom, kancelária — komplet aj s posádkou',
+      dir_vypratavanie: 'Vypratávanie', dir_vypratavanie_sub: 'Byt, pivnica, garáž, pozostalosť',
       // Services
       svc_furniture: 'Nábytok', svc_furniture_sub: 'Sedačky, postele, skrine…',
       svc_appliance: 'Spotrebiče', svc_appliance_sub: 'Chladnička, práčka, TV…',
@@ -4430,10 +4449,10 @@ padding: 9px 16px;
       step5_title: 'Date and place', step5_sub: 'Address, distance and notes',
       step6_title: 'Contact', step6_sub: 'Where to send the quote?',
       step7_title: 'Summary and price', step7_sub: 'Check the details and submit',
-      dir_odvoz: 'Pickup', dir_odvoz_sub: 'We pick up old things from you',
-      dir_dovoz: 'Delivery', dir_dovoz_sub: 'We deliver goods / furniture to you',
-      dir_stahovanie: 'Moving', dir_stahovanie_sub: 'Flat, house, office, company',
-      dir_vypratavanie: 'Clearance', dir_vypratavanie_sub: 'Flat, cellar, storage, garage',
+      dir_odvoz: 'Furniture pickup', dir_odvoz_sub: 'Sofa, wardrobe, appliance — we collect from your home',
+      dir_dovoz: 'Waste removal', dir_dovoz_sub: 'Construction rubble, mixed waste',
+      dir_stahovanie: 'Moving', dir_stahovanie_sub: 'Flat, house, office — full service with crew',
+      dir_vypratavanie: 'Clearance', dir_vypratavanie_sub: 'Flat, cellar, storage, estate cleanout',
       svc_furniture: 'Furniture', svc_furniture_sub: 'Sofas, beds, wardrobes…',
       svc_appliance: 'Appliances', svc_appliance_sub: 'Fridge, washer, TV…',
       svc_construction: 'Construction waste / rubble', svc_construction_sub: 'rubble, bricks, drywall, wood, metal',
@@ -4649,10 +4668,10 @@ padding: 9px 16px;
       step5_title: 'Termin und Ort', step5_sub: 'Adresse, Entfernung, Notizen',
       step6_title: 'Kontakt', step6_sub: 'Wohin senden wir das Angebot?',
       step7_title: 'Zusammenfassung', step7_sub: 'Daten prüfen und senden',
-      dir_odvoz: 'Abholung', dir_odvoz_sub: 'Wir holen alte Sachen bei Ihnen ab',
-      dir_dovoz: 'Lieferung', dir_dovoz_sub: 'Wir liefern Waren / Möbel zu Ihnen',
-      dir_stahovanie: 'Umzug', dir_stahovanie_sub: 'Wohnung, Haus, Büro, Firma',
-      dir_vypratavanie: 'Entrümpelung', dir_vypratavanie_sub: 'Wohnung, Keller, Lager, Garage',
+      dir_odvoz: 'Möbel-Abholung', dir_odvoz_sub: 'Sofa, Schrank, Geräte — wir holen ab',
+      dir_dovoz: 'Schuttabfuhr', dir_dovoz_sub: 'Bauschutt, Mischabfall',
+      dir_stahovanie: 'Umzug', dir_stahovanie_sub: 'Wohnung, Haus, Büro — komplett mit Team',
+      dir_vypratavanie: 'Entrümpelung', dir_vypratavanie_sub: 'Wohnung, Keller, Garage, Nachlass',
       svc_furniture: 'Möbel', svc_furniture_sub: 'Sofas, Betten, Schränke…',
       svc_appliance: 'Geräte', svc_appliance_sub: 'Kühlschrank, Waschmaschine, TV…',
       svc_construction: 'Bauschutt / Bauabfall', svc_construction_sub: 'Schutt, Ziegel, Gipskarton, Holz, Metall',
@@ -6267,8 +6286,12 @@ padding: 9px 16px;
   }
 
   function setProgress() {
-    const pct = Math.round(((calc.step + 1) / STEP_META.length) * 100);
-    calcEls.barFill.style.width = Math.min(100, Math.max(5, pct)) + '%';
+    // The standalone "service" step is auto-skipped, so visually we show
+    // only the steps the user actually walks through (6 instead of 7).
+    const visibleSteps = Math.max(1, STEP_META.length - 1);
+    const visibleIndex = calc.step >= 1 ? calc.step : 0;
+    const pct = Math.round(((visibleIndex + 1) / visibleSteps) * 100);
+    calcEls.barFill.style.width = Math.min(100, Math.max(8, pct)) + '%';
     if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', String(pct));
   }
 
@@ -6287,12 +6310,32 @@ padding: 9px 16px;
     calcEls.wizard.dataset.open = 'false';
   }
 
+  // Default service per direction → lets us collapse the service step into
+  // the direction step (4 big tiles instead of two clicks).
+  const DEFAULT_SERVICE_BY_DIRECTION = {
+    odvoz: 'furniture',
+    dovoz: 'construction',       // 'Vývoz odpadu' → stavebný/zmesný
+    stahovanie: 'moving_flat',
+    vypratavanie: 'clearance_flat',
+  };
+
   function goStep(nextStep) {
     calc.error = '';
     const previousStep = calc.step;
     let targetStep = Math.max(0, Math.min(STEP_META.length - 1, nextStep));
     if (shouldSkipItemsStep() && targetStep === 2) {
       targetStep = nextStep > previousStep ? 3 : 1;
+    }
+    // Skip the standalone service step — direction already implies it.
+    if (targetStep === 1) {
+      if (!calc.data.service && calc.data.direction) {
+        calc.data.service = DEFAULT_SERVICE_BY_DIRECTION[calc.data.direction] || 'furniture';
+      }
+      targetStep = nextStep > previousStep ? 2 : 0;
+      // After skip, recompute item-skip too
+      if (shouldSkipItemsStep() && targetStep === 2) {
+        targetStep = nextStep > previousStep ? 3 : 0;
+      }
     }
     calc.step = targetStep;
     renderCalc();
