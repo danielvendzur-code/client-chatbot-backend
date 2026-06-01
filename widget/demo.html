@@ -1753,8 +1753,84 @@ position: relative;
 }
 
 /* ============================================================
-SPEEDOMETER PRICE GAUGE (summary)
+PRICE BREAKDOWN CARD (summary)
 ============================================================ */
+.cbw-pb {
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+background: #fff;
+padding: 18px 18px 20px;
+margin: 8px 0 6px;
+box-shadow: var(--shadow-sm);
+}
+.cbw-pb-head {
+display: flex; justify-content: space-between; align-items: baseline;
+padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.cbw-pb-label {
+font-size: 11.5px; font-weight: 800; letter-spacing: 0.06em;
+text-transform: uppercase; color: var(--text-muted);
+}
+.cbw-pb-range {
+font-family: 'DM Serif Display', serif;
+font-size: 30px; line-height: 1; color: var(--text);
+}
+.cbw-pb-list { display: flex; flex-direction: column; margin: 10px 0 0; }
+.cbw-pb-row {
+display: flex; justify-content: space-between; align-items: baseline;
+padding: 7px 0; font-size: 13.5px;
+border-bottom: 1px dashed var(--border);
+}
+.cbw-pb-row:last-child { border-bottom: none; }
+.cbw-pb-row-label { color: var(--text); font-weight: 600; }
+.cbw-pb-row-sub { color: var(--text-muted); font-weight: 500; font-size: 12px; margin-left: 6px; }
+.cbw-pb-row-amount { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cbw-pb-row-amount.cbw-pb-positive { color: var(--primary-dark); }
+.cbw-pb-row-amount.cbw-pb-discount { color: #16a34a; }
+.cbw-pb-total {
+margin-top: 10px; padding-top: 10px;
+border-top: 1.5px solid var(--text);
+display: flex; justify-content: space-between; align-items: baseline;
+}
+.cbw-pb-total-label { font-size: 12px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); }
+.cbw-pb-total-amount {
+font-family: 'DM Serif Display', serif;
+font-size: 26px; color: var(--primary-dark);
+font-variant-numeric: tabular-nums;
+}
+.cbw-pb-note {
+margin-top: 12px;
+font-size: 11.5px; color: var(--text-muted);
+display: flex; align-items: flex-start; gap: 6px; line-height: 1.4;
+}
+.cbw-pb-note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; color: var(--primary); }
+.cbw-pb-trust { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+.cbw-pb-trust span {
+display: inline-flex; align-items: center; gap: 4px;
+font-size: 11px; color: var(--text-muted); font-weight: 600;
+}
+.cbw-pb-trust svg { width: 12px; height: 12px; color: #16a34a; }
+
+/* ============================================================
+ZIP CODE INPUT (place step)
+============================================================ */
+.cbw-zip-row {
+display: grid; grid-template-columns: 130px 1fr; gap: 8px;
+margin-top: 8px;
+}
+@media (max-width: 420px) { .cbw-zip-row { grid-template-columns: 1fr; } }
+.cbw-zip-row .cbw-q-input { letter-spacing: 0.04em; }
+.cbw-zip-feedback {
+display: flex; align-items: center; gap: 6px;
+font-size: 12px; color: var(--text-muted);
+padding: 8px 10px; border-radius: var(--radius-sm);
+background: var(--surface-blue); border: 1px solid var(--border);
+}
+.cbw-zip-feedback strong { color: var(--text); }
+.cbw-zip-feedback[data-zone="local"] { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+.cbw-zip-feedback[data-zone="near"]  { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.cbw-zip-feedback[data-zone="far"]   { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+.cbw-zip-feedback svg { width: 14px; height: 14px; flex-shrink: 0; }
 .cbw-gauge {
 position: relative;
 width: 100%;
@@ -5758,6 +5834,8 @@ padding: 9px 16px;
       distance: 'city',
       date: '',
       dateMode: 'standard',
+      zipFrom: '',
+      zipTo: '',
       cityFrom: '',
       cityTo: '',
       note: '',
@@ -6216,6 +6294,47 @@ padding: 9px 16px;
     return ['moving_flat', 'moving_office', 'clearance_flat', 'clearance_storage'].includes(calc.data.service);
   }
 
+  // Live PSČ feedback shown under the from/to inputs.
+  function renderZipFeedback(zip) {
+    const z = zipZone(zip);
+    if (!z) return '';
+    const sub = z.surcharge ? '<strong>+' + z.surcharge + ' €</strong> doprava' : '<strong>v cene</strong>';
+    const icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+    return '<div class="cbw-zip-feedback" data-zone="' + z.code + '">' + icon + '<span>Pásmo: <strong>' + escapeHtml(z.label) + '</strong> · ' + sub + '</span></div>';
+  }
+
+  /* PSČ pricing — distance from Bratislava (810 00) by region.
+     Inspired by how Slovak moving companies tier zones. */
+  function zipZone(zip) {
+    const z = String(zip || '').replace(/\D/g, '').slice(0, 5);
+    if (z.length !== 5) return null;
+    const n = parseInt(z, 10);
+    // Bratislava + immediate suburbs (810-841)
+    if (n >= 81000 && n <= 84199) return { code: 'local', label: 'Bratislava', surcharge: 0, kmFromBA: 0 };
+    // Senec, Pezinok, Modra, Malacky, Trnava (903-919)
+    if (n >= 90000 && n <= 91999) return { code: 'near',  label: 'Bratislavský/Trnavský kraj', surcharge: 18, kmFromBA: 25 };
+    // Žilina + Považie (010-022)
+    if (n >= 1000  && n <= 5999)  return { code: 'far',  label: 'Severozápad SR', surcharge: 95, kmFromBA: 200 };
+    // Banská Bystrica, Zvolen (974-980)
+    if (n >= 96000 && n <= 99999) return { code: 'far',  label: 'Stredné Slovensko', surcharge: 75, kmFromBA: 175 };
+    // Košice, Prešov (040-090)
+    if (n >= 4000  && n <= 9999)  return { code: 'far',  label: 'Východné Slovensko', surcharge: 145, kmFromBA: 400 };
+    // Nitra a južné SR (940-960)
+    if (n >= 94000 && n <= 96999) return { code: 'near', label: 'Nitriansky kraj',       surcharge: 35, kmFromBA: 90 };
+    // Trenčín (911-915)
+    if (n >= 91000 && n <= 91999) return { code: 'near', label: 'Trenčiansky kraj',     surcharge: 30, kmFromBA: 70 };
+    return { code: 'far', label: 'Slovensko', surcharge: 60, kmFromBA: 130 };
+  }
+
+  function distanceSurcharge(d) {
+    let surcharge = 0;
+    const fromZ = zipZone(d.zipFrom);
+    const toZ   = zipZone(d.zipTo);
+    if (fromZ) surcharge += fromZ.surcharge;
+    if (toZ && toZ.code !== 'local') surcharge += Math.round(toZ.surcharge * 0.6);
+    return surcharge;
+  }
+
   function calculatePrice() {
     const svc = selectedService() || { base: 50 };
     const items = selectedItems();
@@ -6225,46 +6344,85 @@ padding: 9px 16px;
     const itemWeight = items.reduce((sum, item) => sum + (Number(item.weight) || 1), 0);
     const quantityMultiplier = quantity <= 1 ? 1 : 1 + Math.min(2.2, (quantity - 1) * 0.32);
 
-    let total = Number(svc.base || 50) + itemBase * quantityMultiplier;
-    const breakdown = [];
+    const lines = [];   // breakdown lines (label, sub, amount, type)
+    let total = 0;
 
     if (isSpacePriceJob()) {
       const area = Math.max(0, Number(d.areaM2) || 0);
       const jobType = selectedJobType() || getJobTypeOptions()[0];
-      const baseByType = Number(jobType.base || 120);
+      const baseByType = Math.max(Number(svc.base || 50), Number(jobType.base || 120));
       const m2Rate = Number(jobType.rate || 2.6);
-      total = Math.max(Number(svc.base || 50), baseByType) + area * m2Rate + itemBase * 0.45;
-      breakdown.push({ label: t('price_base_space'), amount: Math.max(Number(svc.base || 50), baseByType) });
-      if (area) breakdown.push({ label: t('price_area').replace('{m2}', area), amount: area * m2Rate });
-
+      total = baseByType + area * m2Rate + itemBase * 0.45;
+      lines.push({ label: 'Základ', sub: (svc.title || jobType.title || ''), amount: baseByType });
+      if (area) lines.push({ label: 'Plocha ' + area + ' m²', sub: m2Rate.toFixed(1) + ' €/m²', amount: roundTo5(area * m2Rate) });
+      if (itemBase) lines.push({ label: 'Položky (' + items.length + ')', sub: '', amount: roundTo5(itemBase * 0.45) });
       getSelectedExtras().forEach(extra => {
-        total += Number(extra.price || 0);
-        breakdown.push({ label: extra.title, amount: Number(extra.price || 0) });
+        const v = Number(extra.price || 0);
+        total += v;
+        if (v) lines.push({ label: extra.title, sub: '', amount: v });
       });
-
-      if (d.jobType === 'office' || calc.data.service === 'moving_office') total += 45;
-      if ((d.extras || {}).stairs_no_lift) total += Math.max(0, Number(d.floors) || 0) * 12;
-      if ((d.extras || {}).company_archive && d.jobType !== 'office') total += 15;
+      if (d.jobType === 'office' || calc.data.service === 'moving_office') { total += 45; lines.push({ label: 'Kancelárska réžia', sub: '', amount: 45 }); }
+      if ((d.extras || {}).stairs_no_lift) {
+        const v = Math.max(0, Number(d.floors) || 0) * 12;
+        if (v) { total += v; lines.push({ label: 'Bez výťahu × poschodia', sub: (d.floors || 0) + '× 12 €', amount: v }); }
+      }
+    } else {
+      total = Number(svc.base || 50) + itemBase * quantityMultiplier;
+      lines.push({ label: 'Základ', sub: (svc.title || ''), amount: Number(svc.base || 50) });
+      if (itemBase) {
+        const v = roundTo5(itemBase * quantityMultiplier);
+        lines.push({ label: 'Položky (' + items.length + (quantity > 1 ? ' × ' + quantity : '') + ')', sub: '', amount: v });
+      }
     }
 
-    if (d.direction === 'dovoz') total += 10;
-    if (d.access === 'stairs') total += 25;
-    if (d.access === 'hard') total += 45;
-    if (d.elevator === 'no') total += 20;
-    total += Math.max(0, Number(d.floors) || 0) * 8;
-    if (d.parking === 'far') total += 15;
-    if (d.distance === 'near') total += 20;
-    if (d.distance === 'far') total += 45;
-    if (itemWeight * quantity > 3) total += 35;
-    if (items.some(item => (item.tags || []).includes('heavy'))) total += 25;
+    // Difficulty / access
+    if (d.access === 'stairs') { total += 25; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 25 }); }
+    if (d.access === 'hard')   { total += 45; lines.push({ label: 'Náročný prístup',               sub: '', amount: 45 }); }
+    if (d.elevator === 'no' && !(d.extras || {}).stairs_no_lift) { total += 20; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 20 }); }
+    const floors = Math.max(0, Number(d.floors) || 0);
+    if (floors && !((d.extras || {}).stairs_no_lift)) {
+      const v = floors * 8;
+      total += v;
+      lines.push({ label: 'Poschodie ' + floors + '.', sub: floors + '× 8 €', amount: v });
+    }
+    if (d.parking === 'far') { total += 15; lines.push({ label: 'Parkovanie ďalej od vchodu', sub: '', amount: 15 }); }
+    if (itemWeight * quantity > 3) { total += 35; lines.push({ label: 'Ťažší náklad', sub: '', amount: 35 }); }
+    if (items.some(item => (item.tags || []).includes('heavy'))) { total += 25; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 25 }); }
 
-    // Termínové naceňovanie: súrne/víkend +15 %, flexibilný −10 %
-    if (d.dateMode === 'rush') { total *= 1.15; breakdown.push({ label: t('date_rush'), amount: 0 }); }
-    else if (d.dateMode === 'flex') { total *= 0.90; breakdown.push({ label: t('date_flex'), amount: 0 }); }
+    // PSČ-based distance pricing (replaces vague "city/near/far")
+    const fromZ = zipZone(d.zipFrom);
+    const toZ   = zipZone(d.zipTo);
+    let distAmount = 0;
+    let distSub = '';
+    if (fromZ && fromZ.surcharge) distAmount += fromZ.surcharge;
+    if (toZ && toZ.code !== 'local') distAmount += Math.round(toZ.surcharge * 0.6);
+    if (fromZ || toZ) {
+      const labelBits = [];
+      if (fromZ) labelBits.push(fromZ.label);
+      if (toZ && toZ.code !== 'local' && toZ.label !== (fromZ && fromZ.label)) labelBits.push('→ ' + toZ.label);
+      distSub = labelBits.join(' ');
+    }
+    if (!distAmount) {
+      // fallback to old distance dropdown if user did not type a zip
+      if (d.distance === 'near') { distAmount = 20; distSub = 'Okolie'; }
+      else if (d.distance === 'far') { distAmount = 45; distSub = 'Mimo regiónu'; }
+    }
+    if (distAmount) {
+      total += distAmount;
+      lines.push({ label: 'Doprava (PSČ)', sub: distSub, amount: distAmount });
+    }
 
-    const min = roundTo5(total * 0.85);
-    const max = roundTo5(total * 1.2);
-    return { min, max, mid: roundTo5((min + max) / 2), weight: itemWeight * quantity, breakdown };
+    // Date mode multiplier
+    let dateMultLabel = '';
+    if (d.dateMode === 'rush')      { total *= 1.15; dateMultLabel = 'Súrne / víkend +15 %'; }
+    else if (d.dateMode === 'flex') { total *= 0.90; dateMultLabel = 'Flexibilný termín −10 %'; }
+    if (dateMultLabel) {
+      lines.push({ label: dateMultLabel, sub: '', amount: 0, type: d.dateMode === 'flex' ? 'discount' : 'positive' });
+    }
+
+    const min = Math.max(0, roundTo5(total * 0.90));
+    const max = roundTo5(total * 1.15);
+    return { min, max, mid: roundTo5((min + max) / 2), weight: itemWeight * quantity, breakdown: lines };
   }
 
   function validateStep(step) {
@@ -6293,6 +6451,11 @@ padding: 9px 16px;
     const pct = Math.round(((visibleIndex + 1) / visibleSteps) * 100);
     calcEls.barFill.style.width = Math.min(100, Math.max(8, pct)) + '%';
     if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', String(pct));
+  }
+
+  // QA / test mode — opens the calculator immediately on /test URL.
+  if (location.pathname.endsWith('/test') || /[?&]cbw=test/.test(location.search)) {
+    setTimeout(() => { if (typeof openCalculator === 'function') openCalculator(); }, 600);
   }
 
   function openCalculator() {
@@ -6543,78 +6706,43 @@ padding: 9px 16px;
     `;
   }
 
-  // Speedometer-style price gauge for the summary step.
+  // Professional itemised price breakdown — replaces the speedometer gauge.
   function renderGauge(price) {
-    const scaleMax = Math.max(50, roundTo5(price.max * 1.25));
-    const frac = Math.max(0.04, Math.min(0.96, price.mid / scaleMax));
-    // 180° arc, radius 80, center (100,100). Length of half arc = π*r ≈ 251.3
-    const ARC = Math.PI * 80;
-    const dashOffset = ARC * (1 - frac);
-    const needleDeg = -90 + 180 * frac;
-    const ticks = [];
-    for (let i = 0; i <= 8; i++) {
-      const a = (Math.PI) * (i / 8) - Math.PI; // 180°→360°
-      const x1 = 100 + Math.cos(a) * 70, y1 = 100 + Math.sin(a) * 70;
-      const x2 = 100 + Math.cos(a) * 80, y2 = 100 + Math.sin(a) * 80;
-      ticks.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`);
-    }
-    return `
-      <div class="cbw-sum-price cbw-brand-gradient">
-        <div class="cbw-sum-price-label">${escapeHtml(t('gauge_label'))}</div>
-        <div class="cbw-gauge" data-min="${price.min}" data-max="${price.max}" data-mid="${price.mid}" data-deg="${needleDeg.toFixed(1)}" data-arc="${ARC.toFixed(1)}" data-off="${dashOffset.toFixed(1)}">
-          <svg viewBox="0 0 200 118" role="img" aria-label="${price.min}–${price.max} €">
-            <defs>
-              <linearGradient id="cbwGaugeGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#bae6fd"/><stop offset="0.5" stop-color="#38bdf8"/><stop offset="1" stop-color="#fff"/>
-              </linearGradient>
-            </defs>
-            <path class="cbw-gauge-track" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="12" stroke-linecap="round"/>
-            <path class="cbw-gauge-fill" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="12"
-                  stroke-dasharray="${ARC.toFixed(1)}" stroke-dashoffset="${ARC.toFixed(1)}"/>
-            <g class="cbw-gauge-ticks">${ticks.join('')}</g>
-            <g class="cbw-gauge-needle" style="transform: rotate(-90deg)">
-              <line x1="100" y1="100" x2="100" y2="36" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
-            </g>
-            <circle class="cbw-gauge-hub" cx="100" cy="100" r="7"/>
-            <circle cx="100" cy="100" r="3" fill="#0c4a6e"/>
-          </svg>
-        </div>
-        <div class="cbw-gauge-value"><span id="cbwGaugeNum">${price.min}</span> – ${price.max} €</div>
-        <div class="cbw-gauge-cap">${escapeHtml(t('gauge_cap'))}</div>
-      </div>
-    `;
+    const items = (price.breakdown || []).map(line => {
+      const tone = line.type === 'discount' ? 'cbw-pb-discount' : (line.type === 'positive' ? 'cbw-pb-positive' : '');
+      let amountTxt;
+      if (!line.amount) amountTxt = '<span class="' + tone + '">' + (line.type === 'discount' ? '−' : (line.type === 'positive' ? '+' : '')) + '%</span>';
+      else amountTxt = (line.amount >= 0 ? '+' : '') + line.amount + ' €';
+      const sub = line.sub ? '<span class="cbw-pb-row-sub">' + escapeHtml(String(line.sub)) + '</span>' : '';
+      return '<div class="cbw-pb-row">'
+        +    '<span><span class="cbw-pb-row-label">' + escapeHtml(line.label) + '</span>' + sub + '</span>'
+        +    '<span class="cbw-pb-row-amount ' + tone + '">' + amountTxt + '</span>'
+        +  '</div>';
+    }).join('');
+    return ''
+      + '<div class="cbw-pb">'
+      +   '<div class="cbw-pb-head">'
+      +     '<span class="cbw-pb-label">Orientačný odhad</span>'
+      +     '<span class="cbw-pb-range">' + price.min + ' – ' + price.max + ' €</span>'
+      +   '</div>'
+      +   '<div class="cbw-pb-list">' + items + '</div>'
+      +   '<div class="cbw-pb-total">'
+      +     '<span class="cbw-pb-total-label">Spolu</span>'
+      +     '<span class="cbw-pb-total-amount">' + price.min + ' – ' + price.max + ' €</span>'
+      +   '</div>'
+      +   '<div class="cbw-pb-note">'
+      +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+      +     '<span>Finálnu cenu vám potvrdíme telefonicky alebo po obhliadke — bez záväzku, do 30 minút v pracovných hodinách.</span>'
+      +   '</div>'
+      +   '<div class="cbw-pb-trust">'
+      +     '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Bez záväzku</span>'
+      +     '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Žiadne skryté poplatky</span>'
+      +     '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Reagujeme do 30 min</span>'
+      +   '</div>'
+      + '</div>';
   }
 
-  function animateGauge() {
-    const g = calcEls.body && calcEls.body.querySelector('.cbw-gauge');
-    if (!g) return;
-    const deg = Number(g.dataset.deg) || 0;
-    const off = Number(g.dataset.off) || 0;
-    const min = Number(g.dataset.min) || 0;
-    const mid = Number(g.dataset.mid) || min;
-    const fill = g.querySelector('.cbw-gauge-fill');
-    const needle = g.querySelector('.cbw-gauge-needle');
-    const numEl = document.getElementById('cbwGaugeNum');
-    requestAnimationFrame(() => {
-      if (fill) fill.style.strokeDashoffset = String(off);
-      if (needle) needle.style.transform = 'rotate(' + deg + 'deg)';
-    });
-    // Count-up from min→mid then settle showing the range's low bound
-    if (numEl) {
-      const target = mid;
-      const start = performance.now();
-      const dur = 1400;
-      const from = Math.max(0, Math.round(min * 0.4));
-      const tick = now => {
-        const p = Math.min(1, (now - start) / dur);
-        const eased = 1 - Math.pow(1 - p, 3);
-        numEl.textContent = String(roundTo5(from + (target - from) * eased));
-        if (p < 1) requestAnimationFrame(tick);
-        else numEl.textContent = String(min);
-      };
-      requestAnimationFrame(tick);
-    }
-  }
+  function animateGauge() { /* no-op — kept so existing call site stays valid */ }
 
   function renderQuantityVisual() {
     const quantity = Math.max(1, Number(calc.data.quantity) || 1);
@@ -6705,11 +6833,19 @@ padding: 9px 16px;
       <div class="cbw-field-stack">
         <div>
           <label class="cbw-field-label">${escapeHtml(isDelivery ? t('place_from_delivery') : t('place_from'))} <span class="cbw-required-star">*</span></label>
-          <input class="cbw-q-input" id="cbwCityFrom" value="${escapeHtml(d.cityFrom)}" placeholder="${escapeHtml(t('ph_from'))}">
+          <div class="cbw-zip-row">
+            <input class="cbw-q-input" id="cbwZipFrom" inputmode="numeric" maxlength="5" value="${escapeHtml(d.zipFrom)}" placeholder="PSČ (napr. 811 01)">
+            <input class="cbw-q-input" id="cbwCityFrom" value="${escapeHtml(d.cityFrom)}" placeholder="Mesto, ulica">
+          </div>
+          ${renderZipFeedback(d.zipFrom)}
         </div>
         <div>
           <label class="cbw-field-label">${escapeHtml(isDelivery ? t('place_to_delivery') : t('place_to'))} ${isDelivery ? '<span class="cbw-required-star">*</span>' : ''}</label>
-          <input class="cbw-q-input" id="cbwCityTo" value="${escapeHtml(d.cityTo)}" placeholder="${escapeHtml(t('ph_to'))}">
+          <div class="cbw-zip-row">
+            <input class="cbw-q-input" id="cbwZipTo" inputmode="numeric" maxlength="5" value="${escapeHtml(d.zipTo)}" placeholder="PSČ cieľa">
+            <input class="cbw-q-input" id="cbwCityTo" value="${escapeHtml(d.cityTo)}" placeholder="Mesto, ulica">
+          </div>
+          ${d.zipTo ? renderZipFeedback(d.zipTo) : ''}
         </div>
         <div>
           <label class="cbw-field-label">${escapeHtml(t('date_mode_label'))}</label>
@@ -6922,6 +7058,17 @@ bind('[data-datemode]', 'click', e => setData('dateMode', e.currentTarget.datase
     const map = { CityFrom: 'cityFrom', CityTo: 'cityTo', Date: 'date', Note: 'note', Name: 'name', Phone: 'phone', Email: 'email' };
     calc.data[map[key]] = e.target.value;
     calcEls.next.disabled = calc.sending || !validateStep(calc.step);
+  });
+});
+
+// PSČ inputs — re-render to refresh live feedback + breakdown, keep focus
+['ZipFrom', 'ZipTo'].forEach(key => {
+  const el = document.getElementById('cbw' + key);
+  if (!el) return;
+  el.addEventListener('input', e => {
+    const cleaned = String(e.target.value || '').replace(/[^\d ]/g, '').slice(0, 6);
+    calc.data[key === 'ZipFrom' ? 'zipFrom' : 'zipTo'] = cleaned;
+    rerenderRestoringFocus('cbw' + key);
   });
 });
 const gdpr = document.getElementById('cbwGdpr');
