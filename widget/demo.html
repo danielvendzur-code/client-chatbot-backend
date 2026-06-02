@@ -1753,6 +1753,210 @@ position: relative;
 }
 
 /* ============================================================
+V2 — PARAMETRIC ONE-PAGE FLOW
+============================================================ */
+.cbw-v2 { display: flex; flex-direction: column; gap: 14px; padding: 0 0 6px; }
+.cbw-sticky {
+  position: sticky; top: 0; z-index: 5;
+  margin: -2px -2px 6px; padding: 12px 14px;
+  background: linear-gradient(180deg, #0c4a6e 0%, #075985 100%);
+  color: #fff;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: 0 6px 16px -8px rgba(2,44,52,0.45);
+}
+.cbw-sticky-row { display: flex; justify-content: space-between; align-items: baseline; }
+.cbw-sticky-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.cbw-sticky-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.cbw-sticky-bar { height: 4px; background: rgba(255,255,255,0.18); border-radius: 999px; margin-top: 8px; overflow: hidden; }
+.cbw-sticky-fill {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #fff);
+  transition: width 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cbw-sticky-cap { font-size: 11px; opacity: 0.78; margin-top: 4px; }
+
+.cbw-sec {
+  position: relative;
+  padding: 16px 14px 18px;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cbw-sec-num {
+  position: absolute; top: 14px; right: 14px;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--surface-blue); color: var(--primary-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+}
+.cbw-sec-title { font-size: 16px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+.cbw-sec-hint { font-size: 12.5px; color: var(--text-muted); margin: 0; line-height: 1.45; }
+.cbw-sec-sublabel { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+
+.cbw-svc-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.cbw-svc-tile {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 10px 10px 12px;
+  background: #fff; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer; font: inherit;
+  text-align: left;
+  transition: transform 180ms var(--bounce), border-color 160ms ease, box-shadow 180ms ease;
+}
+.cbw-svc-tile:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: var(--shadow-sm); }
+.cbw-svc-tile[aria-pressed="true"] {
+  border-color: var(--primary); background: var(--surface-blue);
+  box-shadow: 0 0 0 2px var(--primary) inset;
+}
+.cbw-svc-tile-vis {
+  width: 100%; height: 60px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary-soft) 0%, #fff 100%);
+  display: flex; align-items: center; justify-content: center; padding: 4px;
+}
+.cbw-svc-tile-vis svg { width: 100%; height: 100%; }
+.cbw-svc-tile-title { font-size: 13.5px; font-weight: 800; color: var(--text); }
+.cbw-svc-tile-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; line-height: 1.3; }
+
+/* Volume slider + van */
+.cbw-vol-wrap { display: flex; flex-direction: column; gap: 8px; }
+.cbw-van { width: 100%; height: 110px; display: block; }
+.cbw-van-fill { transition: width 400ms cubic-bezier(0.22, 1, 0.36, 1); }
+.cbw-van-box { transition: opacity 280ms ease; transform-origin: center bottom; }
+.cbw-van-wheel { transform-origin: center; transform-box: fill-box; }
+.cbw-vol-readout {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 8px 12px; background: var(--surface-blue); border-radius: var(--radius-sm);
+}
+.cbw-vol-readout-title { font-size: 14.5px; font-weight: 800; color: var(--primary-dark); }
+.cbw-vol-readout-sub { font-size: 12px; color: var(--text-muted); }
+.cbw-vol-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px; background: var(--border); border-radius: 999px;
+  outline: none; margin: 0;
+}
+.cbw-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--primary);
+  cursor: pointer; box-shadow: 0 2px 6px rgba(2,44,52,0.25);
+  transition: transform 160ms ease;
+}
+.cbw-vol-slider::-webkit-slider-thumb:active { transform: scale(1.18); }
+.cbw-vol-slider::-moz-range-thumb {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--primary);
+  cursor: pointer; box-shadow: 0 2px 6px rgba(2,44,52,0.25);
+}
+.cbw-vol-ticks {
+  display: flex; justify-content: space-between;
+  font-size: 10.5px; color: var(--text-muted); font-weight: 600;
+}
+
+/* Chips: specials, parking */
+.cbw-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.cbw-chip-spec, .cbw-chip-park {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 11px; border: 1.5px solid var(--border);
+  background: #fff; color: var(--text);
+  border-radius: 999px; font: inherit; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; transition: all 150ms ease;
+}
+.cbw-chip-spec span:first-child { font-size: 14px; }
+.cbw-chip-spec[aria-pressed="true"], .cbw-chip-park[aria-pressed="true"] {
+  background: var(--primary-dark); border-color: var(--primary-dark); color: #fff;
+  box-shadow: 0 2px 4px rgba(2,44,52,0.18);
+}
+
+/* Location row with PSC + city */
+.cbw-loc-row {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end;
+}
+@media (max-width: 480px) { .cbw-loc-row { grid-template-columns: 1fr; } .cbw-loc-arrow { display: none; } }
+.cbw-loc-col { display: flex; flex-direction: column; gap: 4px; }
+.cbw-loc-lbl { font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0; }
+.cbw-loc-inputs { display: grid; grid-template-columns: 90px 1fr; gap: 6px; }
+.cbw-loc-arrow { font-size: 20px; color: var(--primary); font-weight: 800; padding-bottom: 12px; }
+.cbw-zip { letter-spacing: 0.04em; }
+.cbw-zip-chip {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 700;
+  background: var(--surface-blue); color: var(--primary-dark); margin-top: 4px;
+}
+.cbw-zip-chip[data-zone="local"] { background: #ecfdf5; color: #065f46; }
+.cbw-zip-chip[data-zone="near"]  { background: #fffbeb; color: #92400e; }
+.cbw-zip-chip[data-zone="far"]   { background: #fef2f2; color: #991b1b; }
+
+/* Access stepper + toggle */
+.cbw-access-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+@media (max-width: 380px) { .cbw-access-row { grid-template-columns: 1fr; } }
+.cbw-stepper {
+  display: flex; align-items: stretch;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: #fff; overflow: hidden;
+}
+.cbw-step-btn {
+  width: 40px; border: none; background: var(--surface-blue);
+  font-size: 20px; font-weight: 800; color: var(--primary-dark); cursor: pointer;
+  transition: background 140ms ease;
+}
+.cbw-step-btn:active { background: var(--primary); color: #fff; }
+.cbw-step-val { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.cbw-step-num { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1; }
+.cbw-step-val small { font-size: 10px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.cbw-toggle {
+  display: flex; align-items: stretch;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: #fff; overflow: hidden;
+}
+.cbw-toggle-lbl {
+  flex: 1; display: flex; align-items: center; padding: 0 12px;
+  font-size: 12.5px; font-weight: 800; color: var(--text-muted);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.cbw-toggle-btn {
+  padding: 0 14px; border: none; background: #fff;
+  font: inherit; font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer;
+  border-left: 1px solid var(--border);
+}
+.cbw-toggle-btn[aria-pressed="true"] {
+  background: var(--primary); color: #fff;
+}
+
+/* Timing */
+.cbw-time-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.cbw-time-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 8px; border: 1.5px solid var(--border); background: #fff; color: var(--text);
+  border-radius: var(--radius-sm); cursor: pointer; font: inherit;
+  font-size: 12.5px; font-weight: 700;
+  transition: all 150ms ease;
+}
+.cbw-time-btn small { font-size: 10px; font-weight: 800; letter-spacing: 0.04em; }
+.cbw-time-btn[data-tone="discount"] small { color: #16a34a; }
+.cbw-time-btn[data-tone="rush"] small { color: #dc2626; }
+.cbw-time-btn[aria-pressed="true"] {
+  background: var(--primary-dark); border-color: var(--primary-dark); color: #fff;
+}
+.cbw-time-btn[aria-pressed="true"] small { color: #fff; }
+
+/* Breakdown collapse */
+.cbw-bd {
+  margin-top: 6px; background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 4px 14px;
+}
+.cbw-bd summary {
+  list-style: none; cursor: pointer; padding: 10px 0;
+  font-size: 13px; font-weight: 800; color: var(--primary-dark);
+}
+.cbw-bd summary::-webkit-details-marker { display: none; }
+.cbw-bd summary::after { content: "▾"; float: right; transition: transform 200ms ease; }
+.cbw-bd[open] summary::after { transform: rotate(180deg); }
+
+/* ============================================================
 PRICE BREAKDOWN CARD (summary)
 ============================================================ */
 .cbw-pb {
@@ -5836,6 +6040,8 @@ padding: 9px 16px;
       dateMode: 'standard',
       zipFrom: '',
       zipTo: '',
+      volume: 25,
+      specials: {},
       cityFrom: '',
       cityTo: '',
       note: '',
@@ -6387,6 +6593,27 @@ padding: 9px 16px;
     }
     if (d.parking === 'far') { total += 15; lines.push({ label: 'Parkovanie ďalej od vchodu', sub: '', amount: 15 }); }
     if (itemWeight * quantity > 3) { total += 35; lines.push({ label: 'Ťažší náklad', sub: '', amount: 35 }); }
+
+    // V2 volume slider — primary cost driver (replaces item-by-item picking)
+    const vol = Math.max(0, Math.min(100, Number(d.volume) || 0));
+    if (vol > 0) {
+      const volAmount = roundTo5(vol * 2.2);
+      total += volAmount;
+      const volSubMap = [[0,'<1/4'], [25,'1/4'], [50,'1/2'], [75,'3/4'], [90,'plná'], [100,'2× dodávka']];
+      const volSub = (volSubMap.find(([k]) => vol <= k) || ['','plná'])[1];
+      lines.push({ label: 'Objem nákladu', sub: volSub + ' dodávky', amount: volAmount });
+    }
+
+    // Special heavy/oversized items
+    const sp = d.specials || {};
+    const specMap = { piano: ['Klavír', 90], safe: ['Sejf', 70], aquarium: ['Akvárium', 35], fragile: ['Krehké veci', 30], oversized: ['Nadrozmer', 50] };
+    Object.keys(sp).forEach(k => {
+      if (k === 'none' || !sp[k] || !specMap[k]) return;
+      const [label, amt] = specMap[k];
+      total += amt;
+      lines.push({ label: 'Špec.: ' + label, sub: '', amount: amt });
+    });
+    if (d.parking === 'blocked') { total += 30; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 30 }); }
     if (items.some(item => (item.tags || []).includes('heavy'))) { total += 25; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 25 }); }
 
     // PSČ-based distance pricing (replaces vague "city/near/far")
@@ -6909,38 +7136,275 @@ appendBubble('bot', t('thanks_send'));
 });
 }
 
+/* ============================================================
+   V2 — single-page parametric estimate (replaces wizard)
+   ============================================================ */
 function renderCalc(options) {
 if (!calc.open) return;
-const renderOptions = options || {};
-const preserveScroll = !!renderOptions.preserveScroll;
-const previousScrollTop = calcEls.body ? calcEls.body.scrollTop : 0;
 addRuntimeStyles();
-const meta = STEP_META[calc.step] || STEP_META[0];
-calcEls.title.textContent = meta[0];
-calcEls.step.textContent = meta[1];
-calcEls.headBack.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
+const renderOptions = options || {};
+const previousScrollTop = (!renderOptions.preserveScroll || !calcEls.body) ? 0 : calcEls.body.scrollTop;
+
+calcEls.title.textContent = 'Cenová kalkulačka';
+calcEls.step.textContent = 'Stačí pár pohybov — odhad uvidíte priebežne';
+calcEls.headBack.style.visibility = 'hidden';
+calcEls.prev.style.visibility = 'hidden';
 calcEls.foot.style.display = 'flex';
-calcEls.prev.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
-calcEls.next.textContent = calc.step === STEP_META.length - 1 ? (calc.sending ? t('calc_sending') : t('calc_send')) : t('calc_next');
-calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-setProgress();
-let html = '';
-if (calc.step === 0) html = renderStepDirection();
-if (calc.step === 1) html = renderStepService();
-if (calc.step === 2) html = renderStepItems();
-if (calc.step === 3) html = renderStepDetails();
-if (calc.step === 4) html = renderStepPlace();
-if (calc.step === 5) html = renderStepContact();
-if (calc.step === 6) html = renderStepSummary();
+calcEls.next.disabled = calc.sending || !validateAll();
+calcEls.next.textContent = calc.sending ? (t('calc_sending') || 'Odosielam…') : 'Odoslať dopyt';
+if (calcEls.barFill) calcEls.barFill.style.width = (validateAll() ? 100 : 60) + '%';
+if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', validateAll() ? '100' : '60');
+
+const d = calc.data;
+const price = calculatePrice();
+
+const html = ''
++ renderStickyPrice(price)
++ '<form class="cbw-v2" autocomplete="off" onsubmit="return false">'
++   sectionService(d)
++   sectionVolume(d, price)
++   sectionLocation(d)
++   sectionAccess(d)
++   sectionTiming(d)
++   sectionContact(d)
++ '</form>'
++ renderBreakdown(price);
+
 calcEls.body.innerHTML = html;
-if (preserveScroll) {
-  calcEls.body.scrollTop = previousScrollTop;
-  requestAnimationFrame(() => { if (calcEls.body) calcEls.body.scrollTop = previousScrollTop; });
-} else {
-  calcEls.body.scrollTop = 0;
+calcEls.body.scrollTop = previousScrollTop;
+bindCalcV2Events();
 }
-bindCalcStepEvents();
-if (calc.step === 6) animateGauge();
+
+function validateAll() {
+  const d = calc.data;
+  if (!d.service && !d.direction) return false;
+  if (!String(d.phone || '').trim().match(/\d[\d\s\-()+]{6,}/)) return false;
+  if (!d.gdpr) return false;
+  return true;
+}
+
+function renderStickyPrice(price) {
+  return ''
+    + '<div class="cbw-sticky">'
+    +   '<div class="cbw-sticky-row">'
+    +     '<div class="cbw-sticky-label">Odhad ceny</div>'
+    +     '<div class="cbw-sticky-value">' + price.min + ' – ' + price.max + ' €</div>'
+    +   '</div>'
+    +   '<div class="cbw-sticky-bar"><div class="cbw-sticky-fill" style="width:' + Math.min(100, Math.max(8, Math.round((price.mid / Math.max(50, price.max * 1.3)) * 100))) + '%"></div></div>'
+    +   '<div class="cbw-sticky-cap">Mení sa naživo, ako vypĺňate. Konečnú cenu potvrdíme telefonicky.</div>'
+    + '</div>';
+}
+
+function sectionService(d) {
+  const dirs = DIRECTIONS.slice();
+  return ''
+    + '<section class="cbw-sec" id="cbwSecService">'
+    +   '<div class="cbw-sec-num">1</div>'
+    +   '<h3 class="cbw-sec-title">Akú službu potrebujete?</h3>'
+    +   '<p class="cbw-sec-hint">Vyberte hlavnú kategóriu. Detaily doladíme nižšie.</p>'
+    +   '<div class="cbw-svc-tiles">'
+    +     dirs.map(function (dir) {
+            return '<button type="button" class="cbw-svc-tile" data-direction="' + dir.id + '" aria-pressed="' + (d.direction === dir.id) + '">'
+              + '<span class="cbw-svc-tile-vis">' + dir.icon() + '</span>'
+              + '<span class="cbw-svc-tile-title">' + escapeHtml(dir.title) + '</span>'
+              + '<span class="cbw-svc-tile-sub">' + escapeHtml(dir.sub) + '</span>'
+              + '</button>';
+          }).join('')
+    +   '</div>'
+    + '</section>';
+}
+
+function sectionVolume(d, price) {
+  const v = Math.max(5, Math.min(100, Number(d.volume) || 25));
+  const labels = [
+    [0, 18, 'Pár kusov', 'do 1/8 dodávky'],
+    [18, 32, '1/4 dodávky', 'pár veľkých kusov'],
+    [32, 50, '1/2 dodávky', 'malá izba'],
+    [50, 70, '3/4 dodávky', 'väčšia izba alebo 1-izba'],
+    [70, 90, 'Plná dodávka', 'kompletná 2-izba'],
+    [90, 101, 'Viac ako dodávka', 'budeme jazdiť 2×']
+  ];
+  const cur = labels.find(l => v >= l[0] && v < l[1]) || labels[0];
+  const fillPct = Math.min(100, v);
+  // Animated van fill — boxes appear progressively
+  const vanSvg = ''
+    + '<svg viewBox="0 0 320 110" class="cbw-van" aria-hidden="true">'
+    +   '<line class="cbw-van-road" x1="6" y1="98" x2="314" y2="98" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-dasharray="10 6"/>'
+    +   '<g class="cbw-van-body">'
+    +     '<rect x="40" y="32" width="170" height="56" rx="4" fill="#fff" stroke="#0c4a6e" stroke-width="3"/>'
+    +     '<path d="M210 42 h36 l30 30 v16 H210 z" fill="#fff" stroke="#0c4a6e" stroke-width="3" stroke-linejoin="round"/>'
+    +     '<path d="M216 48 h26 l24 24 H216 z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="1.5"/>'
+    +     '<rect x="50" y="40" width="14" height="14" rx="2" stroke="#0c4a6e" stroke-width="1.5" fill="none"/>'
+    +     // Fill silhouette (clipped to width based on volume)
+    +     '<rect class="cbw-van-fill" x="46" y="40" width="' + (fillPct * 1.58) + '" height="42" fill="#0284c7" opacity="0.16"/>'
+    +     // Cargo boxes — multiplied
+    +     boxesInVan(v) +
+    +     '<circle class="cbw-van-wheel" cx="80" cy="92" r="9" fill="#0c4a6e"/>'
+    +     '<circle cx="80" cy="92" r="3.5" fill="#fff"/>'
+    +     '<circle class="cbw-van-wheel" cx="230" cy="92" r="9" fill="#0c4a6e"/>'
+    +     '<circle cx="230" cy="92" r="3.5" fill="#fff"/>'
+    +   '</g>'
+    + '</svg>';
+  const specials = [
+    ['piano', '🎹', 'Klavír'], ['safe', '🔒', 'Sejf'],
+    ['aquarium', '🐟', 'Akvárium'], ['fragile', '🪞', 'Krehké veci'],
+    ['oversized', '📦', 'Nadrozmer'], ['none', '✓', 'Nič špeciálne']
+  ];
+  const spec = d.specials || {};
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">2</div>'
+    +   '<h3 class="cbw-sec-title">Koľko vecí prevážame?</h3>'
+    +   '<p class="cbw-sec-hint">Posúvajte, dokým dodávka nezodpovedá vášmu nákladu. Nemusíte vyberať jednotlivé predmety.</p>'
+    +   '<div class="cbw-vol-wrap">'
+    +     vanSvg
+    +     '<div class="cbw-vol-readout">'
+    +       '<span class="cbw-vol-readout-title">' + escapeHtml(cur[2]) + '</span>'
+    +       '<span class="cbw-vol-readout-sub">' + escapeHtml(cur[3]) + '</span>'
+    +     '</div>'
+    +     '<input type="range" class="cbw-vol-slider" id="cbwVolume" min="5" max="100" step="1" value="' + v + '" aria-label="Objem nákladu">'
+    +     '<div class="cbw-vol-ticks"><span>Pár kusov</span><span>1/2 dodávky</span><span>Plná</span></div>'
+    +   '</div>'
+    +   '<div class="cbw-sec-sublabel">Špeciálne predmety (voliteľné)</div>'
+    +   '<div class="cbw-chip-row">'
+    +     specials.map(s => '<button type="button" class="cbw-chip-spec" data-special="' + s[0] + '" aria-pressed="' + !!spec[s[0]] + '"><span>' + s[1] + '</span>' + escapeHtml(s[2]) + '</button>').join('')
+    +   '</div>'
+    + '</section>';
+}
+
+function boxesInVan(v) {
+  const positions = [
+    [56, 60, 18, 18, '#fbbf24'],
+    [78, 56, 22, 22, '#0ea5e9'],
+    [104, 60, 20, 18, '#f59e0b'],
+    [128, 50, 24, 28, '#0369a1'],
+    [156, 58, 22, 20, '#84cc16'],
+    [180, 54, 24, 24, '#a855f7']
+  ];
+  const count = Math.min(positions.length, Math.ceil(v / 16));
+  return positions.slice(0, count).map((p, i) =>
+    '<rect class="cbw-van-box" style="--i:' + i + '" x="' + p[0] + '" y="' + p[1] + '" width="' + p[2] + '" height="' + p[3] + '" rx="2" fill="' + p[4] + '" stroke="#0c4a6e" stroke-width="1.2"/>'
+  ).join('');
+}
+
+function sectionLocation(d) {
+  const zFrom = zipZone(d.zipFrom);
+  const zTo = zipZone(d.zipTo);
+  function feedback(zip, z) {
+    if (!z) return '';
+    const sub = z.surcharge ? '<strong>+' + z.surcharge + ' €</strong>' : '<strong>v cene</strong>';
+    return '<span class="cbw-zip-chip" data-zone="' + z.code + '">' + escapeHtml(z.label) + ' · ' + sub + '</span>';
+  }
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">3</div>'
+    +   '<h3 class="cbw-sec-title">Odkiaľ — Kam?</h3>'
+    +   '<p class="cbw-sec-hint">Vďaka PSČ vám hneď ukážeme príplatok za vzdialenosť.</p>'
+    +   '<div class="cbw-loc-row">'
+    +     '<div class="cbw-loc-col">'
+    +       '<label class="cbw-loc-lbl">Odkiaľ</label>'
+    +       '<div class="cbw-loc-inputs">'
+    +         '<input class="cbw-q-input cbw-zip" id="cbwZipFrom" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipFrom) + '" placeholder="PSČ">'
+    +         '<input class="cbw-q-input" id="cbwCityFrom" value="' + escapeHtml(d.cityFrom) + '" placeholder="Mesto / ulica">'
+    +       '</div>'
+    +       feedback(d.zipFrom, zFrom)
+    +     '</div>'
+    +     '<div class="cbw-loc-arrow">→</div>'
+    +     '<div class="cbw-loc-col">'
+    +       '<label class="cbw-loc-lbl">Kam</label>'
+    +       '<div class="cbw-loc-inputs">'
+    +         '<input class="cbw-q-input cbw-zip" id="cbwZipTo" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipTo) + '" placeholder="PSČ">'
+    +         '<input class="cbw-q-input" id="cbwCityTo" value="' + escapeHtml(d.cityTo) + '" placeholder="Mesto / ulica">'
+    +       '</div>'
+    +       feedback(d.zipTo, zTo)
+    +     '</div>'
+    +   '</div>'
+    + '</section>';
+}
+
+function sectionAccess(d) {
+  const floors = Math.max(0, Math.min(20, Number(d.floors) || 0));
+  const parkOpts = [
+    ['near', 'Priamo pri vchode'],
+    ['far',  'Ďalej / horšie'],
+    ['blocked', 'Bez možnosti']
+  ];
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">4</div>'
+    +   '<h3 class="cbw-sec-title">Prístup k bytu</h3>'
+    +   '<p class="cbw-sec-hint">Zatlačte +/− pre poschodie, vyberte výťah a parkovanie.</p>'
+    +   '<div class="cbw-access-row">'
+    +     '<div class="cbw-stepper">'
+    +       '<button type="button" class="cbw-step-btn" data-floor-delta="-1" aria-label="Menej">−</button>'
+    +       '<div class="cbw-step-val"><span class="cbw-step-num">' + floors + '</span><small>Poschodie</small></div>'
+    +       '<button type="button" class="cbw-step-btn" data-floor-delta="+1" aria-label="Viac">+</button>'
+    +     '</div>'
+    +     '<div class="cbw-toggle">'
+    +       '<label class="cbw-toggle-lbl">Výťah</label>'
+    +       '<button type="button" class="cbw-toggle-btn" data-elevator="yes" aria-pressed="' + (d.elevator === 'yes') + '">Áno</button>'
+    +       '<button type="button" class="cbw-toggle-btn" data-elevator="no" aria-pressed="' + (d.elevator === 'no') + '">Nie</button>'
+    +     '</div>'
+    +   '</div>'
+    +   '<div class="cbw-sec-sublabel">Parkovanie</div>'
+    +   '<div class="cbw-chip-row">'
+    +     parkOpts.map(p => '<button type="button" class="cbw-chip-park" data-parking="' + p[0] + '" aria-pressed="' + (d.parking === p[0]) + '">' + escapeHtml(p[1]) + '</button>').join('')
+    +   '</div>'
+    + '</section>';
+}
+
+function sectionTiming(d) {
+  const modes = [
+    ['flex',     'Flexibilný',     '−10 %', 'discount'],
+    ['standard', 'Štandard',       '',      'std'],
+    ['rush',     'Súrne / víkend', '+15 %', 'rush']
+  ];
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">5</div>'
+    +   '<h3 class="cbw-sec-title">Kedy to potrebujete?</h3>'
+    +   '<p class="cbw-sec-hint">Flexibilný termín ušetrí, súrny stojí viac.</p>'
+    +   '<div class="cbw-time-row">'
+    +     modes.map(m => '<button type="button" class="cbw-time-btn" data-tone="' + m[3] + '" data-datemode="' + m[0] + '" aria-pressed="' + (d.dateMode === m[0]) + '"><span>' + escapeHtml(m[1]) + '</span><small>' + escapeHtml(m[2]) + '</small></button>').join('')
+    +   '</div>'
+    +   '<label class="cbw-loc-lbl" style="margin-top:10px">Konkrétny dátum (voliteľne)</label>'
+    +   '<input class="cbw-q-input" id="cbwDate" type="date" value="' + escapeHtml(d.date) + '">'
+    + '</section>';
+}
+
+function sectionContact(d) {
+  return ''
+    + '<section class="cbw-sec cbw-sec-contact">'
+    +   '<div class="cbw-sec-num">6</div>'
+    +   '<h3 class="cbw-sec-title">Kontakt</h3>'
+    +   '<p class="cbw-sec-hint">Ozveme sa do 30 minút v pracovných hodinách.</p>'
+    +   '<div class="cbw-loc-row">'
+    +     '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Meno</label><input class="cbw-q-input" id="cbwName" value="' + escapeHtml(d.name) + '" placeholder="Vaše meno"></div>'
+    +     '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Telefón <span class="cbw-required-star">*</span></label><input class="cbw-q-input" id="cbwPhone" value="' + escapeHtml(d.phone) + '" inputmode="tel" placeholder="0900 123 456"></div>'
+    +   '</div>'
+    +   '<label class="cbw-loc-lbl">E-mail (voliteľné)</label>'
+    +   '<input class="cbw-q-input" id="cbwEmail" value="' + escapeHtml(d.email) + '" type="email" placeholder="email@example.sk">'
+    +   '<label class="cbw-loc-lbl">Poznámka (voliteľné)</label>'
+    +   '<textarea class="cbw-q-input" id="cbwNote" placeholder="Čokoľvek čo by sme mali vedieť">' + escapeHtml(d.note) + '</textarea>'
+    +   '<button type="button" class="cbw-gdpr-wrap" id="cbwGdpr" data-checked="' + (d.gdpr ? 'true' : 'false') + '"><span class="cbw-gdpr-check"></span><span class="cbw-gdpr-text"><strong>' + escapeHtml(t('gdpr_title') || 'Súhlasím so spracovaním údajov') + '</strong><br>' + escapeHtml(t('gdpr_text') || 'Údaje použijeme len na kontakt v rámci tohto dopytu.') + '</span></button>'
+    + '</section>';
+}
+
+function renderBreakdown(price) {
+  if (!price.breakdown || !price.breakdown.length) return '';
+  const items = price.breakdown.map(line => {
+    const tone = line.type === 'discount' ? 'cbw-pb-discount' : (line.type === 'positive' ? 'cbw-pb-positive' : '');
+    const amount = line.amount ? ((line.amount >= 0 ? '+' : '') + line.amount + ' €') : (line.type === 'discount' ? '−10 %' : (line.type === 'positive' ? '+15 %' : ''));
+    const sub = line.sub ? ' · ' + escapeHtml(String(line.sub)) : '';
+    return '<div class="cbw-pb-row"><span class="cbw-pb-row-label">' + escapeHtml(line.label) + '<small>' + sub + '</small></span><span class="cbw-pb-row-amount ' + tone + '">' + amount + '</span></div>';
+  }).join('');
+  return ''
+    + '<details class="cbw-bd">'
+    +   '<summary>Z čoho sa skladá cena</summary>'
+    +   '<div class="cbw-pb-list">' + items + '</div>'
+    +   '<div class="cbw-pb-total"><span class="cbw-pb-total-label">Spolu odhad</span><span class="cbw-pb-total-amount">' + price.min + ' – ' + price.max + ' €</span></div>'
+    +   '<div class="cbw-pb-trust"><span>✓ Bez záväzku</span><span>✓ Žiadne skryté poplatky</span><span>✓ Odpoveď do 30 min</span></div>'
+    + '</details>';
 }
 
 function rerenderKeepingFocus(inputId, value) {
@@ -6971,116 +7435,118 @@ if (cursorPos != null) { try { next.setSelectionRange(cursorPos, cursorPos); } c
 });
 }
 
-function bindCalcStepEvents() {
-bind('[data-direction]', 'click', e => setData('direction', e.currentTarget.dataset.direction, true));
-bind('[data-service]', 'click', e => setData('service', e.currentTarget.dataset.service, true));
-bind('[data-search-item]', 'click', e => {
-const item = byId(ALL_ITEMS, e.currentTarget.dataset.searchItem);
-if (!item) return;
-const svc = byId(SERVICES, item.cat);
-if (svc && calc.data.direction && !svc.directions.includes(calc.data.direction)) return;
-calc.data.service = item.cat;
-calc.data.items = isSelectedItem(item.id) ? selectedItems() : selectedItems().concat(item);
-calc.search = '';
-calc.filter = 'all';
-goStep(2);
-});
-const svcSearch = document.getElementById('cbwServiceSearch');
-if (svcSearch) {
-svcSearch.addEventListener('input', e => rerenderKeepingFocus('cbwServiceSearch', e.target.value));
-svcSearch.addEventListener('keydown', e => {
-if (e.key === 'Enter') {
-e.preventDefault();
-const first = filteredItems(1)[0];
-if (first && itemMatchesQuery(first, svcSearch.value)) {
-calc.data.service = first.cat;
-calc.data.items = [first];
-calc.search = '';
-goStep(2);
-} else {
-addCustomItem(svcSearch.value, 2);
-}
-}
-});
-}
-const addServiceCustom = document.getElementById('cbwAddServiceCustom');
-if (addServiceCustom) addServiceCustom.addEventListener('click', () => addCustomItem((document.getElementById('cbwServiceSearch') || {}).value, 2));
-const itemSearch = document.getElementById('cbwItemSearch');
-if (itemSearch) {
-itemSearch.addEventListener('input', e => rerenderKeepingFocus('cbwItemSearch', e.target.value));
-itemSearch.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCustomItem(itemSearch.value); } });
-}
-const addSearchAsItem = document.getElementById('cbwAddSearchAsItem');
-if (addSearchAsItem) addSearchAsItem.addEventListener('click', () => addCustomItem((document.getElementById('cbwItemSearch') || {}).value));
-bind('[data-filter]', 'click', e => { calc.filter = e.currentTarget.dataset.filter; renderCalc({ preserveScroll: true }); });
-bind('[data-preset]', 'click', e => applyPreset(e.currentTarget.dataset.preset));
-bind('[data-item]', 'click', e => toggleItem(e.currentTarget.dataset.item));
-bind('[data-remove-item]', 'click', e => toggleItem(e.currentTarget.dataset.removeItem));
-const clearItems = document.getElementById('cbwClearItems');
-if (clearItems) clearItems.addEventListener('click', () => { calc.data.items = []; renderCalc({ preserveScroll: true }); });
-const customInput = document.getElementById('cbwCustomItem');
-if (customInput) {
-customInput.addEventListener('input', e => { calc.customText = e.target.value; });
-customInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCustomItem(customInput.value); } });
-}
-const customAdd = document.getElementById('cbwAddCustom');
-if (customAdd) customAdd.addEventListener('click', () => addCustomItem((document.getElementById('cbwCustomItem') || {}).value));
-const quantity = document.getElementById('cbwQuantity');
-if (quantity) quantity.addEventListener('input', e => {
-  const raw = e.target.value;
-  calc.data.quantity = raw === '' ? '' : Math.max(1, Number(raw) || 1);
-  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-});
-const floors = document.getElementById('cbwFloors');
-if (floors) floors.addEventListener('input', e => {
-  const raw = e.target.value;
-  calc.data.floors = raw === '' ? '' : Math.max(0, Number(raw) || 0);
-  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-});
-const areaM2 = document.getElementById('cbwAreaM2');
-if (areaM2) areaM2.addEventListener('input', e => {
-  const raw = e.target.value;
-  calc.data.areaM2 = raw === '' ? '' : Math.max(0, Number(raw) || 0);
-  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-});
-bind('[data-space-type]', 'click', e => selectTopJobType(e.currentTarget.dataset.spaceType));
-bind('[data-job-type]', 'click', e => setData('jobType', e.currentTarget.dataset.jobType));
-bind('[data-extra]', 'click', e => toggleExtra(e.currentTarget.dataset.extra));
-bind('[data-access]', 'click', e => setData('access', e.currentTarget.dataset.access));
-bind('[data-elevator]', 'click', e => setData('elevator', e.currentTarget.dataset.elevator));
-bind('[data-parking]', 'click', e => setData('parking', e.currentTarget.dataset.parking));
-bind('[data-distance]', 'click', e => setData('distance', e.currentTarget.dataset.distance));
-bind('[data-datemode]', 'click', e => setData('dateMode', e.currentTarget.dataset.datemode));
+function bindCalcStepEvents() { bindCalcV2Events(); }
 
-['CityFrom', 'CityTo', 'Date', 'Note', 'Name', 'Phone', 'Email'].forEach(key => {
-  const el = document.getElementById('cbw' + key);
-  if (el) el.addEventListener('input', e => {
-    const map = { CityFrom: 'cityFrom', CityTo: 'cityTo', Date: 'date', Note: 'note', Name: 'name', Phone: 'phone', Email: 'email' };
-    calc.data[map[key]] = e.target.value;
-    calcEls.next.disabled = calc.sending || !validateStep(calc.step);
+function bindCalcV2Events() {
+  // Service tiles
+  bind('[data-direction]', 'click', e => {
+    const dir = e.currentTarget.dataset.direction;
+    calc.data.direction = dir;
+    calc.data.service = DEFAULT_SERVICE_BY_DIRECTION[dir] || calc.data.service || 'furniture';
+    renderCalc({ preserveScroll: true });
   });
-});
 
-// PSČ inputs — re-render to refresh live feedback + breakdown, keep focus
-['ZipFrom', 'ZipTo'].forEach(key => {
-  const el = document.getElementById('cbw' + key);
-  if (!el) return;
-  el.addEventListener('input', e => {
-    const cleaned = String(e.target.value || '').replace(/[^\d ]/g, '').slice(0, 6);
-    calc.data[key === 'ZipFrom' ? 'zipFrom' : 'zipTo'] = cleaned;
-    rerenderRestoringFocus('cbw' + key);
+  // Volume slider — debounced repaint of the readout + sticky price
+  const vol = document.getElementById('cbwVolume');
+  if (vol) {
+    vol.addEventListener('input', e => {
+      calc.data.volume = Number(e.target.value) || 0;
+      updateVolumeLive();
+      updateStickyPrice();
+    });
+  }
+
+  // Special items chips
+  bind('[data-special]', 'click', e => {
+    const id = e.currentTarget.dataset.special;
+    const cur = Object.assign({}, calc.data.specials || {});
+    if (id === 'none') {
+      calc.data.specials = cur.none ? {} : { none: true };
+    } else {
+      delete cur.none;
+      if (cur[id]) delete cur[id]; else cur[id] = true;
+      calc.data.specials = cur;
+    }
+    renderCalc({ preserveScroll: true });
   });
-});
-const gdpr = document.getElementById('cbwGdpr');
-if (gdpr) gdpr.addEventListener('click', () => setData('gdpr', !calc.data.gdpr));
-const photoInput = document.getElementById('cbwPhotos');
-if (photoInput) photoInput.addEventListener('change', handlePhotos);
-bind('[data-remove-photo]', 'click', e => {
-  const idx = Number(e.currentTarget.dataset.removePhoto);
-  calc.data.photos.splice(idx, 1);
-  renderCalc({ preserveScroll: true });
-});
+
+  // Floor stepper +/-
+  bind('[data-floor-delta]', 'click', e => {
+    const delta = Number(e.currentTarget.dataset.floorDelta) || 0;
+    calc.data.floors = Math.max(0, Math.min(20, (Number(calc.data.floors) || 0) + delta));
+    renderCalc({ preserveScroll: true });
+  });
+
+  // Elevator + Parking + Date mode
+  bind('[data-elevator]', 'click', e => { calc.data.elevator = e.currentTarget.dataset.elevator; renderCalc({ preserveScroll: true }); });
+  bind('[data-parking]', 'click', e => { calc.data.parking = e.currentTarget.dataset.parking; renderCalc({ preserveScroll: true }); });
+  bind('[data-datemode]', 'click', e => { calc.data.dateMode = e.currentTarget.dataset.datemode; renderCalc({ preserveScroll: true }); });
+
+  // PSČ inputs — refresh chip + sticky price, keep focus
+  ['ZipFrom', 'ZipTo'].forEach(key => {
+    const el = document.getElementById('cbw' + key);
+    if (!el) return;
+    el.addEventListener('input', e => {
+      const cleaned = String(e.target.value || '').replace(/[^\d ]/g, '').slice(0, 6);
+      calc.data[key === 'ZipFrom' ? 'zipFrom' : 'zipTo'] = cleaned;
+      rerenderRestoringFocus('cbw' + key);
+    });
+  });
+
+  // Plain text inputs — update state only, refresh sticky
+  ['CityFrom', 'CityTo', 'Date', 'Note', 'Name', 'Phone', 'Email'].forEach(key => {
+    const el = document.getElementById('cbw' + key);
+    if (!el) return;
+    el.addEventListener('input', e => {
+      const map = { CityFrom: 'cityFrom', CityTo: 'cityTo', Date: 'date', Note: 'note', Name: 'name', Phone: 'phone', Email: 'email' };
+      calc.data[map[key]] = e.target.value;
+      updateStickyPrice();
+      calcEls.next.disabled = calc.sending || !validateAll();
+    });
+  });
+
+  // GDPR toggle
+  const gdpr = document.getElementById('cbwGdpr');
+  if (gdpr) gdpr.addEventListener('click', () => {
+    calc.data.gdpr = !calc.data.gdpr;
+    gdpr.dataset.checked = calc.data.gdpr ? 'true' : 'false';
+    calcEls.next.disabled = calc.sending || !validateAll();
+  });
 }
+
+function updateVolumeLive() {
+  const v = Math.max(5, Math.min(100, Number(calc.data.volume) || 25));
+  // Update van fill width
+  const fill = document.querySelector('.cbw-van-fill');
+  if (fill) fill.setAttribute('width', String(v * 1.58));
+  // Update readout text
+  const labels = [
+    [0, 18, 'Pár kusov', 'do 1/8 dodávky'],
+    [18, 32, '1/4 dodávky', 'pár veľkých kusov'],
+    [32, 50, '1/2 dodávky', 'malá izba'],
+    [50, 70, '3/4 dodávky', 'väčšia izba alebo 1-izba'],
+    [70, 90, 'Plná dodávka', 'kompletná 2-izba'],
+    [90, 101, 'Viac ako dodávka', 'budeme jazdiť 2×']
+  ];
+  const cur = labels.find(l => v >= l[0] && v < l[1]) || labels[0];
+  const title = document.querySelector('.cbw-vol-readout-title');
+  const sub = document.querySelector('.cbw-vol-readout-sub');
+  if (title) title.textContent = cur[2];
+  if (sub) sub.textContent = cur[3];
+  // Toggle box visibility
+  const boxes = document.querySelectorAll('.cbw-van-box');
+  const visibleCount = Math.min(boxes.length, Math.ceil(v / 16));
+  boxes.forEach((b, i) => { b.style.opacity = i < visibleCount ? '1' : '0'; });
+}
+
+function updateStickyPrice() {
+  const price = calculatePrice();
+  const val = document.querySelector('.cbw-sticky-value');
+  const fill = document.querySelector('.cbw-sticky-fill');
+  if (val) val.textContent = price.min + ' – ' + price.max + ' €';
+  if (fill) fill.style.width = Math.min(100, Math.max(8, Math.round((price.mid / Math.max(50, price.max * 1.3)) * 100))) + '%';
+}
+
 
 function handlePhotos(event) {
 const files = Array.from(event.target.files || []).slice(0, 5);
