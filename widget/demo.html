@@ -1797,6 +1797,105 @@ V2 — PARAMETRIC ONE-PAGE FLOW
 .cbw-sec-sublabel { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
 
 .cbw-svc-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+
+/* WIZARD V3 — step-by-step */
+.cbw-ministicky {
+  position: sticky; top: 0; z-index: 5;
+  margin: -2px -2px 12px; padding: 10px 14px;
+  background: linear-gradient(180deg, #0c4a6e 0%, #075985 100%);
+  color: #fff; border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: 0 6px 16px -8px rgba(2,44,52,0.45);
+}
+.cbw-ministicky .cbw-sticky-row { display: flex; justify-content: space-between; align-items: baseline; }
+.cbw-ministicky .cbw-sticky-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.cbw-ministicky .cbw-sticky-value { font-family: 'DM Serif Display', serif; font-size: 22px; line-height: 1; font-variant-numeric: tabular-nums; }
+.cbw-ministicky .cbw-sticky-cap { font-size: 10.5px; opacity: 0.78; margin-top: 3px; }
+
+.cbw-step-intro {
+  padding: 12px 14px; margin-bottom: 12px;
+  background: var(--surface-blue);
+  border-left: 3px solid var(--primary);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 13px; color: var(--text); line-height: 1.5;
+}
+
+.cbw-space-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+@media (min-width: 480px) { .cbw-space-grid { grid-template-columns: 1fr 1fr 1fr; } }
+.cbw-space-card {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 10px; background: #fff;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; font: inherit; text-align: left;
+  transition: all 180ms var(--bounce);
+}
+.cbw-space-card:hover { border-color: var(--primary); transform: translateY(-1px); box-shadow: var(--shadow-sm); }
+.cbw-space-card[aria-pressed="true"] {
+  background: var(--surface-blue); border-color: var(--primary);
+  box-shadow: 0 0 0 2px var(--primary) inset;
+}
+.cbw-space-ico {
+  width: 38px; height: 38px; border-radius: 8px;
+  background: var(--surface-blue); padding: 4px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.cbw-space-ico svg { width: 100%; height: 100%; }
+.cbw-space-text { display: flex; flex-direction: column; min-width: 0; }
+.cbw-space-text strong { font-size: 13px; color: var(--text); font-weight: 800; line-height: 1.2; }
+.cbw-space-text small { font-size: 11px; color: var(--text-muted); margin-top: 2px; line-height: 1.3; }
+
+.cbw-details-collapse {
+  border: 1.5px dashed var(--border); border-radius: var(--radius-sm);
+  padding: 8px 12px; background: #fff; margin-top: 4px;
+}
+.cbw-details-collapse summary {
+  list-style: none; cursor: pointer; padding: 6px 0;
+  font-size: 12.5px; font-weight: 700; color: var(--primary-dark);
+  user-select: none;
+}
+.cbw-details-collapse summary::-webkit-details-marker { display: none; }
+.cbw-details-collapse summary::before { content: "＋"; margin-right: 6px; font-weight: 800; }
+.cbw-details-collapse[open] summary::before { content: "−"; }
+.cbw-details-collapse[open] { border-color: var(--primary); background: var(--surface-blue); }
+.cbw-details-collapse textarea { margin-top: 6px; min-height: 70px; }
+
+.cbw-van-wrap {
+  display: flex; justify-content: center; align-items: center;
+  padding: 18px 8px 6px;
+  background: linear-gradient(180deg, #f0f9ff 0%, #fff 100%);
+  border: 1px solid var(--border); border-radius: var(--radius-md);
+  margin-bottom: 12px;
+}
+.cbw-ducato { width: 100%; max-width: 340px; height: auto; display: block; }
+.cbw-ducato-fill { transition: y 380ms cubic-bezier(0.22, 1, 0.36, 1), height 380ms cubic-bezier(0.22, 1, 0.36, 1); }
+.cbw-vol-help {
+  margin-top: 12px; padding: 10px 12px;
+  background: #fefce8; border: 1px solid #fde68a; border-radius: var(--radius-sm);
+  font-size: 11.5px; color: #713f12; line-height: 1.5;
+}
+
+.cbw-crew-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 6px 0 14px; }
+@media (min-width: 480px) { .cbw-crew-grid { grid-template-columns: repeat(5, 1fr); } }
+.cbw-crew-card {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 12px 8px 10px;
+  background: #fff; border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  cursor: pointer; font: inherit; text-align: center;
+  transition: all 160ms ease;
+}
+.cbw-crew-card:hover { border-color: var(--primary); transform: translateY(-1px); }
+.cbw-crew-card[aria-pressed="true"] { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+.cbw-crew-num { font-family: 'DM Serif Display', serif; font-size: 30px; line-height: 1; color: var(--primary-dark); }
+.cbw-crew-card[aria-pressed="true"] .cbw-crew-num { color: #fff; }
+.cbw-crew-title { font-size: 12.5px; font-weight: 800; }
+.cbw-crew-sub { font-size: 10.5px; opacity: 0.75; font-weight: 600; }
+.cbw-crew-badge {
+  position: absolute; top: -8px; right: 6px;
+  padding: 2px 7px; border-radius: 999px;
+  background: #fbbf24; color: #78350f;
+  font-size: 9.5px; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; box-shadow: var(--shadow-sm);
+}
 .cbw-svc-tile {
   display: flex; flex-direction: column; gap: 6px;
   padding: 10px 10px 12px;
@@ -6042,6 +6141,10 @@ padding: 9px 16px;
       zipTo: '',
       volume: 25,
       specials: {},
+      spaceKind: '',
+      spaceDetails: '',
+      detailsOpen: false,
+      crew: '',
       cityFrom: '',
       cityTo: '',
       note: '',
@@ -6616,6 +6719,13 @@ padding: 9px 16px;
     if (d.parking === 'blocked') { total += 30; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 30 }); }
     if (items.some(item => (item.tags || []).includes('heavy'))) { total += 25; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 25 }); }
 
+    // Crew size — each extra person beyond 2 adds an hourly surcharge estimate
+    const crewMap = { self: { count: 1, sub: 'Sami', extra: -30 }, help_1: { count: 1, sub: '1 pomocník', extra: 0 }, crew_2: { count: 2, sub: '2 ľudia', extra: 0 }, crew_3: { count: 3, sub: '3 ľudia', extra: 40 }, crew_4: { count: 4, sub: '4+ ľudia', extra: 90 } };
+    if (d.crew && crewMap[d.crew] && crewMap[d.crew].extra !== 0) {
+      total += crewMap[d.crew].extra;
+      lines.push({ label: 'Posádka', sub: crewMap[d.crew].sub, amount: crewMap[d.crew].extra });
+    }
+
     // PSČ-based distance pricing (replaces vague "city/near/far")
     const fromZ = zipZone(d.zipFrom);
     const toZ   = zipZone(d.zipTo);
@@ -7139,166 +7249,216 @@ appendBubble('bot', t('thanks_send'));
 /* ============================================================
    V2 — single-page parametric estimate (replaces wizard)
    ============================================================ */
+/* ============================================================
+   5-STEP WIZARD (Service → Space → Volume → Details → Crew+Contact)
+   ============================================================ */
+
+const STEPS = [
+  { id: 'service', title: 'Akú službu potrebujete?',  sub: 'Krok 1 z 5' },
+  { id: 'space',   title: 'Z akého priestoru?',        sub: 'Krok 2 z 5' },
+  { id: 'volume',  title: 'Koľko toho je?',            sub: 'Krok 3 z 5' },
+  { id: 'details', title: 'Detaily a termín',          sub: 'Krok 4 z 5' },
+  { id: 'contact', title: 'Posádka a kontakt',         sub: 'Krok 5 z 5' }
+];
+
 function renderCalc(options) {
-if (!calc.open) return;
-try {
-  addRuntimeStyles();
-  const renderOptions = options || {};
-  const previousScrollTop = (!renderOptions.preserveScroll || !calcEls.body) ? 0 : calcEls.body.scrollTop;
+  if (!calc.open) return;
+  try {
+    addRuntimeStyles();
+    const opts = options || {};
+    const prev = (!opts.preserveScroll || !calcEls.body) ? 0 : calcEls.body.scrollTop;
+    if (typeof calc.step !== 'number' || calc.step < 0 || calc.step >= STEPS.length) calc.step = 0;
+    const step = STEPS[calc.step];
 
-  calcEls.title.textContent = 'Cenová kalkulačka';
-  calcEls.step.textContent = 'Stačí pár pohybov — odhad uvidíte priebežne';
-  calcEls.headBack.style.visibility = 'hidden';
-  calcEls.prev.style.visibility = 'hidden';
-  calcEls.foot.style.display = 'flex';
-  calcEls.next.disabled = calc.sending || !validateAll();
-  calcEls.next.textContent = calc.sending ? (t('calc_sending') || 'Odosielam…') : 'Odoslať dopyt';
-  if (calcEls.barFill) calcEls.barFill.style.width = (validateAll() ? 100 : 60) + '%';
-  if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', validateAll() ? '100' : '60');
+    calcEls.title.textContent = step.title;
+    calcEls.step.textContent = step.sub;
+    calcEls.headBack.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
+    calcEls.foot.style.display = 'flex';
+    calcEls.prev.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
+    calcEls.prev.textContent = 'Späť';
+    const last = calc.step === STEPS.length - 1;
+    calcEls.next.textContent = calc.sending ? 'Odosielam…' : (last ? 'Odoslať dopyt' : 'Pokračovať');
+    calcEls.next.disabled = calc.sending || !validateWizardStep(calc.step);
+    if (calcEls.barFill) calcEls.barFill.style.width = Math.round(((calc.step + 1) / STEPS.length) * 100) + '%';
 
-  const d = calc.data;
-  const price = calculatePrice();
+    const d = calc.data;
+    const price = calculatePrice();
+    let html = '';
+    if (step.id === 'service') html = wizService(d);
+    else if (step.id === 'space') html = wizSpace(d);
+    else if (step.id === 'volume') html = wizVolume(d, price);
+    else if (step.id === 'details') html = wizDetails(d);
+    else if (step.id === 'contact') html = wizContact(d, price);
 
-  const html = ''
-    + renderStickyPrice(price)
-    + '<form class="cbw-v2" autocomplete="off" onsubmit="return false">'
-    +   sectionService(d)
-    +   sectionVolume(d, price)
-    +   sectionLocation(d)
-    +   sectionAccess(d)
-    +   sectionTiming(d)
-    +   sectionContact(d)
-    + '</form>'
-    + renderBreakdown(price);
-
-  calcEls.body.innerHTML = html;
-  calcEls.body.scrollTop = previousScrollTop;
-  bindCalcV2Events();
-} catch (err) {
-  if (window.console && console.error) console.error('[cbw-calc] render error:', err);
-  if (calcEls.body) {
-    calcEls.body.innerHTML = ''
-      + '<div style="padding:20px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px;margin:10px 0">'
-      +   '<strong style="color:#991b1b">Hups, kalkulačka má technický problém.</strong>'
-      +   '<p style="font-size:12px;color:#7f1d1d;margin:6px 0 0">Zavolajte nám prosím priamo na <a href="tel:+421948841313" style="color:#0c4a6e;font-weight:700">+421 948 841 313</a> alebo nám napíšte na <a href="mailto:info@odvoznabytku.sk" style="color:#0c4a6e;font-weight:700">info@odvoznabytku.sk</a>. Ďakujeme!</p>'
-      +   '<details style="margin-top:10px;font-size:11px;color:#7f1d1d"><summary>Technický detail</summary><pre style="white-space:pre-wrap;font-size:10px">' + (err && err.message || err) + '</pre></details>'
-      + '</div>';
+    calcEls.body.innerHTML = '<div class="cbw-ministicky">' + renderMiniSticky(price) + '</div>' + html;
+    calcEls.body.scrollTop = prev;
+    bindWizardEvents();
+  } catch (err) {
+    if (window.console && console.error) console.error('[cbw-calc] render error:', err);
+    if (calcEls.body) {
+      calcEls.body.innerHTML = '<div style="padding:20px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px;margin:10px 0"><strong style="color:#991b1b">Hups, kalkulačka má technický problém.</strong><p style="font-size:12px;color:#7f1d1d;margin:6px 0 0">Zavolajte nám prosím priamo na <a href="tel:+421948841313" style="color:#0c4a6e;font-weight:700">+421 948 841 313</a> alebo na <a href="mailto:info@odvoznabytku.sk" style="color:#0c4a6e;font-weight:700">info@odvoznabytku.sk</a>.</p><details style="margin-top:10px;font-size:11px;color:#7f1d1d"><summary>Technický detail</summary><pre style="white-space:pre-wrap;font-size:10px">' + (err && err.message || err) + '</pre></details></div>';
+    }
   }
 }
-}
 
-function validateAll() {
+function validateWizardStep(step) {
   const d = calc.data;
-  if (!d.service && !d.direction) return false;
-  if (!String(d.phone || '').trim().match(/\d[\d\s\-()+]{6,}/)) return false;
-  if (!d.gdpr) return false;
+  if (step === 0) return !!d.direction;
+  if (step === 1) return !!d.spaceKind;
+  if (step === 2) return Number(d.volume) >= 5;
+  if (step === 3) return true; // optional fields
+  if (step === 4) {
+    if (!String(d.phone || '').trim().match(/\d[\d\s\-()+]{6,}/)) return false;
+    if (!d.gdpr) return false;
+    return true;
+  }
   return true;
 }
 
-function renderStickyPrice(price) {
-  return ''
-    + '<div class="cbw-sticky">'
-    +   '<div class="cbw-sticky-row">'
-    +     '<div class="cbw-sticky-label">Odhad ceny</div>'
-    +     '<div class="cbw-sticky-value">' + price.min + ' – ' + price.max + ' €</div>'
-    +   '</div>'
-    +   '<div class="cbw-sticky-bar"><div class="cbw-sticky-fill" style="width:' + Math.min(100, Math.max(8, Math.round((price.mid / Math.max(50, price.max * 1.3)) * 100))) + '%"></div></div>'
-    +   '<div class="cbw-sticky-cap">Mení sa naživo, ako vypĺňate. Konečnú cenu potvrdíme telefonicky.</div>'
+function renderMiniSticky(price) {
+  return '<div class="cbw-sticky-row"><div class="cbw-sticky-label">Predbežný odhad</div><div class="cbw-sticky-value">' + price.min + ' – ' + price.max + ' €</div></div><div class="cbw-sticky-cap">Mení sa s každou odpoveďou. Konečnú cenu potvrdíme telefonicky.</div>';
+}
+
+// ───── STEP 1: Service ─────
+function wizService(d) {
+  const dirs = DIRECTIONS.slice();
+  return '<div class="cbw-step-intro">Vyberte hlavnú kategóriu. Dotiahneme detaily v ďalších krokoch.</div>'
+    + '<div class="cbw-svc-tiles">'
+    + dirs.map(function (dir) {
+        return '<button type="button" class="cbw-svc-tile" data-direction="' + dir.id + '" aria-pressed="' + (d.direction === dir.id) + '">'
+          + '<span class="cbw-svc-tile-vis">' + dir.icon() + '</span>'
+          + '<span class="cbw-svc-tile-title">' + escapeHtml(dir.title) + '</span>'
+          + '<span class="cbw-svc-tile-sub">' + escapeHtml(dir.sub) + '</span>'
+          + '</button>';
+      }).join('')
     + '</div>';
 }
 
-function sectionService(d) {
-  const dirs = DIRECTIONS.slice();
-  return ''
-    + '<section class="cbw-sec" id="cbwSecService">'
-    +   '<div class="cbw-sec-num">1</div>'
-    +   '<h3 class="cbw-sec-title">Akú službu potrebujete?</h3>'
-    +   '<p class="cbw-sec-hint">Vyberte hlavnú kategóriu. Detaily doladíme nižšie.</p>'
-    +   '<div class="cbw-svc-tiles">'
-    +     dirs.map(function (dir) {
-            return '<button type="button" class="cbw-svc-tile" data-direction="' + dir.id + '" aria-pressed="' + (d.direction === dir.id) + '">'
-              + '<span class="cbw-svc-tile-vis">' + dir.icon() + '</span>'
-              + '<span class="cbw-svc-tile-title">' + escapeHtml(dir.title) + '</span>'
-              + '<span class="cbw-svc-tile-sub">' + escapeHtml(dir.sub) + '</span>'
-              + '</button>';
-          }).join('')
-    +   '</div>'
-    + '</section>';
+// ───── STEP 2: Space + optional textarea ─────
+function getSpaceOptions(direction) {
+  const all = [
+    { id: 'room',     title: 'Jedna izba',      sub: 'spálňa, detská, obývačka', icon: 'room' },
+    { id: 'flat_s',   title: '1–2 izbový byt',  sub: 'menší byt do 60 m²',       icon: 'flat' },
+    { id: 'flat_l',   title: '3+ izbový byt',   sub: 'väčší byt 60+ m²',          icon: 'flat' },
+    { id: 'house',    title: 'Rodinný dom',     sub: 'celý dom, viac miestností', icon: 'house' },
+    { id: 'cellar',   title: 'Pivnica / komora','sub': 'malý priestor s vecami', icon: 'cellar' },
+    { id: 'garage',   title: 'Garáž / sklad',   sub: 'nábytok, náradie, veci',   icon: 'garage' },
+    { id: 'office',   title: 'Kancelária',      sub: 'stoly, archív, technika',  icon: 'office' },
+    { id: 'other',    title: 'Iné / nepasuje',  sub: 'popíšte nižšie',           icon: 'other' }
+  ];
+  // For 'vyvoz' (waste) — emphasise smaller/utility spaces
+  if (direction === 'dovoz') {
+    return [
+      { id: 'small_pile', title: 'Pár vriec / kusov', sub: 'do 1 m³',  icon: 'cellar' },
+      { id: 'room_load',  title: 'Plná dodávka',      sub: '~3 m³',     icon: 'room' },
+      { id: 'cellar',     title: 'Pivnica / garáž',   sub: 'plný odvoz', icon: 'garage' },
+      { id: 'big',        title: 'Veľký objem',       sub: 'viac dodávok / kontajner', icon: 'house' },
+      { id: 'other',      title: 'Iné',                sub: 'popíšte nižšie',          icon: 'other' }
+    ];
+  }
+  return all;
 }
 
-function sectionVolume(d, price) {
-  const v = Math.max(5, Math.min(100, Number(d.volume) || 25));
-  const labels = [
-    [0, 18, 'Pár kusov', 'do 1/8 dodávky'],
-    [18, 32, '1/4 dodávky', 'pár veľkých kusov'],
-    [32, 50, '1/2 dodávky', 'malá izba'],
-    [50, 70, '3/4 dodávky', 'väčšia izba alebo 1-izba'],
-    [70, 90, 'Plná dodávka', 'kompletná 2-izba'],
-    [90, 101, 'Viac ako dodávka', 'budeme jazdiť 2×']
-  ];
-  const cur = labels.find(l => v >= l[0] && v < l[1]) || labels[0];
-  const fillPct = Math.min(100, v);
-  // Animated van fill — boxes appear progressively
-  const vanSvg = ''
-    + '<svg viewBox="0 0 320 110" class="cbw-van" aria-hidden="true">'
-    +   '<line class="cbw-van-road" x1="6" y1="98" x2="314" y2="98" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-dasharray="10 6"/>'
-    +   '<g class="cbw-van-body">'
-    +     '<rect x="40" y="32" width="170" height="56" rx="4" fill="#fff" stroke="#0c4a6e" stroke-width="3"/>'
-    +     '<path d="M210 42 h36 l30 30 v16 H210 z" fill="#fff" stroke="#0c4a6e" stroke-width="3" stroke-linejoin="round"/>'
-    +     '<path d="M216 48 h26 l24 24 H216 z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="1.5"/>'
-    +     '<rect x="50" y="40" width="14" height="14" rx="2" stroke="#0c4a6e" stroke-width="1.5" fill="none"/>'
-    +     // Fill silhouette (clipped to width based on volume)
-    +     '<rect class="cbw-van-fill" x="46" y="40" width="' + (fillPct * 1.58) + '" height="42" fill="#0284c7" opacity="0.16"/>'
-    +     boxesInVan(v)
-    +     '<circle class="cbw-van-wheel" cx="80" cy="92" r="9" fill="#0c4a6e"/>'
-    +     '<circle cx="80" cy="92" r="3.5" fill="#fff"/>'
-    +     '<circle class="cbw-van-wheel" cx="230" cy="92" r="9" fill="#0c4a6e"/>'
-    +     '<circle cx="230" cy="92" r="3.5" fill="#fff"/>'
-    +   '</g>'
+function spaceIconSvg(kind) {
+  const palette = 'stroke="#0c4a6e" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+  if (kind === 'room')   return '<svg viewBox="0 0 40 40" fill="none" ' + palette + '><rect x="6" y="10" width="28" height="22" rx="2"/><path d="M14 32v-8h6v8"/><circle cx="26" cy="20" r="2"/></svg>';
+  if (kind === 'flat')   return '<svg viewBox="0 0 40 40" fill="none" ' + palette + '><rect x="6" y="8" width="28" height="26" rx="2"/><line x1="6" y1="21" x2="34" y2="21"/><rect x="10" y="12" width="5" height="5"/><rect x="25" y="12" width="5" height="5"/><rect x="10" y="25" width="5" height="5"/><rect x="25" y="25" width="5" height="5"/></svg>';
+  if (kind === 'house')  return '<svg viewBox="0 0 40 40" fill="none" ' + palette + '><path d="M4 22 20 8l16 14"/><path d="M8 20v14h24V20"/><rect x="17" y="24" width="6" height="10"/></svg>';
+  if (kind === 'cellar') return '<svg viewBox="0 0 40 40" fill="none" ' + palette + '><rect x="6" y="10" width="28" height="24" rx="1"/><line x1="6" y1="22" x2="34" y2="22"/><rect x="11" y="14" width="6" height="5"/><rect x="23" y="14" width="6" height="5"/><rect x="11" y="25" width="6" height="6"/><rect x="23" y="25" width="6" height="6"/></svg>';
+  if (kind === 'garage') return '<svg viewBox="0 0 40 40" fill="none" ' + palette + '><path d="M4 18 20 6l16 12"/><rect x="8" y="18" width="24" height="16" rx="1"/><line x1="8" y1="24" x2="32" y2="24"/><line x1="8" y1="29" x2="32" y2="29"/></svg>';
+  if (kind === 'office') return '<svg viewBox="0 0 40 40" fill="none" ' + palette + '><rect x="6" y="8" width="28" height="26" rx="2"/><line x1="6" y1="15" x2="34" y2="15"/><rect x="10" y="19" width="5" height="5"/><rect x="18" y="19" width="5" height="5"/><rect x="26" y="19" width="5" height="5"/><rect x="10" y="27" width="5" height="5"/><rect x="18" y="27" width="5" height="5"/><rect x="26" y="27" width="5" height="5"/></svg>';
+  return '<svg viewBox="0 0 40 40" fill="none" ' + palette + '><circle cx="20" cy="20" r="14"/><line x1="20" y1="14" x2="20" y2="22"/><circle cx="20" cy="27" r="1.5" fill="#0c4a6e"/></svg>';
+}
+
+function wizSpace(d) {
+  const opts = getSpaceOptions(d.direction);
+  const cards = opts.map(function (o) {
+    return '<button type="button" class="cbw-space-card" data-space="' + o.id + '" aria-pressed="' + (d.spaceKind === o.id) + '">'
+      + '<span class="cbw-space-ico">' + spaceIconSvg(o.icon) + '</span>'
+      + '<span class="cbw-space-text"><strong>' + escapeHtml(o.title) + '</strong><small>' + escapeHtml(o.sub) + '</small></span>'
+      + '</button>';
+  }).join('');
+  const open = d.detailsOpen ? 'open' : '';
+  return '<div class="cbw-step-intro">Vyberte typ priestoru. Detaily môžete dopísať v textovom poli nižšie (voliteľné).</div>'
+    + '<div class="cbw-space-grid">' + cards + '</div>'
+    + '<details class="cbw-details-collapse" ' + open + ' id="cbwDetailsCollapse">'
+    +   '<summary>Dopísať detaily (voliteľné)</summary>'
+    +   '<textarea class="cbw-q-input" id="cbwSpaceDetails" rows="3" placeholder="Napríklad: 2 sedačky, jedálenský stôl, šatník, krabice s knihami…">' + escapeHtml(d.spaceDetails || '') + '</textarea>'
+    + '</details>';
+}
+
+// ───── STEP 3: Volume slider with Fiat Ducato silhouette ─────
+function vanSilhouette(fillPct) {
+  // Approximation of a Fiat Ducato L2H2 silhouette; cargo box is the central
+  // rectangle which fills with brand-blue gradient as the slider moves.
+  const w = 220; // svg viewBox width
+  const cargoX = 14, cargoY = 30, cargoW = 138, cargoH = 60;
+  const fillW = Math.max(0, Math.min(cargoW, (fillPct / 100) * cargoW));
+  return ''
+    + '<svg class="cbw-ducato" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    +   '<defs>'
+    +     '<linearGradient id="cbwVanFill" x1="0" y1="1" x2="0" y2="0">'
+    +       '<stop offset="0" stop-color="#0c4a6e"/>'
+    +       '<stop offset="0.6" stop-color="#0284c7"/>'
+    +       '<stop offset="1" stop-color="#7dd3fc"/>'
+    +     '</linearGradient>'
+    +   '</defs>'
+    +   '<line x1="6" y1="100" x2="234" y2="100" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 6"/>'
+    // Cargo box (back of van)
+    +   '<rect x="' + cargoX + '" y="' + cargoY + '" width="' + cargoW + '" height="' + cargoH + '" rx="3" fill="#fff" stroke="#0c4a6e" stroke-width="2.5"/>'
+    +   '<rect class="cbw-ducato-fill" x="' + cargoX + '" y="' + (cargoY + cargoH - (fillW * cargoH / cargoW)) + '" width="' + cargoW + '" height="' + (fillW * cargoH / cargoW) + '" fill="url(#cbwVanFill)" rx="3"/>'
+    // Cab (front)
+    +   '<path d="M152 38 h32 l28 18 v34 H152 z" fill="#fff" stroke="#0c4a6e" stroke-width="2.5" stroke-linejoin="round"/>'
+    +   '<path d="M156 42 h26 l22 14 H156 z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="1.5"/>'
+    // Side door handle line
+    +   '<line x1="78" y1="38" x2="78" y2="90" stroke="#0c4a6e" stroke-width="1.5"/>'
+    +   '<circle cx="74" cy="64" r="2" stroke="#0c4a6e" stroke-width="1" fill="none"/>'
+    // Back door split
+    +   '<line x1="' + (cargoX + cargoW / 2) + '" y1="38" x2="' + (cargoX + cargoW / 2) + '" y2="84" stroke="#0c4a6e" stroke-width="1" stroke-dasharray="3 3"/>'
+    // Logo band
+    +   '<rect x="155" y="60" width="50" height="14" rx="1" fill="#0284c7"/>'
+    +   '<text x="180" y="71" text-anchor="middle" fill="#fff" font-family="-apple-system,Segoe UI,sans-serif" font-size="9" font-weight="700">DUCATO</text>'
+    // Wheels
+    +   '<circle cx="42" cy="100" r="11" fill="#0c4a6e"/>'
+    +   '<circle cx="42" cy="100" r="4.5" fill="#fff"/>'
+    +   '<circle cx="186" cy="100" r="11" fill="#0c4a6e"/>'
+    +   '<circle cx="186" cy="100" r="4.5" fill="#fff"/>'
     + '</svg>';
-  const specials = [
-    ['piano', '🎹', 'Klavír'], ['safe', '🔒', 'Sejf'],
-    ['aquarium', '🐟', 'Akvárium'], ['fragile', '🪞', 'Krehké veci'],
-    ['oversized', '📦', 'Nadrozmer'], ['none', '✓', 'Nič špeciálne']
-  ];
-  const spec = d.specials || {};
-  return ''
-    + '<section class="cbw-sec">'
-    +   '<div class="cbw-sec-num">2</div>'
-    +   '<h3 class="cbw-sec-title">Koľko vecí prevážame?</h3>'
-    +   '<p class="cbw-sec-hint">Posúvajte, dokým dodávka nezodpovedá vášmu nákladu. Nemusíte vyberať jednotlivé predmety.</p>'
-    +   '<div class="cbw-vol-wrap">'
-    +     vanSvg
-    +     '<div class="cbw-vol-readout">'
-    +       '<span class="cbw-vol-readout-title">' + escapeHtml(cur[2]) + '</span>'
-    +       '<span class="cbw-vol-readout-sub">' + escapeHtml(cur[3]) + '</span>'
-    +     '</div>'
-    +     '<input type="range" class="cbw-vol-slider" id="cbwVolume" min="5" max="100" step="1" value="' + v + '" aria-label="Objem nákladu">'
-    +     '<div class="cbw-vol-ticks"><span>Pár kusov</span><span>1/2 dodávky</span><span>Plná</span></div>'
-    +   '</div>'
-    +   '<div class="cbw-sec-sublabel">Špeciálne predmety (voliteľné)</div>'
-    +   '<div class="cbw-chip-row">'
-    +     specials.map(s => '<button type="button" class="cbw-chip-spec" data-special="' + s[0] + '" aria-pressed="' + !!spec[s[0]] + '"><span>' + s[1] + '</span>' + escapeHtml(s[2]) + '</button>').join('')
-    +   '</div>'
-    + '</section>';
 }
 
-function boxesInVan(v) {
-  const positions = [
-    [56, 60, 18, 18, '#fbbf24'],
-    [78, 56, 22, 22, '#0ea5e9'],
-    [104, 60, 20, 18, '#f59e0b'],
-    [128, 50, 24, 28, '#0369a1'],
-    [156, 58, 22, 20, '#84cc16'],
-    [180, 54, 24, 24, '#a855f7']
+function volumeReadout(v) {
+  const labels = [
+    [0, 18, '≈ 1/4 dodávky',  'pár kusov, ~1 m³'],
+    [18, 38, '≈ 1/2 dodávky', 'malá izba, ~2 m³'],
+    [38, 60, '≈ 3/4 dodávky', 'väčšia izba, ~3 m³'],
+    [60, 82, 'Plná dodávka',   'celá 1–2 izba, ~5 m³'],
+    [82, 101, '2× plná dodávka', 'celý byt / dom — pôjdeme 2×']
   ];
-  const count = Math.min(positions.length, Math.ceil(v / 16));
-  return positions.slice(0, count).map((p, i) =>
-    '<rect class="cbw-van-box" style="--i:' + i + '" x="' + p[0] + '" y="' + p[1] + '" width="' + p[2] + '" height="' + p[3] + '" rx="2" fill="' + p[4] + '" stroke="#0c4a6e" stroke-width="1.2"/>'
-  ).join('');
+  return labels.find(l => v >= l[0] && v < l[1]) || labels[0];
 }
 
-function sectionLocation(d) {
+function wizVolume(d, price) {
+  const v = Math.max(5, Math.min(100, Number(d.volume) || 25));
+  const cur = volumeReadout(v);
+  return '<div class="cbw-step-intro">Posúvajte slider — dodávka sa farebne vypĺňa podľa toho, koľko miesta zaberie váš náklad.</div>'
+    + '<div class="cbw-van-wrap">' + vanSilhouette(v) + '</div>'
+    + '<div class="cbw-vol-readout">'
+    +   '<span class="cbw-vol-readout-title">' + escapeHtml(cur[2]) + '</span>'
+    +   '<span class="cbw-vol-readout-sub">' + escapeHtml(cur[3]) + '</span>'
+    + '</div>'
+    + '<input type="range" class="cbw-vol-slider" id="cbwVolume" min="5" max="100" step="1" value="' + v + '" aria-label="Objem nákladu">'
+    + '<div class="cbw-vol-ticks"><span>1/4</span><span>1/2</span><span>3/4</span><span>Plná</span><span>2×</span></div>'
+    + '<div class="cbw-vol-help">💡 <strong>Tip:</strong> Fiat Ducato L2H2 pojme cca 11 m³. Slider je orientačný — finálnu kapacitu potvrdíme telefonicky.</div>'
+    + '<div class="cbw-sec-sublabel" style="margin-top:14px">Špeciálne predmety (pridajú malé príplatky)</div>'
+    + '<div class="cbw-chip-row">'
+    + [['piano','🎹','Klavír'],['safe','🔒','Sejf'],['aquarium','🐟','Akvárium'],['fragile','🪞','Krehké veci'],['oversized','📦','Nadrozmer']]
+        .map(function(s) { return '<button type="button" class="cbw-chip-spec" data-special="' + s[0] + '" aria-pressed="' + !!(d.specials || {})[s[0]] + '"><span>' + s[1] + '</span>' + escapeHtml(s[2]) + '</button>'; })
+        .join('')
+    + '</div>';
+}
+
+// ───── STEP 4: Details (location, access, date) ─────
+function wizDetails(d) {
   const zFrom = zipZone(d.zipFrom);
   const zTo = zipZone(d.zipTo);
   function feedback(zip, z) {
@@ -7306,258 +7466,200 @@ function sectionLocation(d) {
     const sub = z.surcharge ? '<strong>+' + z.surcharge + ' €</strong>' : '<strong>v cene</strong>';
     return '<span class="cbw-zip-chip" data-zone="' + z.code + '">' + escapeHtml(z.label) + ' · ' + sub + '</span>';
   }
-  return ''
-    + '<section class="cbw-sec">'
-    +   '<div class="cbw-sec-num">3</div>'
-    +   '<h3 class="cbw-sec-title">Odkiaľ — Kam?</h3>'
-    +   '<p class="cbw-sec-hint">Vďaka PSČ vám hneď ukážeme príplatok za vzdialenosť.</p>'
-    +   '<div class="cbw-loc-row">'
-    +     '<div class="cbw-loc-col">'
-    +       '<label class="cbw-loc-lbl">Odkiaľ</label>'
-    +       '<div class="cbw-loc-inputs">'
-    +         '<input class="cbw-q-input cbw-zip" id="cbwZipFrom" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipFrom) + '" placeholder="PSČ">'
-    +         '<input class="cbw-q-input" id="cbwCityFrom" value="' + escapeHtml(d.cityFrom) + '" placeholder="Mesto / ulica">'
-    +       '</div>'
-    +       feedback(d.zipFrom, zFrom)
-    +     '</div>'
-    +     '<div class="cbw-loc-arrow">→</div>'
-    +     '<div class="cbw-loc-col">'
-    +       '<label class="cbw-loc-lbl">Kam</label>'
-    +       '<div class="cbw-loc-inputs">'
-    +         '<input class="cbw-q-input cbw-zip" id="cbwZipTo" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipTo) + '" placeholder="PSČ">'
-    +         '<input class="cbw-q-input" id="cbwCityTo" value="' + escapeHtml(d.cityTo) + '" placeholder="Mesto / ulica">'
-    +       '</div>'
-    +       feedback(d.zipTo, zTo)
-    +     '</div>'
-    +   '</div>'
-    + '</section>';
-}
-
-function sectionAccess(d) {
   const floors = Math.max(0, Math.min(20, Number(d.floors) || 0));
-  const parkOpts = [
-    ['near', 'Priamo pri vchode'],
-    ['far',  'Ďalej / horšie'],
-    ['blocked', 'Bez možnosti']
+  return '<div class="cbw-step-intro">Adresa, poschodie, parkovanie a termín. Žiadne čísla si pamätať nemusíte — len posuvníky a tlačidlá.</div>'
+    + '<div class="cbw-sec-sublabel">Odkiaľ → Kam</div>'
+    + '<div class="cbw-loc-row">'
+    +   '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Odkiaľ</label>'
+    +     '<div class="cbw-loc-inputs"><input class="cbw-q-input cbw-zip" id="cbwZipFrom" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipFrom) + '" placeholder="PSČ"><input class="cbw-q-input" id="cbwCityFrom" value="' + escapeHtml(d.cityFrom) + '" placeholder="Mesto / ulica"></div>'
+    +     feedback(d.zipFrom, zFrom)
+    +   '</div>'
+    +   '<div class="cbw-loc-arrow">→</div>'
+    +   '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Kam</label>'
+    +     '<div class="cbw-loc-inputs"><input class="cbw-q-input cbw-zip" id="cbwZipTo" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipTo) + '" placeholder="PSČ"><input class="cbw-q-input" id="cbwCityTo" value="' + escapeHtml(d.cityTo) + '" placeholder="Mesto / ulica"></div>'
+    +     feedback(d.zipTo, zTo)
+    +   '</div>'
+    + '</div>'
+    + '<div class="cbw-sec-sublabel">Prístup k bytu</div>'
+    + '<div class="cbw-access-row">'
+    +   '<div class="cbw-stepper">'
+    +     '<button type="button" class="cbw-step-btn" data-floor-delta="-1" aria-label="Menej">−</button>'
+    +     '<div class="cbw-step-val"><span class="cbw-step-num">' + floors + '</span><small>Poschodie</small></div>'
+    +     '<button type="button" class="cbw-step-btn" data-floor-delta="+1" aria-label="Viac">+</button>'
+    +   '</div>'
+    +   '<div class="cbw-toggle">'
+    +     '<label class="cbw-toggle-lbl">Výťah</label>'
+    +     '<button type="button" class="cbw-toggle-btn" data-elevator="yes" aria-pressed="' + (d.elevator === 'yes') + '">Áno</button>'
+    +     '<button type="button" class="cbw-toggle-btn" data-elevator="no" aria-pressed="' + (d.elevator === 'no') + '">Nie</button>'
+    +   '</div>'
+    + '</div>'
+    + '<div class="cbw-sec-sublabel">Parkovanie pri vchode</div>'
+    + '<div class="cbw-chip-row">'
+    + [['near','Priamo pri vchode'],['far','Ďalej / horšie'],['blocked','Bez možnosti']]
+        .map(function(p) { return '<button type="button" class="cbw-chip-park" data-parking="' + p[0] + '" aria-pressed="' + (d.parking === p[0]) + '">' + escapeHtml(p[1]) + '</button>'; })
+        .join('')
+    + '</div>'
+    + '<div class="cbw-sec-sublabel">Kedy to potrebujete</div>'
+    + '<div class="cbw-time-row">'
+    + [['flex','Flexibilný','−10 %','discount'],['standard','Štandard','','std'],['rush','Súrne / víkend','+15 %','rush']]
+        .map(function(m) { return '<button type="button" class="cbw-time-btn" data-tone="' + m[3] + '" data-datemode="' + m[0] + '" aria-pressed="' + (d.dateMode === m[0]) + '"><span>' + escapeHtml(m[1]) + '</span><small>' + escapeHtml(m[2]) + '</small></button>'; })
+        .join('')
+    + '</div>'
+    + '<label class="cbw-loc-lbl" style="margin-top:10px">Konkrétny dátum (voliteľne)</label>'
+    + '<input class="cbw-q-input" id="cbwDate" type="date" value="' + escapeHtml(d.date) + '">';
+}
+
+// ───── STEP 5: Crew + Contact ─────
+function estimateCrewSize(d) {
+  const v = Number(d.volume) || 0;
+  const heavy = ['piano','safe','oversized'].some(k => (d.specials || {})[k]);
+  if (v >= 70 || heavy) return 3;
+  if (v >= 35) return 2;
+  return 2; // most jobs need 2 people minimum
+}
+
+function wizContact(d, price) {
+  const suggested = estimateCrewSize(d);
+  const crewOpts = [
+    { id: 'self',    title: 'Sami si naložím', sub: 'len doprava',  count: 1 },
+    { id: 'help_1',  title: '1 pomocník',      sub: 'menšie kusy',  count: 1 },
+    { id: 'crew_2',  title: '2-členná posádka', sub: 'štandardná pomoc', count: 2 },
+    { id: 'crew_3',  title: '3-členná posádka', sub: 'väčšie / ťažké', count: 3 },
+    { id: 'crew_4',  title: '4+ posádka',       sub: 'dom, viac dodávok', count: 4 }
   ];
-  return ''
-    + '<section class="cbw-sec">'
-    +   '<div class="cbw-sec-num">4</div>'
-    +   '<h3 class="cbw-sec-title">Prístup k bytu</h3>'
-    +   '<p class="cbw-sec-hint">Zatlačte +/− pre poschodie, vyberte výťah a parkovanie.</p>'
-    +   '<div class="cbw-access-row">'
-    +     '<div class="cbw-stepper">'
-    +       '<button type="button" class="cbw-step-btn" data-floor-delta="-1" aria-label="Menej">−</button>'
-    +       '<div class="cbw-step-val"><span class="cbw-step-num">' + floors + '</span><small>Poschodie</small></div>'
-    +       '<button type="button" class="cbw-step-btn" data-floor-delta="+1" aria-label="Viac">+</button>'
-    +     '</div>'
-    +     '<div class="cbw-toggle">'
-    +       '<label class="cbw-toggle-lbl">Výťah</label>'
-    +       '<button type="button" class="cbw-toggle-btn" data-elevator="yes" aria-pressed="' + (d.elevator === 'yes') + '">Áno</button>'
-    +       '<button type="button" class="cbw-toggle-btn" data-elevator="no" aria-pressed="' + (d.elevator === 'no') + '">Nie</button>'
-    +     '</div>'
-    +   '</div>'
-    +   '<div class="cbw-sec-sublabel">Parkovanie</div>'
-    +   '<div class="cbw-chip-row">'
-    +     parkOpts.map(p => '<button type="button" class="cbw-chip-park" data-parking="' + p[0] + '" aria-pressed="' + (d.parking === p[0]) + '">' + escapeHtml(p[1]) + '</button>').join('')
-    +   '</div>'
-    + '</section>';
-}
-
-function sectionTiming(d) {
-  const modes = [
-    ['flex',     'Flexibilný',     '−10 %', 'discount'],
-    ['standard', 'Štandard',       '',      'std'],
-    ['rush',     'Súrne / víkend', '+15 %', 'rush']
-  ];
-  return ''
-    + '<section class="cbw-sec">'
-    +   '<div class="cbw-sec-num">5</div>'
-    +   '<h3 class="cbw-sec-title">Kedy to potrebujete?</h3>'
-    +   '<p class="cbw-sec-hint">Flexibilný termín ušetrí, súrny stojí viac.</p>'
-    +   '<div class="cbw-time-row">'
-    +     modes.map(m => '<button type="button" class="cbw-time-btn" data-tone="' + m[3] + '" data-datemode="' + m[0] + '" aria-pressed="' + (d.dateMode === m[0]) + '"><span>' + escapeHtml(m[1]) + '</span><small>' + escapeHtml(m[2]) + '</small></button>').join('')
-    +   '</div>'
-    +   '<label class="cbw-loc-lbl" style="margin-top:10px">Konkrétny dátum (voliteľne)</label>'
-    +   '<input class="cbw-q-input" id="cbwDate" type="date" value="' + escapeHtml(d.date) + '">'
-    + '</section>';
-}
-
-function sectionContact(d) {
-  return ''
-    + '<section class="cbw-sec cbw-sec-contact">'
-    +   '<div class="cbw-sec-num">6</div>'
-    +   '<h3 class="cbw-sec-title">Kontakt</h3>'
-    +   '<p class="cbw-sec-hint">Ozveme sa do 30 minút v pracovných hodinách.</p>'
-    +   '<div class="cbw-loc-row">'
-    +     '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Meno</label><input class="cbw-q-input" id="cbwName" value="' + escapeHtml(d.name) + '" placeholder="Vaše meno"></div>'
-    +     '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Telefón <span class="cbw-required-star">*</span></label><input class="cbw-q-input" id="cbwPhone" value="' + escapeHtml(d.phone) + '" inputmode="tel" placeholder="0900 123 456"></div>'
-    +   '</div>'
-    +   '<label class="cbw-loc-lbl">E-mail (voliteľné)</label>'
-    +   '<input class="cbw-q-input" id="cbwEmail" value="' + escapeHtml(d.email) + '" type="email" placeholder="email@example.sk">'
-    +   '<label class="cbw-loc-lbl">Poznámka (voliteľné)</label>'
-    +   '<textarea class="cbw-q-input" id="cbwNote" placeholder="Čokoľvek čo by sme mali vedieť">' + escapeHtml(d.note) + '</textarea>'
-    +   '<button type="button" class="cbw-gdpr-wrap" id="cbwGdpr" data-checked="' + (d.gdpr ? 'true' : 'false') + '"><span class="cbw-gdpr-check"></span><span class="cbw-gdpr-text"><strong>' + escapeHtml(t('gdpr_title') || 'Súhlasím so spracovaním údajov') + '</strong><br>' + escapeHtml(t('gdpr_text') || 'Údaje použijeme len na kontakt v rámci tohto dopytu.') + '</span></button>'
-    + '</section>';
-}
-
-function renderBreakdown(price) {
-  if (!price.breakdown || !price.breakdown.length) return '';
-  const items = price.breakdown.map(line => {
+  const breakdown = (price.breakdown || []).map(function(line) {
     const tone = line.type === 'discount' ? 'cbw-pb-discount' : (line.type === 'positive' ? 'cbw-pb-positive' : '');
     const amount = line.amount ? ((line.amount >= 0 ? '+' : '') + line.amount + ' €') : (line.type === 'discount' ? '−10 %' : (line.type === 'positive' ? '+15 %' : ''));
     const sub = line.sub ? ' · ' + escapeHtml(String(line.sub)) : '';
     return '<div class="cbw-pb-row"><span class="cbw-pb-row-label">' + escapeHtml(line.label) + '<small>' + sub + '</small></span><span class="cbw-pb-row-amount ' + tone + '">' + amount + '</span></div>';
   }).join('');
-  return ''
-    + '<details class="cbw-bd">'
-    +   '<summary>Z čoho sa skladá cena</summary>'
-    +   '<div class="cbw-pb-list">' + items + '</div>'
-    +   '<div class="cbw-pb-total"><span class="cbw-pb-total-label">Spolu odhad</span><span class="cbw-pb-total-amount">' + price.min + ' – ' + price.max + ' €</span></div>'
-    +   '<div class="cbw-pb-trust"><span>✓ Bez záväzku</span><span>✓ Žiadne skryté poplatky</span><span>✓ Odpoveď do 30 min</span></div>'
-    + '</details>';
+  return '<div class="cbw-step-intro">Odhadli sme, že najlepšie sa hodí <strong>' + suggested + '-členná posádka</strong>. Môžete to zmeniť — ovplyvní to cenu a rýchlosť.</div>'
+    + '<div class="cbw-sec-sublabel">Odhadovaný počet posádky potrebnej na túto prácu</div>'
+    + '<div class="cbw-crew-grid">'
+    + crewOpts.map(function (c) {
+        const sel = (d.crew || ('crew_' + suggested)) === c.id;
+        const recommended = c.count === suggested;
+        return '<button type="button" class="cbw-crew-card" data-crew="' + c.id + '" aria-pressed="' + sel + '">'
+          + (recommended ? '<span class="cbw-crew-badge">Odporúčané</span>' : '')
+          + '<span class="cbw-crew-num">' + c.count + '</span>'
+          + '<span class="cbw-crew-title">' + escapeHtml(c.title) + '</span>'
+          + '<span class="cbw-crew-sub">' + escapeHtml(c.sub) + '</span>'
+          + '</button>';
+      }).join('')
+    + '</div>'
+    + '<div class="cbw-sec-sublabel">Kontakt</div>'
+    + '<div class="cbw-loc-row">'
+    +   '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Meno</label><input class="cbw-q-input" id="cbwName" value="' + escapeHtml(d.name) + '" placeholder="Vaše meno"></div>'
+    +   '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Telefón <span class="cbw-required-star">*</span></label><input class="cbw-q-input" id="cbwPhone" value="' + escapeHtml(d.phone) + '" inputmode="tel" placeholder="0900 123 456"></div>'
+    + '</div>'
+    + '<label class="cbw-loc-lbl">E-mail (voliteľné)</label>'
+    + '<input class="cbw-q-input" id="cbwEmail" value="' + escapeHtml(d.email) + '" type="email" placeholder="email@example.sk">'
+    + '<label class="cbw-loc-lbl">Poznámka</label>'
+    + '<textarea class="cbw-q-input" id="cbwNote" placeholder="Čokoľvek čo by sme mali vedieť">' + escapeHtml(d.note) + '</textarea>'
+    + '<button type="button" class="cbw-gdpr-wrap" id="cbwGdpr" data-checked="' + (d.gdpr ? 'true' : 'false') + '"><span class="cbw-gdpr-check"></span><span class="cbw-gdpr-text"><strong>Súhlasím so spracovaním údajov</strong><br>Údaje použijeme len na kontakt v rámci tohto dopytu.</span></button>'
+    + '<details class="cbw-bd" open><summary>Z čoho sa skladá cena (' + price.min + ' – ' + price.max + ' €)</summary><div class="cbw-pb-list">' + breakdown + '</div><div class="cbw-pb-total"><span class="cbw-pb-total-label">Spolu odhad</span><span class="cbw-pb-total-amount">' + price.min + ' – ' + price.max + ' €</span></div></details>';
 }
 
-function rerenderKeepingFocus(inputId, value) {
-calc.search = value;
-renderCalc({ preserveScroll: true });
-requestAnimationFrame(() => {
-const el = document.getElementById(inputId);
-if (!el) return;
-el.focus({ preventScroll: true });
-const pos = String(value || '').length;
-try { el.setSelectionRange(pos, pos); } catch (_) {}
-});
-}
-
-/* Re-render the wizard but restore focus + caret to the given input
-   afterwards. Used by quantity/floors so the mobile keyboard doesn't
-   close between keystrokes. */
-function rerenderRestoringFocus(inputId) {
-const el = document.getElementById(inputId);
-const isNum = el && el.type === 'number';
-const cursorPos = (!isNum && el && typeof el.selectionStart === 'number') ? el.selectionStart : null;
-renderCalc();
-requestAnimationFrame(() => {
-const next = document.getElementById(inputId);
-if (!next) return;
-next.focus({ preventScroll: true });
-if (cursorPos != null) { try { next.setSelectionRange(cursorPos, cursorPos); } catch (_) {} }
-});
-}
-
-function bindCalcStepEvents() { bindCalcV2Events(); }
-
-function bindCalcV2Events() {
-  // Service tiles
-  bind('[data-direction]', 'click', e => {
+// ───── Event binding ─────
+function bindWizardEvents() {
+  bind('[data-direction]', 'click', function (e) {
     const dir = e.currentTarget.dataset.direction;
     calc.data.direction = dir;
     calc.data.service = DEFAULT_SERVICE_BY_DIRECTION[dir] || calc.data.service || 'furniture';
+    setTimeout(function () { goStep(1); }, 220);
     renderCalc({ preserveScroll: true });
   });
 
-  // Volume slider — debounced repaint of the readout + sticky price
-  const vol = document.getElementById('cbwVolume');
-  if (vol) {
-    vol.addEventListener('input', e => {
-      calc.data.volume = Number(e.target.value) || 0;
-      updateVolumeLive();
-      updateStickyPrice();
-    });
-  }
-
-  // Special items chips
-  bind('[data-special]', 'click', e => {
-    const id = e.currentTarget.dataset.special;
-    const cur = Object.assign({}, calc.data.specials || {});
-    if (id === 'none') {
-      calc.data.specials = cur.none ? {} : { none: true };
-    } else {
-      delete cur.none;
-      if (cur[id]) delete cur[id]; else cur[id] = true;
-      calc.data.specials = cur;
+  bind('[data-space]', 'click', function (e) {
+    calc.data.spaceKind = e.currentTarget.dataset.space;
+    // Hint a sensible volume default the first time a space is chosen
+    const defaults = { room: 22, flat_s: 38, flat_l: 60, house: 80, cellar: 18, garage: 28, office: 50, small_pile: 12, room_load: 60, big: 95 };
+    if (defaults[calc.data.spaceKind] && Number(calc.data.volume) === 25) {
+      calc.data.volume = defaults[calc.data.spaceKind];
     }
     renderCalc({ preserveScroll: true });
   });
 
-  // Floor stepper +/-
-  bind('[data-floor-delta]', 'click', e => {
+  const detailsCollapse = document.getElementById('cbwDetailsCollapse');
+  if (detailsCollapse) detailsCollapse.addEventListener('toggle', function () { calc.data.detailsOpen = detailsCollapse.open; });
+  const spaceDetails = document.getElementById('cbwSpaceDetails');
+  if (spaceDetails) spaceDetails.addEventListener('input', function (e) { calc.data.spaceDetails = e.target.value; });
+
+  const vol = document.getElementById('cbwVolume');
+  if (vol) vol.addEventListener('input', function (e) {
+    calc.data.volume = Number(e.target.value) || 0;
+    updateVanLive();
+    updateMiniSticky();
+  });
+
+  bind('[data-special]', 'click', function (e) {
+    const id = e.currentTarget.dataset.special;
+    const cur = Object.assign({}, calc.data.specials || {});
+    if (cur[id]) delete cur[id]; else cur[id] = true;
+    calc.data.specials = cur;
+    renderCalc({ preserveScroll: true });
+  });
+
+  bind('[data-floor-delta]', 'click', function (e) {
     const delta = Number(e.currentTarget.dataset.floorDelta) || 0;
     calc.data.floors = Math.max(0, Math.min(20, (Number(calc.data.floors) || 0) + delta));
     renderCalc({ preserveScroll: true });
   });
+  bind('[data-elevator]', 'click', function (e) { calc.data.elevator = e.currentTarget.dataset.elevator; renderCalc({ preserveScroll: true }); });
+  bind('[data-parking]',  'click', function (e) { calc.data.parking  = e.currentTarget.dataset.parking;  renderCalc({ preserveScroll: true }); });
+  bind('[data-datemode]', 'click', function (e) { calc.data.dateMode = e.currentTarget.dataset.datemode; renderCalc({ preserveScroll: true }); });
+  bind('[data-crew]',     'click', function (e) { calc.data.crew     = e.currentTarget.dataset.crew;     renderCalc({ preserveScroll: true }); });
 
-  // Elevator + Parking + Date mode
-  bind('[data-elevator]', 'click', e => { calc.data.elevator = e.currentTarget.dataset.elevator; renderCalc({ preserveScroll: true }); });
-  bind('[data-parking]', 'click', e => { calc.data.parking = e.currentTarget.dataset.parking; renderCalc({ preserveScroll: true }); });
-  bind('[data-datemode]', 'click', e => { calc.data.dateMode = e.currentTarget.dataset.datemode; renderCalc({ preserveScroll: true }); });
-
-  // PSČ inputs — refresh chip + sticky price, keep focus
-  ['ZipFrom', 'ZipTo'].forEach(key => {
+  ['ZipFrom', 'ZipTo'].forEach(function (key) {
     const el = document.getElementById('cbw' + key);
     if (!el) return;
-    el.addEventListener('input', e => {
+    el.addEventListener('input', function (e) {
       const cleaned = String(e.target.value || '').replace(/[^\d ]/g, '').slice(0, 6);
       calc.data[key === 'ZipFrom' ? 'zipFrom' : 'zipTo'] = cleaned;
       rerenderRestoringFocus('cbw' + key);
     });
   });
-
-  // Plain text inputs — update state only, refresh sticky
-  ['CityFrom', 'CityTo', 'Date', 'Note', 'Name', 'Phone', 'Email'].forEach(key => {
+  ['CityFrom', 'CityTo', 'Date', 'Note', 'Name', 'Phone', 'Email'].forEach(function (key) {
     const el = document.getElementById('cbw' + key);
     if (!el) return;
-    el.addEventListener('input', e => {
+    el.addEventListener('input', function (e) {
       const map = { CityFrom: 'cityFrom', CityTo: 'cityTo', Date: 'date', Note: 'note', Name: 'name', Phone: 'phone', Email: 'email' };
       calc.data[map[key]] = e.target.value;
-      updateStickyPrice();
-      calcEls.next.disabled = calc.sending || !validateAll();
+      updateMiniSticky();
+      calcEls.next.disabled = calc.sending || !validateWizardStep(calc.step);
     });
   });
 
-  // GDPR toggle
   const gdpr = document.getElementById('cbwGdpr');
-  if (gdpr) gdpr.addEventListener('click', () => {
+  if (gdpr) gdpr.addEventListener('click', function () {
     calc.data.gdpr = !calc.data.gdpr;
     gdpr.dataset.checked = calc.data.gdpr ? 'true' : 'false';
-    calcEls.next.disabled = calc.sending || !validateAll();
+    calcEls.next.disabled = calc.sending || !validateWizardStep(calc.step);
   });
 }
 
-function updateVolumeLive() {
+function updateVanLive() {
   const v = Math.max(5, Math.min(100, Number(calc.data.volume) || 25));
-  // Update van fill width
-  const fill = document.querySelector('.cbw-van-fill');
-  if (fill) fill.setAttribute('width', String(v * 1.58));
-  // Update readout text
-  const labels = [
-    [0, 18, 'Pár kusov', 'do 1/8 dodávky'],
-    [18, 32, '1/4 dodávky', 'pár veľkých kusov'],
-    [32, 50, '1/2 dodávky', 'malá izba'],
-    [50, 70, '3/4 dodávky', 'väčšia izba alebo 1-izba'],
-    [70, 90, 'Plná dodávka', 'kompletná 2-izba'],
-    [90, 101, 'Viac ako dodávka', 'budeme jazdiť 2×']
-  ];
-  const cur = labels.find(l => v >= l[0] && v < l[1]) || labels[0];
+  const cargoX = 14, cargoY = 30, cargoW = 138, cargoH = 60;
+  const fillW = Math.max(0, Math.min(cargoW, (v / 100) * cargoW));
+  const fill = document.querySelector('.cbw-ducato-fill');
+  if (fill) {
+    fill.setAttribute('y', String(cargoY + cargoH - (fillW * cargoH / cargoW)));
+    fill.setAttribute('width', String(cargoW));
+    fill.setAttribute('height', String(fillW * cargoH / cargoW));
+  }
+  const cur = volumeReadout(v);
   const title = document.querySelector('.cbw-vol-readout-title');
-  const sub = document.querySelector('.cbw-vol-readout-sub');
+  const sub   = document.querySelector('.cbw-vol-readout-sub');
   if (title) title.textContent = cur[2];
   if (sub) sub.textContent = cur[3];
-  // Toggle box visibility
-  const boxes = document.querySelectorAll('.cbw-van-box');
-  const visibleCount = Math.min(boxes.length, Math.ceil(v / 16));
-  boxes.forEach((b, i) => { b.style.opacity = i < visibleCount ? '1' : '0'; });
 }
 
-function updateStickyPrice() {
+function updateMiniSticky() {
   const price = calculatePrice();
-  const val = document.querySelector('.cbw-sticky-value');
-  const fill = document.querySelector('.cbw-sticky-fill');
+  const val = document.querySelector('.cbw-ministicky .cbw-sticky-value');
   if (val) val.textContent = price.min + ' – ' + price.max + ' €';
-  if (fill) fill.style.width = Math.min(100, Math.max(8, Math.round((price.mid / Math.max(50, price.max * 1.3)) * 100))) + '%';
 }
-
 
 function handlePhotos(event) {
 const files = Array.from(event.target.files || []).slice(0, 5);
