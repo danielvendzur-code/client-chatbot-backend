@@ -1753,8 +1753,288 @@ position: relative;
 }
 
 /* ============================================================
-SPEEDOMETER PRICE GAUGE (summary)
+V2 — PARAMETRIC ONE-PAGE FLOW
 ============================================================ */
+.cbw-v2 { display: flex; flex-direction: column; gap: 14px; padding: 0 0 6px; }
+.cbw-sticky {
+  position: sticky; top: 0; z-index: 5;
+  margin: -2px -2px 6px; padding: 12px 14px;
+  background: linear-gradient(180deg, #0c4a6e 0%, #075985 100%);
+  color: #fff;
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+  box-shadow: 0 6px 16px -8px rgba(2,44,52,0.45);
+}
+.cbw-sticky-row { display: flex; justify-content: space-between; align-items: baseline; }
+.cbw-sticky-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.85; }
+.cbw-sticky-value {
+  font-family: 'DM Serif Display', serif;
+  font-size: 26px; line-height: 1; font-variant-numeric: tabular-nums;
+}
+.cbw-sticky-bar { height: 4px; background: rgba(255,255,255,0.18); border-radius: 999px; margin-top: 8px; overflow: hidden; }
+.cbw-sticky-fill {
+  height: 100%; border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #fff);
+  transition: width 360ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+.cbw-sticky-cap { font-size: 11px; opacity: 0.78; margin-top: 4px; }
+
+.cbw-sec {
+  position: relative;
+  padding: 16px 14px 18px;
+  background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.cbw-sec-num {
+  position: absolute; top: 14px; right: 14px;
+  width: 22px; height: 22px; border-radius: 999px;
+  background: var(--surface-blue); color: var(--primary-dark);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 800;
+}
+.cbw-sec-title { font-size: 16px; font-weight: 800; color: var(--text); margin: 0; letter-spacing: -0.01em; }
+.cbw-sec-hint { font-size: 12.5px; color: var(--text-muted); margin: 0; line-height: 1.45; }
+.cbw-sec-sublabel { font-size: 11px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); margin-top: 4px; }
+
+.cbw-svc-tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
+.cbw-svc-tile {
+  display: flex; flex-direction: column; gap: 6px;
+  padding: 10px 10px 12px;
+  background: #fff; border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer; font: inherit;
+  text-align: left;
+  transition: transform 180ms var(--bounce), border-color 160ms ease, box-shadow 180ms ease;
+}
+.cbw-svc-tile:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: var(--shadow-sm); }
+.cbw-svc-tile[aria-pressed="true"] {
+  border-color: var(--primary); background: var(--surface-blue);
+  box-shadow: 0 0 0 2px var(--primary) inset;
+}
+.cbw-svc-tile-vis {
+  width: 100%; height: 60px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--primary-soft) 0%, #fff 100%);
+  display: flex; align-items: center; justify-content: center; padding: 4px;
+}
+.cbw-svc-tile-vis svg { width: 100%; height: 100%; }
+.cbw-svc-tile-title { font-size: 13.5px; font-weight: 800; color: var(--text); }
+.cbw-svc-tile-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; line-height: 1.3; }
+
+/* Volume slider + van */
+.cbw-vol-wrap { display: flex; flex-direction: column; gap: 8px; }
+.cbw-van { width: 100%; height: 110px; display: block; }
+.cbw-van-fill { transition: width 400ms cubic-bezier(0.22, 1, 0.36, 1); }
+.cbw-van-box { transition: opacity 280ms ease; transform-origin: center bottom; }
+.cbw-van-wheel { transform-origin: center; transform-box: fill-box; }
+.cbw-vol-readout {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 8px 12px; background: var(--surface-blue); border-radius: var(--radius-sm);
+}
+.cbw-vol-readout-title { font-size: 14.5px; font-weight: 800; color: var(--primary-dark); }
+.cbw-vol-readout-sub { font-size: 12px; color: var(--text-muted); }
+.cbw-vol-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 6px; background: var(--border); border-radius: 999px;
+  outline: none; margin: 0;
+}
+.cbw-vol-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--primary);
+  cursor: pointer; box-shadow: 0 2px 6px rgba(2,44,52,0.25);
+  transition: transform 160ms ease;
+}
+.cbw-vol-slider::-webkit-slider-thumb:active { transform: scale(1.18); }
+.cbw-vol-slider::-moz-range-thumb {
+  width: 24px; height: 24px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--primary);
+  cursor: pointer; box-shadow: 0 2px 6px rgba(2,44,52,0.25);
+}
+.cbw-vol-ticks {
+  display: flex; justify-content: space-between;
+  font-size: 10.5px; color: var(--text-muted); font-weight: 600;
+}
+
+/* Chips: specials, parking */
+.cbw-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.cbw-chip-spec, .cbw-chip-park {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 11px; border: 1.5px solid var(--border);
+  background: #fff; color: var(--text);
+  border-radius: 999px; font: inherit; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; transition: all 150ms ease;
+}
+.cbw-chip-spec span:first-child { font-size: 14px; }
+.cbw-chip-spec[aria-pressed="true"], .cbw-chip-park[aria-pressed="true"] {
+  background: var(--primary-dark); border-color: var(--primary-dark); color: #fff;
+  box-shadow: 0 2px 4px rgba(2,44,52,0.18);
+}
+
+/* Location row with PSC + city */
+.cbw-loc-row {
+  display: grid; grid-template-columns: 1fr auto 1fr; gap: 10px; align-items: end;
+}
+@media (max-width: 480px) { .cbw-loc-row { grid-template-columns: 1fr; } .cbw-loc-arrow { display: none; } }
+.cbw-loc-col { display: flex; flex-direction: column; gap: 4px; }
+.cbw-loc-lbl { font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0; }
+.cbw-loc-inputs { display: grid; grid-template-columns: 90px 1fr; gap: 6px; }
+.cbw-loc-arrow { font-size: 20px; color: var(--primary); font-weight: 800; padding-bottom: 12px; }
+.cbw-zip { letter-spacing: 0.04em; }
+.cbw-zip-chip {
+  display: inline-flex; align-items: center;
+  padding: 4px 10px; border-radius: 999px;
+  font-size: 11.5px; font-weight: 700;
+  background: var(--surface-blue); color: var(--primary-dark); margin-top: 4px;
+}
+.cbw-zip-chip[data-zone="local"] { background: #ecfdf5; color: #065f46; }
+.cbw-zip-chip[data-zone="near"]  { background: #fffbeb; color: #92400e; }
+.cbw-zip-chip[data-zone="far"]   { background: #fef2f2; color: #991b1b; }
+
+/* Access stepper + toggle */
+.cbw-access-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 4px; }
+@media (max-width: 380px) { .cbw-access-row { grid-template-columns: 1fr; } }
+.cbw-stepper {
+  display: flex; align-items: stretch;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: #fff; overflow: hidden;
+}
+.cbw-step-btn {
+  width: 40px; border: none; background: var(--surface-blue);
+  font-size: 20px; font-weight: 800; color: var(--primary-dark); cursor: pointer;
+  transition: background 140ms ease;
+}
+.cbw-step-btn:active { background: var(--primary); color: #fff; }
+.cbw-step-val { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.cbw-step-num { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1; }
+.cbw-step-val small { font-size: 10px; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+.cbw-toggle {
+  display: flex; align-items: stretch;
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  background: #fff; overflow: hidden;
+}
+.cbw-toggle-lbl {
+  flex: 1; display: flex; align-items: center; padding: 0 12px;
+  font-size: 12.5px; font-weight: 800; color: var(--text-muted);
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.cbw-toggle-btn {
+  padding: 0 14px; border: none; background: #fff;
+  font: inherit; font-size: 13px; font-weight: 700; color: var(--text); cursor: pointer;
+  border-left: 1px solid var(--border);
+}
+.cbw-toggle-btn[aria-pressed="true"] {
+  background: var(--primary); color: #fff;
+}
+
+/* Timing */
+.cbw-time-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.cbw-time-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  padding: 10px 8px; border: 1.5px solid var(--border); background: #fff; color: var(--text);
+  border-radius: var(--radius-sm); cursor: pointer; font: inherit;
+  font-size: 12.5px; font-weight: 700;
+  transition: all 150ms ease;
+}
+.cbw-time-btn small { font-size: 10px; font-weight: 800; letter-spacing: 0.04em; }
+.cbw-time-btn[data-tone="discount"] small { color: #16a34a; }
+.cbw-time-btn[data-tone="rush"] small { color: #dc2626; }
+.cbw-time-btn[aria-pressed="true"] {
+  background: var(--primary-dark); border-color: var(--primary-dark); color: #fff;
+}
+.cbw-time-btn[aria-pressed="true"] small { color: #fff; }
+
+/* Breakdown collapse */
+.cbw-bd {
+  margin-top: 6px; background: #fff; border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 4px 14px;
+}
+.cbw-bd summary {
+  list-style: none; cursor: pointer; padding: 10px 0;
+  font-size: 13px; font-weight: 800; color: var(--primary-dark);
+}
+.cbw-bd summary::-webkit-details-marker { display: none; }
+.cbw-bd summary::after { content: "▾"; float: right; transition: transform 200ms ease; }
+.cbw-bd[open] summary::after { transform: rotate(180deg); }
+
+/* ============================================================
+PRICE BREAKDOWN CARD (summary)
+============================================================ */
+.cbw-pb {
+border: 1px solid var(--border);
+border-radius: var(--radius-md);
+background: #fff;
+padding: 18px 18px 20px;
+margin: 8px 0 6px;
+box-shadow: var(--shadow-sm);
+}
+.cbw-pb-head {
+display: flex; justify-content: space-between; align-items: baseline;
+padding-bottom: 12px; border-bottom: 1px solid var(--border);
+}
+.cbw-pb-label {
+font-size: 11.5px; font-weight: 800; letter-spacing: 0.06em;
+text-transform: uppercase; color: var(--text-muted);
+}
+.cbw-pb-range {
+font-family: 'DM Serif Display', serif;
+font-size: 30px; line-height: 1; color: var(--text);
+}
+.cbw-pb-list { display: flex; flex-direction: column; margin: 10px 0 0; }
+.cbw-pb-row {
+display: flex; justify-content: space-between; align-items: baseline;
+padding: 7px 0; font-size: 13.5px;
+border-bottom: 1px dashed var(--border);
+}
+.cbw-pb-row:last-child { border-bottom: none; }
+.cbw-pb-row-label { color: var(--text); font-weight: 600; }
+.cbw-pb-row-sub { color: var(--text-muted); font-weight: 500; font-size: 12px; margin-left: 6px; }
+.cbw-pb-row-amount { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.cbw-pb-row-amount.cbw-pb-positive { color: var(--primary-dark); }
+.cbw-pb-row-amount.cbw-pb-discount { color: #16a34a; }
+.cbw-pb-total {
+margin-top: 10px; padding-top: 10px;
+border-top: 1.5px solid var(--text);
+display: flex; justify-content: space-between; align-items: baseline;
+}
+.cbw-pb-total-label { font-size: 12px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text); }
+.cbw-pb-total-amount {
+font-family: 'DM Serif Display', serif;
+font-size: 26px; color: var(--primary-dark);
+font-variant-numeric: tabular-nums;
+}
+.cbw-pb-note {
+margin-top: 12px;
+font-size: 11.5px; color: var(--text-muted);
+display: flex; align-items: flex-start; gap: 6px; line-height: 1.4;
+}
+.cbw-pb-note svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 2px; color: var(--primary); }
+.cbw-pb-trust { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 10px; }
+.cbw-pb-trust span {
+display: inline-flex; align-items: center; gap: 4px;
+font-size: 11px; color: var(--text-muted); font-weight: 600;
+}
+.cbw-pb-trust svg { width: 12px; height: 12px; color: #16a34a; }
+
+/* ============================================================
+ZIP CODE INPUT (place step)
+============================================================ */
+.cbw-zip-row {
+display: grid; grid-template-columns: 130px 1fr; gap: 8px;
+margin-top: 8px;
+}
+@media (max-width: 420px) { .cbw-zip-row { grid-template-columns: 1fr; } }
+.cbw-zip-row .cbw-q-input { letter-spacing: 0.04em; }
+.cbw-zip-feedback {
+display: flex; align-items: center; gap: 6px;
+font-size: 12px; color: var(--text-muted);
+padding: 8px 10px; border-radius: var(--radius-sm);
+background: var(--surface-blue); border: 1px solid var(--border);
+}
+.cbw-zip-feedback strong { color: var(--text); }
+.cbw-zip-feedback[data-zone="local"] { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
+.cbw-zip-feedback[data-zone="near"]  { background: #fffbeb; border-color: #fde68a; color: #92400e; }
+.cbw-zip-feedback[data-zone="far"]   { background: #fef2f2; border-color: #fecaca; color: #991b1b; }
+.cbw-zip-feedback svg { width: 14px; height: 14px; flex-shrink: 0; }
 .cbw-gauge {
 position: relative;
 width: 100%;
@@ -5758,6 +6038,10 @@ padding: 9px 16px;
       distance: 'city',
       date: '',
       dateMode: 'standard',
+      zipFrom: '',
+      zipTo: '',
+      volume: 25,
+      specials: {},
       cityFrom: '',
       cityTo: '',
       note: '',
@@ -6216,6 +6500,47 @@ padding: 9px 16px;
     return ['moving_flat', 'moving_office', 'clearance_flat', 'clearance_storage'].includes(calc.data.service);
   }
 
+  // Live PSČ feedback shown under the from/to inputs.
+  function renderZipFeedback(zip) {
+    const z = zipZone(zip);
+    if (!z) return '';
+    const sub = z.surcharge ? '<strong>+' + z.surcharge + ' €</strong> doprava' : '<strong>v cene</strong>';
+    const icon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>';
+    return '<div class="cbw-zip-feedback" data-zone="' + z.code + '">' + icon + '<span>Pásmo: <strong>' + escapeHtml(z.label) + '</strong> · ' + sub + '</span></div>';
+  }
+
+  /* PSČ pricing — distance from Bratislava (810 00) by region.
+     Inspired by how Slovak moving companies tier zones. */
+  function zipZone(zip) {
+    const z = String(zip || '').replace(/\D/g, '').slice(0, 5);
+    if (z.length !== 5) return null;
+    const n = parseInt(z, 10);
+    // Bratislava + immediate suburbs (810-841)
+    if (n >= 81000 && n <= 84199) return { code: 'local', label: 'Bratislava', surcharge: 0, kmFromBA: 0 };
+    // Senec, Pezinok, Modra, Malacky, Trnava (903-919)
+    if (n >= 90000 && n <= 91999) return { code: 'near',  label: 'Bratislavský/Trnavský kraj', surcharge: 18, kmFromBA: 25 };
+    // Žilina + Považie (010-022)
+    if (n >= 1000  && n <= 5999)  return { code: 'far',  label: 'Severozápad SR', surcharge: 95, kmFromBA: 200 };
+    // Banská Bystrica, Zvolen (974-980)
+    if (n >= 96000 && n <= 99999) return { code: 'far',  label: 'Stredné Slovensko', surcharge: 75, kmFromBA: 175 };
+    // Košice, Prešov (040-090)
+    if (n >= 4000  && n <= 9999)  return { code: 'far',  label: 'Východné Slovensko', surcharge: 145, kmFromBA: 400 };
+    // Nitra a južné SR (940-960)
+    if (n >= 94000 && n <= 96999) return { code: 'near', label: 'Nitriansky kraj',       surcharge: 35, kmFromBA: 90 };
+    // Trenčín (911-915)
+    if (n >= 91000 && n <= 91999) return { code: 'near', label: 'Trenčiansky kraj',     surcharge: 30, kmFromBA: 70 };
+    return { code: 'far', label: 'Slovensko', surcharge: 60, kmFromBA: 130 };
+  }
+
+  function distanceSurcharge(d) {
+    let surcharge = 0;
+    const fromZ = zipZone(d.zipFrom);
+    const toZ   = zipZone(d.zipTo);
+    if (fromZ) surcharge += fromZ.surcharge;
+    if (toZ && toZ.code !== 'local') surcharge += Math.round(toZ.surcharge * 0.6);
+    return surcharge;
+  }
+
   function calculatePrice() {
     const svc = selectedService() || { base: 50 };
     const items = selectedItems();
@@ -6225,46 +6550,106 @@ padding: 9px 16px;
     const itemWeight = items.reduce((sum, item) => sum + (Number(item.weight) || 1), 0);
     const quantityMultiplier = quantity <= 1 ? 1 : 1 + Math.min(2.2, (quantity - 1) * 0.32);
 
-    let total = Number(svc.base || 50) + itemBase * quantityMultiplier;
-    const breakdown = [];
+    const lines = [];   // breakdown lines (label, sub, amount, type)
+    let total = 0;
 
     if (isSpacePriceJob()) {
       const area = Math.max(0, Number(d.areaM2) || 0);
       const jobType = selectedJobType() || getJobTypeOptions()[0];
-      const baseByType = Number(jobType.base || 120);
+      const baseByType = Math.max(Number(svc.base || 50), Number(jobType.base || 120));
       const m2Rate = Number(jobType.rate || 2.6);
-      total = Math.max(Number(svc.base || 50), baseByType) + area * m2Rate + itemBase * 0.45;
-      breakdown.push({ label: t('price_base_space'), amount: Math.max(Number(svc.base || 50), baseByType) });
-      if (area) breakdown.push({ label: t('price_area').replace('{m2}', area), amount: area * m2Rate });
-
+      total = baseByType + area * m2Rate + itemBase * 0.45;
+      lines.push({ label: 'Základ', sub: (svc.title || jobType.title || ''), amount: baseByType });
+      if (area) lines.push({ label: 'Plocha ' + area + ' m²', sub: m2Rate.toFixed(1) + ' €/m²', amount: roundTo5(area * m2Rate) });
+      if (itemBase) lines.push({ label: 'Položky (' + items.length + ')', sub: '', amount: roundTo5(itemBase * 0.45) });
       getSelectedExtras().forEach(extra => {
-        total += Number(extra.price || 0);
-        breakdown.push({ label: extra.title, amount: Number(extra.price || 0) });
+        const v = Number(extra.price || 0);
+        total += v;
+        if (v) lines.push({ label: extra.title, sub: '', amount: v });
       });
-
-      if (d.jobType === 'office' || calc.data.service === 'moving_office') total += 45;
-      if ((d.extras || {}).stairs_no_lift) total += Math.max(0, Number(d.floors) || 0) * 12;
-      if ((d.extras || {}).company_archive && d.jobType !== 'office') total += 15;
+      if (d.jobType === 'office' || calc.data.service === 'moving_office') { total += 45; lines.push({ label: 'Kancelárska réžia', sub: '', amount: 45 }); }
+      if ((d.extras || {}).stairs_no_lift) {
+        const v = Math.max(0, Number(d.floors) || 0) * 12;
+        if (v) { total += v; lines.push({ label: 'Bez výťahu × poschodia', sub: (d.floors || 0) + '× 12 €', amount: v }); }
+      }
+    } else {
+      total = Number(svc.base || 50) + itemBase * quantityMultiplier;
+      lines.push({ label: 'Základ', sub: (svc.title || ''), amount: Number(svc.base || 50) });
+      if (itemBase) {
+        const v = roundTo5(itemBase * quantityMultiplier);
+        lines.push({ label: 'Položky (' + items.length + (quantity > 1 ? ' × ' + quantity : '') + ')', sub: '', amount: v });
+      }
     }
 
-    if (d.direction === 'dovoz') total += 10;
-    if (d.access === 'stairs') total += 25;
-    if (d.access === 'hard') total += 45;
-    if (d.elevator === 'no') total += 20;
-    total += Math.max(0, Number(d.floors) || 0) * 8;
-    if (d.parking === 'far') total += 15;
-    if (d.distance === 'near') total += 20;
-    if (d.distance === 'far') total += 45;
-    if (itemWeight * quantity > 3) total += 35;
-    if (items.some(item => (item.tags || []).includes('heavy'))) total += 25;
+    // Difficulty / access
+    if (d.access === 'stairs') { total += 25; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 25 }); }
+    if (d.access === 'hard')   { total += 45; lines.push({ label: 'Náročný prístup',               sub: '', amount: 45 }); }
+    if (d.elevator === 'no' && !(d.extras || {}).stairs_no_lift) { total += 20; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 20 }); }
+    const floors = Math.max(0, Number(d.floors) || 0);
+    if (floors && !((d.extras || {}).stairs_no_lift)) {
+      const v = floors * 8;
+      total += v;
+      lines.push({ label: 'Poschodie ' + floors + '.', sub: floors + '× 8 €', amount: v });
+    }
+    if (d.parking === 'far') { total += 15; lines.push({ label: 'Parkovanie ďalej od vchodu', sub: '', amount: 15 }); }
+    if (itemWeight * quantity > 3) { total += 35; lines.push({ label: 'Ťažší náklad', sub: '', amount: 35 }); }
 
-    // Termínové naceňovanie: súrne/víkend +15 %, flexibilný −10 %
-    if (d.dateMode === 'rush') { total *= 1.15; breakdown.push({ label: t('date_rush'), amount: 0 }); }
-    else if (d.dateMode === 'flex') { total *= 0.90; breakdown.push({ label: t('date_flex'), amount: 0 }); }
+    // V2 volume slider — primary cost driver (replaces item-by-item picking)
+    const vol = Math.max(0, Math.min(100, Number(d.volume) || 0));
+    if (vol > 0) {
+      const volAmount = roundTo5(vol * 2.2);
+      total += volAmount;
+      const volSubMap = [[0,'<1/4'], [25,'1/4'], [50,'1/2'], [75,'3/4'], [90,'plná'], [100,'2× dodávka']];
+      const volSub = (volSubMap.find(([k]) => vol <= k) || ['','plná'])[1];
+      lines.push({ label: 'Objem nákladu', sub: volSub + ' dodávky', amount: volAmount });
+    }
 
-    const min = roundTo5(total * 0.85);
-    const max = roundTo5(total * 1.2);
-    return { min, max, mid: roundTo5((min + max) / 2), weight: itemWeight * quantity, breakdown };
+    // Special heavy/oversized items
+    const sp = d.specials || {};
+    const specMap = { piano: ['Klavír', 90], safe: ['Sejf', 70], aquarium: ['Akvárium', 35], fragile: ['Krehké veci', 30], oversized: ['Nadrozmer', 50] };
+    Object.keys(sp).forEach(k => {
+      if (k === 'none' || !sp[k] || !specMap[k]) return;
+      const [label, amt] = specMap[k];
+      total += amt;
+      lines.push({ label: 'Špec.: ' + label, sub: '', amount: amt });
+    });
+    if (d.parking === 'blocked') { total += 30; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 30 }); }
+    if (items.some(item => (item.tags || []).includes('heavy'))) { total += 25; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 25 }); }
+
+    // PSČ-based distance pricing (replaces vague "city/near/far")
+    const fromZ = zipZone(d.zipFrom);
+    const toZ   = zipZone(d.zipTo);
+    let distAmount = 0;
+    let distSub = '';
+    if (fromZ && fromZ.surcharge) distAmount += fromZ.surcharge;
+    if (toZ && toZ.code !== 'local') distAmount += Math.round(toZ.surcharge * 0.6);
+    if (fromZ || toZ) {
+      const labelBits = [];
+      if (fromZ) labelBits.push(fromZ.label);
+      if (toZ && toZ.code !== 'local' && toZ.label !== (fromZ && fromZ.label)) labelBits.push('→ ' + toZ.label);
+      distSub = labelBits.join(' ');
+    }
+    if (!distAmount) {
+      // fallback to old distance dropdown if user did not type a zip
+      if (d.distance === 'near') { distAmount = 20; distSub = 'Okolie'; }
+      else if (d.distance === 'far') { distAmount = 45; distSub = 'Mimo regiónu'; }
+    }
+    if (distAmount) {
+      total += distAmount;
+      lines.push({ label: 'Doprava (PSČ)', sub: distSub, amount: distAmount });
+    }
+
+    // Date mode multiplier
+    let dateMultLabel = '';
+    if (d.dateMode === 'rush')      { total *= 1.15; dateMultLabel = 'Súrne / víkend +15 %'; }
+    else if (d.dateMode === 'flex') { total *= 0.90; dateMultLabel = 'Flexibilný termín −10 %'; }
+    if (dateMultLabel) {
+      lines.push({ label: dateMultLabel, sub: '', amount: 0, type: d.dateMode === 'flex' ? 'discount' : 'positive' });
+    }
+
+    const min = Math.max(0, roundTo5(total * 0.90));
+    const max = roundTo5(total * 1.15);
+    return { min, max, mid: roundTo5((min + max) / 2), weight: itemWeight * quantity, breakdown: lines };
   }
 
   function validateStep(step) {
@@ -6293,6 +6678,11 @@ padding: 9px 16px;
     const pct = Math.round(((visibleIndex + 1) / visibleSteps) * 100);
     calcEls.barFill.style.width = Math.min(100, Math.max(8, pct)) + '%';
     if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', String(pct));
+  }
+
+  // QA / test mode — opens the calculator immediately on /test URL.
+  if (location.pathname.endsWith('/test') || /[?&]cbw=test/.test(location.search)) {
+    setTimeout(() => { if (typeof openCalculator === 'function') openCalculator(); }, 600);
   }
 
   function openCalculator() {
@@ -6543,78 +6933,43 @@ padding: 9px 16px;
     `;
   }
 
-  // Speedometer-style price gauge for the summary step.
+  // Professional itemised price breakdown — replaces the speedometer gauge.
   function renderGauge(price) {
-    const scaleMax = Math.max(50, roundTo5(price.max * 1.25));
-    const frac = Math.max(0.04, Math.min(0.96, price.mid / scaleMax));
-    // 180° arc, radius 80, center (100,100). Length of half arc = π*r ≈ 251.3
-    const ARC = Math.PI * 80;
-    const dashOffset = ARC * (1 - frac);
-    const needleDeg = -90 + 180 * frac;
-    const ticks = [];
-    for (let i = 0; i <= 8; i++) {
-      const a = (Math.PI) * (i / 8) - Math.PI; // 180°→360°
-      const x1 = 100 + Math.cos(a) * 70, y1 = 100 + Math.sin(a) * 70;
-      const x2 = 100 + Math.cos(a) * 80, y2 = 100 + Math.sin(a) * 80;
-      ticks.push(`<line x1="${x1.toFixed(1)}" y1="${y1.toFixed(1)}" x2="${x2.toFixed(1)}" y2="${y2.toFixed(1)}"/>`);
-    }
-    return `
-      <div class="cbw-sum-price cbw-brand-gradient">
-        <div class="cbw-sum-price-label">${escapeHtml(t('gauge_label'))}</div>
-        <div class="cbw-gauge" data-min="${price.min}" data-max="${price.max}" data-mid="${price.mid}" data-deg="${needleDeg.toFixed(1)}" data-arc="${ARC.toFixed(1)}" data-off="${dashOffset.toFixed(1)}">
-          <svg viewBox="0 0 200 118" role="img" aria-label="${price.min}–${price.max} €">
-            <defs>
-              <linearGradient id="cbwGaugeGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stop-color="#bae6fd"/><stop offset="0.5" stop-color="#38bdf8"/><stop offset="1" stop-color="#fff"/>
-              </linearGradient>
-            </defs>
-            <path class="cbw-gauge-track" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="12" stroke-linecap="round"/>
-            <path class="cbw-gauge-fill" d="M20 100 A80 80 0 0 1 180 100" fill="none" stroke-width="12"
-                  stroke-dasharray="${ARC.toFixed(1)}" stroke-dashoffset="${ARC.toFixed(1)}"/>
-            <g class="cbw-gauge-ticks">${ticks.join('')}</g>
-            <g class="cbw-gauge-needle" style="transform: rotate(-90deg)">
-              <line x1="100" y1="100" x2="100" y2="36" stroke="#fff" stroke-width="3.5" stroke-linecap="round"/>
-            </g>
-            <circle class="cbw-gauge-hub" cx="100" cy="100" r="7"/>
-            <circle cx="100" cy="100" r="3" fill="#0c4a6e"/>
-          </svg>
-        </div>
-        <div class="cbw-gauge-value"><span id="cbwGaugeNum">${price.min}</span> – ${price.max} €</div>
-        <div class="cbw-gauge-cap">${escapeHtml(t('gauge_cap'))}</div>
-      </div>
-    `;
+    const items = (price.breakdown || []).map(line => {
+      const tone = line.type === 'discount' ? 'cbw-pb-discount' : (line.type === 'positive' ? 'cbw-pb-positive' : '');
+      let amountTxt;
+      if (!line.amount) amountTxt = '<span class="' + tone + '">' + (line.type === 'discount' ? '−' : (line.type === 'positive' ? '+' : '')) + '%</span>';
+      else amountTxt = (line.amount >= 0 ? '+' : '') + line.amount + ' €';
+      const sub = line.sub ? '<span class="cbw-pb-row-sub">' + escapeHtml(String(line.sub)) + '</span>' : '';
+      return '<div class="cbw-pb-row">'
+        +    '<span><span class="cbw-pb-row-label">' + escapeHtml(line.label) + '</span>' + sub + '</span>'
+        +    '<span class="cbw-pb-row-amount ' + tone + '">' + amountTxt + '</span>'
+        +  '</div>';
+    }).join('');
+    return ''
+      + '<div class="cbw-pb">'
+      +   '<div class="cbw-pb-head">'
+      +     '<span class="cbw-pb-label">Orientačný odhad</span>'
+      +     '<span class="cbw-pb-range">' + price.min + ' – ' + price.max + ' €</span>'
+      +   '</div>'
+      +   '<div class="cbw-pb-list">' + items + '</div>'
+      +   '<div class="cbw-pb-total">'
+      +     '<span class="cbw-pb-total-label">Spolu</span>'
+      +     '<span class="cbw-pb-total-amount">' + price.min + ' – ' + price.max + ' €</span>'
+      +   '</div>'
+      +   '<div class="cbw-pb-note">'
+      +     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+      +     '<span>Finálnu cenu vám potvrdíme telefonicky alebo po obhliadke — bez záväzku, do 30 minút v pracovných hodinách.</span>'
+      +   '</div>'
+      +   '<div class="cbw-pb-trust">'
+      +     '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Bez záväzku</span>'
+      +     '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Žiadne skryté poplatky</span>'
+      +     '<span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Reagujeme do 30 min</span>'
+      +   '</div>'
+      + '</div>';
   }
 
-  function animateGauge() {
-    const g = calcEls.body && calcEls.body.querySelector('.cbw-gauge');
-    if (!g) return;
-    const deg = Number(g.dataset.deg) || 0;
-    const off = Number(g.dataset.off) || 0;
-    const min = Number(g.dataset.min) || 0;
-    const mid = Number(g.dataset.mid) || min;
-    const fill = g.querySelector('.cbw-gauge-fill');
-    const needle = g.querySelector('.cbw-gauge-needle');
-    const numEl = document.getElementById('cbwGaugeNum');
-    requestAnimationFrame(() => {
-      if (fill) fill.style.strokeDashoffset = String(off);
-      if (needle) needle.style.transform = 'rotate(' + deg + 'deg)';
-    });
-    // Count-up from min→mid then settle showing the range's low bound
-    if (numEl) {
-      const target = mid;
-      const start = performance.now();
-      const dur = 1400;
-      const from = Math.max(0, Math.round(min * 0.4));
-      const tick = now => {
-        const p = Math.min(1, (now - start) / dur);
-        const eased = 1 - Math.pow(1 - p, 3);
-        numEl.textContent = String(roundTo5(from + (target - from) * eased));
-        if (p < 1) requestAnimationFrame(tick);
-        else numEl.textContent = String(min);
-      };
-      requestAnimationFrame(tick);
-    }
-  }
+  function animateGauge() { /* no-op — kept so existing call site stays valid */ }
 
   function renderQuantityVisual() {
     const quantity = Math.max(1, Number(calc.data.quantity) || 1);
@@ -6705,11 +7060,19 @@ padding: 9px 16px;
       <div class="cbw-field-stack">
         <div>
           <label class="cbw-field-label">${escapeHtml(isDelivery ? t('place_from_delivery') : t('place_from'))} <span class="cbw-required-star">*</span></label>
-          <input class="cbw-q-input" id="cbwCityFrom" value="${escapeHtml(d.cityFrom)}" placeholder="${escapeHtml(t('ph_from'))}">
+          <div class="cbw-zip-row">
+            <input class="cbw-q-input" id="cbwZipFrom" inputmode="numeric" maxlength="5" value="${escapeHtml(d.zipFrom)}" placeholder="PSČ (napr. 811 01)">
+            <input class="cbw-q-input" id="cbwCityFrom" value="${escapeHtml(d.cityFrom)}" placeholder="Mesto, ulica">
+          </div>
+          ${renderZipFeedback(d.zipFrom)}
         </div>
         <div>
           <label class="cbw-field-label">${escapeHtml(isDelivery ? t('place_to_delivery') : t('place_to'))} ${isDelivery ? '<span class="cbw-required-star">*</span>' : ''}</label>
-          <input class="cbw-q-input" id="cbwCityTo" value="${escapeHtml(d.cityTo)}" placeholder="${escapeHtml(t('ph_to'))}">
+          <div class="cbw-zip-row">
+            <input class="cbw-q-input" id="cbwZipTo" inputmode="numeric" maxlength="5" value="${escapeHtml(d.zipTo)}" placeholder="PSČ cieľa">
+            <input class="cbw-q-input" id="cbwCityTo" value="${escapeHtml(d.cityTo)}" placeholder="Mesto, ulica">
+          </div>
+          ${d.zipTo ? renderZipFeedback(d.zipTo) : ''}
         </div>
         <div>
           <label class="cbw-field-label">${escapeHtml(t('date_mode_label'))}</label>
@@ -6773,38 +7136,286 @@ appendBubble('bot', t('thanks_send'));
 });
 }
 
+/* ============================================================
+   V2 — single-page parametric estimate (replaces wizard)
+   ============================================================ */
 function renderCalc(options) {
 if (!calc.open) return;
-const renderOptions = options || {};
-const preserveScroll = !!renderOptions.preserveScroll;
-const previousScrollTop = calcEls.body ? calcEls.body.scrollTop : 0;
-addRuntimeStyles();
-const meta = STEP_META[calc.step] || STEP_META[0];
-calcEls.title.textContent = meta[0];
-calcEls.step.textContent = meta[1];
-calcEls.headBack.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
-calcEls.foot.style.display = 'flex';
-calcEls.prev.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
-calcEls.next.textContent = calc.step === STEP_META.length - 1 ? (calc.sending ? t('calc_sending') : t('calc_send')) : t('calc_next');
-calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-setProgress();
-let html = '';
-if (calc.step === 0) html = renderStepDirection();
-if (calc.step === 1) html = renderStepService();
-if (calc.step === 2) html = renderStepItems();
-if (calc.step === 3) html = renderStepDetails();
-if (calc.step === 4) html = renderStepPlace();
-if (calc.step === 5) html = renderStepContact();
-if (calc.step === 6) html = renderStepSummary();
-calcEls.body.innerHTML = html;
-if (preserveScroll) {
+try {
+  addRuntimeStyles();
+  const renderOptions = options || {};
+  const previousScrollTop = (!renderOptions.preserveScroll || !calcEls.body) ? 0 : calcEls.body.scrollTop;
+
+  calcEls.title.textContent = 'Cenová kalkulačka';
+  calcEls.step.textContent = 'Stačí pár pohybov — odhad uvidíte priebežne';
+  calcEls.headBack.style.visibility = 'hidden';
+  calcEls.prev.style.visibility = 'hidden';
+  calcEls.foot.style.display = 'flex';
+  calcEls.next.disabled = calc.sending || !validateAll();
+  calcEls.next.textContent = calc.sending ? (t('calc_sending') || 'Odosielam…') : 'Odoslať dopyt';
+  if (calcEls.barFill) calcEls.barFill.style.width = (validateAll() ? 100 : 60) + '%';
+  if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', validateAll() ? '100' : '60');
+
+  const d = calc.data;
+  const price = calculatePrice();
+
+  const html = ''
+    + renderStickyPrice(price)
+    + '<form class="cbw-v2" autocomplete="off" onsubmit="return false">'
+    +   sectionService(d)
+    +   sectionVolume(d, price)
+    +   sectionLocation(d)
+    +   sectionAccess(d)
+    +   sectionTiming(d)
+    +   sectionContact(d)
+    + '</form>'
+    + renderBreakdown(price);
+
+  calcEls.body.innerHTML = html;
   calcEls.body.scrollTop = previousScrollTop;
-  requestAnimationFrame(() => { if (calcEls.body) calcEls.body.scrollTop = previousScrollTop; });
-} else {
-  calcEls.body.scrollTop = 0;
+  bindCalcV2Events();
+} catch (err) {
+  if (window.console && console.error) console.error('[cbw-calc] render error:', err);
+  if (calcEls.body) {
+    calcEls.body.innerHTML = ''
+      + '<div style="padding:20px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px;margin:10px 0">'
+      +   '<strong style="color:#991b1b">Hups, kalkulačka má technický problém.</strong>'
+      +   '<p style="font-size:12px;color:#7f1d1d;margin:6px 0 0">Zavolajte nám prosím priamo na <a href="tel:+421948841313" style="color:#0c4a6e;font-weight:700">+421 948 841 313</a> alebo nám napíšte na <a href="mailto:info@odvoznabytku.sk" style="color:#0c4a6e;font-weight:700">info@odvoznabytku.sk</a>. Ďakujeme!</p>'
+      +   '<details style="margin-top:10px;font-size:11px;color:#7f1d1d"><summary>Technický detail</summary><pre style="white-space:pre-wrap;font-size:10px">' + (err && err.message || err) + '</pre></details>'
+      + '</div>';
+  }
 }
-bindCalcStepEvents();
-if (calc.step === 6) animateGauge();
+}
+
+function validateAll() {
+  const d = calc.data;
+  if (!d.service && !d.direction) return false;
+  if (!String(d.phone || '').trim().match(/\d[\d\s\-()+]{6,}/)) return false;
+  if (!d.gdpr) return false;
+  return true;
+}
+
+function renderStickyPrice(price) {
+  return ''
+    + '<div class="cbw-sticky">'
+    +   '<div class="cbw-sticky-row">'
+    +     '<div class="cbw-sticky-label">Odhad ceny</div>'
+    +     '<div class="cbw-sticky-value">' + price.min + ' – ' + price.max + ' €</div>'
+    +   '</div>'
+    +   '<div class="cbw-sticky-bar"><div class="cbw-sticky-fill" style="width:' + Math.min(100, Math.max(8, Math.round((price.mid / Math.max(50, price.max * 1.3)) * 100))) + '%"></div></div>'
+    +   '<div class="cbw-sticky-cap">Mení sa naživo, ako vypĺňate. Konečnú cenu potvrdíme telefonicky.</div>'
+    + '</div>';
+}
+
+function sectionService(d) {
+  const dirs = DIRECTIONS.slice();
+  return ''
+    + '<section class="cbw-sec" id="cbwSecService">'
+    +   '<div class="cbw-sec-num">1</div>'
+    +   '<h3 class="cbw-sec-title">Akú službu potrebujete?</h3>'
+    +   '<p class="cbw-sec-hint">Vyberte hlavnú kategóriu. Detaily doladíme nižšie.</p>'
+    +   '<div class="cbw-svc-tiles">'
+    +     dirs.map(function (dir) {
+            return '<button type="button" class="cbw-svc-tile" data-direction="' + dir.id + '" aria-pressed="' + (d.direction === dir.id) + '">'
+              + '<span class="cbw-svc-tile-vis">' + dir.icon() + '</span>'
+              + '<span class="cbw-svc-tile-title">' + escapeHtml(dir.title) + '</span>'
+              + '<span class="cbw-svc-tile-sub">' + escapeHtml(dir.sub) + '</span>'
+              + '</button>';
+          }).join('')
+    +   '</div>'
+    + '</section>';
+}
+
+function sectionVolume(d, price) {
+  const v = Math.max(5, Math.min(100, Number(d.volume) || 25));
+  const labels = [
+    [0, 18, 'Pár kusov', 'do 1/8 dodávky'],
+    [18, 32, '1/4 dodávky', 'pár veľkých kusov'],
+    [32, 50, '1/2 dodávky', 'malá izba'],
+    [50, 70, '3/4 dodávky', 'väčšia izba alebo 1-izba'],
+    [70, 90, 'Plná dodávka', 'kompletná 2-izba'],
+    [90, 101, 'Viac ako dodávka', 'budeme jazdiť 2×']
+  ];
+  const cur = labels.find(l => v >= l[0] && v < l[1]) || labels[0];
+  const fillPct = Math.min(100, v);
+  // Animated van fill — boxes appear progressively
+  const vanSvg = ''
+    + '<svg viewBox="0 0 320 110" class="cbw-van" aria-hidden="true">'
+    +   '<line class="cbw-van-road" x1="6" y1="98" x2="314" y2="98" stroke="#94a3b8" stroke-width="3" stroke-linecap="round" stroke-dasharray="10 6"/>'
+    +   '<g class="cbw-van-body">'
+    +     '<rect x="40" y="32" width="170" height="56" rx="4" fill="#fff" stroke="#0c4a6e" stroke-width="3"/>'
+    +     '<path d="M210 42 h36 l30 30 v16 H210 z" fill="#fff" stroke="#0c4a6e" stroke-width="3" stroke-linejoin="round"/>'
+    +     '<path d="M216 48 h26 l24 24 H216 z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="1.5"/>'
+    +     '<rect x="50" y="40" width="14" height="14" rx="2" stroke="#0c4a6e" stroke-width="1.5" fill="none"/>'
+    +     // Fill silhouette (clipped to width based on volume)
+    +     '<rect class="cbw-van-fill" x="46" y="40" width="' + (fillPct * 1.58) + '" height="42" fill="#0284c7" opacity="0.16"/>'
+    +     boxesInVan(v)
+    +     '<circle class="cbw-van-wheel" cx="80" cy="92" r="9" fill="#0c4a6e"/>'
+    +     '<circle cx="80" cy="92" r="3.5" fill="#fff"/>'
+    +     '<circle class="cbw-van-wheel" cx="230" cy="92" r="9" fill="#0c4a6e"/>'
+    +     '<circle cx="230" cy="92" r="3.5" fill="#fff"/>'
+    +   '</g>'
+    + '</svg>';
+  const specials = [
+    ['piano', '🎹', 'Klavír'], ['safe', '🔒', 'Sejf'],
+    ['aquarium', '🐟', 'Akvárium'], ['fragile', '🪞', 'Krehké veci'],
+    ['oversized', '📦', 'Nadrozmer'], ['none', '✓', 'Nič špeciálne']
+  ];
+  const spec = d.specials || {};
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">2</div>'
+    +   '<h3 class="cbw-sec-title">Koľko vecí prevážame?</h3>'
+    +   '<p class="cbw-sec-hint">Posúvajte, dokým dodávka nezodpovedá vášmu nákladu. Nemusíte vyberať jednotlivé predmety.</p>'
+    +   '<div class="cbw-vol-wrap">'
+    +     vanSvg
+    +     '<div class="cbw-vol-readout">'
+    +       '<span class="cbw-vol-readout-title">' + escapeHtml(cur[2]) + '</span>'
+    +       '<span class="cbw-vol-readout-sub">' + escapeHtml(cur[3]) + '</span>'
+    +     '</div>'
+    +     '<input type="range" class="cbw-vol-slider" id="cbwVolume" min="5" max="100" step="1" value="' + v + '" aria-label="Objem nákladu">'
+    +     '<div class="cbw-vol-ticks"><span>Pár kusov</span><span>1/2 dodávky</span><span>Plná</span></div>'
+    +   '</div>'
+    +   '<div class="cbw-sec-sublabel">Špeciálne predmety (voliteľné)</div>'
+    +   '<div class="cbw-chip-row">'
+    +     specials.map(s => '<button type="button" class="cbw-chip-spec" data-special="' + s[0] + '" aria-pressed="' + !!spec[s[0]] + '"><span>' + s[1] + '</span>' + escapeHtml(s[2]) + '</button>').join('')
+    +   '</div>'
+    + '</section>';
+}
+
+function boxesInVan(v) {
+  const positions = [
+    [56, 60, 18, 18, '#fbbf24'],
+    [78, 56, 22, 22, '#0ea5e9'],
+    [104, 60, 20, 18, '#f59e0b'],
+    [128, 50, 24, 28, '#0369a1'],
+    [156, 58, 22, 20, '#84cc16'],
+    [180, 54, 24, 24, '#a855f7']
+  ];
+  const count = Math.min(positions.length, Math.ceil(v / 16));
+  return positions.slice(0, count).map((p, i) =>
+    '<rect class="cbw-van-box" style="--i:' + i + '" x="' + p[0] + '" y="' + p[1] + '" width="' + p[2] + '" height="' + p[3] + '" rx="2" fill="' + p[4] + '" stroke="#0c4a6e" stroke-width="1.2"/>'
+  ).join('');
+}
+
+function sectionLocation(d) {
+  const zFrom = zipZone(d.zipFrom);
+  const zTo = zipZone(d.zipTo);
+  function feedback(zip, z) {
+    if (!z) return '';
+    const sub = z.surcharge ? '<strong>+' + z.surcharge + ' €</strong>' : '<strong>v cene</strong>';
+    return '<span class="cbw-zip-chip" data-zone="' + z.code + '">' + escapeHtml(z.label) + ' · ' + sub + '</span>';
+  }
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">3</div>'
+    +   '<h3 class="cbw-sec-title">Odkiaľ — Kam?</h3>'
+    +   '<p class="cbw-sec-hint">Vďaka PSČ vám hneď ukážeme príplatok za vzdialenosť.</p>'
+    +   '<div class="cbw-loc-row">'
+    +     '<div class="cbw-loc-col">'
+    +       '<label class="cbw-loc-lbl">Odkiaľ</label>'
+    +       '<div class="cbw-loc-inputs">'
+    +         '<input class="cbw-q-input cbw-zip" id="cbwZipFrom" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipFrom) + '" placeholder="PSČ">'
+    +         '<input class="cbw-q-input" id="cbwCityFrom" value="' + escapeHtml(d.cityFrom) + '" placeholder="Mesto / ulica">'
+    +       '</div>'
+    +       feedback(d.zipFrom, zFrom)
+    +     '</div>'
+    +     '<div class="cbw-loc-arrow">→</div>'
+    +     '<div class="cbw-loc-col">'
+    +       '<label class="cbw-loc-lbl">Kam</label>'
+    +       '<div class="cbw-loc-inputs">'
+    +         '<input class="cbw-q-input cbw-zip" id="cbwZipTo" inputmode="numeric" maxlength="5" value="' + escapeHtml(d.zipTo) + '" placeholder="PSČ">'
+    +         '<input class="cbw-q-input" id="cbwCityTo" value="' + escapeHtml(d.cityTo) + '" placeholder="Mesto / ulica">'
+    +       '</div>'
+    +       feedback(d.zipTo, zTo)
+    +     '</div>'
+    +   '</div>'
+    + '</section>';
+}
+
+function sectionAccess(d) {
+  const floors = Math.max(0, Math.min(20, Number(d.floors) || 0));
+  const parkOpts = [
+    ['near', 'Priamo pri vchode'],
+    ['far',  'Ďalej / horšie'],
+    ['blocked', 'Bez možnosti']
+  ];
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">4</div>'
+    +   '<h3 class="cbw-sec-title">Prístup k bytu</h3>'
+    +   '<p class="cbw-sec-hint">Zatlačte +/− pre poschodie, vyberte výťah a parkovanie.</p>'
+    +   '<div class="cbw-access-row">'
+    +     '<div class="cbw-stepper">'
+    +       '<button type="button" class="cbw-step-btn" data-floor-delta="-1" aria-label="Menej">−</button>'
+    +       '<div class="cbw-step-val"><span class="cbw-step-num">' + floors + '</span><small>Poschodie</small></div>'
+    +       '<button type="button" class="cbw-step-btn" data-floor-delta="+1" aria-label="Viac">+</button>'
+    +     '</div>'
+    +     '<div class="cbw-toggle">'
+    +       '<label class="cbw-toggle-lbl">Výťah</label>'
+    +       '<button type="button" class="cbw-toggle-btn" data-elevator="yes" aria-pressed="' + (d.elevator === 'yes') + '">Áno</button>'
+    +       '<button type="button" class="cbw-toggle-btn" data-elevator="no" aria-pressed="' + (d.elevator === 'no') + '">Nie</button>'
+    +     '</div>'
+    +   '</div>'
+    +   '<div class="cbw-sec-sublabel">Parkovanie</div>'
+    +   '<div class="cbw-chip-row">'
+    +     parkOpts.map(p => '<button type="button" class="cbw-chip-park" data-parking="' + p[0] + '" aria-pressed="' + (d.parking === p[0]) + '">' + escapeHtml(p[1]) + '</button>').join('')
+    +   '</div>'
+    + '</section>';
+}
+
+function sectionTiming(d) {
+  const modes = [
+    ['flex',     'Flexibilný',     '−10 %', 'discount'],
+    ['standard', 'Štandard',       '',      'std'],
+    ['rush',     'Súrne / víkend', '+15 %', 'rush']
+  ];
+  return ''
+    + '<section class="cbw-sec">'
+    +   '<div class="cbw-sec-num">5</div>'
+    +   '<h3 class="cbw-sec-title">Kedy to potrebujete?</h3>'
+    +   '<p class="cbw-sec-hint">Flexibilný termín ušetrí, súrny stojí viac.</p>'
+    +   '<div class="cbw-time-row">'
+    +     modes.map(m => '<button type="button" class="cbw-time-btn" data-tone="' + m[3] + '" data-datemode="' + m[0] + '" aria-pressed="' + (d.dateMode === m[0]) + '"><span>' + escapeHtml(m[1]) + '</span><small>' + escapeHtml(m[2]) + '</small></button>').join('')
+    +   '</div>'
+    +   '<label class="cbw-loc-lbl" style="margin-top:10px">Konkrétny dátum (voliteľne)</label>'
+    +   '<input class="cbw-q-input" id="cbwDate" type="date" value="' + escapeHtml(d.date) + '">'
+    + '</section>';
+}
+
+function sectionContact(d) {
+  return ''
+    + '<section class="cbw-sec cbw-sec-contact">'
+    +   '<div class="cbw-sec-num">6</div>'
+    +   '<h3 class="cbw-sec-title">Kontakt</h3>'
+    +   '<p class="cbw-sec-hint">Ozveme sa do 30 minút v pracovných hodinách.</p>'
+    +   '<div class="cbw-loc-row">'
+    +     '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Meno</label><input class="cbw-q-input" id="cbwName" value="' + escapeHtml(d.name) + '" placeholder="Vaše meno"></div>'
+    +     '<div class="cbw-loc-col"><label class="cbw-loc-lbl">Telefón <span class="cbw-required-star">*</span></label><input class="cbw-q-input" id="cbwPhone" value="' + escapeHtml(d.phone) + '" inputmode="tel" placeholder="0900 123 456"></div>'
+    +   '</div>'
+    +   '<label class="cbw-loc-lbl">E-mail (voliteľné)</label>'
+    +   '<input class="cbw-q-input" id="cbwEmail" value="' + escapeHtml(d.email) + '" type="email" placeholder="email@example.sk">'
+    +   '<label class="cbw-loc-lbl">Poznámka (voliteľné)</label>'
+    +   '<textarea class="cbw-q-input" id="cbwNote" placeholder="Čokoľvek čo by sme mali vedieť">' + escapeHtml(d.note) + '</textarea>'
+    +   '<button type="button" class="cbw-gdpr-wrap" id="cbwGdpr" data-checked="' + (d.gdpr ? 'true' : 'false') + '"><span class="cbw-gdpr-check"></span><span class="cbw-gdpr-text"><strong>' + escapeHtml(t('gdpr_title') || 'Súhlasím so spracovaním údajov') + '</strong><br>' + escapeHtml(t('gdpr_text') || 'Údaje použijeme len na kontakt v rámci tohto dopytu.') + '</span></button>'
+    + '</section>';
+}
+
+function renderBreakdown(price) {
+  if (!price.breakdown || !price.breakdown.length) return '';
+  const items = price.breakdown.map(line => {
+    const tone = line.type === 'discount' ? 'cbw-pb-discount' : (line.type === 'positive' ? 'cbw-pb-positive' : '');
+    const amount = line.amount ? ((line.amount >= 0 ? '+' : '') + line.amount + ' €') : (line.type === 'discount' ? '−10 %' : (line.type === 'positive' ? '+15 %' : ''));
+    const sub = line.sub ? ' · ' + escapeHtml(String(line.sub)) : '';
+    return '<div class="cbw-pb-row"><span class="cbw-pb-row-label">' + escapeHtml(line.label) + '<small>' + sub + '</small></span><span class="cbw-pb-row-amount ' + tone + '">' + amount + '</span></div>';
+  }).join('');
+  return ''
+    + '<details class="cbw-bd">'
+    +   '<summary>Z čoho sa skladá cena</summary>'
+    +   '<div class="cbw-pb-list">' + items + '</div>'
+    +   '<div class="cbw-pb-total"><span class="cbw-pb-total-label">Spolu odhad</span><span class="cbw-pb-total-amount">' + price.min + ' – ' + price.max + ' €</span></div>'
+    +   '<div class="cbw-pb-trust"><span>✓ Bez záväzku</span><span>✓ Žiadne skryté poplatky</span><span>✓ Odpoveď do 30 min</span></div>'
+    + '</details>';
 }
 
 function rerenderKeepingFocus(inputId, value) {
@@ -6835,105 +7446,118 @@ if (cursorPos != null) { try { next.setSelectionRange(cursorPos, cursorPos); } c
 });
 }
 
-function bindCalcStepEvents() {
-bind('[data-direction]', 'click', e => setData('direction', e.currentTarget.dataset.direction, true));
-bind('[data-service]', 'click', e => setData('service', e.currentTarget.dataset.service, true));
-bind('[data-search-item]', 'click', e => {
-const item = byId(ALL_ITEMS, e.currentTarget.dataset.searchItem);
-if (!item) return;
-const svc = byId(SERVICES, item.cat);
-if (svc && calc.data.direction && !svc.directions.includes(calc.data.direction)) return;
-calc.data.service = item.cat;
-calc.data.items = isSelectedItem(item.id) ? selectedItems() : selectedItems().concat(item);
-calc.search = '';
-calc.filter = 'all';
-goStep(2);
-});
-const svcSearch = document.getElementById('cbwServiceSearch');
-if (svcSearch) {
-svcSearch.addEventListener('input', e => rerenderKeepingFocus('cbwServiceSearch', e.target.value));
-svcSearch.addEventListener('keydown', e => {
-if (e.key === 'Enter') {
-e.preventDefault();
-const first = filteredItems(1)[0];
-if (first && itemMatchesQuery(first, svcSearch.value)) {
-calc.data.service = first.cat;
-calc.data.items = [first];
-calc.search = '';
-goStep(2);
-} else {
-addCustomItem(svcSearch.value, 2);
-}
-}
-});
-}
-const addServiceCustom = document.getElementById('cbwAddServiceCustom');
-if (addServiceCustom) addServiceCustom.addEventListener('click', () => addCustomItem((document.getElementById('cbwServiceSearch') || {}).value, 2));
-const itemSearch = document.getElementById('cbwItemSearch');
-if (itemSearch) {
-itemSearch.addEventListener('input', e => rerenderKeepingFocus('cbwItemSearch', e.target.value));
-itemSearch.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCustomItem(itemSearch.value); } });
-}
-const addSearchAsItem = document.getElementById('cbwAddSearchAsItem');
-if (addSearchAsItem) addSearchAsItem.addEventListener('click', () => addCustomItem((document.getElementById('cbwItemSearch') || {}).value));
-bind('[data-filter]', 'click', e => { calc.filter = e.currentTarget.dataset.filter; renderCalc({ preserveScroll: true }); });
-bind('[data-preset]', 'click', e => applyPreset(e.currentTarget.dataset.preset));
-bind('[data-item]', 'click', e => toggleItem(e.currentTarget.dataset.item));
-bind('[data-remove-item]', 'click', e => toggleItem(e.currentTarget.dataset.removeItem));
-const clearItems = document.getElementById('cbwClearItems');
-if (clearItems) clearItems.addEventListener('click', () => { calc.data.items = []; renderCalc({ preserveScroll: true }); });
-const customInput = document.getElementById('cbwCustomItem');
-if (customInput) {
-customInput.addEventListener('input', e => { calc.customText = e.target.value; });
-customInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addCustomItem(customInput.value); } });
-}
-const customAdd = document.getElementById('cbwAddCustom');
-if (customAdd) customAdd.addEventListener('click', () => addCustomItem((document.getElementById('cbwCustomItem') || {}).value));
-const quantity = document.getElementById('cbwQuantity');
-if (quantity) quantity.addEventListener('input', e => {
-  const raw = e.target.value;
-  calc.data.quantity = raw === '' ? '' : Math.max(1, Number(raw) || 1);
-  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-});
-const floors = document.getElementById('cbwFloors');
-if (floors) floors.addEventListener('input', e => {
-  const raw = e.target.value;
-  calc.data.floors = raw === '' ? '' : Math.max(0, Number(raw) || 0);
-  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-});
-const areaM2 = document.getElementById('cbwAreaM2');
-if (areaM2) areaM2.addEventListener('input', e => {
-  const raw = e.target.value;
-  calc.data.areaM2 = raw === '' ? '' : Math.max(0, Number(raw) || 0);
-  calcEls.next.disabled = calc.sending || !validateStep(calc.step);
-});
-bind('[data-space-type]', 'click', e => selectTopJobType(e.currentTarget.dataset.spaceType));
-bind('[data-job-type]', 'click', e => setData('jobType', e.currentTarget.dataset.jobType));
-bind('[data-extra]', 'click', e => toggleExtra(e.currentTarget.dataset.extra));
-bind('[data-access]', 'click', e => setData('access', e.currentTarget.dataset.access));
-bind('[data-elevator]', 'click', e => setData('elevator', e.currentTarget.dataset.elevator));
-bind('[data-parking]', 'click', e => setData('parking', e.currentTarget.dataset.parking));
-bind('[data-distance]', 'click', e => setData('distance', e.currentTarget.dataset.distance));
-bind('[data-datemode]', 'click', e => setData('dateMode', e.currentTarget.dataset.datemode));
+function bindCalcStepEvents() { bindCalcV2Events(); }
 
-['CityFrom', 'CityTo', 'Date', 'Note', 'Name', 'Phone', 'Email'].forEach(key => {
-  const el = document.getElementById('cbw' + key);
-  if (el) el.addEventListener('input', e => {
-    const map = { CityFrom: 'cityFrom', CityTo: 'cityTo', Date: 'date', Note: 'note', Name: 'name', Phone: 'phone', Email: 'email' };
-    calc.data[map[key]] = e.target.value;
-    calcEls.next.disabled = calc.sending || !validateStep(calc.step);
+function bindCalcV2Events() {
+  // Service tiles
+  bind('[data-direction]', 'click', e => {
+    const dir = e.currentTarget.dataset.direction;
+    calc.data.direction = dir;
+    calc.data.service = DEFAULT_SERVICE_BY_DIRECTION[dir] || calc.data.service || 'furniture';
+    renderCalc({ preserveScroll: true });
   });
-});
-const gdpr = document.getElementById('cbwGdpr');
-if (gdpr) gdpr.addEventListener('click', () => setData('gdpr', !calc.data.gdpr));
-const photoInput = document.getElementById('cbwPhotos');
-if (photoInput) photoInput.addEventListener('change', handlePhotos);
-bind('[data-remove-photo]', 'click', e => {
-  const idx = Number(e.currentTarget.dataset.removePhoto);
-  calc.data.photos.splice(idx, 1);
-  renderCalc({ preserveScroll: true });
-});
+
+  // Volume slider — debounced repaint of the readout + sticky price
+  const vol = document.getElementById('cbwVolume');
+  if (vol) {
+    vol.addEventListener('input', e => {
+      calc.data.volume = Number(e.target.value) || 0;
+      updateVolumeLive();
+      updateStickyPrice();
+    });
+  }
+
+  // Special items chips
+  bind('[data-special]', 'click', e => {
+    const id = e.currentTarget.dataset.special;
+    const cur = Object.assign({}, calc.data.specials || {});
+    if (id === 'none') {
+      calc.data.specials = cur.none ? {} : { none: true };
+    } else {
+      delete cur.none;
+      if (cur[id]) delete cur[id]; else cur[id] = true;
+      calc.data.specials = cur;
+    }
+    renderCalc({ preserveScroll: true });
+  });
+
+  // Floor stepper +/-
+  bind('[data-floor-delta]', 'click', e => {
+    const delta = Number(e.currentTarget.dataset.floorDelta) || 0;
+    calc.data.floors = Math.max(0, Math.min(20, (Number(calc.data.floors) || 0) + delta));
+    renderCalc({ preserveScroll: true });
+  });
+
+  // Elevator + Parking + Date mode
+  bind('[data-elevator]', 'click', e => { calc.data.elevator = e.currentTarget.dataset.elevator; renderCalc({ preserveScroll: true }); });
+  bind('[data-parking]', 'click', e => { calc.data.parking = e.currentTarget.dataset.parking; renderCalc({ preserveScroll: true }); });
+  bind('[data-datemode]', 'click', e => { calc.data.dateMode = e.currentTarget.dataset.datemode; renderCalc({ preserveScroll: true }); });
+
+  // PSČ inputs — refresh chip + sticky price, keep focus
+  ['ZipFrom', 'ZipTo'].forEach(key => {
+    const el = document.getElementById('cbw' + key);
+    if (!el) return;
+    el.addEventListener('input', e => {
+      const cleaned = String(e.target.value || '').replace(/[^\d ]/g, '').slice(0, 6);
+      calc.data[key === 'ZipFrom' ? 'zipFrom' : 'zipTo'] = cleaned;
+      rerenderRestoringFocus('cbw' + key);
+    });
+  });
+
+  // Plain text inputs — update state only, refresh sticky
+  ['CityFrom', 'CityTo', 'Date', 'Note', 'Name', 'Phone', 'Email'].forEach(key => {
+    const el = document.getElementById('cbw' + key);
+    if (!el) return;
+    el.addEventListener('input', e => {
+      const map = { CityFrom: 'cityFrom', CityTo: 'cityTo', Date: 'date', Note: 'note', Name: 'name', Phone: 'phone', Email: 'email' };
+      calc.data[map[key]] = e.target.value;
+      updateStickyPrice();
+      calcEls.next.disabled = calc.sending || !validateAll();
+    });
+  });
+
+  // GDPR toggle
+  const gdpr = document.getElementById('cbwGdpr');
+  if (gdpr) gdpr.addEventListener('click', () => {
+    calc.data.gdpr = !calc.data.gdpr;
+    gdpr.dataset.checked = calc.data.gdpr ? 'true' : 'false';
+    calcEls.next.disabled = calc.sending || !validateAll();
+  });
 }
+
+function updateVolumeLive() {
+  const v = Math.max(5, Math.min(100, Number(calc.data.volume) || 25));
+  // Update van fill width
+  const fill = document.querySelector('.cbw-van-fill');
+  if (fill) fill.setAttribute('width', String(v * 1.58));
+  // Update readout text
+  const labels = [
+    [0, 18, 'Pár kusov', 'do 1/8 dodávky'],
+    [18, 32, '1/4 dodávky', 'pár veľkých kusov'],
+    [32, 50, '1/2 dodávky', 'malá izba'],
+    [50, 70, '3/4 dodávky', 'väčšia izba alebo 1-izba'],
+    [70, 90, 'Plná dodávka', 'kompletná 2-izba'],
+    [90, 101, 'Viac ako dodávka', 'budeme jazdiť 2×']
+  ];
+  const cur = labels.find(l => v >= l[0] && v < l[1]) || labels[0];
+  const title = document.querySelector('.cbw-vol-readout-title');
+  const sub = document.querySelector('.cbw-vol-readout-sub');
+  if (title) title.textContent = cur[2];
+  if (sub) sub.textContent = cur[3];
+  // Toggle box visibility
+  const boxes = document.querySelectorAll('.cbw-van-box');
+  const visibleCount = Math.min(boxes.length, Math.ceil(v / 16));
+  boxes.forEach((b, i) => { b.style.opacity = i < visibleCount ? '1' : '0'; });
+}
+
+function updateStickyPrice() {
+  const price = calculatePrice();
+  const val = document.querySelector('.cbw-sticky-value');
+  const fill = document.querySelector('.cbw-sticky-fill');
+  if (val) val.textContent = price.min + ' – ' + price.max + ' €';
+  if (fill) fill.style.width = Math.min(100, Math.max(8, Math.round((price.mid / Math.max(50, price.max * 1.3)) * 100))) + '%';
+}
+
 
 function handlePhotos(event) {
 const files = Array.from(event.target.files || []).slice(0, 5);

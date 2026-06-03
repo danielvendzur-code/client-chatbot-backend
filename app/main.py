@@ -50,6 +50,13 @@ async def demo() -> FileResponse:
     return FileResponse(WIDGET_DIR / "demo.html")
 
 
+@app.get("/test", include_in_schema=False)
+async def test() -> FileResponse:
+    """Same widget as /demo but with a ?cbw=test marker so the wizard
+    can render in 'test' mode (all steps visible at once for QA)."""
+    return FileResponse(WIDGET_DIR / "demo.html")
+
+
 @app.get("/healthz")
 async def healthz() -> dict[str, str]:
     return {"status": "ok"}
