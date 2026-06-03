@@ -7141,38 +7141,50 @@ appendBubble('bot', t('thanks_send'));
    ============================================================ */
 function renderCalc(options) {
 if (!calc.open) return;
-addRuntimeStyles();
-const renderOptions = options || {};
-const previousScrollTop = (!renderOptions.preserveScroll || !calcEls.body) ? 0 : calcEls.body.scrollTop;
+try {
+  addRuntimeStyles();
+  const renderOptions = options || {};
+  const previousScrollTop = (!renderOptions.preserveScroll || !calcEls.body) ? 0 : calcEls.body.scrollTop;
 
-calcEls.title.textContent = 'Cenová kalkulačka';
-calcEls.step.textContent = 'Stačí pár pohybov — odhad uvidíte priebežne';
-calcEls.headBack.style.visibility = 'hidden';
-calcEls.prev.style.visibility = 'hidden';
-calcEls.foot.style.display = 'flex';
-calcEls.next.disabled = calc.sending || !validateAll();
-calcEls.next.textContent = calc.sending ? (t('calc_sending') || 'Odosielam…') : 'Odoslať dopyt';
-if (calcEls.barFill) calcEls.barFill.style.width = (validateAll() ? 100 : 60) + '%';
-if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', validateAll() ? '100' : '60');
+  calcEls.title.textContent = 'Cenová kalkulačka';
+  calcEls.step.textContent = 'Stačí pár pohybov — odhad uvidíte priebežne';
+  calcEls.headBack.style.visibility = 'hidden';
+  calcEls.prev.style.visibility = 'hidden';
+  calcEls.foot.style.display = 'flex';
+  calcEls.next.disabled = calc.sending || !validateAll();
+  calcEls.next.textContent = calc.sending ? (t('calc_sending') || 'Odosielam…') : 'Odoslať dopyt';
+  if (calcEls.barFill) calcEls.barFill.style.width = (validateAll() ? 100 : 60) + '%';
+  if (calcEls.bar) calcEls.bar.setAttribute('aria-valuenow', validateAll() ? '100' : '60');
 
-const d = calc.data;
-const price = calculatePrice();
+  const d = calc.data;
+  const price = calculatePrice();
 
-const html = ''
-+ renderStickyPrice(price)
-+ '<form class="cbw-v2" autocomplete="off" onsubmit="return false">'
-+   sectionService(d)
-+   sectionVolume(d, price)
-+   sectionLocation(d)
-+   sectionAccess(d)
-+   sectionTiming(d)
-+   sectionContact(d)
-+ '</form>'
-+ renderBreakdown(price);
+  const html = ''
+    + renderStickyPrice(price)
+    + '<form class="cbw-v2" autocomplete="off" onsubmit="return false">'
+    +   sectionService(d)
+    +   sectionVolume(d, price)
+    +   sectionLocation(d)
+    +   sectionAccess(d)
+    +   sectionTiming(d)
+    +   sectionContact(d)
+    + '</form>'
+    + renderBreakdown(price);
 
-calcEls.body.innerHTML = html;
-calcEls.body.scrollTop = previousScrollTop;
-bindCalcV2Events();
+  calcEls.body.innerHTML = html;
+  calcEls.body.scrollTop = previousScrollTop;
+  bindCalcV2Events();
+} catch (err) {
+  if (window.console && console.error) console.error('[cbw-calc] render error:', err);
+  if (calcEls.body) {
+    calcEls.body.innerHTML = ''
+      + '<div style="padding:20px;border:1px solid #fecaca;background:#fef2f2;border-radius:12px;margin:10px 0">'
+      +   '<strong style="color:#991b1b">Hups, kalkulačka má technický problém.</strong>'
+      +   '<p style="font-size:12px;color:#7f1d1d;margin:6px 0 0">Zavolajte nám prosím priamo na <a href="tel:+421948841313" style="color:#0c4a6e;font-weight:700">+421 948 841 313</a> alebo nám napíšte na <a href="mailto:info@odvoznabytku.sk" style="color:#0c4a6e;font-weight:700">info@odvoznabytku.sk</a>. Ďakujeme!</p>'
+      +   '<details style="margin-top:10px;font-size:11px;color:#7f1d1d"><summary>Technický detail</summary><pre style="white-space:pre-wrap;font-size:10px">' + (err && err.message || err) + '</pre></details>'
+      + '</div>';
+  }
+}
 }
 
 function validateAll() {
@@ -7237,8 +7249,7 @@ function sectionVolume(d, price) {
     +     '<rect x="50" y="40" width="14" height="14" rx="2" stroke="#0c4a6e" stroke-width="1.5" fill="none"/>'
     +     // Fill silhouette (clipped to width based on volume)
     +     '<rect class="cbw-van-fill" x="46" y="40" width="' + (fillPct * 1.58) + '" height="42" fill="#0284c7" opacity="0.16"/>'
-    +     // Cargo boxes — multiplied
-    +     boxesInVan(v) +
+    +     boxesInVan(v)
     +     '<circle class="cbw-van-wheel" cx="80" cy="92" r="9" fill="#0c4a6e"/>'
     +     '<circle cx="80" cy="92" r="3.5" fill="#fff"/>'
     +     '<circle class="cbw-van-wheel" cx="230" cy="92" r="9" fill="#0c4a6e"/>'
