@@ -1866,7 +1866,43 @@ V2 — PARAMETRIC ONE-PAGE FLOW
   margin-bottom: 12px;
 }
 .cbw-ducato { width: 100%; max-width: 340px; height: auto; display: block; }
-.cbw-ducato-fill { transition: y 380ms cubic-bezier(0.22, 1, 0.36, 1), height 380ms cubic-bezier(0.22, 1, 0.36, 1); }
+.cbw-ducato-fill { transition: width 520ms cubic-bezier(0.22, 1, 0.36, 1); }
+
+/* Price + label inside the Next button */
+.cbw-next-priced { display: flex !important; align-items: center; justify-content: space-between; gap: 14px; }
+.cbw-next-priced .cbw-next-label { display: inline-flex; align-items: center; gap: 6px; font-weight: 800; }
+.cbw-next-priced .cbw-next-label::after {
+  content: ""; width: 14px; height: 14px;
+  background: currentColor; mask: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  -webkit-mask: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='9 18 15 12 9 6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+.cbw-next-priced .cbw-next-price {
+  font-family: 'DM Serif Display', serif;
+  font-size: 17px; font-variant-numeric: tabular-nums;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.28);
+  transition: transform 200ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cbw-next-priced .cbw-next-price.cbw-flash { transform: scale(1.12); }
+
+/* m² area row in step 2 */
+.cbw-area-block {
+  margin-top: 14px; padding: 12px 14px;
+  background: #fff; border: 1px solid var(--border); border-radius: var(--radius-md);
+}
+.cbw-area-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 8px;
+}
+.cbw-area-label { font-size: 12px; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); }
+.cbw-area-value {
+  font-family: 'DM Serif Display', serif; font-size: 22px;
+  color: var(--primary-dark); font-variant-numeric: tabular-nums;
+}
+.cbw-area-row { display: grid; grid-template-columns: 1fr 110px; gap: 10px; align-items: center; }
+@media (max-width: 380px) { .cbw-area-row { grid-template-columns: 1fr; } }
+.cbw-area-row input[type=number] { letter-spacing: 0.04em; text-align: right; font-weight: 700; }
+.cbw-area-hint { font-size: 11px; color: var(--text-muted); margin-top: 6px; }
 .cbw-vol-help {
   margin-top: 12px; padding: 10px 12px;
   background: #fefce8; border: 1px solid #fde68a; border-radius: var(--radius-sm);
@@ -4435,7 +4471,10 @@ padding: 9px 16px;
   <div class="cbw-calc-body" id="cbwCalcBody"></div>
   <div class="cbw-calc-foot" id="cbwCalcFoot" style="display:none">
     <button type="button" class="cbw-calc-back-btn" id="cbwCalcPrev">Späť</button>
-    <button type="button" class="cbw-calc-next-btn cbw-brand-gradient" id="cbwCalcNext" disabled>Pokračovať</button>
+    <button type="button" class="cbw-calc-next-btn cbw-brand-gradient cbw-next-priced" id="cbwCalcNext" disabled>
+      <span class="cbw-next-label" id="cbwNextLabel">Pokračovať</span>
+      <span class="cbw-next-price" id="cbwNextPrice" aria-live="polite"></span>
+    </button>
   </div>
 </div>
 
@@ -6719,6 +6758,14 @@ padding: 9px 16px;
     if (d.parking === 'blocked') { total += 30; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 30 }); }
     if (items.some(item => (item.tags || []).includes('heavy'))) { total += 25; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 25 }); }
 
+    // Area (m²) — adds 1.4 €/m² up to a soft 200 m² cap to keep estimates sane
+    const area = Math.max(0, Math.min(2000, Number(d.areaM2) || 0));
+    if (area > 0) {
+      const aAmount = Math.round(area * 1.4);
+      total += aAmount;
+      lines.push({ label: 'Rozloha priestoru', sub: area + ' m² × 1,40 €', amount: aAmount });
+    }
+
     // Crew size — each extra person beyond 2 adds an hourly surcharge estimate
     const crewMap = { self: { count: 1, sub: 'Sami', extra: -30 }, help_1: { count: 1, sub: '1 pomocník', extra: 0 }, crew_2: { count: 2, sub: '2 ľudia', extra: 0 }, crew_3: { count: 3, sub: '3 ľudia', extra: 40 }, crew_4: { count: 4, sub: '4+ ľudia', extra: 90 } };
     if (d.crew && crewMap[d.crew] && crewMap[d.crew].extra !== 0) {
@@ -6821,23 +6868,9 @@ padding: 9px 16px;
 
   function goStep(nextStep) {
     calc.error = '';
-    const previousStep = calc.step;
-    let targetStep = Math.max(0, Math.min(STEP_META.length - 1, nextStep));
-    if (shouldSkipItemsStep() && targetStep === 2) {
-      targetStep = nextStep > previousStep ? 3 : 1;
-    }
-    // Skip the standalone service step — direction already implies it.
-    if (targetStep === 1) {
-      if (!calc.data.service && calc.data.direction) {
-        calc.data.service = DEFAULT_SERVICE_BY_DIRECTION[calc.data.direction] || 'furniture';
-      }
-      targetStep = nextStep > previousStep ? 2 : 0;
-      // After skip, recompute item-skip too
-      if (shouldSkipItemsStep() && targetStep === 2) {
-        targetStep = nextStep > previousStep ? 3 : 0;
-      }
-    }
-    calc.step = targetStep;
+    // V3 wizard: plain 5-step navigation, clamp to STEPS bounds (0..4).
+    const maxStep = (typeof STEPS !== 'undefined' ? STEPS.length : 5) - 1;
+    calc.step = Math.max(0, Math.min(maxStep, nextStep));
     renderCalc();
   }
 
@@ -7277,7 +7310,13 @@ function renderCalc(options) {
     calcEls.prev.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
     calcEls.prev.textContent = 'Späť';
     const last = calc.step === STEPS.length - 1;
-    calcEls.next.textContent = calc.sending ? 'Odosielam…' : (last ? 'Odoslať dopyt' : 'Pokračovať');
+    // Compose label + price chip inside the Next button
+    const nextLabel = calc.sending ? 'Odosielam…' : (last ? 'Odoslať dopyt' : 'Pokračovať');
+    calcEls.next.innerHTML = '<span class="cbw-next-label">' + nextLabel + '</span>'
+      + '<span class="cbw-next-price" id="cbwNextPrice">' + (_lastNextPrice.min || price.min) + ' – ' + (_lastNextPrice.max || price.max) + ' €</span>';
+    calcEls.next.classList.add('cbw-next-priced');
+    // Trigger smooth count-up after layout
+    setTimeout(updateNextPriceLive, 30);
     calcEls.next.disabled = calc.sending || !validateWizardStep(calc.step);
     if (calcEls.barFill) calcEls.barFill.style.width = Math.round(((calc.step + 1) / STEPS.length) * 100) + '%';
 
@@ -7290,7 +7329,7 @@ function renderCalc(options) {
     else if (step.id === 'details') html = wizDetails(d);
     else if (step.id === 'contact') html = wizContact(d, price);
 
-    calcEls.body.innerHTML = '<div class="cbw-ministicky">' + renderMiniSticky(price) + '</div>' + html;
+    calcEls.body.innerHTML = html;
     calcEls.body.scrollTop = prev;
     bindWizardEvents();
   } catch (err) {
@@ -7379,50 +7418,101 @@ function wizSpace(d) {
       + '</button>';
   }).join('');
   const open = d.detailsOpen ? 'open' : '';
-  return '<div class="cbw-step-intro">Vyberte typ priestoru. Detaily môžete dopísať v textovom poli nižšie (voliteľné).</div>'
+  const area = Math.max(0, Number(d.areaM2) || 0);
+  // Slider with elastic upper bound — if user types in a larger number the
+  // slider rescales automatically (no hard ceiling).
+  const sliderMax = Math.max(200, area * 1.5 || 200);
+  return '<div class="cbw-step-intro">Vyberte typ priestoru. Detaily a presnú rozlohu môžete doplniť nižšie.</div>'
     + '<div class="cbw-space-grid">' + cards + '</div>'
-    + '<details class="cbw-details-collapse" ' + open + ' id="cbwDetailsCollapse">'
+    + '<div class="cbw-area-block">'
+    +   '<div class="cbw-area-head">'
+    +     '<span class="cbw-area-label">Rozloha</span>'
+    +     '<span class="cbw-area-value" id="cbwAreaValue">' + (area ? area : '—') + ' m²</span>'
+    +   '</div>'
+    +   '<div class="cbw-area-row">'
+    +     '<input type="range" class="cbw-vol-slider" id="cbwAreaSlider" min="0" max="' + sliderMax + '" step="1" value="' + area + '" aria-label="Rozloha v m²">'
+    +     '<input type="number" class="cbw-q-input" id="cbwAreaInput" min="0" step="1" value="' + (area || '') + '" placeholder="m²">'
+    +   '</div>'
+    +   '<div class="cbw-area-hint">Posúvajte slider alebo napíšte presnú hodnotu — bez hornej hranice. Pomôže nám presnejšie naceniť.</div>'
+    + '</div>'
+    + '<details class="cbw-details-collapse" ' + open + ' id="cbwDetailsCollapse" style="margin-top:10px">'
     +   '<summary>Dopísať detaily (voliteľné)</summary>'
     +   '<textarea class="cbw-q-input" id="cbwSpaceDetails" rows="3" placeholder="Napríklad: 2 sedačky, jedálenský stôl, šatník, krabice s knihami…">' + escapeHtml(d.spaceDetails || '') + '</textarea>'
     + '</details>';
 }
 
 // ───── STEP 3: Volume slider with Fiat Ducato silhouette ─────
+// Cargo geometry constants shared by SVG renderer + live updater
+const VAN_X = 18, VAN_Y = 22, VAN_W = 230, VAN_H = 78;
+
 function vanSilhouette(fillPct) {
-  // Approximation of a Fiat Ducato L2H2 silhouette; cargo box is the central
-  // rectangle which fills with brand-blue gradient as the slider moves.
-  const w = 220; // svg viewBox width
-  const cargoX = 14, cargoY = 30, cargoW = 138, cargoH = 60;
-  const fillW = Math.max(0, Math.min(cargoW, (fillPct / 100) * cargoW));
+  // Detailed side-on Fiat Ducato L2H2 silhouette. The blue gradient fill is
+  // clipped to the cargo bay shape and grows horizontally left→right as the
+  // slider moves (single smooth animation, not stepped).
+  const fillW = Math.max(0, Math.min(VAN_W, (Math.max(0, Math.min(100, fillPct)) / 100) * VAN_W));
   return ''
-    + '<svg class="cbw-ducato" viewBox="0 0 240 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
+    + '<svg class="cbw-ducato" viewBox="0 0 300 132" xmlns="http://www.w3.org/2000/svg" aria-label="Fiat Ducato">'
     +   '<defs>'
-    +     '<linearGradient id="cbwVanFill" x1="0" y1="1" x2="0" y2="0">'
-    +       '<stop offset="0" stop-color="#0c4a6e"/>'
-    +       '<stop offset="0.6" stop-color="#0284c7"/>'
-    +       '<stop offset="1" stop-color="#7dd3fc"/>'
+    +     '<linearGradient id="cbwVanFill" x1="0" y1="0" x2="1" y2="0">'
+    +       '<stop offset="0"   stop-color="#0c4a6e"/>'
+    +       '<stop offset="0.55" stop-color="#0284c7"/>'
+    +       '<stop offset="1"   stop-color="#7dd3fc"/>'
     +     '</linearGradient>'
+    +     '<linearGradient id="cbwVanSky" x1="0" y1="0" x2="0" y2="1">'
+    +       '<stop offset="0" stop-color="#f0f9ff"/><stop offset="1" stop-color="#fff"/>'
+    +     '</linearGradient>'
+    +     '<clipPath id="cbwCargoClip">'
+    +       '<path d="M' + VAN_X + ' ' + VAN_Y + ' h' + VAN_W + ' v' + VAN_H + ' h-' + VAN_W + ' z" />'
+    +     '</clipPath>'
     +   '</defs>'
-    +   '<line x1="6" y1="100" x2="234" y2="100" stroke="#cbd5e1" stroke-width="3" stroke-linecap="round" stroke-dasharray="8 6"/>'
-    // Cargo box (back of van)
-    +   '<rect x="' + cargoX + '" y="' + cargoY + '" width="' + cargoW + '" height="' + cargoH + '" rx="3" fill="#fff" stroke="#0c4a6e" stroke-width="2.5"/>'
-    +   '<rect class="cbw-ducato-fill" x="' + cargoX + '" y="' + (cargoY + cargoH - (fillW * cargoH / cargoW)) + '" width="' + cargoW + '" height="' + (fillW * cargoH / cargoW) + '" fill="url(#cbwVanFill)" rx="3"/>'
-    // Cab (front)
-    +   '<path d="M152 38 h32 l28 18 v34 H152 z" fill="#fff" stroke="#0c4a6e" stroke-width="2.5" stroke-linejoin="round"/>'
-    +   '<path d="M156 42 h26 l22 14 H156 z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="1.5"/>'
-    // Side door handle line
-    +   '<line x1="78" y1="38" x2="78" y2="90" stroke="#0c4a6e" stroke-width="1.5"/>'
-    +   '<circle cx="74" cy="64" r="2" stroke="#0c4a6e" stroke-width="1" fill="none"/>'
-    // Back door split
-    +   '<line x1="' + (cargoX + cargoW / 2) + '" y1="38" x2="' + (cargoX + cargoW / 2) + '" y2="84" stroke="#0c4a6e" stroke-width="1" stroke-dasharray="3 3"/>'
-    // Logo band
-    +   '<rect x="155" y="60" width="50" height="14" rx="1" fill="#0284c7"/>'
-    +   '<text x="180" y="71" text-anchor="middle" fill="#fff" font-family="-apple-system,Segoe UI,sans-serif" font-size="9" font-weight="700">DUCATO</text>'
-    // Wheels
-    +   '<circle cx="42" cy="100" r="11" fill="#0c4a6e"/>'
-    +   '<circle cx="42" cy="100" r="4.5" fill="#fff"/>'
-    +   '<circle cx="186" cy="100" r="11" fill="#0c4a6e"/>'
-    +   '<circle cx="186" cy="100" r="4.5" fill="#fff"/>'
+    // Ground shadow
+    +   '<ellipse cx="160" cy="122" rx="138" ry="6" fill="#0c4a6e" opacity="0.08"/>'
+    // Road
+    +   '<line x1="6" y1="118" x2="294" y2="118" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="8 6"/>'
+    // Body — main silhouette (cargo + cab in one outline)
+    +   '<path d="M' + VAN_X + ' ' + (VAN_Y + 4) + ' Q' + VAN_X + ' ' + VAN_Y + ' ' + (VAN_X + 4) + ' ' + VAN_Y + ' '
+    +     + 'h' + (VAN_W - 18) + ' '
+    +     + 'q12 0 18 8 l28 18 q10 4 10 18 v22 q0 6 -6 6 '
+    +     + 'h-12 q-2 -10 -12 -10 q-10 0 -12 10 h-' + (VAN_W - 70) + ' '
+    +     + 'q-2 -10 -12 -10 q-10 0 -12 10 '
+    +     + 'h-8 q-6 0 -6 -6 z" '
+    +     + 'fill="url(#cbwVanSky)" stroke="#0c4a6e" stroke-width="2.2" stroke-linejoin="round"/>'
+    // Fill (left→right horizontal) clipped to cargo box
+    +   '<g clip-path="url(#cbwCargoClip)">'
+    +     '<rect class="cbw-ducato-fill" x="' + VAN_X + '" y="' + VAN_Y + '" width="' + fillW + '" height="' + VAN_H + '" fill="url(#cbwVanFill)"/>'
+    +   '</g>'
+    // Cab area + windshield (right side of van)
+    +   '<path d="M222 ' + (VAN_Y + 16) + ' l20 14 q4 3 4 8 v6 h-30 z" fill="#bae6fd" stroke="#0c4a6e" stroke-width="1.6" stroke-linejoin="round"/>'
+    +   '<path d="M222 ' + (VAN_Y + 16) + ' l20 14" stroke="#fff" stroke-width="2" opacity="0.7"/>'
+    // A-pillar
+    +   '<line x1="222" y1="' + (VAN_Y + 16) + '" x2="222" y2="' + (VAN_Y + 44) + '" stroke="#0c4a6e" stroke-width="2"/>'
+    // Side panel highlight stripe
+    +   '<line x1="' + (VAN_X + 16) + '" y1="' + (VAN_Y + 56) + '" x2="218" y2="' + (VAN_Y + 56) + '" stroke="#0c4a6e" stroke-width="1.2" opacity="0.45"/>'
+    // Side door (sliding) handle + groove
+    +   '<line x1="92" y1="' + (VAN_Y + 6) + '" x2="92" y2="' + (VAN_Y + VAN_H - 6) + '" stroke="#0c4a6e" stroke-width="1.4" opacity="0.7"/>'
+    +   '<circle cx="88" cy="' + (VAN_Y + VAN_H / 2) + '" r="2.5" fill="#fff" stroke="#0c4a6e" stroke-width="1.2"/>'
+    // Back door split (dashed)
+    +   '<line x1="' + (VAN_X + 6) + '" y1="' + (VAN_Y + 6) + '" x2="' + (VAN_X + 6) + '" y2="' + (VAN_Y + VAN_H - 6) + '" stroke="#0c4a6e" stroke-width="1" stroke-dasharray="3 4" opacity="0.7"/>'
+    // Side mirror
+    +   '<path d="M248 ' + (VAN_Y + 28) + ' h6 q3 0 3 3 v4 q0 3 -3 3 h-6 z" fill="#fff" stroke="#0c4a6e" stroke-width="1.4" stroke-linejoin="round"/>'
+    +   '<line x1="244" y1="' + (VAN_Y + 30) + '" x2="248" y2="' + (VAN_Y + 30) + '" stroke="#0c4a6e" stroke-width="1.4"/>'
+    // Headlight
+    +   '<ellipse cx="270" cy="' + (VAN_Y + 50) + '" rx="6" ry="4" fill="#fde68a" stroke="#0c4a6e" stroke-width="1.4"/>'
+    // Bumper / grille
+    +   '<rect x="252" y="' + (VAN_Y + 60) + '" width="22" height="6" rx="1.5" fill="#0c4a6e" opacity="0.85"/>'
+    +   '<rect x="254" y="' + (VAN_Y + 67) + '" width="18" height="3" rx="1"   fill="#0c4a6e" opacity="0.55"/>'
+    // Wheel arches (subtle dark wells)
+    +   '<path d="M' + (VAN_X + 30) + ' ' + (VAN_Y + VAN_H + 2) + ' a16 16 0 0 1 32 0" fill="#0c4a6e" opacity="0.12"/>'
+    +   '<path d="M' + (VAN_X + VAN_W - 72) + ' ' + (VAN_Y + VAN_H + 2) + ' a16 16 0 0 1 32 0" fill="#0c4a6e" opacity="0.12"/>'
+    // Wheels (front + rear)
+    +   '<circle cx="' + (VAN_X + 46) + '" cy="' + (VAN_Y + VAN_H + 10) + '" r="13" fill="#0c4a6e"/>'
+    +   '<circle cx="' + (VAN_X + 46) + '" cy="' + (VAN_Y + VAN_H + 10) + '" r="6"  fill="#475569"/>'
+    +   '<circle cx="' + (VAN_X + 46) + '" cy="' + (VAN_Y + VAN_H + 10) + '" r="2"  fill="#fff"/>'
+    +   '<circle cx="' + (VAN_X + VAN_W - 56) + '" cy="' + (VAN_Y + VAN_H + 10) + '" r="13" fill="#0c4a6e"/>'
+    +   '<circle cx="' + (VAN_X + VAN_W - 56) + '" cy="' + (VAN_Y + VAN_H + 10) + '" r="6"  fill="#475569"/>'
+    +   '<circle cx="' + (VAN_X + VAN_W - 56) + '" cy="' + (VAN_Y + VAN_H + 10) + '" r="2"  fill="#fff"/>'
+    // Brand wordmark on side panel
+    +   '<text x="' + (VAN_X + VAN_W / 2 - 6) + '" y="' + (VAN_Y + 36) + '" text-anchor="middle" fill="#0c4a6e" font-family="-apple-system,Segoe UI,sans-serif" font-size="11" font-weight="800" letter-spacing="2" opacity="0.65">DUCATO</text>'
     + '</svg>';
 }
 
@@ -7585,6 +7675,25 @@ function bindWizardEvents() {
   const spaceDetails = document.getElementById('cbwSpaceDetails');
   if (spaceDetails) spaceDetails.addEventListener('input', function (e) { calc.data.spaceDetails = e.target.value; });
 
+  // m² slider + number input (sync both ways, no upper limit)
+  const areaSlider = document.getElementById('cbwAreaSlider');
+  const areaInput  = document.getElementById('cbwAreaInput');
+  const areaValue  = document.getElementById('cbwAreaValue');
+  function syncArea(v) {
+    const n = Math.max(0, Math.round(Number(v) || 0));
+    calc.data.areaM2 = n;
+    if (areaValue) areaValue.textContent = (n ? n : '—') + ' m²';
+    if (areaSlider) {
+      const max = Math.max(200, n * 1.5 || 200);
+      areaSlider.max = String(max);
+      if (Number(areaSlider.value) !== n) areaSlider.value = String(n);
+    }
+    if (areaInput && document.activeElement !== areaInput) areaInput.value = n || '';
+    updateNextPriceLive();
+  }
+  if (areaSlider) areaSlider.addEventListener('input', function (e) { syncArea(e.target.value); });
+  if (areaInput) areaInput.addEventListener('input', function (e) { syncArea(e.target.value); });
+
   const vol = document.getElementById('cbwVolume');
   if (vol) vol.addEventListener('input', function (e) {
     calc.data.volume = Number(e.target.value) || 0;
@@ -7639,27 +7748,50 @@ function bindWizardEvents() {
 }
 
 function updateVanLive() {
-  const v = Math.max(5, Math.min(100, Number(calc.data.volume) || 25));
-  const cargoX = 14, cargoY = 30, cargoW = 138, cargoH = 60;
-  const fillW = Math.max(0, Math.min(cargoW, (v / 100) * cargoW));
+  const v = Math.max(0, Math.min(100, Number(calc.data.volume) || 25));
+  const fillW = Math.max(0, Math.min(VAN_W, (v / 100) * VAN_W));
   const fill = document.querySelector('.cbw-ducato-fill');
   if (fill) {
-    fill.setAttribute('y', String(cargoY + cargoH - (fillW * cargoH / cargoW)));
-    fill.setAttribute('width', String(cargoW));
-    fill.setAttribute('height', String(fillW * cargoH / cargoW));
+    fill.setAttribute('x', String(VAN_X));
+    fill.setAttribute('y', String(VAN_Y));
+    fill.setAttribute('width', String(fillW));
+    fill.setAttribute('height', String(VAN_H));
   }
   const cur = volumeReadout(v);
   const title = document.querySelector('.cbw-vol-readout-title');
   const sub   = document.querySelector('.cbw-vol-readout-sub');
   if (title) title.textContent = cur[2];
   if (sub) sub.textContent = cur[3];
+  updateNextPriceLive();
 }
 
-function updateMiniSticky() {
+let _lastNextPrice = { min: 0, max: 0 };
+function updateNextPriceLive() {
   const price = calculatePrice();
-  const val = document.querySelector('.cbw-ministicky .cbw-sticky-value');
-  if (val) val.textContent = price.min + ' – ' + price.max + ' €';
+  const el = document.getElementById('cbwNextPrice');
+  if (!el) return;
+  const newMin = price.min, newMax = price.max;
+  if (newMin === _lastNextPrice.min && newMax === _lastNextPrice.max) return;
+  const fromMin = _lastNextPrice.min || newMin;
+  const fromMax = _lastNextPrice.max || newMax;
+  el.classList.add('cbw-flash');
+  setTimeout(function () { el.classList.remove('cbw-flash'); }, 240);
+  const start = performance.now();
+  const dur = 520;
+  function step(now) {
+    const p = Math.min(1, (now - start) / dur);
+    const e = 1 - Math.pow(1 - p, 3);
+    const curMin = Math.round(fromMin + (newMin - fromMin) * e);
+    const curMax = Math.round(fromMax + (newMax - fromMax) * e);
+    el.textContent = curMin + ' – ' + curMax + ' €';
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+  _lastNextPrice = { min: newMin, max: newMax };
 }
+
+// keep old name working for any other call sites
+function updateMiniSticky() { updateNextPriceLive(); }
 
 function handlePhotos(event) {
 const files = Array.from(event.target.files || []).slice(0, 5);
