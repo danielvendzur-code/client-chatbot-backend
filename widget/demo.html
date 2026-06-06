@@ -7310,6 +7310,10 @@ function renderCalc(options) {
     calcEls.prev.style.visibility = calc.step > 0 ? 'visible' : 'hidden';
     calcEls.prev.textContent = 'Späť';
     const last = calc.step === STEPS.length - 1;
+
+    const d = calc.data;
+    const price = calculatePrice();
+
     // Compose label + price chip inside the Next button
     const nextLabel = calc.sending ? 'Odosielam…' : (last ? 'Odoslať dopyt' : 'Pokračovať');
     calcEls.next.innerHTML = '<span class="cbw-next-label">' + nextLabel + '</span>'
@@ -7320,8 +7324,6 @@ function renderCalc(options) {
     calcEls.next.disabled = calc.sending || !validateWizardStep(calc.step);
     if (calcEls.barFill) calcEls.barFill.style.width = Math.round(((calc.step + 1) / STEPS.length) * 100) + '%';
 
-    const d = calc.data;
-    const price = calculatePrice();
     let html = '';
     if (step.id === 'service') html = wizService(d);
     else if (step.id === 'space') html = wizSpace(d);
