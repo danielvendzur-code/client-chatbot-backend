@@ -1655,9 +1655,9 @@ flex-shrink: 0;
 }
 .cbw-calc-foot button {
 flex: 1;
-padding: 13px 16px;
+padding: 9px 12px;
 border-radius: var(--radius-sm);
-font: inherit; font-size: 14.5px; font-weight: 700;
+font: inherit; font-size: 13px; font-weight: 700;
 cursor: pointer;
 transition: all 200ms ease;
 border: 1.5px solid var(--border-strong);
@@ -1672,7 +1672,8 @@ color: #fff;
 position: relative;
 overflow: hidden;
 }
-.cbw-calc-next-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.cbw-calc-next-btn:disabled { opacity: 0.78; cursor: not-allowed; }
+.cbw-calc-next-btn:disabled .cbw-next-price { opacity: 1; }
 .cbw-calc-next-btn:hover:not(:disabled) { filter: brightness(1.08); transform: translateY(-1px); }
 .cbw-calc-next-btn:active:not(:disabled) { transform: scale(0.98); }
 
@@ -1946,13 +1947,13 @@ V2 — PARAMETRIC ONE-PAGE FLOW
   box-shadow: 0 0 0 2px var(--primary) inset;
 }
 .cbw-svc-tile-vis {
-  width: 100%; height: 60px; border-radius: 8px;
+  width: 100%; height: 96px; border-radius: 10px;
   background: linear-gradient(135deg, var(--primary-soft) 0%, #fff 100%);
-  display: flex; align-items: center; justify-content: center; padding: 4px;
+  display: flex; align-items: center; justify-content: center; padding: 10px;
 }
 .cbw-svc-tile-vis svg { width: 100%; height: 100%; }
-.cbw-svc-tile-title { font-size: 13.5px; font-weight: 800; color: var(--text); }
-.cbw-svc-tile-sub { font-size: 11px; color: var(--text-muted); font-weight: 500; line-height: 1.3; }
+.cbw-svc-tile-title { font-size: 15px; font-weight: 800; color: var(--text); }
+.cbw-svc-tile-sub { font-size: 11.5px; color: var(--text-muted); font-weight: 500; line-height: 1.3; }
 
 /* Volume slider + van */
 .cbw-vol-wrap { display: flex; flex-direction: column; gap: 8px; }
@@ -4627,8 +4628,8 @@ padding: 9px 16px;
       step6_title: 'Kontakt', step6_sub: 'Kam máme poslať ponuku?',
       step7_title: 'Súhrn a cena', step7_sub: 'Skontrolujte údaje a odošlite dopyt',
       // Directions
-      dir_odvoz: 'Odvoz nábytku', dir_odvoz_sub: 'Sedačka, skriňa, spotrebič — odvezieme z bytu',
-      dir_dovoz: 'Vývoz odpadu', dir_dovoz_sub: 'Stavebný odpad, suť, zmesný odpad',
+      dir_odvoz: 'Odvoz', dir_odvoz_sub: 'Nábytok, spotrebiče, drobnosti',
+      dir_dovoz: 'Vývoz', dir_dovoz_sub: 'Stavebný odpad, suť, zmesný odpad',
       dir_stahovanie: 'Sťahovanie', dir_stahovanie_sub: 'Byt, dom, kancelária — komplet aj s posádkou',
       dir_vypratavanie: 'Vypratávanie', dir_vypratavanie_sub: 'Byt, pivnica, garáž, pozostalosť',
       // Services
@@ -4867,8 +4868,8 @@ padding: 9px 16px;
       step5_title: 'Date and place', step5_sub: 'Address, distance and notes',
       step6_title: 'Contact', step6_sub: 'Where to send the quote?',
       step7_title: 'Summary and price', step7_sub: 'Check the details and submit',
-      dir_odvoz: 'Furniture pickup', dir_odvoz_sub: 'Sofa, wardrobe, appliance — we collect from your home',
-      dir_dovoz: 'Waste removal', dir_dovoz_sub: 'Construction rubble, mixed waste',
+      dir_odvoz: 'Pickup', dir_odvoz_sub: 'Furniture, appliances, items',
+      dir_dovoz: 'Disposal', dir_dovoz_sub: 'Construction rubble, mixed waste',
       dir_stahovanie: 'Moving', dir_stahovanie_sub: 'Flat, house, office — full service with crew',
       dir_vypratavanie: 'Clearance', dir_vypratavanie_sub: 'Flat, cellar, storage, estate cleanout',
       svc_furniture: 'Furniture', svc_furniture_sub: 'Sofas, beds, wardrobes…',
@@ -5086,8 +5087,8 @@ padding: 9px 16px;
       step5_title: 'Termin und Ort', step5_sub: 'Adresse, Entfernung, Notizen',
       step6_title: 'Kontakt', step6_sub: 'Wohin senden wir das Angebot?',
       step7_title: 'Zusammenfassung', step7_sub: 'Daten prüfen und senden',
-      dir_odvoz: 'Möbel-Abholung', dir_odvoz_sub: 'Sofa, Schrank, Geräte — wir holen ab',
-      dir_dovoz: 'Schuttabfuhr', dir_dovoz_sub: 'Bauschutt, Mischabfall',
+      dir_odvoz: 'Abholung', dir_odvoz_sub: 'Möbel, Geräte, Sachen',
+      dir_dovoz: 'Entsorgung', dir_dovoz_sub: 'Bauschutt, Mischabfall',
       dir_stahovanie: 'Umzug', dir_stahovanie_sub: 'Wohnung, Haus, Büro — komplett mit Team',
       dir_vypratavanie: 'Entrümpelung', dir_vypratavanie_sub: 'Wohnung, Keller, Garage, Nachlass',
       svc_furniture: 'Möbel', svc_furniture_sub: 'Sofas, Betten, Schränke…',
@@ -6166,7 +6167,7 @@ padding: 9px 16px;
       service: '',
       items: [],
       quantity: 1,
-      areaM2: '',
+      areaM2: 50,
       jobType: '',
       extras: {},
       access: 'standard',
@@ -6181,6 +6182,7 @@ padding: 9px 16px;
       volume: 25,
       specials: {},
       spaceKind: '',
+      homeSize: '',
       spaceDetails: '',
       detailsOpen: false,
       crew: '',
@@ -6741,7 +6743,7 @@ padding: 9px 16px;
     if (vol > 0) {
       const volAmount = roundTo5(vol * 2.2);
       total += volAmount;
-      const volSubMap = [[0,'<1/4'], [25,'1/4'], [50,'1/2'], [75,'3/4'], [90,'plná'], [100,'2× dodávka']];
+      const volSubMap = [[0,'<1/4'], [25,'1/4'], [50,'1/2'], [75,'3/4'], [90,'plná'], [100,'viac dodávok']];
       const volSub = (volSubMap.find(([k]) => vol <= k) || ['','plná'])[1];
       lines.push({ label: 'Objem nákladu', sub: volSub + ' dodávky', amount: volAmount });
     }
@@ -7133,7 +7135,7 @@ padding: 9px 16px;
             <circle class="cbw-dir-wheel" cx="25" cy="64" r="8" fill="#0c4a6e"/><circle class="cbw-dir-wheel" cx="120" cy="64" r="8" fill="#0c4a6e"/><circle cx="25" cy="64" r="3" fill="#fff"/><circle cx="120" cy="64" r="3" fill="#fff"/>
           </g>
         </svg>
-        <div class="cbw-qty-meta">🚚 Naplnenie dodávky ~${Math.round(ratio * 100)} % · orientačne ${price.min}–${price.max} €</div>
+        <div class="cbw-qty-meta">Naplnenie dodávky ~${Math.round(ratio * 100)} % · orientačne ${price.min}–${price.max} €</div>
       </div>
     `;
   }
@@ -7377,27 +7379,33 @@ function wizService(d) {
 
 // ───── STEP 2: Space + optional textarea ─────
 function getSpaceOptions(direction) {
-  const all = [
-    { id: 'room',     title: 'Jedna izba',      sub: 'spálňa, detská, obývačka', icon: 'room' },
-    { id: 'flat_s',   title: '1–2 izbový byt',  sub: 'menší byt do 60 m²',       icon: 'flat' },
-    { id: 'flat_l',   title: '3+ izbový byt',   sub: 'väčší byt 60+ m²',          icon: 'flat' },
-    { id: 'house',    title: 'Rodinný dom',     sub: 'celý dom, viac miestností', icon: 'house' },
-    { id: 'cellar',   title: 'Pivnica / komora','sub': 'malý priestor s vecami', icon: 'cellar' },
-    { id: 'garage',   title: 'Garáž / sklad',   sub: 'nábytok, náradie, veci',   icon: 'garage' },
-    { id: 'office',   title: 'Kancelária',      sub: 'stoly, archív, technika',  icon: 'office' },
-    { id: 'other',    title: 'Iné / nepasuje',  sub: 'popíšte nižšie',           icon: 'other' }
-  ];
   // For 'vyvoz' (waste) — emphasise smaller/utility spaces
   if (direction === 'dovoz') {
     return [
-      { id: 'small_pile', title: 'Pár vriec / kusov', sub: 'do 1 m³',  icon: 'cellar' },
-      { id: 'room_load',  title: 'Plná dodávka',      sub: '~3 m³',     icon: 'room' },
-      { id: 'cellar',     title: 'Pivnica / garáž',   sub: 'plný odvoz', icon: 'garage' },
+      { id: 'small_pile', title: 'Pár vriec / kusov', sub: 'do 1 m³',                 icon: 'cellar' },
+      { id: 'room_load',  title: 'Plná dodávka',      sub: '~3 m³',                    icon: 'room' },
+      { id: 'cellar',     title: 'Pivnica / garáž',   sub: 'plný odvoz',               icon: 'garage' },
       { id: 'big',        title: 'Veľký objem',       sub: 'viac dodávok / kontajner', icon: 'house' },
-      { id: 'other',      title: 'Iné',                sub: 'popíšte nižšie',          icon: 'other' }
+      { id: 'other',      title: 'Iné',               sub: 'popíšte nižšie',           icon: 'other' }
     ];
   }
-  return all;
+  // 6 max — kombinovaný "Byt / dom" otvorí doplňujúcu otázku o veľkosti
+  return [
+    { id: 'home',   title: 'Byt / dom',       sub: 'izba, byt alebo celý dom', icon: 'flat' },
+    { id: 'cellar', title: 'Pivnica / komora',sub: 'malý priestor s vecami',   icon: 'cellar' },
+    { id: 'garage', title: 'Garáž / sklad',   sub: 'nábytok, náradie, veci',   icon: 'garage' },
+    { id: 'office', title: 'Kancelária',      sub: 'stoly, archív, technika',  icon: 'office' },
+    { id: 'other',  title: 'Iné',             sub: 'popíšte nižšie',           icon: 'other' }
+  ];
+}
+
+function getHomeSizeOptions() {
+  return [
+    { id: 'room',   title: 'Jedna izba',     sub: 'spálňa, detská, obývačka' },
+    { id: 'flat_s', title: '1–2 izbový byt', sub: 'menší byt do 60 m²' },
+    { id: 'flat_l', title: '3+ izbový byt',  sub: 'väčší byt 60+ m²' },
+    { id: 'house',  title: 'Rodinný dom',    sub: 'celý dom, viac miestností' }
+  ];
 }
 
 function spaceIconSvg(kind) {
@@ -7420,22 +7428,33 @@ function wizSpace(d) {
       + '</button>';
   }).join('');
   const open = d.detailsOpen ? 'open' : '';
-  const area = Math.max(0, Number(d.areaM2) || 0);
-  // Slider with elastic upper bound — if user types in a larger number the
-  // slider rescales automatically (no hard ceiling).
-  const sliderMax = Math.max(200, area * 1.5 || 200);
+  const area = Math.max(0, Number(d.areaM2) || 50);
+  const SLIDER_MAX = 1000;
+
+  let homeSizeBlock = '';
+  if (d.spaceKind === 'home') {
+    const sizeOpts = getHomeSizeOptions();
+    homeSizeBlock = '<div class="cbw-sec-sublabel" style="margin-top:10px">Aká je veľkosť bytu / domu?</div>'
+      + '<div class="cbw-chip-row">'
+      + sizeOpts.map(function (s) {
+          return '<button type="button" class="cbw-chip-park" data-homesize="' + s.id + '" aria-pressed="' + (d.homeSize === s.id) + '">' + escapeHtml(s.title) + '</button>';
+        }).join('')
+      + '</div>';
+  }
+
   return '<div class="cbw-step-intro">Vyberte typ priestoru. Detaily a presnú rozlohu môžete doplniť nižšie.</div>'
     + '<div class="cbw-space-grid">' + cards + '</div>'
+    + homeSizeBlock
     + '<div class="cbw-area-block">'
     +   '<div class="cbw-area-head">'
     +     '<span class="cbw-area-label">Rozloha</span>'
-    +     '<span class="cbw-area-value" id="cbwAreaValue">' + (area ? area : '—') + ' m²</span>'
+    +     '<span class="cbw-area-value" id="cbwAreaValue">' + area + ' m²</span>'
     +   '</div>'
     +   '<div class="cbw-area-row">'
-    +     '<input type="range" class="cbw-vol-slider" id="cbwAreaSlider" min="0" max="' + sliderMax + '" step="1" value="' + area + '" aria-label="Rozloha v m²">'
-    +     '<input type="number" class="cbw-q-input" id="cbwAreaInput" min="0" step="1" value="' + (area || '') + '" placeholder="m²">'
+    +     '<input type="range" class="cbw-vol-slider" id="cbwAreaSlider" min="0" max="' + SLIDER_MAX + '" step="1" value="' + Math.min(SLIDER_MAX, area) + '" aria-label="Rozloha v m²">'
+    +     '<input type="number" class="cbw-q-input" id="cbwAreaInput" min="0" step="1" value="' + area + '" placeholder="m²">'
     +   '</div>'
-    +   '<div class="cbw-area-hint">Posúvajte slider alebo napíšte presnú hodnotu — bez hornej hranice. Pomôže nám presnejšie naceniť.</div>'
+    +   '<div class="cbw-area-hint">Slider do 1000 m². Ak máte viac, napíšte presnú hodnotu do políčka.</div>'
     + '</div>'
     + '<details class="cbw-details-collapse" ' + open + ' id="cbwDetailsCollapse" style="margin-top:10px">'
     +   '<summary>Dopísať detaily (voliteľné)</summary>'
@@ -7524,7 +7543,7 @@ function volumeReadout(v) {
     [18, 38, '≈ 1/2 dodávky', 'malá izba, ~2 m³'],
     [38, 60, '≈ 3/4 dodávky', 'väčšia izba, ~3 m³'],
     [60, 82, 'Plná dodávka',   'celá 1–2 izba, ~5 m³'],
-    [82, 101, '2× plná dodávka', 'celý byt / dom — pôjdeme 2×']
+    [82, 101, 'Viac dodávok',  'celý byt / dom — pôjdeme viacerokrát']
   ];
   return labels.find(l => v >= l[0] && v < l[1]) || labels[0];
 }
@@ -7539,12 +7558,15 @@ function wizVolume(d, price) {
     +   '<span class="cbw-vol-readout-sub">' + escapeHtml(cur[3]) + '</span>'
     + '</div>'
     + '<input type="range" class="cbw-vol-slider" id="cbwVolume" min="5" max="100" step="1" value="' + v + '" aria-label="Objem nákladu">'
-    + '<div class="cbw-vol-ticks"><span>1/4</span><span>1/2</span><span>3/4</span><span>Plná</span><span>2×</span></div>'
-    + '<div class="cbw-vol-help">💡 <strong>Tip:</strong> Fiat Ducato L2H2 pojme cca 11 m³. Slider je orientačný — finálnu kapacitu potvrdíme telefonicky.</div>'
+    + '<div class="cbw-vol-ticks"><span>1/4</span><span>1/2</span><span>3/4</span><span>Plná</span><span>Viac</span></div>'
+    + '<div class="cbw-vol-help"><strong>Tip:</strong> Fiat Ducato L2H2 pojme cca 11 m³. Pri väčšom objeme prídeme viacerokrát. Slider je orientačný — finálnu kapacitu potvrdíme telefonicky.</div>'
     + '<div class="cbw-sec-sublabel" style="margin-top:14px">Špeciálne predmety (pridajú malé príplatky)</div>'
     + '<div class="cbw-chip-row">'
-    + [['piano','🎹','Klavír'],['safe','🔒','Sejf'],['aquarium','🐟','Akvárium'],['fragile','🪞','Krehké veci'],['oversized','📦','Nadrozmer']]
-        .map(function(s) { return '<button type="button" class="cbw-chip-spec" data-special="' + s[0] + '" aria-pressed="' + !!(d.specials || {})[s[0]] + '"><span>' + s[1] + '</span>' + escapeHtml(s[2]) + '</button>'; })
+    + [['piano','Klavír'],['safe','Sejf'],['aquarium','Akvárium'],['fragile','Krehké veci'],['oversized','Nadrozmer']]
+        .map(function(s) {
+          const on = !!(d.specials || {})[s[0]];
+          return '<button type="button" class="cbw-chip-spec" data-special="' + s[0] + '" aria-pressed="' + on + '">' + escapeHtml(s[1]) + '</button>';
+        })
         .join('')
     + '</div>';
 }
@@ -7664,11 +7686,24 @@ function bindWizardEvents() {
 
   bind('[data-space]', 'click', function (e) {
     calc.data.spaceKind = e.currentTarget.dataset.space;
+    if (calc.data.spaceKind !== 'home') calc.data.homeSize = '';
     // Hint a sensible volume default the first time a space is chosen
-    const defaults = { room: 22, flat_s: 38, flat_l: 60, house: 80, cellar: 18, garage: 28, office: 50, small_pile: 12, room_load: 60, big: 95 };
+    const defaults = { home: 40, cellar: 18, garage: 28, office: 50, small_pile: 12, room_load: 60, big: 95 };
     if (defaults[calc.data.spaceKind] && Number(calc.data.volume) === 25) {
       calc.data.volume = defaults[calc.data.spaceKind];
     }
+    renderCalc({ preserveScroll: true });
+  });
+
+  bind('[data-homesize]', 'click', function (e) {
+    calc.data.homeSize = e.currentTarget.dataset.homesize;
+    // Suggest sensible area + volume defaults based on home size
+    const areaDefaults = { room: 22, flat_s: 50, flat_l: 80, house: 130 };
+    const volDefaults  = { room: 22, flat_s: 38, flat_l: 60, house: 80 };
+    const a = areaDefaults[calc.data.homeSize];
+    const v = volDefaults[calc.data.homeSize];
+    if (a && (!Number(calc.data.areaM2) || Number(calc.data.areaM2) === 50)) calc.data.areaM2 = a;
+    if (v && Number(calc.data.volume) === 25) calc.data.volume = v;
     renderCalc({ preserveScroll: true });
   });
 
@@ -7684,13 +7719,14 @@ function bindWizardEvents() {
   function syncArea(v) {
     const n = Math.max(0, Math.round(Number(v) || 0));
     calc.data.areaM2 = n;
-    if (areaValue) areaValue.textContent = (n ? n : '—') + ' m²';
+    if (areaValue) areaValue.textContent = n + ' m²';
     if (areaSlider) {
-      const max = Math.max(200, n * 1.5 || 200);
-      areaSlider.max = String(max);
-      if (Number(areaSlider.value) !== n) areaSlider.value = String(n);
+      // Slider has a fixed cap of 1000 m²; values above are accepted via the
+      // number input but the thumb pegs at the right edge.
+      const sliderValue = Math.min(1000, n);
+      if (Number(areaSlider.value) !== sliderValue) areaSlider.value = String(sliderValue);
     }
-    if (areaInput && document.activeElement !== areaInput) areaInput.value = n || '';
+    if (areaInput && document.activeElement !== areaInput) areaInput.value = n;
     updateNextPriceLive();
   }
   if (areaSlider) areaSlider.addEventListener('input', function (e) { syncArea(e.target.value); });
@@ -7841,7 +7877,7 @@ photos: (calc.data.photos || []).map(p => ({ name: p.name, size: p.size, type: p
 }
 
 async function submitLead() {
-if (!validateStep(5) || calc.sending) return;
+if (!validateWizardStep(STEPS.length - 1) || calc.sending) return;
 calc.sending = true;
 calc.error = '';
 renderCalc();
@@ -7883,7 +7919,8 @@ calc.customText = '';
 calc.error = '';
 calc.sending = false;
 calc.data = {
-direction: '', service: '', items: [], quantity: 1, areaM2: '', jobType: '', extras: {}, access: 'standard', floors: 0, elevator: 'yes', parking: 'near', distance: 'city',
+direction: '', service: '', items: [], quantity: 1, areaM2: 50, jobType: '', extras: {}, access: 'standard', floors: 0, elevator: 'yes', parking: 'near', distance: 'city',
+volume: 25, specials: {}, spaceKind: '', homeSize: '', spaceDetails: '', detailsOpen: false, crew: '', dateMode: 'standard', zipFrom: '', zipTo: '',
 date: '', cityFrom: '', cityTo: '', note: '', photos: [], name: '', phone: '', email: '', gdpr: false
 };
 }
@@ -7943,8 +7980,8 @@ if (calcEls.exit) calcEls.exit.addEventListener('click', closeCalculator);
 if (calcEls.headBack) calcEls.headBack.addEventListener('click', () => goStep(calc.step - 1));
 if (calcEls.prev) calcEls.prev.addEventListener('click', () => goStep(calc.step - 1));
 if (calcEls.next) calcEls.next.addEventListener('click', () => {
-if (!validateStep(calc.step)) return;
-if (calc.step === STEP_META.length - 1) submitLead();
+if (!validateWizardStep(calc.step)) return;
+if (calc.step === STEPS.length - 1) submitLead();
 else goStep(calc.step + 1);
 });
 
