@@ -4369,6 +4369,409 @@ padding: 9px 16px;
   background: linear-gradient(180deg, #ffffff 0%, #fffbeb 100%) !important;
 }
 
+/* ============================================================
+   PREMIUM DEMO PAGE - full client-ready first screen
+   ============================================================ */
+body {
+  background:
+    linear-gradient(135deg, #f7fafc 0%, #fff7e8 42%, #eef8f4 100%) !important;
+}
+.demo-page {
+  min-height: 100dvh;
+  padding: 28px 28px 112px;
+  color: #17202d;
+}
+.demo-hero {
+  width: min(1180px, 100%);
+  min-height: calc(100dvh - 56px);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, .82fr);
+  gap: 32px;
+  align-items: center;
+}
+.demo-copy {
+  min-width: 0;
+}
+.demo-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.demo-mark {
+  width: 52px;
+  height: 52px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    linear-gradient(#ffffff, #ffffff) padding-box,
+    linear-gradient(135deg, #fbb246, #2c3445 58%, #10b981) border-box;
+  border: 2px solid transparent;
+  box-shadow: 0 16px 34px -24px rgba(15, 23, 42, .7);
+  font-weight: 950;
+  letter-spacing: 0;
+}
+.demo-mark span:first-child { color: #2c3445; }
+.demo-mark span:last-child { color: #fbb246; }
+.demo-brand-text {
+  display: grid;
+  gap: 3px;
+}
+.demo-brand-text strong {
+  font-size: 14px;
+  font-weight: 950;
+}
+.demo-brand-text span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  width: fit-content;
+  color: #516070;
+  font-size: 12px;
+  font-weight: 800;
+}
+.demo-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 5px rgba(16, 185, 129, .13);
+}
+.demo-kicker {
+  width: fit-content;
+  margin-bottom: 12px;
+  padding: 8px 12px;
+  border: 1px solid rgba(251, 178, 70, .45);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .78);
+  color: #6d4b17;
+  font-size: 12px;
+  font-weight: 900;
+}
+.demo-copy h1 {
+  margin: 0;
+  color: #17202d;
+  max-width: 100%;
+  font-size: clamp(50px, 6.6vw, 86px);
+  line-height: .86;
+  letter-spacing: 0;
+  font-weight: 950;
+  overflow-wrap: anywhere;
+}
+.demo-copy p {
+  max-width: 670px;
+  margin: 22px 0 0;
+  color: #4f5f6f;
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 1.65;
+  font-weight: 600;
+}
+.demo-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+.demo-action {
+  min-height: 54px;
+  border-radius: 17px;
+  padding: 0 20px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-weight: 950;
+  font-size: 14px;
+  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+}
+.demo-action svg {
+  width: 18px;
+  height: 18px;
+}
+.demo-action-primary {
+  background: linear-gradient(135deg, #fbb246 0%, #f59e0b 100%);
+  color: #1f2633;
+  box-shadow: 0 18px 34px -22px rgba(245, 158, 11, .92);
+}
+.demo-action-secondary {
+  background: #ffffff;
+  color: #2c3445;
+  border-color: #d8dde8;
+  box-shadow: 0 16px 30px -26px rgba(15, 23, 42, .7);
+}
+.demo-action:hover {
+  transform: translateY(-2px);
+}
+.demo-metrics {
+  margin-top: 28px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  max-width: 620px;
+}
+.demo-metric {
+  min-height: 86px;
+  border: 1px solid rgba(216, 221, 232, .86);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, .74);
+  padding: 15px;
+  box-shadow: 0 12px 30px -28px rgba(15, 23, 42, .72);
+}
+.demo-metric strong {
+  display: block;
+  color: #1f2633;
+  font-size: 24px;
+  line-height: 1;
+  font-weight: 950;
+}
+.demo-metric span {
+  display: block;
+  margin-top: 8px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.35;
+  font-weight: 800;
+}
+.demo-visual {
+  min-width: 0;
+  border: 1px solid rgba(216, 221, 232, .95);
+  border-radius: 30px;
+  background: rgba(255, 255, 255, .84);
+  box-shadow: 0 34px 86px -48px rgba(15, 23, 42, .58);
+  overflow: hidden;
+}
+.demo-visual-head {
+  min-height: 72px;
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #ffffff;
+  background:
+    linear-gradient(135deg, #1f2633 0%, #2c3445 62%, #3a4356 100%);
+}
+.demo-visual-head .demo-mark {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  box-shadow: none;
+}
+.demo-visual-head b {
+  display: block;
+  font-size: 14px;
+  font-weight: 950;
+}
+.demo-visual-head small {
+  display: block;
+  margin-top: 3px;
+  color: rgba(255, 255, 255, .72);
+  font-size: 11px;
+  font-weight: 800;
+}
+.demo-price-pill {
+  margin-left: auto;
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: rgba(251, 178, 70, .16);
+  color: #ffd38a;
+  font-size: 12px;
+  font-weight: 950;
+}
+.demo-visual-body {
+  padding: 18px;
+  display: grid;
+  gap: 14px;
+}
+.demo-truck-scene {
+  min-height: 196px;
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, #f8fafc 0%, #eef8f4 100%);
+  border: 1px solid #e2e8f0;
+  position: relative;
+  overflow: hidden;
+}
+.demo-truck-scene svg {
+  width: 100%;
+  height: 100%;
+  min-height: 196px;
+  display: block;
+}
+.demo-task-list {
+  display: grid;
+  gap: 9px;
+}
+.demo-task {
+  display: grid;
+  grid-template-columns: 34px 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 17px;
+  background: #ffffff;
+}
+.demo-task i {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-style: normal;
+  background: #fff2dc;
+  color: #b36a07;
+  font-weight: 950;
+}
+.demo-task b {
+  display: block;
+  color: #1f2633;
+  font-size: 13px;
+  font-weight: 950;
+}
+.demo-task span {
+  display: block;
+  margin-top: 2px;
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 750;
+}
+.demo-task em {
+  color: #10b981;
+  font-style: normal;
+  font-size: 12px;
+  font-weight: 950;
+}
+.demo-service-band {
+  width: min(1180px, 100%);
+  margin: -18px auto 0;
+}
+.demo-service-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+.demo-service {
+  min-height: 136px;
+  padding: 17px;
+  border: 1px solid rgba(216, 221, 232, .9);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, .78);
+  box-shadow: 0 14px 36px -32px rgba(15, 23, 42, .7);
+}
+.demo-service svg {
+  width: 24px;
+  height: 24px;
+  color: #f59e0b;
+}
+.demo-service b {
+  display: block;
+  margin-top: 14px;
+  color: #1f2633;
+  font-size: 14px;
+  font-weight: 950;
+}
+.demo-service span {
+  display: block;
+  margin-top: 6px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.45;
+  font-weight: 700;
+}
+.cbw-launcher-tip,
+.cbw-root.cbw-tip-visible[data-open="false"] .cbw-launcher-tip {
+  display: none !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+@media (min-width: 641px) {
+  .cbw-choice-overlay {
+    align-items: center !important;
+    padding: 24px !important;
+  }
+  .cbw-choice-sheet {
+    width: min(430px, calc(100vw - 40px)) !important;
+    border-radius: 28px !important;
+    padding: 18px 20px 22px !important;
+    transform: translateY(18px) scale(.96) !important;
+  }
+  .cbw-choice-overlay[data-open="true"] .cbw-choice-sheet {
+    transform: translateY(0) scale(1) !important;
+  }
+  .cbw-choice-grip {
+    display: none !important;
+  }
+}
+@media (max-width: 980px) {
+  .demo-page {
+    padding: 22px 18px 108px;
+  }
+  .demo-hero {
+    min-height: auto;
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding-top: 8px;
+  }
+  .demo-service-band {
+    margin-top: 22px;
+  }
+  .demo-service-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 560px) {
+  .demo-page {
+    padding: 16px 14px 94px;
+  }
+  .demo-brand-row {
+    margin-bottom: 22px;
+  }
+  .demo-copy h1 {
+    font-size: clamp(38px, 11.8vw, 48px);
+    line-height: .92;
+  }
+  .demo-copy p {
+    font-size: 15px;
+    line-height: 1.58;
+  }
+  .demo-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .demo-action {
+    width: 100%;
+  }
+  .demo-metrics {
+    grid-template-columns: 1fr;
+  }
+  .demo-visual {
+    border-radius: 24px;
+  }
+  .demo-visual-body {
+    padding: 13px;
+  }
+  .demo-truck-scene,
+  .demo-truck-scene svg {
+    min-height: 158px;
+  }
+  .demo-task {
+    grid-template-columns: 32px 1fr;
+  }
+  .demo-task em {
+    display: none;
+  }
+  .demo-service-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* FINAL POLISH 2026 - restored Odvoz Nabytku version */
 .cbw-panel {
   border: 1px solid rgba(216, 221, 232, .96) !important;
@@ -4468,6 +4871,114 @@ padding: 9px 16px;
 </style>
 </head>
 <body>
+
+<main class="demo-page">
+  <section class="demo-hero" aria-labelledby="demoTitle">
+    <div class="demo-copy">
+      <div class="demo-brand-row">
+        <div class="demo-mark" aria-hidden="true"><span>O</span><span>N</span></div>
+        <div class="demo-brand-text">
+          <strong>odvoznabytku</strong>
+          <span><i class="demo-dot"></i>online</span>
+        </div>
+      </div>
+      <div class="demo-kicker">Odvoz nábytku • vypratávanie • sťahovanie</div>
+      <h1 id="demoTitle">odvoznabytku</h1>
+      <p>Rýchla ukážka pre zákazníka: vyberie službu, rozsah práce, poschodie a miesto. Kalkulačka pripraví orientačnú cenu a chatbot odpovie na najčastejšie otázky bez zbytočného čakania.</p>
+      <div class="demo-actions" aria-label="Rýchle akcie">
+        <button class="demo-action demo-action-primary" type="button" data-demo-action="calc">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 7h8M8 12h.01M12 12h.01M16 12h.01M8 16h.01M12 16h.01M16 16h.01"/></svg>
+          Spustiť kalkulačku
+        </button>
+        <button class="demo-action demo-action-secondary" type="button" data-demo-action="chat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-8.5 8.5 9.4 9.4 0 0 1-3.9-.86L3 21l1.46-4.9A8.5 8.5 0 1 1 21 12Z"/><path d="M8 11h8M8 15h5"/></svg>
+          Otvoriť chatbot
+        </button>
+      </div>
+      <div class="demo-metrics" aria-label="Prehľad">
+        <div class="demo-metric"><strong>1 min</strong><span>základná orientačná cena</span></div>
+        <div class="demo-metric"><strong>24/7</strong><span>dopyty aj mimo pracovného času</span></div>
+        <div class="demo-metric"><strong>SK/EN/DE</strong><span>jazyk prepne zákazník ručne</span></div>
+      </div>
+    </div>
+
+    <aside class="demo-visual" aria-label="Ukážka procesu objednávky">
+      <div class="demo-visual-head">
+        <div class="demo-mark" aria-hidden="true"><span>O</span><span>N</span></div>
+        <div>
+          <b>Nový dopyt</b>
+          <small>odvoz a vypratávanie</small>
+        </div>
+        <span class="demo-price-pill">od 45 €</span>
+      </div>
+      <div class="demo-visual-body">
+        <div class="demo-truck-scene" aria-hidden="true">
+          <svg viewBox="0 0 520 240" role="img">
+            <defs>
+              <linearGradient id="roadGrad" x1="0" x2="1">
+                <stop offset="0" stop-color="#dbe4ee"/>
+                <stop offset="1" stop-color="#cbd5e1"/>
+              </linearGradient>
+              <linearGradient id="truckGrad" x1="0" x2="1">
+                <stop offset="0" stop-color="#2c3445"/>
+                <stop offset="1" stop-color="#3a4356"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="520" height="240" fill="#f8fafc"/>
+            <rect x="0" y="174" width="520" height="46" rx="23" fill="url(#roadGrad)"/>
+            <path d="M54 174h398" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-dasharray="22 24"/>
+            <rect x="54" y="88" width="88" height="86" rx="16" fill="#ffffff" stroke="#d8dde8" stroke-width="3"/>
+            <path d="M48 97l50-42 50 42" fill="none" stroke="#2c3445" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            <rect x="83" y="128" width="30" height="46" rx="6" fill="#fbb246"/>
+            <rect x="122" y="134" width="42" height="40" rx="8" fill="#fff2dc" stroke="#fbb246" stroke-width="3"/>
+            <rect x="148" y="112" width="42" height="62" rx="8" fill="#ffffff" stroke="#d8dde8" stroke-width="3"/>
+            <rect x="206" y="116" width="152" height="58" rx="12" fill="url(#truckGrad)"/>
+            <path d="M358 132h46l34 42h-80Z" fill="#2c3445"/>
+            <rect x="374" y="139" width="35" height="20" rx="6" fill="#dbeafe"/>
+            <rect x="226" y="132" width="54" height="42" rx="8" fill="#fbb246"/>
+            <rect x="286" y="128" width="46" height="46" rx="8" fill="#ffffff" opacity=".95"/>
+            <circle cx="246" cy="181" r="18" fill="#17202d"/>
+            <circle cx="246" cy="181" r="7" fill="#f8fafc"/>
+            <circle cx="397" cy="181" r="18" fill="#17202d"/>
+            <circle cx="397" cy="181" r="7" fill="#f8fafc"/>
+            <path d="M430 110c18 0 33-15 33-33 0 18 15 33 33 33-18 0-33 15-33 33 0-18-15-33-33-33Z" fill="#10b981" opacity=".22"/>
+          </svg>
+        </div>
+        <div class="demo-task-list">
+          <div class="demo-task"><i>1</i><div><b>Výber služby</b><span>odvoz, dovoz, sťahovanie alebo vypratávanie</span></div><em>hotovo</em></div>
+          <div class="demo-task"><i>2</i><div><b>Rozsah práce</b><span>položky, objem, poschodie a prístup</span></div><em>cena</em></div>
+          <div class="demo-task"><i>3</i><div><b>Kontakt</b><span>telefonický alebo e-mailový dopyt</span></div><em>lead</em></div>
+        </div>
+        <button class="demo-action demo-action-primary" type="button" data-demo-action="calc">Vyskúšať live kalkulačku</button>
+      </div>
+    </aside>
+  </section>
+
+  <section class="demo-service-band" aria-label="Služby">
+    <div class="demo-service-grid">
+      <article class="demo-service">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13h16v6H4z"/><path d="M7 13V9a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v4"/><path d="M6 19v2M18 19v2"/></svg>
+        <b>Odvoz nábytku</b>
+        <span>sedačky, skrine, postele, matrace a spotrebiče</span>
+      </article>
+      <article class="demo-service">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M6 6l1 15h10l1-15"/><path d="M10 11v6M14 11v6"/></svg>
+        <b>Vypratávanie</b>
+        <span>byty, pivnice, garáže, povaly a pozostalosti</span>
+      </article>
+      <article class="demo-service">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16h13V7H3z"/><path d="M16 11h3l2 3v2h-5z"/><circle cx="7" cy="18" r="2"/><circle cx="18" cy="18" r="2"/></svg>
+        <b>Sťahovanie</b>
+        <span>byt, dom, kancelária, firma aj s posádkou</span>
+      </article>
+      <article class="demo-service">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17h16"/><path d="M7 17l2-10h6l2 10"/><path d="M9 7h6"/><path d="M8 12h8"/></svg>
+        <b>Vývoz odpadu</b>
+        <span>suť, stavebný odpad, drevo, kov a zmesný náklad</span>
+      </article>
+    </div>
+  </section>
+</main>
 
 <div class="cbw-root" id="cbwRoot" data-position="right" data-open="false">
 
@@ -5721,12 +6232,7 @@ padding: 9px 16px;
     }, 320);
   });
   if (choiceChat) choiceChat.addEventListener('click', () => {
-    closeChoiceModal();
-    togglePanel(true);
-    // Focus input after panel opens
-    setTimeout(() => {
-      focusInputWithoutPageJump();
-    }, 420);
+    openChat();
   });
 
   refreshBtn.addEventListener('click', () => {
@@ -6941,6 +7447,7 @@ padding: 9px 16px;
   }
 
   function openCalculator() {
+    togglePanel(true);
     addRuntimeStyles();
     calc.open = true;
     calc.error = '';
@@ -6953,6 +7460,13 @@ padding: 9px 16px;
     calc.open = false;
     root.classList.remove('cbw-calc-active');
     calcEls.wizard.dataset.open = 'false';
+  }
+
+  function openChat() {
+    closeChoiceModal();
+    closeCalculator();
+    togglePanel(true);
+    setTimeout(focusInputWithoutPageJump, 140);
   }
 
   // Default service per direction → lets us collapse the service step into
@@ -8083,6 +8597,15 @@ resetCalculator();
 closeCalculator();
 });
 
+document.querySelectorAll('[data-demo-action]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const action = btn.getAttribute('data-demo-action');
+    root.classList.remove('cbw-tip-visible');
+    if (action === 'calc') openCalculator();
+    else if (action === 'chat') openChat();
+  });
+});
+
 renderContactBar();
 // Apply current language to all static UI texts (after DOM is built)
 applyI18n();
@@ -8091,6 +8614,7 @@ applyI18n();
 window.CBWWidget = {
 open: () => togglePanel(true),
 close: () => togglePanel(false),
+openChat,
 openCalculator,
 resetCalculator,
 getLeadDraft: makeLeadPayload,
