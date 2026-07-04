@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>odvoznabytku.sk — asistent a cenová kalkulačka</title>
+<title>ProfiPresun — odvoz, sťahovanie a vypratávanie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -54,47 +54,94 @@ body { font-family: var(--font); color: var(--slate-900); background: var(--slat
 button { font-family: inherit; }
 
 /* ==========================================================================
-   DEMO PAGE (background behind the widget)
+   LANDING PAGE (website behind the widget)
    ========================================================================== */
-.demo {
+.site {
   min-height: 100vh;
-  display: flex; align-items: center; justify-content: center;
-  padding: 32px 20px;
   background:
-    radial-gradient(1000px 500px at 85% -10%, rgba(37, 99, 235, .08), transparent 60%),
-    radial-gradient(800px 400px at -10% 110%, rgba(16, 185, 129, .06), transparent 55%),
+    radial-gradient(1100px 520px at 90% -12%, rgba(37, 99, 235, .09), transparent 60%),
+    radial-gradient(700px 380px at -8% 108%, rgba(16, 185, 129, .07), transparent 55%),
     var(--slate-50);
 }
-.demo-card { max-width: 520px; text-align: center; }
-.demo-badge {
-  display: inline-flex; align-items: center; gap: 7px;
-  padding: 6px 14px; border-radius: 999px;
-  background: #fff; border: 1px solid var(--slate-200);
-  font-size: 12.5px; font-weight: 600; color: var(--slate-500);
-  box-shadow: var(--sh-sm);
-  margin-bottom: 22px;
+.site-nav {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; align-items: center; gap: 28px;
+  padding: 22px 28px;
 }
-.demo-badge i {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--green-500); display: inline-block;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, .18);
+.site-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.site-logo-mark {
+  width: 36px; height: 36px; border-radius: 11px;
+  background: linear-gradient(140deg, var(--blue-500), var(--blue-700));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; box-shadow: 0 5px 14px -5px rgba(37, 99, 235, .55);
 }
-.demo h1 {
-  margin: 0 0 14px; font-size: clamp(26px, 5vw, 38px);
-  font-weight: 800; letter-spacing: -0.03em; line-height: 1.12;
+.site-logo-mark svg { width: 20px; height: 20px; }
+.site-logo-name { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: var(--slate-900); }
+.site-logo-name b { color: var(--blue-600); font-weight: 800; }
+.site-links { display: flex; gap: 24px; margin-left: auto; }
+.site-links a {
+  font-size: 13.5px; font-weight: 600; color: var(--slate-500);
+  text-decoration: none; transition: color 140ms ease;
+}
+.site-links a:hover { color: var(--slate-900); }
+.site-nav-cta {
+  display: inline-flex; align-items: center;
+  padding: 9px 18px; border-radius: 999px;
+  background: var(--slate-900); color: #fff;
+  font-size: 13px; font-weight: 700; text-decoration: none;
+  transition: transform 160ms ease, background 160ms ease;
+}
+.site-nav-cta:hover { background: var(--navy-800); transform: translateY(-1px); }
+.site-hero {
+  max-width: 1080px; margin: 0 auto;
+  padding: 64px 28px 80px;
+}
+.site-kicker {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; font-weight: 700; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--blue-600);
+  margin-bottom: 18px;
+}
+.site-kicker::before { content: ""; width: 22px; height: 2px; background: var(--blue-600); border-radius: 2px; }
+.site-hero h1 {
+  margin: 0 0 18px; max-width: 620px;
+  font-size: clamp(30px, 5vw, 48px);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.08;
   color: var(--slate-900);
 }
-.demo h1 span { color: var(--blue-600); }
-.demo p {
-  margin: 0 auto; max-width: 400px;
-  font-size: 15.5px; line-height: 1.65; color: var(--slate-500);
+.site-hero h1 span { color: var(--blue-600); }
+.site-hero p {
+  margin: 0 0 28px; max-width: 470px;
+  font-size: 16px; line-height: 1.65; color: var(--slate-500);
 }
-.demo-hint {
-  margin-top: 34px; display: inline-flex; align-items: center; gap: 10px;
-  font-size: 13.5px; font-weight: 600; color: var(--slate-400);
+.site-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+.site-btn-primary {
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 14px 26px; border: none; border-radius: 999px; cursor: pointer;
+  background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+  color: #fff; font-size: 14.5px; font-weight: 700; font-family: inherit;
+  box-shadow: 0 10px 24px -8px rgba(37, 99, 235, .55);
+  transition: transform 180ms var(--spring), box-shadow 180ms ease;
 }
-.demo-hint svg { width: 20px; height: 20px; animation: nudge 2.2s var(--ease) infinite; }
-@keyframes nudge { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(5px, 5px); } }
+.site-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -8px rgba(37, 99, 235, .6); }
+.site-btn-primary svg { width: 17px; height: 17px; }
+.site-btn-ghost {
+  display: inline-flex; align-items: center;
+  padding: 14px 24px; border-radius: 999px;
+  background: #fff; border: 1.5px solid var(--slate-200);
+  color: var(--slate-700); font-size: 14.5px; font-weight: 700; text-decoration: none;
+  transition: border-color 160ms ease;
+}
+.site-btn-ghost:hover { border-color: var(--slate-400); }
+.site-trust { display: flex; flex-wrap: wrap; gap: 28px; }
+.site-trust-item { display: flex; align-items: center; gap: 10px; }
+.site-trust-item svg { width: 20px; height: 20px; color: var(--blue-600); flex-shrink: 0; }
+.site-trust-item b { display: block; font-size: 14.5px; font-weight: 800; color: var(--slate-900); line-height: 1.2; }
+.site-trust-item span { font-size: 12px; color: var(--slate-500); font-weight: 500; }
+@media (max-width: 720px) {
+  .site-links { display: none; }
+  .site-hero { padding: 40px 24px 60px; }
+}
 
 /* ==========================================================================
    WIDGET ROOT + LAUNCHER
@@ -130,8 +177,8 @@ button { font-family: inherit; }
    ========================================================================== */
 .aw-panel {
   position: absolute; bottom: 76px; right: 0;
-  width: min(396px, calc(100vw - 32px));
-  height: min(660px, calc(100dvh - 116px));
+  width: min(424px, calc(100vw - 32px));
+  height: min(724px, calc(100dvh - 108px));
   background: #fff;
   border-radius: var(--r-lg);
   box-shadow: var(--sh-lg);
@@ -159,12 +206,12 @@ button { font-family: inherit; }
 .aw-ava {
   position: relative; flex-shrink: 0;
   width: 42px; height: 42px; border-radius: 13px;
-  background: rgba(255, 255, 255, .09);
-  border: 1px solid rgba(255, 255, 255, .14);
+  background: linear-gradient(140deg, var(--blue-500), var(--blue-700));
+  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, .6), inset 0 1px 0 rgba(255, 255, 255, .25);
   display: flex; align-items: center; justify-content: center;
-  color: #8EC5FF;
+  color: #fff;
 }
-.aw-ava svg { width: 23px; height: 23px; }
+.aw-ava svg { width: 22px; height: 22px; }
 .aw-ava-dot {
   position: absolute; bottom: -2px; right: -2px;
   width: 12px; height: 12px; border-radius: 50%;
@@ -299,6 +346,34 @@ button { font-family: inherit; }
 .aw-cta-txt span { display: block; margin-top: 2px; font-size: 12px; color: rgba(255, 255, 255, .72); }
 .aw-cta-arr { flex-shrink: 0; opacity: .8; }
 .aw-cta-arr svg { width: 18px; height: 18px; }
+
+/* Service shortcuts on home */
+.aw-shortcuts { display: flex; flex-direction: column; gap: 7px; margin-bottom: 4px; }
+.aw-shortcut {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; text-align: left;
+  padding: 11px 13px;
+  background: #fff; border: 1.5px solid var(--slate-200);
+  border-radius: var(--r-md); cursor: pointer;
+  transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+}
+.aw-shortcut:hover { border-color: var(--blue-500); transform: translateY(-1px); box-shadow: var(--sh-md); }
+.aw-shortcut:hover .aw-shortcut-arr { opacity: 1; transform: translateX(0); }
+.aw-shortcut-ic {
+  flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px;
+  background: var(--blue-50); color: var(--blue-600);
+  display: flex; align-items: center; justify-content: center;
+}
+.aw-shortcut-ic svg { width: 18px; height: 18px; }
+.aw-shortcut-txt { flex: 1; min-width: 0; line-height: 1.3; }
+.aw-shortcut-txt b { display: block; font-size: 13px; font-weight: 700; color: var(--slate-900); }
+.aw-shortcut-txt span { font-size: 11.5px; color: var(--slate-500); }
+.aw-shortcut-arr {
+  flex-shrink: 0; color: var(--blue-600);
+  opacity: 0; transform: translateX(-4px);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+.aw-shortcut-arr svg { width: 15px; height: 15px; }
 
 .aw-qrow { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
 .aw-qchip {
@@ -749,18 +824,50 @@ button { font-family: inherit; }
 </head>
 <body>
 
-<!-- ======================= DEMO PAGE ======================= -->
-<main class="demo">
-  <div class="demo-card">
-    <div class="demo-badge"><i></i>Ukážkové demo pre klienta</div>
-    <h1>Webový asistent<br>s <span>cenovou kalkulačkou</span></h1>
-    <p>Návštevník vašej stránky dostane orientačnú cenu za minútu a vy hotový dopyt s kontaktom — bez telefonátov navyše.</p>
-    <div class="demo-hint">
-      Vyskúšajte bublinu vpravo dole
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 7l10 10M17 7v10H7"/></svg>
+<!-- ======================= LANDING PAGE ======================= -->
+<div class="site">
+  <nav class="site-nav">
+    <a class="site-logo" href="#">
+      <span class="site-logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M12 10V3M8.5 6.5L12 3l3.5 3.5"/></svg>
+      </span>
+      <span class="site-logo-name">Profi<b>Presun</b></span>
+    </a>
+    <div class="site-links">
+      <a href="#">Služby</a>
+      <a href="#">Cenník</a>
+      <a href="#">Referencie</a>
+      <a href="#">Kontakt</a>
     </div>
-  </div>
-</main>
+    <a class="site-nav-cta" href="tel:+421948841313">+421 948 841 313</a>
+  </nav>
+  <main class="site-hero">
+    <div class="site-kicker">Odvoz · Sťahovanie · Vypratávanie</div>
+    <h1>Presunieme všetko.<br>Vy sa <span>nemusíte dvíhať</span>.</h1>
+    <p>Nábytok, odpad aj celé domácnosti — s vlastnou posádkou a poistením. Cenu sa dozviete za minútu, termín do 48 hodín.</p>
+    <div class="site-actions">
+      <button class="site-btn-primary" type="button" onclick="AWWidget.startWizard()">
+        Nezáväzná kalkulácia
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+      <a class="site-btn-ghost" href="#" onclick="AWWidget.open();return false;">Napíšte nám</a>
+    </div>
+    <div class="site-trust">
+      <div class="site-trust-item">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
+        <div><b>4,9 / 5</b><span>hodnotenie zákazníkov</span></div>
+      </div>
+      <div class="site-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h13v10H1z"/><path d="M14 10h4l3 3v4h-7"/><circle cx="6" cy="19" r="1.6"/><circle cx="17.5" cy="19" r="1.6"/></svg>
+        <div><b>2 400+</b><span>úspešných zákaziek</span></div>
+      </div>
+      <div class="site-trust-item">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+        <div><b>Poistené</b><span>zodpovednosť do 100 000 €</span></div>
+      </div>
+    </div>
+  </main>
+</div>
 
 <!-- ======================= WIDGET ======================= -->
 <div class="aw" id="aw" data-open="false">
@@ -768,11 +875,11 @@ button { font-family: inherit; }
     <header class="aw-head">
       <div class="aw-head-row">
         <div class="aw-ava">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 8h13v9H1z"/><path d="M14 11h4l3 3v3h-7"/><circle cx="6" cy="18.5" r="1.8"/><circle cx="17.5" cy="18.5" r="1.8"/></svg>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M12 10V3M8.5 6.5L12 3l3.5 3.5"/></svg>
           <span class="aw-ava-dot"></span>
         </div>
         <div class="aw-head-txt">
-          <div class="aw-head-title">odvoznabytku.sk</div>
+          <div class="aw-head-title">ProfiPresun</div>
           <div class="aw-head-sub"><i></i>Online · odpovieme do pár minút</div>
         </div>
         <button class="aw-head-btn" data-a="close" aria-label="Zavrieť okno" type="button">
@@ -800,7 +907,8 @@ button { font-family: inherit; }
    CONFIG + CATALOG
    ========================================================================== */
 var CONFIG = {
-  company: 'odvoznabytku.sk',
+  company: 'ProfiPresun',
+  assistant: 'Tomáš',
   phone: '+421 948 841 313',
   phoneRaw: '+421948841313',
   whatsapp: '421948841313',
@@ -856,6 +964,39 @@ var SPECIALS = [
   { id: 'fragile',  label: 'Krehké veci',      icon: 'glass',  add: 25 }
 ];
 
+/* Čo konkrétne treba odviezť — iné položky pre každú službu */
+var ITEMS = {
+  odvoz: [
+    { id: 'sofa',      label: 'Sedačka / kreslo', add: 20 },
+    { id: 'wardrobe',  label: 'Skriňa',           add: 20 },
+    { id: 'bed',       label: 'Posteľ / matrac',  add: 15 },
+    { id: 'appliance', label: 'Spotrebič',        add: 15 },
+    { id: 'table',     label: 'Stôl / stoličky',  add: 10 },
+    { id: 'boxes',     label: 'Krabice / vrecia', add: 5 }
+  ],
+  vyvoz: [
+    { id: 'rubble',   label: 'Stavebná suť',   add: 25 },
+    { id: 'soil',     label: 'Zemina',         add: 20 },
+    { id: 'wood',     label: 'Drevo / okná',   add: 15 },
+    { id: 'mixed',    label: 'Zmesný odpad',   add: 15 },
+    { id: 'ewaste',   label: 'Elektroodpad',   add: 10 },
+    { id: 'bags',     label: 'Vrecia',         add: 5 }
+  ],
+  stahovanie: [
+    { id: 'furniture', label: 'Nábytok',              add: 20 },
+    { id: 'appliance', label: 'Spotrebiče',           add: 15 },
+    { id: 'office',    label: 'Kancelárske vybavenie', add: 15 },
+    { id: 'boxes',     label: 'Krabice / šatstvo',    add: 10 },
+    { id: 'plants',    label: 'Rastliny',             add: 5 }
+  ],
+  vypratavanie: [
+    { id: 'furniture', label: 'Nábytok',              add: 20 },
+    { id: 'mixed',     label: 'Zmesný odpad',         add: 15 },
+    { id: 'ewaste',    label: 'Elektro',              add: 10 },
+    { id: 'boxes',     label: 'Drobnosti / krabice',  add: 5 }
+  ]
+};
+
 var TERMS = [
   { id: 'flex', label: 'Flexibilný',   hint: 'zľava −8 %',    tone: 'down', mult: 0.92 },
   { id: 'date', label: 'Presný dátum', hint: 'podľa vás',     tone: '',     mult: 1 },
@@ -870,7 +1011,7 @@ var FAQ = {
 
 var STEP_TITLES = [
   { t: 'S čím vám pomôžeme?', s: 'Vyberte službu — všetko ostatné doladíme spolu.' },
-  { t: 'Aký je rozsah?',      s: 'Stačí odhad, presný objem spresníme telefonicky.' },
+  { t: 'Čo a koľko toho je?', s: 'Vyberte objem a označte, čo všetko treba odviezť.' },
   { t: 'Adresa a termín',     s: 'Podľa lokality a termínu spresníme cenu dopravy.' },
   { t: 'Zhrnutie a kontakt',  s: 'Skontrolujte dopyt a nechajte nám kontakt.' }
 ];
@@ -889,7 +1030,7 @@ var state = {
 
 function freshData() {
   return {
-    service: '', volume: '', specials: {},
+    service: '', volume: '', specials: {}, items: {},
     photos: [],
     cityFrom: '', zipFrom: '', cityTo: '', zipTo: '',
     floor: 0, lift: 'yes',
@@ -929,6 +1070,7 @@ function calcPrice() {
   var vol = findById(VOLUMES, d.volume);
   var total = (svc ? svc.base : 49) + (vol ? vol.add : 0);
 
+  (ITEMS[d.service] || []).forEach(function (it) { if (d.items[it.id]) total += it.add; });
   SPECIALS.forEach(function (s) { if (d.specials[s.id]) total += s.add; });
 
   if (d.lift === 'no') total += Math.max(0, d.floor) * 12;
@@ -971,15 +1113,26 @@ function stepValid(step) {
    ========================================================================== */
 function homeHTML() {
   return '<div class="aw-view">'
-    + '<div class="aw-msg"><div class="aw-msg-ava">A</div><div class="aw-msg-bubble">'
-    +   'Dobrý deň! Som <strong>Adam</strong>, asistent ' + esc(CONFIG.company) + '. '
-    +   'Pomôžem vám s odvozom, sťahovaním aj vypratávaním — a hneď vám poviem orientačnú cenu.'
+    + '<div class="aw-msg"><div class="aw-msg-ava">T</div><div class="aw-msg-bubble">'
+    +   'Dobrý deň! Som <strong>' + esc(CONFIG.assistant) + '</strong> z ' + esc(CONFIG.company) + '. '
+    +   'S čím vám dnes pomôžem? Vyberte službu alebo si nechajte rovno vypočítať cenu.'
     + '</div></div>'
     + '<button class="aw-cta" data-a="wizard" type="button">'
     +   '<span class="aw-cta-ic">' + ICONS.calc + '</span>'
-    +   '<span class="aw-cta-txt"><strong>Vypočítať orientačnú cenu</strong><span>4 rýchle otázky · bez registrácie</span></span>'
+    +   '<span class="aw-cta-txt"><strong>Vypočítať orientačnú cenu</strong><span>4 rýchle otázky · menej než minúta</span></span>'
     +   '<span class="aw-cta-arr">' + ICONS.arrowR + '</span>'
     + '</button>'
+    + '<div class="aw-sec" style="margin-top:4px">Naše služby</div>'
+    + '<div class="aw-shortcuts">'
+    + SERVICES.map(function (s) {
+        return '<button class="aw-shortcut" type="button" data-a="quick:' + s.id + '">'
+          + '<span class="aw-shortcut-ic">' + ICONS[s.icon] + '</span>'
+          + '<span class="aw-shortcut-txt"><b>' + esc(s.label) + '</b><span>' + esc(s.sub) + '</span></span>'
+          + '<span class="aw-shortcut-arr">' + ICONS.arrowR + '</span>'
+          + '</button>';
+      }).join('')
+    + '</div>'
+    + '<div class="aw-sec">Časté otázky</div>'
     + '<div class="aw-qrow">'
     +   '<button class="aw-qchip" data-a="faq:sluzby" type="button">Aké služby robíte?</button>'
     +   '<button class="aw-qchip" data-a="faq:kedy" type="button">Kedy viete prísť?</button>'
@@ -1006,7 +1159,7 @@ function appendBubble(kind, html) {
   if (!thread) return null;
   var wrap = document.createElement('div');
   wrap.className = 'aw-msg' + (kind === 'user' ? ' aw-msg-user' : '');
-  wrap.innerHTML = (kind === 'user' ? '' : '<div class="aw-msg-ava">A</div>')
+  wrap.innerHTML = (kind === 'user' ? '' : '<div class="aw-msg-ava">' + esc(CONFIG.assistant.charAt(0)) + '</div>')
     + '<div class="aw-msg-bubble">' + html + '</div>';
   thread.appendChild(wrap);
   var body = $('#awBody');
@@ -1063,12 +1216,22 @@ function step0HTML() {
 
 function step1HTML() {
   var d = state.data;
+  var items = ITEMS[d.service] || [];
   return '<div class="aw-view">' + stepHeadHTML(1)
     + '<div class="aw-grid">'
     + VOLUMES.map(function (v) {
         return cardHTML('data-a="vol:' + v.id + '"', d.volume === v.id, v.icon, v.label + ' · ' + v.m3, v.sub);
       }).join('')
     + '</div>'
+    + (items.length
+      ? '<div class="aw-sec">Čo treba odviezť? <small>· označte všetko, čo platí</small></div>'
+        + '<div class="aw-chips">'
+        + items.map(function (it) {
+            return '<button class="aw-chip" type="button" data-a="item:' + it.id + '" aria-pressed="' + !!d.items[it.id] + '">'
+              + esc(it.label) + '</button>';
+          }).join('')
+        + '</div>'
+      : '')
     + '<div class="aw-sec">Špeciálne predmety <small>· voliteľné</small></div>'
     + '<div class="aw-chips">'
     + SPECIALS.map(function (s) {
@@ -1147,9 +1310,11 @@ function summaryRows() {
   var vol = findById(VOLUMES, d.volume);
   var term = findById(TERMS, d.term);
   var specials = SPECIALS.filter(function (s) { return d.specials[s.id]; }).map(function (s) { return s.label; });
+  var items = (ITEMS[d.service] || []).filter(function (it) { return d.items[it.id]; }).map(function (it) { return it.label; });
   var rows = [];
   rows.push(['Služba', svc ? svc.label : '—']);
   rows.push(['Rozsah', vol ? vol.label + ' (' + vol.m3 + ')' : '—']);
+  if (items.length) rows.push(['Položky', items.join(', ')]);
   if (specials.length) rows.push(['Špeciálne', specials.join(', ')]);
   var from = [d.cityFrom.trim(), d.zipFrom.trim()].filter(Boolean).join(', ');
   rows.push([d.service === 'stahovanie' ? 'Odkiaľ' : 'Adresa', from || '—']);
@@ -1426,12 +1591,28 @@ $('#awPanel').addEventListener('click', function (e) {
   if (a === 'submit') { submit(); return; }
 
   if (a === 'svc') {
+    if (d.service !== arg) d.items = {};
     d.service = arg;
     render();
     setTimeout(function () { if (state.view === 'wizard' && state.step === 0) goStep(1); }, 320);
     return;
   }
+  if (a === 'quick') {
+    if (d.service !== arg) d.items = {};
+    d.service = arg;
+    state.view = 'wizard';
+    state.step = 1;
+    state.error = '';
+    render();
+    return;
+  }
   if (a === 'vol') { d.volume = arg; render(); return; }
+  if (a === 'item') {
+    if (d.items[arg]) delete d.items[arg]; else d.items[arg] = true;
+    el.setAttribute('aria-pressed', String(!!d.items[arg]));
+    refreshPrice(); refreshNext();
+    return;
+  }
   if (a === 'spec') {
     if (d.specials[arg]) delete d.specials[arg]; else d.specials[arg] = true;
     el.setAttribute('aria-pressed', String(!!d.specials[arg]));
