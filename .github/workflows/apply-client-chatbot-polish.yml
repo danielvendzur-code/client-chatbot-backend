@@ -7,6 +7,7 @@ on:
       - claude/new-chatbot-design-JrtOE
     paths:
       - '.github/workflows/apply-client-chatbot-polish.yml'
+      - '.github/client-polish-trigger.txt'
 
 permissions:
   contents: write
@@ -18,225 +19,353 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: claude/new-chatbot-design-JrtOE
-      - name: Patch index.html pricing and MojPlot-like UI
+      - name: Patch index.html quantity step, pricing and MojPlot-like UI
         run: |
           python3 <<'PY'
           from pathlib import Path
+          import re
+
           p = Path('index.html')
           text = p.read_text(encoding='utf-8')
 
           css = r'''
 
-/* MOJPLOT-LIKE CLIENT POLISH 2026-07-04 */
+/* MOJPLOT CLIENT UI HARD POLISH 2026-07-04 */
 :root {
-  --cbw-premium-shadow: 0 18px 44px -30px rgba(15,23,42,.72);
-  --cbw-premium-ring: 0 0 0 3px rgba(251,178,70,.18);
+  --cbw-mp-dark: #1f2633;
+  --cbw-mp-dark-2: #2c3445;
+  --cbw-mp-amber: #fbb246;
+  --cbw-mp-amber-2: #e49b31;
+  --cbw-mp-soft: #fff7ed;
+  --cbw-mp-ring: 0 0 0 3px rgba(251,178,70,.20);
+  --cbw-mp-shadow: 0 18px 44px -30px rgba(15,23,42,.76);
 }
 .cbw-panel {
   width: min(430px, calc(100vw - 28px)) !important;
   border: 1px solid rgba(15,23,42,.10) !important;
-  box-shadow: 0 34px 90px -34px rgba(15,23,42,.48), 0 14px 40px -24px rgba(44,52,69,.38) !important;
+  box-shadow: 0 36px 96px -36px rgba(15,23,42,.52), 0 14px 44px -26px rgba(44,52,69,.42) !important;
 }
 .cbw-header.cbw-brand-gradient {
-  min-height: 76px !important;
-  background-image: radial-gradient(circle at 18% 0%, rgba(251,178,70,.30), transparent 34%), linear-gradient(135deg, #1f2633 0%, #2c3445 58%, #111827 100%) !important;
+  min-height: 78px !important;
+  background-image: radial-gradient(circle at 18% 0%, rgba(251,178,70,.34), transparent 35%), linear-gradient(135deg, #1f2633 0%, #2c3445 58%, #111827 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 18px 38px -28px rgba(15,23,42,.75) !important;
 }
 .cbw-calc-prompt {
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
   font-size: 21px !important;
-  font-weight: 900 !important;
-  letter-spacing: -.04em !important;
+  font-weight: 950 !important;
+  letter-spacing: -.045em !important;
+  color: #0f172a !important;
 }
 .cbw-calc-hint {
   font-size: 13.5px !important;
+  line-height: 1.45 !important;
   color: #64748b !important;
   font-weight: 650 !important;
 }
+.cbw-svc-tile,
+.cbw-space-card,
+.cbw-choice-opt,
+.cbw-svc-card,
+.cbw-dir-card,
+.cbw-preset-btn,
+.cbw-q-card,
+.cbw-result-option,
+.cbw-crew-card,
+.cbw-time-btn {
+  border-radius: 21px !important;
+  border: 1.5px solid rgba(15,23,42,.10) !important;
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
+  box-shadow: var(--cbw-mp-shadow) !important;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease !important;
+}
+.cbw-svc-tile:hover,
+.cbw-space-card:hover,
+.cbw-choice-opt:hover,
+.cbw-svc-card:hover,
+.cbw-dir-card:hover,
+.cbw-preset-btn:hover,
+.cbw-q-card:hover,
+.cbw-result-option:hover,
+.cbw-crew-card:hover,
+.cbw-time-btn:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(251,178,70,.82) !important;
+  box-shadow: var(--cbw-mp-ring), 0 22px 44px -30px rgba(15,23,42,.75) !important;
+}
+.cbw-svc-tile[aria-pressed="true"],
+.cbw-space-card[aria-pressed="true"],
+.cbw-choice-opt[aria-pressed="true"],
+.cbw-svc-card[aria-pressed="true"],
+.cbw-dir-card[aria-pressed="true"],
+.cbw-preset-btn[aria-pressed="true"],
+.cbw-q-card[aria-pressed="true"],
+.cbw-result-option[aria-pressed="true"],
+.cbw-crew-card[aria-pressed="true"],
+.cbw-time-btn[aria-pressed="true"] {
+  border-color: #fbb246 !important;
+  background: linear-gradient(180deg, #fffaf1 0%, #fff2dc 100%) !important;
+  box-shadow: 0 0 0 3px rgba(251,178,70,.22), 0 18px 40px -28px rgba(15,23,42,.72) !important;
+}
 .cbw-chip,
+.cbw-chip-spec,
+.cbw-chip-park,
 .cbw-filter-chip,
 .cbw-search-result-chip,
 .cbw-selected-pill,
 .cbw-add-custom,
 .cbw-small-btn {
-  min-height: 38px !important;
-  padding: 9px 13px !important;
+  min-height: 40px !important;
+  padding: 10px 14px !important;
   border-radius: 999px !important;
   border: 1px solid rgba(44,52,69,.16) !important;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
   color: #1f2633 !important;
-  font-weight: 850 !important;
-  box-shadow: 0 10px 24px -22px rgba(15,23,42,.72) !important;
+  font-weight: 900 !important;
+  box-shadow: 0 12px 26px -23px rgba(15,23,42,.76) !important;
 }
 .cbw-chip:hover,
+.cbw-chip-spec:hover,
+.cbw-chip-park:hover,
 .cbw-filter-chip:hover,
 .cbw-search-result-chip:hover,
 .cbw-selected-pill:hover,
 .cbw-add-custom:hover,
 .cbw-small-btn:hover {
   transform: translateY(-1px) !important;
-  border-color: rgba(251,178,70,.76) !important;
+  border-color: rgba(251,178,70,.82) !important;
   background: linear-gradient(180deg, #fffaf1 0%, #fff2dc 100%) !important;
   color: #7c2d12 !important;
-  box-shadow: var(--cbw-premium-ring), 0 14px 30px -24px rgba(15,23,42,.78) !important;
+  box-shadow: var(--cbw-mp-ring), 0 14px 30px -24px rgba(15,23,42,.78) !important;
 }
-.cbw-choice-opt,
-.cbw-svc-card,
-.cbw-dir-card,
-.cbw-preset-btn,
-.cbw-q-card,
-.cbw-result-option {
-  border-radius: 20px !important;
-  border: 1.5px solid rgba(15,23,42,.10) !important;
-  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%) !important;
-  box-shadow: var(--cbw-premium-shadow) !important;
-}
-.cbw-choice-opt:hover,
-.cbw-choice-opt:focus-visible,
-.cbw-svc-card:hover,
-.cbw-dir-card:hover,
-.cbw-preset-btn:hover,
-.cbw-q-card:hover,
-.cbw-result-option:hover {
-  transform: translateY(-2px) !important;
-  border-color: rgba(251,178,70,.78) !important;
-  box-shadow: var(--cbw-premium-ring), 0 22px 42px -30px rgba(15,23,42,.72) !important;
-}
-.cbw-choice-opt[aria-pressed="true"],
-.cbw-svc-card[aria-pressed="true"],
-.cbw-dir-card[aria-pressed="true"],
-.cbw-preset-btn[aria-pressed="true"],
-.cbw-q-card[aria-pressed="true"],
-.cbw-result-option[aria-pressed="true"] {
-  border-color: #fbb246 !important;
-  background: linear-gradient(180deg, #fffaf1 0%, #fff2dc 100%) !important;
-  box-shadow: 0 0 0 3px rgba(251,178,70,.22), 0 18px 40px -28px rgba(15,23,42,.72) !important;
-}
-.cbw-svc-icon-wrap,
-.cbw-choice-opt-icon,
-.cbw-result-icon,
-.cbw-preset-icon {
-  border-radius: 16px !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.45), 0 10px 22px -18px rgba(15,23,42,.70) !important;
+.cbw-chip-spec[aria-pressed="true"],
+.cbw-chip-park[aria-pressed="true"] {
+  background: linear-gradient(135deg, #1f2633 0%, #2c3445 100%) !important;
+  color: #fff !important;
+  border-color: #1f2633 !important;
 }
 .cbw-calc-foot {
   padding: 12px 14px max(14px, env(safe-area-inset-bottom, 14px)) !important;
-  background: linear-gradient(180deg, rgba(255,255,255,.82) 0%, #ffffff 100%) !important;
+  background: linear-gradient(180deg, rgba(255,255,255,.86) 0%, #ffffff 100%) !important;
   border-top: 1px solid rgba(15,23,42,.08) !important;
-  box-shadow: 0 -18px 36px -34px rgba(15,23,42,.70) !important;
+  box-shadow: 0 -18px 36px -34px rgba(15,23,42,.74) !important;
 }
 .cbw-calc-back-btn {
-  min-height: 48px !important;
-  border-radius: 16px !important;
-  font-weight: 850 !important;
+  min-height: 49px !important;
+  border-radius: 17px !important;
+  font-weight: 900 !important;
   border: 1px solid rgba(15,23,42,.10) !important;
   background: #ffffff !important;
   color: #2c3445 !important;
 }
 .cbw-calc-next-btn,
 .cbw-next-priced {
-  min-height: 52px !important;
-  border-radius: 17px !important;
+  min-height: 54px !important;
+  border-radius: 18px !important;
   padding: 13px 16px !important;
   font-size: 15px !important;
   font-weight: 950 !important;
-  letter-spacing: -.01em !important;
+  letter-spacing: -.015em !important;
   background-image: linear-gradient(135deg, #fbb246 0%, #e49b31 48%, #b86f0d 100%) !important;
   color: #fff !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.36), 0 16px 34px -20px rgba(184,111,13,.76) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.38), 0 18px 36px -20px rgba(184,111,13,.78) !important;
 }
 .cbw-calc-next-btn:hover,
 .cbw-next-priced:hover {
   transform: translateY(-1px) !important;
   filter: brightness(1.045) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.40), 0 20px 42px -22px rgba(184,111,13,.82) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.42), 0 22px 46px -22px rgba(184,111,13,.84) !important;
 }
 .cbw-calc-next-btn:disabled {
   opacity: .52 !important;
-  filter: grayscale(.16) !important;
+  filter: grayscale(.14) !important;
   transform: none !important;
   box-shadow: none !important;
 }
 .cbw-next-price {
   margin-left: 8px !important;
-  background: rgba(255,255,255,.20) !important;
-  border: 1px solid rgba(255,255,255,.26) !important;
-  padding: 4px 9px !important;
+  background: rgba(255,255,255,.22) !important;
+  border: 1px solid rgba(255,255,255,.28) !important;
+  padding: 4px 10px !important;
   border-radius: 999px !important;
   font-weight: 950 !important;
 }
-.cbw-pb {
+.cbw-amount-panel {
+  border: 1px solid rgba(15,23,42,.10);
+  border-radius: 24px;
+  padding: 16px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  box-shadow: 0 20px 46px -31px rgba(15,23,42,.68);
+}
+.cbw-amount-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.cbw-amount-kicker { display:block; font-size:11px; font-weight:950; letter-spacing:.08em; text-transform:uppercase; color:#94a3b8; margin-bottom:4px; }
+.cbw-amount-title { display:block; font-size:20px; font-weight:950; letter-spacing:-.045em; color:#0f172a; }
+.cbw-amount-sub { display:block; font-size:13px; color:#64748b; font-weight:700; margin-top:3px; }
+.cbw-amount-price { flex:0 0 auto; border-radius:999px; padding:8px 11px; background:#1f2633; color:#fff; font-size:12.5px; font-weight:950; box-shadow:0 12px 24px -18px rgba(15,23,42,.82); }
+.cbw-amount-scene { position:relative; min-height:112px; border-radius:20px; overflow:hidden; background:radial-gradient(circle at 20% 0%, rgba(251,178,70,.26), transparent 38%), linear-gradient(135deg,#f8fafc 0%,#eef2f7 100%); border:1px solid rgba(15,23,42,.08); margin:12px 0 14px; }
+.cbw-amount-scene::before { content:""; position:absolute; left:0; top:0; bottom:0; width:calc(var(--amount-pct, .35) * 100%); background:linear-gradient(90deg, rgba(251,178,70,.34), rgba(251,178,70,.08)); transition:width .22s ease; }
+.cbw-amount-boxes { position:absolute; inset:0; display:flex; align-items:flex-end; gap:7px; padding:16px; }
+.cbw-amount-box { display:block; width:34px; border-radius:8px 8px 5px 5px; background:linear-gradient(180deg,#fbb246,#d97706); box-shadow:inset 0 1px 0 rgba(255,255,255,.34), 0 10px 18px -16px rgba(15,23,42,.84); transform:translateY(0); }
+.cbw-amount-box:nth-child(2n) { background:linear-gradient(180deg,#2c3445,#1f2633); }
+.cbw-amount-box:nth-child(3n) { background:linear-gradient(180deg,#ffffff,#e2e8f0); border:1px solid rgba(15,23,42,.12); }
+.cbw-amount-meter { height:9px; border-radius:999px; background:#e2e8f0; overflow:hidden; margin:10px 0 10px; }
+.cbw-amount-meter-fill { display:block; height:100%; width:calc(var(--amount-pct, .35) * 100%); border-radius:999px; background:linear-gradient(90deg,#fbb246,#e49b31); transition:width .22s ease; }
+.cbw-amount-presets { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:9px; margin:12px 0 12px; }
+.cbw-amount-preset { text-align:left; border:1.5px solid rgba(15,23,42,.10); background:#fff; border-radius:17px; padding:12px; font:inherit; cursor:pointer; box-shadow:0 14px 30px -26px rgba(15,23,42,.76); transition:all .18s ease; }
+.cbw-amount-preset strong { display:block; color:#0f172a; font-size:13.5px; font-weight:950; letter-spacing:-.025em; }
+.cbw-amount-preset small { display:block; margin-top:3px; color:#64748b; font-size:12px; font-weight:700; line-height:1.3; }
+.cbw-amount-preset[aria-pressed="true"], .cbw-amount-preset:hover { border-color:#fbb246; background:#fff7ed; box-shadow:var(--cbw-mp-ring), 0 16px 30px -24px rgba(15,23,42,.76); transform:translateY(-1px); }
+.cbw-amount-help { margin-top:10px; padding:11px 12px; border-radius:16px; background:#fff7ed; border:1px solid #fed7aa; color:#7c2d12; font-size:12.5px; font-weight:750; line-height:1.45; }
+.cbw-vol-slider { accent-color:#e49b31 !important; }
+.cbw-pb, .cbw-bd {
   border: 1px solid rgba(15,23,42,.10) !important;
   border-radius: 24px !important;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
   box-shadow: 0 24px 56px -32px rgba(15,23,42,.55) !important;
   overflow: hidden !important;
 }
-.cbw-pb-head {
-  padding-bottom: 13px !important;
-  border-bottom: 1px solid rgba(15,23,42,.08) !important;
-}
-.cbw-pb-label {
-  text-transform: uppercase !important;
-  letter-spacing: .075em !important;
-  font-size: 11px !important;
-  color: #64748b !important;
-  font-weight: 950 !important;
-}
-.cbw-pb-range {
-  font-size: 26px !important;
-  letter-spacing: -.045em !important;
-  color: #0f172a !important;
-  font-weight: 950 !important;
-}
-.cbw-pb-row {
-  border-bottom: 1px solid rgba(15,23,42,.06) !important;
-}
-.cbw-pb-total {
-  margin-top: 12px !important;
-  border-radius: 18px !important;
-  background: linear-gradient(135deg, #1f2633 0%, #2c3445 100%) !important;
-  color: #fff !important;
-  padding: 14px 16px !important;
-}
-.cbw-pb-total-label,
-.cbw-pb-total-amount { color: #fff !important; }
-.cbw-pb-note {
-  background: #fff7ed !important;
-  border: 1px solid #fed7aa !important;
-  color: #7c2d12 !important;
-  border-radius: 16px !important;
-}
+.cbw-pb-label { text-transform: uppercase !important; letter-spacing: .075em !important; font-size: 11px !important; color: #64748b !important; font-weight: 950 !important; }
+.cbw-pb-range, .cbw-pb-total-amount { font-weight: 950 !important; letter-spacing: -.04em !important; color:#0f172a !important; }
+.cbw-pb-total { margin-top:12px !important; border-radius:18px !important; background:linear-gradient(135deg,#1f2633 0%,#2c3445 100%) !important; color:#fff !important; padding:14px 16px !important; }
+.cbw-pb-total-label, .cbw-pb-total-amount { color:#fff !important; }
+.cbw-pb-note { background:#fff7ed !important; border:1px solid #fed7aa !important; color:#7c2d12 !important; border-radius:16px !important; }
 @media (max-width: 520px) {
-  .cbw-panel { width: 100vw !important; height: 100dvh !important; max-height: none !important; border-radius: 0 !important; right: 0 !important; bottom: 0 !important; }
-  .cbw-root { right: 16px !important; bottom: 16px !important; }
-  .cbw-pb-range { font-size: 22px !important; }
-  .cbw-q-cards, .cbw-svc-grid, .cbw-dir-grid { gap: 9px !important; }
+  .cbw-panel { width:100vw !important; height:100dvh !important; max-height:none !important; border-radius:0 !important; right:0 !important; bottom:0 !important; }
+  .cbw-root { right:16px !important; bottom:16px !important; }
+  .cbw-amount-presets { grid-template-columns:1fr !important; }
+  .cbw-calc-prompt { font-size:20px !important; }
 }
 '''
-          if '/* MOJPLOT-LIKE CLIENT POLISH 2026-07-04 */' not in text:
+          if '/* MOJPLOT CLIENT UI HARD POLISH 2026-07-04 */' not in text:
               text = text.replace('</style>', css + '\n</style>')
 
+          new_volume_block = r'''
+function amountReadout(v) {
+  const labels = [
+    [0, 20, 'Pár kusov',        '1–3 veci, pár vriec alebo menší nábytok'],
+    [20, 38, 'Menší náklad',    'sedačka, skriňa, stôl alebo viac krabíc'],
+    [38, 58, 'Jedna izba',      'väčší kusový nábytok a viac doplnkov'],
+    [58, 78, '1–2 izbový byt',  'viac miestností, viac nosenia a skladania'],
+    [78, 101, 'Celý byt / dom', 'veľa vecí, viac práce alebo viac jázd']
+  ];
+  return labels.find(l => v >= l[0] && v < l[1]) || labels[0];
+}
+
+function amountBoxScene(v) {
+  const count = Math.max(3, Math.min(14, Math.round(v / 8) + 2));
+  let boxes = '';
+  for (let i = 0; i < count; i++) {
+    const h = 28 + ((i * 13 + count * 7) % 52);
+    boxes += '<span class="cbw-amount-box" style="height:' + h + 'px"></span>';
+  }
+  return boxes;
+}
+
+function closestAmountPreset(v) {
+  const presets = [12, 28, 48, 68, 90];
+  return presets.reduce(function(best, cur) {
+    return Math.abs(cur - v) < Math.abs(best - v) ? cur : best;
+  }, presets[0]);
+}
+
+function wizVolume(d, price) {
+  const v = Math.max(5, Math.min(100, Number(d.volume) || 28));
+  const cur = amountReadout(v);
+  const active = closestAmountPreset(v);
+  const pct = Math.max(.05, Math.min(1, v / 100));
+  const presets = [
+    [12, 'Pár kusov',       '1–3 veci / pár vriec'],
+    [28, 'Menší náklad',   'sedačka, skriňa, krabice'],
+    [48, 'Jedna izba',     'viac nábytku z izby'],
+    [68, '1–2 izbový byt', 'viac miestností'],
+    [90, 'Celý byt / dom', 'veľa vecí / viac jázd']
+  ];
+  return '<div class="cbw-amount-panel" style="--amount-pct:' + pct + '">'
+    + '<div class="cbw-amount-head">'
+    +   '<div><span class="cbw-amount-kicker">Množstvo vecí</span><span class="cbw-amount-title">' + escapeHtml(cur[2]) + '</span><span class="cbw-amount-sub">' + escapeHtml(cur[3]) + '</span></div>'
+    +   '<div class="cbw-amount-price">' + price.min + ' – ' + price.max + ' €</div>'
+    + '</div>'
+    + '<div class="cbw-amount-scene" style="--amount-pct:' + pct + '"><div class="cbw-amount-boxes">' + amountBoxScene(v) + '</div></div>'
+    + '<div class="cbw-amount-meter"><span class="cbw-amount-meter-fill"></span></div>'
+    + '<input type="range" class="cbw-vol-slider" id="cbwVolume" min="5" max="100" step="1" value="' + v + '" aria-label="Množstvo vecí">'
+    + '<div class="cbw-amount-presets">'
+    + presets.map(function(p) {
+        return '<button type="button" class="cbw-amount-preset" data-volume-preset="' + p[0] + '" aria-pressed="' + (active === p[0]) + '"><strong>' + escapeHtml(p[1]) + '</strong><small>' + escapeHtml(p[2]) + '</small></button>';
+      }).join('')
+    + '</div>'
+    + '<div class="cbw-amount-help"><strong>Tip:</strong> Nemusíte poznať m³ ani veľkosť dodávky. Vyberte najbližší scenár podľa toho, koľko vecí vidíte. Fotky v ďalšom kroku cenu ešte spresnia.</div>'
+    + '<div class="cbw-sec-sublabel" style="margin-top:14px">Špeciálne predmety</div>'
+    + '<div class="cbw-chip-row">'
+    + [['piano','Klavír'],['safe','Sejf'],['aquarium','Akvárium'],['fragile','Krehké veci'],['oversized','Nadrozmer']]
+        .map(function(s) {
+          const on = !!(d.specials || {})[s[0]];
+          return '<button type="button" class="cbw-chip-spec" data-special="' + s[0] + '" aria-pressed="' + on + '">' + escapeHtml(s[1]) + '</button>';
+        })
+        .join('')
+    + '</div>'
+    + '</div>';
+}
+
+'''
+          text, n = re.subn(r'function volumeReadout\(v\) \{.*?\n\}\n\nfunction wizVolume\(d, price\) \{.*?\n\}\n\n// ───── STEP 4', new_volume_block + '// ───── STEP 4', text, flags=re.S)
+          print('volume block replacements:', n)
+
+          new_update_live = r'''function updateVanLive() {
+  updateAmountLive();
+}
+
+function updateAmountLive() {
+  const v = Math.max(5, Math.min(100, Number(calc.data.volume) || 28));
+  const pct = Math.max(.05, Math.min(1, v / 100));
+  const cur = amountReadout(v);
+  const scene = document.querySelector('.cbw-amount-scene');
+  const panel = document.querySelector('.cbw-amount-panel');
+  const meter = document.querySelector('.cbw-amount-meter');
+  if (scene) scene.style.setProperty('--amount-pct', pct);
+  if (panel) panel.style.setProperty('--amount-pct', pct);
+  if (meter) meter.style.setProperty('--amount-pct', pct);
+  const title = document.querySelector('.cbw-amount-title');
+  const sub = document.querySelector('.cbw-amount-sub');
+  if (title) title.textContent = cur[2];
+  if (sub) sub.textContent = cur[3];
+  const boxes = document.querySelector('.cbw-amount-boxes');
+  if (boxes) boxes.innerHTML = amountBoxScene(v);
+  const active = closestAmountPreset(v);
+  document.querySelectorAll('[data-volume-preset]').forEach(function(btn) {
+    btn.setAttribute('aria-pressed', String(Number(btn.dataset.volumePreset) === active));
+  });
+  updateNextPriceLive();
+}
+
+let _lastNextPrice'''
+          text, n = re.subn(r'function updateVanLive\(\) \{.*?\n\}\n\nlet _lastNextPrice', new_update_live, text, flags=re.S)
+          print('live updater replacements:', n)
+
+          old_vol_event = """  const vol = document.getElementById('cbwVolume');\n  if (vol) vol.addEventListener('input', function (e) {\n    calc.data.volume = Number(e.target.value) || 0;\n    updateVanLive();\n    updateMiniSticky();\n  });\n\n  bind('[data-special]', 'click', function (e) {"""
+          new_vol_event = """  const vol = document.getElementById('cbwVolume');\n  if (vol) vol.addEventListener('input', function (e) {\n    calc.data.volume = Number(e.target.value) || 0;\n    updateAmountLive();\n    updateMiniSticky();\n  });\n\n  bind('[data-volume-preset]', 'click', function (e) {\n    calc.data.volume = Number(e.currentTarget.dataset.volumePreset) || 28;\n    renderCalc({ preserveScroll: true });\n  });\n\n  bind('[data-special]', 'click', function (e) {"""
+          if old_vol_event in text:
+              text = text.replace(old_vol_event, new_vol_event)
+              print('volume events replaced: 1')
+          else:
+              print('MISS volume event block')
+
           replacements = {
-            '1 + Math.min(2.2, (quantity - 1) * 0.32)': '1 + Math.min(1.65, (quantity - 1) * 0.22)',
-            '1 + Math.min(1.8, (quantity - 1) * 0.24)': '1 + Math.min(1.65, (quantity - 1) * 0.22)',
-            'Number(jobType.rate || 2.6)': 'Number(jobType.rate || 2.15)',
-            'Number(jobType.rate || 2.2)': 'Number(jobType.rate || 2.15)',
-            'area * m2Rate + itemBase * 0.45': 'area * m2Rate + itemBase * 0.32',
-            'area * m2Rate + itemBase * 0.35': 'area * m2Rate + itemBase * 0.32',
-            'itemBase * 0.45': 'itemBase * 0.32',
-            'itemBase * 0.35': 'itemBase * 0.32',
+            '1 + Math.min(2.2, (quantity - 1) * 0.32)': '1 + Math.min(1.55, (quantity - 1) * 0.20)',
+            '1 + Math.min(1.8, (quantity - 1) * 0.24)': '1 + Math.min(1.55, (quantity - 1) * 0.20)',
+            'Number(jobType.rate || 2.6)': 'Number(jobType.rate || 2.05)',
+            'area * m2Rate + itemBase * 0.45': 'area * m2Rate + itemBase * 0.30',
+            'itemBase * 0.45': 'itemBase * 0.30',
+            "total += 45; lines.push({ label: 'Kancelárska réžia', sub: '', amount: 45 });": "total += 35; lines.push({ label: 'Kancelárska réžia', sub: '', amount: 35 });",
+            'Math.max(0, Number(d.floors) || 0) * 12': 'Math.max(0, Number(d.floors) || 0) * 8',
+            "(d.floors || 0) + '× 12 €'": "(d.floors || 0) + '× 8 €'",
             "total += 25; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 25 });": "total += 18; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 18 });",
-            "total += 20; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 20 });": "total += 18; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 18 });",
             "total += 45; lines.push({ label: 'Náročný prístup',               sub: '', amount: 45 });": "total += 32; lines.push({ label: 'Náročný prístup',               sub: '', amount: 32 });",
-            "total += 35; lines.push({ label: 'Náročný prístup',               sub: '', amount: 35 });": "total += 32; lines.push({ label: 'Náročný prístup',               sub: '', amount: 32 });",
             "total += 20; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 20 });": "total += 14; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 14 });",
-            "total += 15; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 15 });": "total += 14; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 14 });",
             'floors * 8': 'floors * 6',
-            'floors * 6': 'floors * 6',
             "floors + '× 8 €'": "floors + '× 6 €'",
             "total += 15; lines.push({ label: 'Parkovanie ďalej od vchodu', sub: '', amount: 15 });": "total += 10; lines.push({ label: 'Parkovanie ďalej od vchodu', sub: '', amount: 10 });",
-            'roundTo5(vol * 2.2)': 'roundTo5(vol * 1.75)',
-            'roundTo5(vol * 1.85)': 'roundTo5(vol * 1.75)',
+            "total += 35; lines.push({ label: 'Ťažší náklad', sub: '', amount: 35 });": "total += 25; lines.push({ label: 'Ťažší náklad', sub: '', amount: 25 });",
+            'roundTo5(vol * 2.2)': 'roundTo5(vol * 1.55)',
+            "lines.push({ label: 'Objem nákladu', sub: volSub + ' dodávky', amount: volAmount });": "lines.push({ label: 'Množstvo vecí', sub: amountReadout(vol)[2], amount: volAmount });",
             "piano: ['Klavír', 90]": "piano: ['Klavír', 75]",
             "safe: ['Sejf', 70]": "safe: ['Sejf', 60]",
             "aquarium: ['Akvárium', 35]": "aquarium: ['Akvárium', 30]",
@@ -244,19 +373,14 @@ jobs:
             "oversized: ['Nadrozmer', 50]": "oversized: ['Nadrozmer', 40]",
             "total += 30; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 30 });": "total += 24; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 24 });",
             "total += 25; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 25 });": "total += 18; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 18 });",
-            'Math.round(area * 1.4)': 'Math.round(area * 1.05)',
-            'Math.round(area * 1.1)': 'Math.round(area * 1.05)',
-            "area + ' m² × 1,40 €'": "area + ' m² × 1,05 €'",
-            "area + ' m² × 1,10 €'": "area + ' m² × 1,05 €'",
             "crew_3: { count: 3, sub: '3 ľudia', extra: 40 }": "crew_3: { count: 3, sub: '3 ľudia', extra: 30 }",
             "crew_4: { count: 4, sub: '4+ ľudia', extra: 90 }": "crew_4: { count: 4, sub: '4+ ľudia', extra: 65 }",
-            'roundTo5(total * 0.90)': 'roundTo5(total * 0.94)',
-            'roundTo5(total * 0.92)': 'roundTo5(total * 0.94)',
-            'roundTo5(total * 1.15)': 'roundTo5(total * 1.06)',
-            'roundTo5(total * 1.08)': 'roundTo5(total * 1.06)',
+            "if (d.dateMode === 'rush')      { total *= 1.15; dateMultLabel = 'Súrne / víkend +15 %'; }": "if (d.dateMode === 'rush')      { total *= 1.12; dateMultLabel = 'Súrne / víkend +12 %'; }",
+            "else if (d.dateMode === 'flex') { total *= 0.90; dateMultLabel = 'Flexibilný termín −10 %'; }": "else if (d.dateMode === 'flex') { total *= 0.93; dateMultLabel = 'Flexibilný termín −7 %'; }",
+            "const min = Math.max(0, roundTo5(total * 0.90));": "const min = Math.max(0, roundTo5(total * 0.94));",
+            "const max = roundTo5(total * 1.15);": "const max = roundTo5(total * 1.06);",
             '<span class="cbw-pb-label">Orientačný odhad</span>': '<span class="cbw-pb-label">Presnejší odhad podľa výberu</span>',
-            '<span class="cbw-pb-label">Presnejší odhad podľa výberu</span>': '<span class="cbw-pb-label">Presnejší odhad podľa výberu</span>',
-            'Finálnu cenu vám potvrdíme telefonicky alebo po obhliadke — bez záväzku, do 30 minút v pracovných hodinách.': 'Cena sa počíta z položiek, objemu, poschodia, prístupu, PSČ a termínu. Finálnu cenu potvrdíme telefonicky alebo po fotke nábytku.'
+            'Finálnu cenu vám potvrdíme telefonicky alebo po obhliadke — bez záväzku, do 30 minút v pracovných hodinách.': 'Cena sa počíta z priestoru, množstva vecí, poschodia, prístupu, PSČ a termínu. Fotky alebo krátky telefonát ju ešte spresnia.'
           }
           changed = 0
           for old, new in replacements.items():
@@ -265,8 +389,17 @@ jobs:
                   changed += 1
               else:
                   print('MISS:', old[:120])
+          print('simple replacements:', changed)
+
+          old_area = """    // Area (m²) — adds 1.4 €/m² up to a soft 200 m² cap to keep estimates sane\n    const area = Math.max(0, Math.min(2000, Number(d.areaM2) || 0));\n    if (area > 0) {\n      const aAmount = Math.round(area * 1.4);\n      total += aAmount;\n      lines.push({ label: 'Rozloha priestoru', sub: area + ' m² × 1,40 €', amount: aAmount });\n    }"""
+          new_area = """    // Area (m²) — for non-space jobs only; space jobs already include m² above.\n    const area = Math.max(0, Math.min(2000, Number(d.areaM2) || 0));\n    if (area > 0 && !isSpacePriceJob()) {\n      const aAmount = Math.round(area * 0.95);\n      total += aAmount;\n      lines.push({ label: 'Rozloha priestoru', sub: area + ' m² × 0,95 €', amount: aAmount });\n    }"""
+          if old_area in text:
+              text = text.replace(old_area, new_area)
+              print('area block replaced: 1')
+          else:
+              print('MISS area block')
+
           p.write_text(text, encoding='utf-8')
-          print('Applied replacements:', changed)
           PY
       - name: Commit patched index.html
         run: |
@@ -274,5 +407,5 @@ jobs:
           git config user.name "chatgpt-codex"
           git config user.email "chatgpt-codex@users.noreply.github.com"
           git add index.html
-          git commit -m "Make client chatbot match MojPlot style"
+          git commit -m "Improve quantity step pricing and MojPlot UI"
           git push origin HEAD:claude/new-chatbot-design-JrtOE
