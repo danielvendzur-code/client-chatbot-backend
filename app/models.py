@@ -72,7 +72,7 @@ class ServiceRequest(BaseModel):
 
 class LeadRequest(BaseModel):
     name: str = Field(..., min_length=2, max_length=120)
-    email: EmailStr
+    email: EmailStr | None = None
     phone: str | None = Field(default=None, max_length=40)
     message: str | None = Field(default=None, max_length=2000)
     conversation: list[Message] = Field(default_factory=list, max_length=20)

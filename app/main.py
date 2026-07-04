@@ -155,7 +155,7 @@ def _render_lead_email(req: LeadRequest) -> tuple[str, str]:
         subject = f"Nový lead: {req.name}"
     rows = [
         ("Meno", req.name),
-        ("E-mail", req.email),
+        ("E-mail", req.email or "—"),
         ("Telefón", req.phone or "—"),
         ("Správa", req.message or "—"),
     ]
@@ -288,6 +288,8 @@ async def _send_owner_notification(req: LeadRequest) -> None:
 
 
 async def _send_customer_confirmation(req: LeadRequest) -> None:
+    if not req.email:
+        return
     subject, html = _render_customer_email(req)
     reply_to = settings.company.contact_email or None
     _send_via_resend(to=req.email, subject=subject, html=html, reply_to=reply_to)
