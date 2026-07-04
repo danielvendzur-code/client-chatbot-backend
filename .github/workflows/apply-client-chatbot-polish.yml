@@ -1,0 +1,170 @@
+name: Apply client chatbot polish
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/apply-client-chatbot-polish.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  polish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: claude/new-chatbot-design-JrtOE
+      - name: Patch index.html pricing and UI
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+
+          # Visual polish: cleaner, more premium card UI without touching wizard logic.
+          polish_css = r'''
+
+/* ============================================================
+   CLIENT POLISH 2026-07-04 — cleaner premium pricing UI
+   ============================================================ */
+.cbw-panel {
+  width: min(430px, calc(100vw - 28px)) !important;
+  border: 1px solid rgba(15, 23, 42, 0.10) !important;
+  box-shadow: 0 28px 80px -26px rgba(15, 23, 42, 0.45), 0 10px 28px -18px rgba(15, 23, 42, 0.25) !important;
+}
+.cbw-header.cbw-brand-gradient {
+  background-image: linear-gradient(135deg, #1f2633 0%, #2c3445 58%, #111827 100%) !important;
+}
+.cbw-cta-btn {
+  min-height: 68px;
+  border-radius: 18px !important;
+  box-shadow: 0 14px 30px -16px rgba(217, 119, 6, 0.55), inset 0 1px 0 rgba(255,255,255,.32) !important;
+}
+.cbw-cta-text { font-size: 15.5px; }
+.cbw-cta-text small { font-size: 12px !important; opacity: .96 !important; }
+.cbw-calc-prompt {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 21px !important;
+  font-weight: 850 !important;
+  letter-spacing: -.035em !important;
+}
+.cbw-q-card, .cbw-svc-card, .cbw-dir-card, .cbw-result-option, .cbw-preset-btn {
+  border-color: rgba(15, 23, 42, 0.10) !important;
+  box-shadow: 0 8px 22px -20px rgba(15,23,42,.55);
+}
+.cbw-q-card:hover, .cbw-svc-card:hover, .cbw-dir-card:hover, .cbw-result-option:hover, .cbw-preset-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 18px 38px -24px rgba(15,23,42,.55) !important;
+}
+.cbw-q-card[aria-pressed="true"], .cbw-svc-card[aria-pressed="true"], .cbw-dir-card[aria-pressed="true"], .cbw-result-option[aria-pressed="true"], .cbw-preset-btn[aria-pressed="true"] {
+  box-shadow: 0 0 0 3px rgba(44,52,69,.14), 0 14px 32px -22px rgba(15,23,42,.65) !important;
+}
+.cbw-pb {
+  border: 1px solid rgba(15,23,42,.10) !important;
+  border-radius: 22px !important;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
+  box-shadow: 0 22px 50px -28px rgba(15,23,42,.5) !important;
+}
+.cbw-pb-head {
+  align-items: flex-end !important;
+  padding-bottom: 12px !important;
+  border-bottom: 1px solid rgba(15,23,42,.08) !important;
+}
+.cbw-pb-label {
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  font-size: 11px !important;
+  color: #64748b !important;
+}
+.cbw-pb-range {
+  font-size: 25px !important;
+  letter-spacing: -.04em !important;
+  color: #0f172a !important;
+}
+.cbw-pb-total {
+  margin-top: 12px !important;
+  border-radius: 16px !important;
+  background: linear-gradient(135deg, #1f2633 0%, #2c3445 100%) !important;
+  color: #fff !important;
+  padding: 14px 16px !important;
+}
+.cbw-pb-total-label, .cbw-pb-total-amount { color: #fff !important; }
+.cbw-pb-note {
+  background: #fff7ed !important;
+  border: 1px solid #fed7aa !important;
+  color: #7c2d12 !important;
+}
+.cbw-next-priced { min-height: 46px; }
+.cbw-next-price {
+  background: rgba(255,255,255,.18);
+  border: 1px solid rgba(255,255,255,.22);
+  padding: 3px 8px;
+  border-radius: 999px;
+}
+@media (max-width: 520px) {
+  .cbw-panel { width: 100vw !important; height: 100dvh !important; max-height: none !important; border-radius: 0 !important; right: 0 !important; bottom: 0 !important; }
+  .cbw-root { right: 16px !important; bottom: 16px !important; }
+  .cbw-pb-range { font-size: 22px !important; }
+}
+'''
+          marker = '/* ============================================================\n   CLIENT POLISH 2026-07-04'
+          if marker not in text:
+              text = text.replace('</style>', polish_css + '\n</style>')
+
+          # More exact and less inflated price model for furniture pickup / moving estimate.
+          replacements = {
+              "1 + Math.min(2.2, (quantity - 1) * 0.32)": "1 + Math.min(1.8, (quantity - 1) * 0.24)",
+              "Number(jobType.rate || 2.6)": "Number(jobType.rate || 2.2)",
+              "area * m2Rate + itemBase * 0.45": "area * m2Rate + itemBase * 0.35",
+              "itemBase * 0.45": "itemBase * 0.35",
+              "amount: roundTo5(itemBase * 0.45)": "amount: roundTo5(itemBase * 0.35)",
+              "total += 25; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 25 });": "total += 20; lines.push({ label: 'Schody / horšia manipulácia', sub: '', amount: 20 });",
+              "total += 45; lines.push({ label: 'Náročný prístup',               sub: '', amount: 45 });": "total += 35; lines.push({ label: 'Náročný prístup',               sub: '', amount: 35 });",
+              "total += 20; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 20 });": "total += 15; lines.push({ label: 'Bez výťahu',                    sub: '', amount: 15 });",
+              "floors * 8": "floors * 6",
+              "floors + '× 8 €'": "floors + '× 6 €'",
+              "total += 15; lines.push({ label: 'Parkovanie ďalej od vchodu', sub: '', amount: 15 });": "total += 10; lines.push({ label: 'Parkovanie ďalej od vchodu', sub: '', amount: 10 });",
+              "total += 35; lines.push({ label: 'Ťažší náklad', sub: '', amount: 35 });": "total += 25; lines.push({ label: 'Ťažší náklad', sub: '', amount: 25 });",
+              "roundTo5(vol * 2.2)": "roundTo5(vol * 1.85)",
+              "piano: ['Klavír', 90]": "piano: ['Klavír', 75]",
+              "safe: ['Sejf', 70]": "safe: ['Sejf', 60]",
+              "aquarium: ['Akvárium', 35]": "aquarium: ['Akvárium', 30]",
+              "fragile: ['Krehké veci', 30]": "fragile: ['Krehké veci', 25]",
+              "oversized: ['Nadrozmer', 50]": "oversized: ['Nadrozmer', 40]",
+              "total += 30; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 30 });": "total += 25; lines.push({ label: 'Parkovanie blokované', sub: '', amount: 25 });",
+              "total += 25; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 25 });": "total += 20; lines.push({ label: 'Špeciálne ťažké kusy', sub: '', amount: 20 });",
+              "Math.round(area * 1.4)": "Math.round(area * 1.1)",
+              "area + ' m² × 1,40 €'": "area + ' m² × 1,10 €'",
+              "crew_3: { count: 3, sub: '3 ľudia', extra: 40 }": "crew_3: { count: 3, sub: '3 ľudia', extra: 30 }",
+              "crew_4: { count: 4, sub: '4+ ľudia', extra: 90 }": "crew_4: { count: 4, sub: '4+ ľudia', extra: 65 }",
+              "roundTo5(total * 0.90)": "roundTo5(total * 0.92)",
+              "roundTo5(total * 1.15)": "roundTo5(total * 1.08)",
+              "<span class=\"cbw-pb-label\">Orientačný odhad</span>": "<span class=\"cbw-pb-label\">Presnejší odhad podľa výberu</span>",
+              "Finálnu cenu vám potvrdíme telefonicky alebo po obhliadke — bez záväzku, do 30 minút v pracovných hodinách.": "Odhad sa počíta z položiek, objemu, poschodia, prístupu, PSČ a termínu. Finálnu cenu potvrdíme telefonicky alebo po fotke nábytku."
+          }
+          changed = 0
+          for old, new in replacements.items():
+              if old in text:
+                  text = text.replace(old, new)
+                  changed += 1
+              else:
+                  print(f'MISS: {old[:90]}')
+
+          if changed == 0 and marker in text:
+              print('No replacement applied; CSS already present.')
+          p.write_text(text, encoding='utf-8')
+          print(f'Applied replacements: {changed}')
+          PY
+      - name: Commit patched index.html
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "chatgpt-codex"
+          git config user.email "chatgpt-codex@users.noreply.github.com"
+          git add index.html
+          git commit -m "Polish client chatbot pricing and visual UI"
+          git push origin HEAD:claude/new-chatbot-design-JrtOE
