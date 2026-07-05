@@ -330,34 +330,6 @@ button { font-family: inherit; }
 .aw-cta-arr { flex-shrink: 0; opacity: .8; }
 .aw-cta-arr svg { width: 18px; height: 18px; }
 
-/* Service shortcuts on home */
-.aw-shortcuts { display: flex; flex-direction: column; gap: 7px; margin-bottom: 4px; }
-.aw-shortcut {
-  display: flex; align-items: center; gap: 12px;
-  width: 100%; text-align: left;
-  padding: 11px 13px;
-  background: #fff; border: 1.5px solid var(--slate-200);
-  border-radius: var(--r-md); cursor: pointer;
-  transition: border-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
-}
-.aw-shortcut:hover { border-color: var(--blue-500); transform: translateY(-1px); box-shadow: var(--sh-md); }
-.aw-shortcut:hover .aw-shortcut-arr { opacity: 1; transform: translateX(0); }
-.aw-shortcut-ic {
-  flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px;
-  background: var(--blue-50); color: var(--blue-600);
-  display: flex; align-items: center; justify-content: center;
-}
-.aw-shortcut-ic svg { width: 18px; height: 18px; }
-.aw-shortcut-txt { flex: 1; min-width: 0; line-height: 1.3; }
-.aw-shortcut-txt b { display: block; font-size: 13px; font-weight: 700; color: var(--slate-900); }
-.aw-shortcut-txt span { font-size: 11.5px; color: var(--slate-500); }
-.aw-shortcut-arr {
-  flex-shrink: 0; color: var(--blue-600);
-  opacity: 0; transform: translateX(-4px);
-  transition: opacity 150ms ease, transform 150ms ease;
-}
-.aw-shortcut-arr svg { width: 15px; height: 15px; }
-
 .aw-qrow { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 14px; }
 .aw-qchip {
   padding: 8px 13px;
@@ -370,6 +342,7 @@ button { font-family: inherit; }
 .aw-qchip:hover { border-color: var(--blue-500); color: var(--blue-600); background: var(--blue-50); }
 
 .aw-contact-row { display: flex; gap: 8px; margin-top: 4px; }
+.aw-contact-sticky { margin-top: 0; padding-top: 10px; }
 .aw-contact-link {
   flex: 1;
   display: flex; align-items: center; justify-content: center; gap: 7px;
@@ -548,34 +521,57 @@ button { font-family: inherit; }
 .aw-step-val b { font-size: 14px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
 .aw-step-val span { font-size: 10px; font-weight: 600; color: var(--slate-400); text-transform: uppercase; letter-spacing: .05em; }
 
-/* Item rows with quantity steppers */
-.aw-items { display: flex; flex-direction: column; gap: 7px; }
-.aw-item {
-  display: flex; align-items: center; justify-content: space-between; gap: 10px;
-  padding: 9px 9px 9px 14px;
+/* Volume slider */
+.aw-vol {
+  padding: 16px 16px 13px;
   background: #fff; border: 1.5px solid var(--slate-200);
-  border-radius: var(--r-sm);
-  transition: border-color 150ms ease, background 150ms ease;
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-sm);
 }
-.aw-item.on { border-color: var(--blue-600); background: var(--blue-50); }
-.aw-item-label { font-size: 13px; font-weight: 600; color: var(--slate-700); }
-.aw-item.on .aw-item-label { color: var(--slate-900); font-weight: 700; }
-.aw-item-ctl {
-  display: flex; align-items: center; gap: 2px;
-  background: var(--slate-100); border-radius: 9px; padding: 2px;
+.aw-vol-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 14px;
 }
-.aw-item.on .aw-item-ctl { background: var(--blue-100); }
-.aw-item-ctl button {
-  width: 28px; height: 28px; border: none; border-radius: 7px; cursor: pointer;
-  background: transparent; color: var(--slate-500);
-  font-size: 16px; font-weight: 700; line-height: 1;
-  transition: background 130ms ease, color 130ms ease;
+.aw-vol-head span {
+  font-size: 11px; font-weight: 700; letter-spacing: .07em;
+  text-transform: uppercase; color: var(--slate-400);
 }
-.aw-item-ctl button:hover { background: #fff; color: var(--blue-600); box-shadow: var(--sh-sm); }
-.aw-item-ctl b {
-  min-width: 22px; text-align: center;
-  font-size: 13.5px; font-weight: 700; color: var(--slate-900);
-  font-variant-numeric: tabular-nums;
+.aw-vol-head b {
+  font-size: 24px; font-weight: 800; letter-spacing: -0.02em;
+  color: var(--blue-700); font-variant-numeric: tabular-nums;
+}
+.aw-slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 7px; border-radius: 999px;
+  background: var(--slate-200);
+  outline: none; margin: 0; cursor: pointer;
+}
+.aw-slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--blue-600);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, .35);
+  cursor: grab;
+  transition: transform 140ms ease;
+}
+.aw-slider::-webkit-slider-thumb:active { cursor: grabbing; transform: scale(1.15); }
+.aw-slider::-moz-range-thumb {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: #fff; border: 3px solid var(--blue-600);
+  box-shadow: 0 2px 8px rgba(37, 99, 235, .35);
+  cursor: grab;
+}
+.aw-slider:focus-visible { box-shadow: 0 0 0 3px rgba(37, 99, 235, .2); }
+.aw-vol-ticks {
+  display: flex; justify-content: space-between;
+  margin-top: 7px;
+  font-size: 10px; font-weight: 600; color: var(--slate-400);
+}
+.aw-vol-desc {
+  margin-top: 11px; padding-top: 11px;
+  border-top: 1px dashed var(--slate-200);
+  font-size: 12.5px; font-weight: 600; color: var(--slate-700);
+  text-align: center;
 }
 
 /* Inline hint */
@@ -873,11 +869,11 @@ button { font-family: inherit; }
     </div>
     <div class="intro-brand">ProfiPresun · webový asistent</div>
     <h1>Zákazník dostane cenu za minútu.<br>Vy dostanete <span>hotový dopyt</span>.</h1>
-    <p class="intro-lead">Asistent prevedie návštevníka šiestimi rýchlymi krokmi — služba, objem, položky, adresa, termín — a na e-mail vám pošle kompletný dopyt s kontaktom, fotkami a orientačnou cenou.</p>
+    <p class="intro-lead">Asistent prevedie návštevníka piatimi rýchlymi krokmi — služba, objem, adresa, termín, kontakt — a na e-mail vám pošle kompletný dopyt s fotkami, rozpisom ceny a odhadom posádky.</p>
     <div class="intro-feats">
       <div class="intro-feat">
         <div class="intro-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-        <b>6 rýchlych krokov</b><span>hotové do minúty</span>
+        <b>5 rýchlych krokov</b><span>hotové do minúty</span>
       </div>
       <div class="intro-feat">
         <div class="intro-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/></svg></div>
@@ -917,7 +913,7 @@ button { font-family: inherit; }
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
         </button>
       </div>
-      <div class="aw-progress" id="awProgress" data-on="false"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="aw-progress" id="awProgress" data-on="false"><i></i><i></i><i></i><i></i><i></i></div>
     </header>
     <div class="aw-body" id="awBody"></div>
     <footer class="aw-foot" id="awFoot"></footer>
@@ -974,19 +970,24 @@ var ICONS = {
   refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></svg>'
 };
 
+/* base = výjazd + réžia; rate = práca a doprava za m³ (2-členná posádka) */
 var SERVICES = [
-  { id: 'odvoz',        label: 'Odvoz nábytku',  sub: 'kusy nábytku a spotrebiče',   icon: 'sofa',  base: 49 },
-  { id: 'vyvoz',        label: 'Vývoz odpadu',   sub: 'suť, odpad, elektro',         icon: 'trash', base: 59 },
-  { id: 'stahovanie',   label: 'Sťahovanie',     sub: 'byt, dom či kancelária',      icon: 'truck', base: 89 },
-  { id: 'vypratavanie', label: 'Vypratávanie',   sub: 'pivnica, byt, pozostalosť',   icon: 'boxes', base: 69 }
+  { id: 'odvoz',        label: 'Odvoz nábytku',  sub: 'kusy nábytku a spotrebiče',   icon: 'sofa',  base: 39, rate: 15 },
+  { id: 'vyvoz',        label: 'Vývoz odpadu',   sub: 'suť, odpad, elektro',         icon: 'trash', base: 45, rate: 20 },
+  { id: 'stahovanie',   label: 'Sťahovanie',     sub: 'byt, dom či kancelária',      icon: 'truck', base: 59, rate: 18 },
+  { id: 'vypratavanie', label: 'Vypratávanie',   sub: 'pivnica, byt, pozostalosť',   icon: 'boxes', base: 49, rate: 19 }
 ];
 
-var VOLUMES = [
-  { id: 'xs', label: 'Pár kusov',      sub: 'sedačka, práčka, skriňa',    m3: '~1 m³',  icon: 'piece', add: 0 },
-  { id: 's',  label: 'Menší náklad',   sub: 'jedna izba alebo pivnica',   m3: '~3 m³',  icon: 'room',  add: 60 },
-  { id: 'm',  label: 'Stredný náklad', sub: '2–3 izbový byt',             m3: '~6 m³',  icon: 'flat',  add: 150 },
-  { id: 'l',  label: 'Veľký objem',    sub: 'dom alebo firma, viac jázd', m3: '10+ m³', icon: 'house', add: 280 }
-];
+/* Slovný popis objemu k sliderovej hodnote (m³); dodávka ~11 m³ */
+function volumeDesc(m3) {
+  if (m3 <= 1.5) return 'pár kusov — sedačka, práčka, skriňa';
+  if (m3 <= 3.5) return 'jedna izba alebo pivnica';
+  if (m3 <= 7)   return '2–3 izbový byt';
+  if (m3 <= 11)  return 'väčší byt — plná dodávka';
+  if (m3 <= 16)  return 'menší dom — približne 2 jazdy';
+  return 'veľký objem — viac jázd alebo kontajner';
+}
+function volumeTrips(m3) { return Math.max(1, Math.ceil(m3 / 11)); }
 
 var SPECIALS = [
   { id: 'piano',    label: 'Klavír',           icon: 'piano',  add: 90 },
@@ -995,38 +996,12 @@ var SPECIALS = [
   { id: 'fragile',  label: 'Krehké veci',      icon: 'glass',  add: 25 }
 ];
 
-/* Čo konkrétne treba odviezť — iné položky pre každú službu */
-var ITEMS = {
-  odvoz: [
-    { id: 'sofa',      label: 'Sedačka / kreslo', add: 20 },
-    { id: 'wardrobe',  label: 'Skriňa',           add: 20 },
-    { id: 'bed',       label: 'Posteľ / matrac',  add: 15 },
-    { id: 'appliance', label: 'Spotrebič',        add: 15 },
-    { id: 'table',     label: 'Stôl / stoličky',  add: 10 },
-    { id: 'boxes',     label: 'Krabice / vrecia', add: 5 }
-  ],
-  vyvoz: [
-    { id: 'rubble',   label: 'Stavebná suť',   add: 25 },
-    { id: 'soil',     label: 'Zemina',         add: 20 },
-    { id: 'wood',     label: 'Drevo / okná',   add: 15 },
-    { id: 'mixed',    label: 'Zmesný odpad',   add: 15 },
-    { id: 'ewaste',   label: 'Elektroodpad',   add: 10 },
-    { id: 'bags',     label: 'Vrecia',         add: 5 }
-  ],
-  stahovanie: [
-    { id: 'furniture', label: 'Nábytok',              add: 20 },
-    { id: 'appliance', label: 'Spotrebiče',           add: 15 },
-    { id: 'office',    label: 'Kancelárske vybavenie', add: 15 },
-    { id: 'boxes',     label: 'Krabice / šatstvo',    add: 10 },
-    { id: 'plants',    label: 'Rastliny',             add: 5 }
-  ],
-  vypratavanie: [
-    { id: 'furniture', label: 'Nábytok',              add: 20 },
-    { id: 'mixed',     label: 'Zmesný odpad',         add: 15 },
-    { id: 'ewaste',    label: 'Elektro',              add: 10 },
-    { id: 'boxes',     label: 'Drobnosti / krabice',  add: 5 }
-  ]
-};
+function crewFor(effM3, d) {
+  var c = effM3 <= 1.2 ? 1 : 2;
+  if (effM3 >= 8) c = 3;
+  if ((d.floor >= 3 && d.lift === 'no') || d.specials.piano || d.specials.safe) c += 1;
+  return Math.min(4, c);
+}
 
 var TERMS = [
   { id: 'flex', label: 'Flexibilný',   hint: 'zľava −8 %',    tone: 'down', mult: 0.92 },
@@ -1049,13 +1024,13 @@ var TIMES = [
 var FAQ = {
   sluzby:  { q: 'Aké služby robíte?', a: 'Robíme <strong>odvoz nábytku a spotrebičov</strong>, <strong>vývoz odpadu a sute</strong>, <strong>sťahovanie</strong> bytov, domov aj firiem a <strong>vypratávanie</strong> pivníc, bytov či pozostalostí. Všetko vrátane nakládky a vynášania.' },
   kedy:    { q: 'Kedy viete prísť?', a: 'Štandardne do <strong>2–3 pracovných dní</strong>, pri súrnych požiadavkách často už <strong>do 48 hodín</strong>. Presný termín si dohodneme telefonicky po odoslaní dopytu.' },
+  cena:    { q: 'Ako počítate cenu?', a: 'Cena sa skladá z <strong>výjazdu</strong>, <strong>objemu nákladu</strong> (€/m³ vrátane práce), príplatkov za poschodie, parkovanie a špeciálne predmety a z <strong>dopravy podľa PSČ</strong>. V kalkulačke uvidíte celý rozpis — nič nie je skryté.' },
   kontakt: { q: 'Kontakt', a: 'Zavolajte nám na <strong>' + CONFIG.phone + '</strong>, napíšte na <strong>' + CONFIG.email + '</strong>, alebo použite WhatsApp. Sme k dispozícii Po–So, 8:00–18:00.' }
 };
 
 var STEP_TITLES = [
   { t: 'S čím vám pomôžeme?',      s: 'Vyberte službu — všetko ostatné doladíme spolu.' },
-  { t: 'Koľko toho približne je?', s: 'Podľa objemu pošleme správne auto aj posádku.' },
-  { t: 'Čo konkrétne odvezieme?',  s: 'Pridajte položky a počty — spresnia cenu aj čas práce.' },
+  { t: 'Koľko toho približne je?', s: 'Potiahnite posuvník — podľa objemu pošleme správne auto aj posádku.' },
   { t: 'Adresa a prístup',         s: 'Poschodie, výťah a parkovanie ovplyvňujú prácnosť.' },
   { t: 'Kedy to potrebujete?',     s: 'Flexibilný termín je lacnejší, súrny zvládneme do 48 hodín.' },
   { t: 'Zhrnutie a kontakt',       s: 'Skontrolujte dopyt a nechajte nám kontakt.' }
@@ -1075,7 +1050,7 @@ var state = {
 
 function freshData() {
   return {
-    service: '', volume: '', specials: {}, items: {},
+    service: '', volumeM3: 4, specials: {},
     photos: [],
     cityFrom: '', zipFrom: '', cityTo: '', zipTo: '',
     floor: 0, lift: 'yes', parking: 'easy',
@@ -1097,13 +1072,37 @@ function esc(s) {
 function round5(n) { return Math.max(0, Math.round(n / 5) * 5); }
 function findById(arr, id) { for (var i = 0; i < arr.length; i++) if (arr[i].id === id) return arr[i]; return null; }
 
+/* PSČ → región podľa prvých dvoch číslic (jemnejšie ako kraj) */
+var ZONES = [
+  { from: 81, to: 85, label: 'Bratislava',            fee: 0 },
+  { from: 86, to: 89, label: 'Bratislavské okolie',   fee: 10 },
+  { from: 90, to: 90, label: 'Senec / Malacky',       fee: 15 },
+  { from: 91, to: 92, label: 'Trnava / Trenčín',      fee: 30 },
+  { from: 93, to: 94, label: 'Južné Slovensko',       fee: 45 },
+  { from: 95, to: 96, label: 'Nitra / Zvolen',        fee: 55 },
+  { from: 97, to: 99, label: 'Stredné Slovensko',     fee: 70 },
+  { from: 1,  to: 3,  label: 'Severné Slovensko',     fee: 75 },
+  { from: 4,  to: 5,  label: 'Košice / Poprad',       fee: 95 },
+  { from: 6,  to: 9,  label: 'Východné Slovensko',    fee: 100 }
+];
+
 function zoneFor(zip) {
   var z = String(zip || '').replace(/\D/g, '');
-  if (z.length < 3) return null;
-  var p = z.charAt(0);
-  if (p === '8') return { tone: 'ok',  label: 'Bratislava a okolie', fee: 0,  feeTxt: 'doprava v cene' };
-  if (p === '9') return { tone: 'mid', label: 'Západné Slovensko',   fee: 35, feeTxt: '+35 € doprava' };
-  return { tone: 'far', label: 'Vzdialenejší región', fee: 80, feeTxt: '+80 € doprava' };
+  if (z.length < 2) return null;
+  var p2 = parseInt(z.slice(0, 2), 10);
+  if (isNaN(p2)) return null;
+  for (var i = 0; i < ZONES.length; i++) {
+    if (p2 >= ZONES[i].from && p2 <= ZONES[i].to) {
+      var zn = ZONES[i];
+      return {
+        tone: zn.fee === 0 ? 'ok' : (zn.fee <= 45 ? 'mid' : 'far'),
+        label: zn.label,
+        fee: zn.fee,
+        feeTxt: zn.fee === 0 ? 'doprava v cene' : '+' + zn.fee + ' € doprava'
+      };
+    }
+  }
+  return null;
 }
 
 /* ==========================================================================
@@ -1112,29 +1111,36 @@ function zoneFor(zip) {
 function calcPrice() {
   var d = state.data;
   var svc = findById(SERVICES, d.service);
-  var vol = findById(VOLUMES, d.volume);
+  var m3 = Math.max(0.5, Number(d.volumeM3) || 4);
   var lines = [];
-  var total = svc ? svc.base : 49;
-  lines.push({ label: 'Základ — ' + (svc ? svc.label.toLowerCase() : 'služba'), amount: total });
+  var total = svc ? svc.base : 39;
+  lines.push({ label: 'Výjazd a réžia — ' + (svc ? svc.label.toLowerCase() : 'služba'), amount: total });
 
-  if (vol && vol.add > 0) {
-    total += vol.add;
-    lines.push({ label: 'Objem — ' + vol.label.toLowerCase() + ' (' + vol.m3 + ')', amount: vol.add });
+  var rate = svc ? svc.rate : 16;
+  var work = Math.round(m3 * rate);
+  total += work;
+  lines.push({ label: 'Práca a odvoz — ' + String(m3).replace('.', ',') + ' m³ × ' + rate + ' €', amount: work });
+
+  var trips = volumeTrips(m3);
+  if (trips > 1) {
+    var tripFee = (trips - 1) * 25;
+    total += tripFee;
+    lines.push({ label: 'Ďalšie jazdy (' + trips + '× dodávka)', amount: tripFee });
   }
 
-  var itemsSum = 0, itemsN = 0;
-  (ITEMS[d.service] || []).forEach(function (it) {
-    var n = d.items[it.id] || 0;
-    if (n > 0) { itemsSum += it.add * n; itemsN += n; }
-  });
-  if (itemsSum > 0) { total += itemsSum; lines.push({ label: 'Položky (' + itemsN + ' ks)', amount: itemsSum }); }
+  var crew = crewFor(m3, d);
+  if (crew > 2) {
+    var crewFee = (crew - 2) * 25;
+    total += crewFee;
+    lines.push({ label: 'Posilnená posádka (' + crew + ' osoby)', amount: crewFee });
+  }
 
   var specSum = 0;
   SPECIALS.forEach(function (s) { if (d.specials[s.id]) specSum += s.add; });
   if (specSum > 0) { total += specSum; lines.push({ label: 'Špeciálne predmety', amount: specSum }); }
 
   var floorFee = 0;
-  if (d.lift === 'no') floorFee = Math.max(0, d.floor) * 12;
+  if (d.lift === 'no') floorFee = Math.min(72, Math.max(0, d.floor) * 12);
   else if (d.floor > 0) floorFee = 10;
   if (floorFee > 0) {
     total += floorFee;
@@ -1156,29 +1162,29 @@ function calcPrice() {
     lines.push({ label: 'Termín — ' + term.label.toLowerCase(), amount: delta });
   }
 
-  var min = round5(total * 0.9);
-  var max = round5(total * 1.18);
-  if (max <= min) max = min + 20;
-  return { min: min, max: max, text: min + ' – ' + max + ' €', lines: lines };
+  total = Math.max(39, total);
+  var min = round5(total * 0.92);
+  var max = round5(total * 1.15);
+  if (max <= min) max = min + 15;
+  return { min: min, max: max, text: min + ' – ' + max + ' €', lines: lines, m3: m3, crew: crew, trips: trips };
 }
 
 /* ==========================================================================
    VALIDATION
    ========================================================================== */
-var LAST_STEP = 5;
+var LAST_STEP = 4;
 
 function stepValid(step) {
   var d = state.data;
   if (step === 0) return !!d.service;
-  if (step === 1) return !!d.volume;
-  if (step === 2) return true; /* položky sú voliteľné */
-  if (step === 3) {
+  if (step === 1) return Number(d.volumeM3) > 0;
+  if (step === 2) {
     if (!d.cityFrom.trim()) return false;
     if (d.service === 'stahovanie' && !d.cityTo.trim()) return false;
     return true;
   }
-  if (step === 4) return true; /* termín má predvolenú hodnotu */
-  if (step === 5) {
+  if (step === 3) return true; /* termín má predvolenú hodnotu */
+  if (step === 4) {
     var digits = String(d.phone || '').replace(/\D/g, '');
     return d.name.trim().length >= 2 && digits.length >= 9 && d.gdpr;
   }
@@ -1192,40 +1198,29 @@ function homeHTML() {
   return '<div class="aw-view">'
     + '<div class="aw-msg"><div class="aw-msg-ava">T</div><div class="aw-msg-bubble">'
     +   'Dobrý deň! Som <strong>' + esc(CONFIG.assistant) + '</strong> z ' + esc(CONFIG.company) + '. '
-    +   'S čím vám dnes pomôžem? Vyberte službu alebo si nechajte rovno vypočítať cenu.'
+    +   'Najrýchlejšie vám pomôže kalkulačka — do minúty viete orientačnú cenu. Alebo sa ma čokoľvek spýtajte.'
     + '</div></div>'
     + '<button class="aw-cta" data-a="wizard" type="button">'
     +   '<span class="aw-cta-ic">' + ICONS.calc + '</span>'
-    +   '<span class="aw-cta-txt"><strong>Vypočítať orientačnú cenu</strong><span>4 rýchle otázky · menej než minúta</span></span>'
+    +   '<span class="aw-cta-txt"><strong>Vypočítať orientačnú cenu</strong><span>5 rýchlych krokov · menej než minúta</span></span>'
     +   '<span class="aw-cta-arr">' + ICONS.arrowR + '</span>'
     + '</button>'
-    + '<div class="aw-sec" style="margin-top:4px">Naše služby</div>'
-    + '<div class="aw-shortcuts">'
-    + SERVICES.map(function (s) {
-        return '<button class="aw-shortcut" type="button" data-a="quick:' + s.id + '">'
-          + '<span class="aw-shortcut-ic">' + ICONS[s.icon] + '</span>'
-          + '<span class="aw-shortcut-txt"><b>' + esc(s.label) + '</b><span>' + esc(s.sub) + '</span></span>'
-          + '<span class="aw-shortcut-arr">' + ICONS.arrowR + '</span>'
-          + '</button>';
-      }).join('')
-    + '</div>'
-    + '<div class="aw-sec">Časté otázky</div>'
     + '<div class="aw-qrow">'
     +   '<button class="aw-qchip" data-a="faq:sluzby" type="button">Aké služby robíte?</button>'
     +   '<button class="aw-qchip" data-a="faq:kedy" type="button">Kedy viete prísť?</button>'
-    +   '<button class="aw-qchip" data-a="faq:kontakt" type="button">Kontakt</button>'
+    +   '<button class="aw-qchip" data-a="faq:cena" type="button">Ako počítate cenu?</button>'
     + '</div>'
     + '<div id="awThread"></div>'
-    + '<div class="aw-contact-row">'
-    +   '<a class="aw-contact-link" href="tel:' + esc(CONFIG.phoneRaw) + '">' + ICONS.phone + 'Zavolať</a>'
-    +   '<a class="aw-contact-link" href="https://wa.me/' + esc(CONFIG.whatsapp) + '" target="_blank" rel="noopener">' + ICONS.wa + 'WhatsApp</a>'
-    +   '<a class="aw-contact-link" href="mailto:' + esc(CONFIG.email) + '">' + ICONS.mail + 'E-mail</a>'
-    + '</div>'
     + '</div>';
 }
 
 function homeFootHTML() {
-  return '<div class="aw-composer">'
+  return '<div class="aw-contact-row aw-contact-sticky">'
+    +   '<a class="aw-contact-link" href="tel:' + esc(CONFIG.phoneRaw) + '">' + ICONS.phone + 'Zavolať</a>'
+    +   '<a class="aw-contact-link" href="https://wa.me/' + esc(CONFIG.whatsapp) + '" target="_blank" rel="noopener">' + ICONS.wa + 'WhatsApp</a>'
+    +   '<a class="aw-contact-link" href="mailto:' + esc(CONFIG.email) + '">' + ICONS.mail + 'E-mail</a>'
+    + '</div>'
+    + '<div class="aw-composer">'
     + '<input type="text" id="awChatInput" placeholder="Napíšte otázku…" autocomplete="off">'
     + '<button class="aw-send" data-a="chat-send" aria-label="Odoslať" type="button">' + ICONS.send + '</button>'
     + '</div>';
@@ -1291,34 +1286,24 @@ function step0HTML() {
     + '</div></div>';
 }
 
-function step1HTML() {
-  var d = state.data;
-  return '<div class="aw-view">' + stepHeadHTML(1)
-    + '<div class="aw-grid">'
-    + VOLUMES.map(function (v) {
-        return cardHTML('data-a="vol:' + v.id + '"', d.volume === v.id, v.icon, v.label + ' · ' + v.m3, v.sub);
-      }).join('')
-    + '</div>'
-    + '<div class="aw-hint">' + ICONS.alert + '<span>Netrafili ste sa presne? Nevadí — objem doladíme telefonicky, cena sa upraví.</span></div>'
-    + '</div>';
+function sliderFillCSS(m3) {
+  var pct = ((m3 - 0.5) / (20 - 0.5)) * 100;
+  return 'background: linear-gradient(to right, var(--blue-600) 0%, var(--blue-500) ' + pct + '%, var(--slate-200) ' + pct + '%)';
 }
 
-function step2HTML() {
+function step1HTML() {
   var d = state.data;
-  var items = ITEMS[d.service] || [];
-  return '<div class="aw-view">' + stepHeadHTML(2)
-    + '<div class="aw-items">'
-    + items.map(function (it) {
-        var n = d.items[it.id] || 0;
-        return '<div class="aw-item' + (n > 0 ? ' on' : '') + '" id="awItem-' + it.id + '">'
-          + '<span class="aw-item-label">' + esc(it.label) + '</span>'
-          + '<span class="aw-item-ctl">'
-          +   '<button type="button" data-a="iminus:' + it.id + '" aria-label="Menej">−</button>'
-          +   '<b id="awItemN-' + it.id + '">' + n + '</b>'
-          +   '<button type="button" data-a="iplus:' + it.id + '" aria-label="Viac">+</button>'
-          + '</span>'
-          + '</div>';
-      }).join('')
+  var m3 = Math.max(0.5, Number(d.volumeM3) || 4);
+  var trips = volumeTrips(m3);
+  return '<div class="aw-view">' + stepHeadHTML(1)
+    + '<div class="aw-vol">'
+    +   '<div class="aw-vol-head">'
+    +     '<span>Objem nákladu</span>'
+    +     '<b id="awVolVal">' + String(m3).replace('.', ',') + ' m³</b>'
+    +   '</div>'
+    +   '<input type="range" class="aw-slider" id="awVolSlider" min="0.5" max="20" step="0.5" value="' + m3 + '" style="' + sliderFillCSS(m3) + '" aria-label="Objem nákladu v m³">'
+    +   '<div class="aw-vol-ticks"><span>0,5</span><span>5</span><span>10</span><span>15</span><span>20 m³</span></div>'
+    +   '<div class="aw-vol-desc" id="awVolDesc">≈ ' + volumeDesc(m3) + (trips > 1 ? ' · ' + trips + ' jazdy' : '') + '</div>'
     + '</div>'
     + '<div class="aw-sec">Špeciálne predmety <small>· príplatok za náročnú manipuláciu</small></div>'
     + '<div class="aw-chips">'
@@ -1337,15 +1322,16 @@ function step2HTML() {
         : '')
     + '<input type="file" id="awFile" accept="image/*" multiple hidden>'
     + '</div>'
+    + '<div class="aw-hint">' + ICONS.alert + '<span>Netrafili ste sa presne? Nevadí — objem doladíme telefonicky a cena sa upraví.</span></div>'
     + '</div>';
 }
 
-function step3HTML() {
+function step2HTML() {
   var d = state.data;
   var isMoving = d.service === 'stahovanie';
   var zf = zoneFor(d.zipFrom);
   var zt = zoneFor(d.zipTo);
-  return '<div class="aw-view">' + stepHeadHTML(3)
+  return '<div class="aw-view">' + stepHeadHTML(2)
     + '<div class="aw-field">'
     +   '<label class="aw-label">' + (isMoving ? 'Odkiaľ sa sťahujete' : 'Adresa') + ' <em>*</em></label>'
     +   '<div class="aw-row2">'
@@ -1388,10 +1374,10 @@ function step3HTML() {
     + '</div>';
 }
 
-function step4HTML() {
+function step3HTML() {
   var d = state.data;
   var showDate = d.term === 'date';
-  return '<div class="aw-view">' + stepHeadHTML(4)
+  return '<div class="aw-view">' + stepHeadHTML(3)
     + '<div class="aw-seg" data-n="3">'
     + TERMS.map(function (t) {
         return '<button class="aw-seg-btn" type="button" data-a="term:' + t.id + '" aria-pressed="' + (d.term === t.id) + '">'
@@ -1415,17 +1401,15 @@ function step4HTML() {
 function summaryRows() {
   var d = state.data;
   var svc = findById(SERVICES, d.service);
-  var vol = findById(VOLUMES, d.volume);
   var term = findById(TERMS, d.term);
   var specials = SPECIALS.filter(function (s) { return d.specials[s.id]; }).map(function (s) { return s.label; });
-  var items = (ITEMS[d.service] || []).filter(function (it) { return (d.items[it.id] || 0) > 0; })
-    .map(function (it) { return it.label + ' ×' + d.items[it.id]; });
   var park = findById(PARKING, d.parking);
   var time = findById(TIMES, d.timePref);
+  var price = calcPrice();
   var rows = [];
   rows.push(['Služba', svc ? svc.label : '—']);
-  rows.push(['Objem', vol ? vol.label + ' (' + vol.m3 + ')' : '—']);
-  if (items.length) rows.push(['Položky', items.join(', ')]);
+  rows.push(['Objem', String(price.m3).replace('.', ',') + ' m³ — ' + volumeDesc(price.m3) + (price.trips > 1 ? ' (' + price.trips + ' jazdy)' : '')]);
+  rows.push(['Odhad posádky', price.crew + ' ' + (price.crew === 1 ? 'osoba' : 'osoby')]);
   if (specials.length) rows.push(['Špeciálne', specials.join(', ')]);
   var from = [d.cityFrom.trim(), d.zipFrom.trim()].filter(Boolean).join(', ');
   rows.push([d.service === 'stahovanie' ? 'Odkiaľ' : 'Adresa', from || '—']);
@@ -1443,10 +1427,10 @@ function summaryRows() {
   return rows;
 }
 
-function step5HTML() {
+function step4HTML() {
   var d = state.data;
   var price = calcPrice();
-  return '<div class="aw-view">' + stepHeadHTML(5)
+  return '<div class="aw-view">' + stepHeadHTML(4)
     + '<div class="aw-price-hero">'
     +   '<div class="aw-price-hero-label">Orientačná cena</div>'
     +   '<div class="aw-price-hero-val">' + price.text + '</div>'
@@ -1553,7 +1537,7 @@ function render() {
     elBody.innerHTML = homeHTML();
     elFoot.innerHTML = homeFootHTML();
   } else if (v === 'wizard') {
-    var steps = [step0HTML, step1HTML, step2HTML, step3HTML, step4HTML, step5HTML];
+    var steps = [step0HTML, step1HTML, step2HTML, step3HTML, step4HTML];
     elBody.innerHTML = steps[state.step]();
     elFoot.innerHTML = wizardFootHTML();
   } else {
@@ -1709,31 +1693,9 @@ $('#awPanel').addEventListener('click', function (e) {
   if (a === 'submit') { submit(); return; }
 
   if (a === 'svc') {
-    if (d.service !== arg) d.items = {};
     d.service = arg;
     render();
     setTimeout(function () { if (state.view === 'wizard' && state.step === 0) goStep(1); }, 320);
-    return;
-  }
-  if (a === 'quick') {
-    if (d.service !== arg) d.items = {};
-    d.service = arg;
-    state.view = 'wizard';
-    state.step = 1;
-    state.error = '';
-    render();
-    return;
-  }
-  if (a === 'vol') { d.volume = arg; render(); return; }
-  if (a === 'iplus' || a === 'iminus') {
-    var cur = d.items[arg] || 0;
-    var next = Math.max(0, Math.min(20, cur + (a === 'iplus' ? 1 : -1)));
-    if (next === 0) delete d.items[arg]; else d.items[arg] = next;
-    var row = $('#awItem-' + arg);
-    var num = $('#awItemN-' + arg);
-    if (num) num.textContent = next;
-    if (row) row.classList.toggle('on', next > 0);
-    refreshPrice(); refreshNext();
     return;
   }
   if (a === 'park') { d.parking = arg; render(); return; }
@@ -1787,6 +1749,21 @@ $('#awPanel').addEventListener('click', function (e) {
 
 /* Field inputs — update state without re-render (keeps focus) */
 elBody.addEventListener('input', function (e) {
+  if (e.target && e.target.id === 'awVolSlider') {
+    var m3 = Math.max(0.5, Number(e.target.value) || 4);
+    state.data.volumeM3 = m3;
+    e.target.style.cssText = sliderFillCSS(m3);
+    var v = $('#awVolVal');
+    if (v) v.textContent = String(m3).replace('.', ',') + ' m³';
+    var dsc = $('#awVolDesc');
+    if (dsc) {
+      var trips = volumeTrips(m3);
+      dsc.textContent = '≈ ' + volumeDesc(m3) + (trips > 1 ? ' · ' + trips + ' jazdy' : '');
+    }
+    refreshPrice();
+    refreshNext();
+    return;
+  }
   var f = e.target.dataset ? e.target.dataset.f : null;
   if (!f) return;
   state.data[f] = e.target.value;
