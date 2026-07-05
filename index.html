@@ -74,7 +74,7 @@ button { font-family: inherit; }
   color: #fff;
   box-shadow: 0 14px 30px -10px rgba(37, 99, 235, .55), inset 0 1px 0 rgba(255, 255, 255, .3);
 }
-.intro-mark svg { width: 30px; height: 30px; }
+.intro-mark svg { width: 46px; height: 46px; }
 .intro-brand {
   font-size: 13px; font-weight: 800; letter-spacing: .12em;
   text-transform: uppercase; color: var(--blue-600);
@@ -143,6 +143,7 @@ button { font-family: inherit; }
 }
 .aw-launcher:hover { transform: scale(1.07); box-shadow: 0 14px 34px -6px rgba(37, 99, 235, .55), 0 3px 8px rgba(15, 23, 42, .14); }
 .aw-launcher:active { transform: scale(.96); }
+.aw-launcher .ic-open { width: 40px; height: 40px; }
 .aw-launcher svg { width: 27px; height: 27px; position: absolute; transition: opacity 180ms ease, transform 260ms var(--spring); }
 .aw-launcher .ic-open { opacity: 1; transform: rotate(0) scale(1); }
 .aw-launcher .ic-close { opacity: 0; transform: rotate(-70deg) scale(.5); }
@@ -194,7 +195,7 @@ button { font-family: inherit; }
   display: flex; align-items: center; justify-content: center;
   color: #fff;
 }
-.aw-ava svg { width: 22px; height: 22px; }
+.aw-ava svg { width: 32px; height: 32px; }
 .aw-ava-dot {
   position: absolute; bottom: -2px; right: -2px;
   width: 12px; height: 12px; border-radius: 50%;
@@ -248,7 +249,7 @@ button { font-family: inherit; }
    ========================================================================== */
 .aw-body {
   flex: 1; overflow-y: auto; overflow-x: hidden;
-  padding: 18px 16px 20px;
+  padding: 14px 15px 16px;
   background: var(--slate-50);
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
@@ -256,8 +257,47 @@ button { font-family: inherit; }
 .aw-body::-webkit-scrollbar { width: 5px; }
 .aw-body::-webkit-scrollbar-thumb { background: var(--slate-300); border-radius: 99px; }
 
-.aw-view { animation: viewIn 300ms var(--ease); }
-@keyframes viewIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.aw-view { animation: viewIn 340ms var(--ease); }
+@keyframes viewIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* Card entrance stagger */
+.aw-view .aw-grid .aw-card { animation: cardIn 380ms var(--spring) backwards; }
+.aw-view .aw-grid .aw-card:nth-child(1) { animation-delay: 30ms; }
+.aw-view .aw-grid .aw-card:nth-child(2) { animation-delay: 70ms; }
+.aw-view .aw-grid .aw-card:nth-child(3) { animation-delay: 110ms; }
+.aw-view .aw-grid .aw-card:nth-child(4) { animation-delay: 150ms; }
+.aw-view .aw-grid .aw-card:nth-child(5) { animation-delay: 190ms; }
+.aw-view .aw-grid .aw-card:nth-child(6) { animation-delay: 230ms; }
+.aw-view .aw-grid .aw-card:nth-child(7) { animation-delay: 270ms; }
+.aw-view .aw-grid .aw-card:nth-child(8) { animation-delay: 310ms; }
+@keyframes cardIn { from { opacity: 0; transform: translateY(12px) scale(.96); } to { opacity: 1; transform: none; } }
+
+/* Sticky calculator chip in chat */
+.aw-calcchip {
+  position: sticky; top: 0; z-index: 6;
+  display: flex; align-items: center; gap: 11px;
+  width: 100%; text-align: left;
+  margin: 0 0 14px; padding: 12px 14px;
+  border: none; cursor: pointer;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
+  color: #fff;
+  box-shadow: 0 8px 20px -8px rgba(37, 99, 235, .5);
+  transition: transform 180ms var(--spring), box-shadow 180ms ease;
+}
+.aw-calcchip:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(37, 99, 235, .55); }
+.aw-calcchip:active { transform: scale(.99); }
+.aw-calcchip-ic {
+  flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
+  background: rgba(255, 255, 255, .16);
+  display: flex; align-items: center; justify-content: center;
+}
+.aw-calcchip-ic svg { width: 18px; height: 18px; }
+.aw-calcchip-txt { flex: 1; line-height: 1.25; }
+.aw-calcchip-txt b { display: block; font-size: 13.5px; font-weight: 700; letter-spacing: -0.01em; }
+.aw-calcchip-txt span { display: block; margin-top: 1px; font-size: 11px; color: rgba(255, 255, 255, .72); }
+.aw-calcchip-arr { flex-shrink: 0; opacity: .85; }
+.aw-calcchip-arr svg { width: 17px; height: 17px; }
 
 /* ==========================================================================
    HOME (chat)
@@ -362,16 +402,16 @@ button { font-family: inherit; }
    ========================================================================== */
 .aw-step-count {
   display: inline-block;
-  font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .08em;
   text-transform: uppercase; color: var(--blue-600);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 .aw-step-title {
-  margin: 0 0 5px;
-  font-size: 19px; font-weight: 800; letter-spacing: -0.02em;
+  margin: 0 0 3px;
+  font-size: 18px; font-weight: 800; letter-spacing: -0.02em;
   color: var(--slate-900); line-height: 1.25;
 }
-.aw-step-sub { margin: 0 0 16px; font-size: 13px; line-height: 1.5; color: var(--slate-500); }
+.aw-step-sub { margin: 0 0 13px; font-size: 12.5px; line-height: 1.45; color: var(--slate-500); }
 
 /* Selection cards */
 .aw-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
@@ -413,8 +453,8 @@ button { font-family: inherit; }
 
 /* Section label */
 .aw-sec {
-  margin: 18px 0 8px;
-  font-size: 11px; font-weight: 700; letter-spacing: .07em;
+  margin: 13px 0 7px;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .07em;
   text-transform: uppercase; color: var(--slate-400);
 }
 .aw-sec small { text-transform: none; letter-spacing: 0; font-weight: 500; color: var(--slate-400); }
@@ -525,19 +565,19 @@ button { font-family: inherit; }
 /* Volume slider */
 /* Van fill visual */
 .aw-van {
-  padding: 14px 16px 6px;
-  margin-bottom: 10px;
+  padding: 8px 16px 2px;
+  margin-bottom: 9px;
   background: linear-gradient(180deg, #F5F8FF, #fff);
   border: 1.5px solid var(--slate-200);
   border-radius: var(--r-md);
   box-shadow: var(--sh-sm);
 }
-.aw-van-svg { display: block; width: 100%; max-width: 260px; height: auto; margin: 0 auto; }
-.aw-van-svg #awVanFill { transition: y 320ms var(--ease), height 320ms var(--ease); }
+.aw-van-svg { display: block; width: 100%; max-width: 200px; height: auto; margin: 0 auto; }
+.aw-van-svg #awVanFill { transition: y 340ms var(--spring), height 340ms var(--spring); }
 #awVanBadge { transition: opacity 200ms ease; }
 
 .aw-vol {
-  padding: 16px 16px 13px;
+  padding: 14px 16px 12px;
   background: #fff; border: 1.5px solid var(--slate-200);
   border-radius: var(--r-md);
   box-shadow: var(--sh-sm);
@@ -879,7 +919,7 @@ button { font-family: inherit; }
 <main class="intro">
   <div class="intro-card">
     <div class="intro-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M12 10V3M8.5 6.5L12 3l3.5 3.5"/></svg>
+      <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BFDBFE" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DBEAFE"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#93C5FD"/><circle cx="15" cy="28" r="3.5" fill="#0B1526"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#0B1526"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
     </div>
     <div class="intro-brand">ProfiPresun · webový asistent</div>
     <h1>Zákazník dostane cenu za minútu.<br>Vy dostanete <span>hotový dopyt</span>.</h1>
@@ -916,13 +956,14 @@ button { font-family: inherit; }
     <header class="aw-head">
       <div class="aw-head-row">
         <div class="aw-ava">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M12 10V3M8.5 6.5L12 3l3.5 3.5"/></svg>
+          <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BFDBFE" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DBEAFE"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#93C5FD"/><circle cx="15" cy="28" r="3.5" fill="#0B1526"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#0B1526"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
           <span class="aw-ava-dot"></span>
         </div>
         <div class="aw-head-txt">
           <div class="aw-head-title">ProfiPresun</div>
           <div class="aw-head-sub"><i></i>Online · odpovieme do pár minút</div>
         </div>
+        <button class="aw-head-btn" id="awToggle" data-a="toggle" aria-label="Prepnúť" type="button"></button>
         <button class="aw-head-btn" data-a="close" aria-label="Zavrieť okno" type="button">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
         </button>
@@ -933,9 +974,9 @@ button { font-family: inherit; }
     <footer class="aw-foot" id="awFoot"></footer>
   </div>
 
-  <button class="aw-launcher" id="awLauncher" aria-label="Otvoriť asistenta" type="button">
-    <svg class="ic-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-    <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  <button class="aw-launcher" id="awLauncher" aria-label="Otvoriť kalkulačku" type="button">
+    <svg class="ic-open" viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BFDBFE" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DBEAFE"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#93C5FD"/><circle cx="15" cy="28" r="3.5" fill="#0B1526"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#0B1526"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
+    <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     <span class="aw-launcher-dot"></span>
   </button>
 </div>
@@ -984,7 +1025,8 @@ var ICONS = {
   refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6M1 20v-6h6"/><path d="M3.5 9a9 9 0 0 1 14.9-3.4L23 10M1 14l4.6 4.4A9 9 0 0 0 20.5 15"/></svg>',
   office:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-3"/><path d="M9 9v.01M9 12v.01M9 15v.01"/></svg>',
   help:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg>',
-  cabinet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M5 12h14M10 8h.01M10 16h.01"/></svg>'
+  cabinet: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1.5"/><path d="M5 12h14M10 8h.01M10 16h.01"/></svg>',
+  chat:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.4 8.4 0 0 1 3.8-.9h.5a8.5 8.5 0 0 1 8 8v.5z"/></svg>'
 };
 
 /* base = výjazd + réžia; rate = práca a doprava za m³ (2-členná posádka) */
@@ -1133,7 +1175,8 @@ var STEP_TITLES = [
    ========================================================================== */
 var state = {
   open: false,
-  view: 'home',            /* home | wizard | done */
+  started: false,
+  view: 'wizard',          /* home | wizard | done */
   step: 0,
   sending: false,
   error: '',
@@ -1289,15 +1332,15 @@ function stepValid(step) {
    ========================================================================== */
 function homeHTML() {
   return '<div class="aw-view">'
+    + '<button class="aw-calcchip" data-a="wizard" type="button">'
+    +   '<span class="aw-calcchip-ic">' + ICONS.calc + '</span>'
+    +   '<span class="aw-calcchip-txt"><b>Vypočítať orientačnú cenu</b><span>pár krokov · menej než minúta</span></span>'
+    +   '<span class="aw-calcchip-arr">' + ICONS.arrowR + '</span>'
+    + '</button>'
     + '<div class="aw-msg"><div class="aw-msg-ava">T</div><div class="aw-msg-bubble">'
     +   'Dobrý deň! Som <strong>' + esc(CONFIG.assistant) + '</strong> z ' + esc(CONFIG.company) + '. '
-    +   'Najrýchlejšie vám pomôže kalkulačka — do minúty viete orientačnú cenu. Alebo sa ma čokoľvek spýtajte.'
+    +   'Pýtajte sa na čokoľvek — alebo si hore vyklikajte orientačnú cenu.'
     + '</div></div>'
-    + '<button class="aw-cta" data-a="wizard" type="button">'
-    +   '<span class="aw-cta-ic">' + ICONS.calc + '</span>'
-    +   '<span class="aw-cta-txt"><strong>Vypočítať orientačnú cenu</strong><span>pár rýchlych krokov · menej než minúta</span></span>'
-    +   '<span class="aw-cta-arr">' + ICONS.arrowR + '</span>'
-    + '</button>'
     + '<div id="awThread"></div>'
     + '</div>';
 }
@@ -1428,7 +1471,6 @@ function step2HTML() {
         : '')
     + '<input type="file" id="awFile" accept="image/*" multiple hidden>'
     + '</div>'
-    + '<div class="aw-hint">' + ICONS.alert + '<span>Netrafili ste sa presne? Nevadí — objem doladíme telefonicky a cena sa upraví.</span></div>'
     + '</div>';
 }
 
@@ -1633,6 +1675,7 @@ function doneFootHTML() {
 var elBody = $('#awBody');
 var elFoot = $('#awFoot');
 var elProgress = $('#awProgress');
+var elToggle = $('#awToggle');
 
 function render() {
   var v = state.view;
@@ -1640,6 +1683,20 @@ function render() {
   if (v === 'wizard') {
     var segs = elProgress.children;
     for (var i = 0; i < segs.length; i++) segs[i].classList.toggle('done', i <= state.step);
+  }
+  /* Prepínač v hlavičke: v kalkulačke ukazuje chat, v chate kalkulačku */
+  if (elToggle) {
+    if (v === 'home') {
+      elToggle.innerHTML = ICONS.calc;
+      elToggle.setAttribute('aria-label', 'Kalkulačka');
+      elToggle.style.display = '';
+    } else if (v === 'wizard') {
+      elToggle.innerHTML = ICONS.chat;
+      elToggle.setAttribute('aria-label', 'Napíšte nám');
+      elToggle.style.display = '';
+    } else {
+      elToggle.style.display = 'none';
+    }
   }
   if (v === 'home') {
     elBody.innerHTML = homeHTML();
@@ -1653,6 +1710,25 @@ function render() {
     elFoot.innerHTML = doneFootHTML();
   }
   elBody.scrollTop = 0;
+  if (v === 'wizard' && state.step === LAST_STEP) animateHeroPrice();
+}
+
+/* Jemné count-up ceny na zhrnutí */
+function animateHeroPrice() {
+  var el = document.querySelector('.aw-price-hero-val');
+  if (!el || !window.requestAnimationFrame) return;
+  var p = calcPrice(), start = null, dur = 600;
+  function frame(t) {
+    if (start === null) start = t;
+    var k = Math.min(1, (t - start) / dur);
+    var e = 1 - Math.pow(1 - k, 3);
+    var mn = Math.round(p.min * (0.78 + 0.22 * e) / 5) * 5;
+    var mx = Math.round(p.max * (0.78 + 0.22 * e) / 5) * 5;
+    el.textContent = mn + ' – ' + mx + ' €';
+    if (k < 1) requestAnimationFrame(frame);
+    else el.textContent = p.text;
+  }
+  requestAnimationFrame(frame);
 }
 
 /* Targeted updates (no re-render → keeps input focus) */
@@ -1688,6 +1764,11 @@ function refreshZone(which) {
 function openPanel(open) {
   state.open = open;
   $('#aw').dataset.open = open ? 'true' : 'false';
+  /* Otvor rovno kalkulačku; chat je až po prekliknutí */
+  if (open && !state.started) {
+    state.started = true;
+    startWizard();
+  }
 }
 
 function goStep(n) {
@@ -1793,7 +1874,12 @@ $('#awPanel').addEventListener('click', function (e) {
 
   if (a === 'close') { openPanel(false); return; }
   if (a === 'home') { state.view = 'home'; render(); return; }
-  if (a === 'wizard') { startWizard(); return; }
+  if (a === 'toggle') {
+    state.view = (state.view === 'home') ? 'wizard' : 'home';
+    render();
+    return;
+  }
+  if (a === 'wizard') { state.view = 'wizard'; render(); return; }
   if (a === 'restart') { state.data = freshData(); startWizard(); return; }
   if (a === 'back') { goStep(state.step - 1); return; }
   if (a === 'next') { if (stepValid(state.step)) goStep(state.step + 1); return; }
