@@ -12,13 +12,13 @@
    DESIGN TOKENS
    ========================================================================== */
 :root {
-  --blue-50:  #ECFDF5;
-  --blue-100: #DCFCE7;
-  --blue-500: #4CAF50;
-  --blue-600: #2E7D32;
-  --blue-700: #1B5E20;
-  --navy-800: #1F2937;
-  --navy-900: #111827;
+  --blue-50:  #ECFEFF;
+  --blue-100: #CCFBF1;
+  --blue-500: #14B8A6;
+  --blue-600: #0F766E;
+  --blue-700: #115E59;
+  --navy-800: #1E293B;
+  --navy-900: #0F172A;
 
   --slate-50:  #F8FAFC;
   --slate-100: #F1F5F9;
@@ -61,7 +61,7 @@ button { font-family: inherit; }
   display: flex; align-items: center; justify-content: center;
   padding: 40px 22px;
   background:
-    radial-gradient(1100px 520px at 88% -12%, rgba(37, 99, 235, .10), transparent 60%),
+    radial-gradient(1100px 520px at 88% -12%, rgba(15, 118, 110, .10), transparent 60%),
     radial-gradient(700px 380px at -8% 108%, rgba(16, 185, 129, .07), transparent 55%),
     var(--slate-50);
 }
@@ -72,7 +72,7 @@ button { font-family: inherit; }
   background: linear-gradient(140deg, var(--blue-500), var(--blue-700));
   display: flex; align-items: center; justify-content: center;
   color: #fff;
-  box-shadow: 0 14px 30px -10px rgba(37, 99, 235, .55), inset 0 1px 0 rgba(255, 255, 255, .3);
+  box-shadow: 0 14px 30px -10px rgba(15, 118, 110, .55), inset 0 1px 0 rgba(255, 255, 255, .3);
 }
 .intro-mark svg { width: 46px; height: 46px; }
 .intro-brand {
@@ -119,10 +119,10 @@ button { font-family: inherit; }
   padding: 15px 30px; border: none; border-radius: 999px; cursor: pointer;
   background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
   color: #fff; font-size: 15px; font-weight: 700; font-family: inherit;
-  box-shadow: 0 12px 26px -8px rgba(37, 99, 235, .55);
+  box-shadow: 0 12px 26px -8px rgba(15, 118, 110, .55);
   transition: transform 180ms var(--spring), box-shadow 180ms ease;
 }
-.intro-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -8px rgba(37, 99, 235, .6); }
+.intro-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -8px rgba(15, 118, 110, .6); }
 .intro-cta svg { width: 18px; height: 18px; }
 .intro-note { margin-top: 16px; font-size: 12px; color: var(--slate-400); }
 
@@ -138,10 +138,10 @@ button { font-family: inherit; }
   background: linear-gradient(140deg, var(--blue-500) 0%, var(--blue-700) 100%);
   color: #fff;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 10px 28px -6px rgba(37, 99, 235, .5), 0 2px 6px rgba(15, 23, 42, .12);
+  box-shadow: 0 10px 28px -6px rgba(15, 118, 110, .5), 0 2px 6px rgba(15, 23, 42, .12);
   transition: transform 220ms var(--spring), box-shadow 220ms var(--ease), opacity 180ms ease;
 }
-.aw-launcher:hover { transform: scale(1.07); box-shadow: 0 14px 34px -6px rgba(37, 99, 235, .55), 0 3px 8px rgba(15, 23, 42, .14); }
+.aw-launcher:hover { transform: scale(1.07); box-shadow: 0 14px 34px -6px rgba(15, 118, 110, .55), 0 3px 8px rgba(15, 23, 42, .14); }
 .aw-launcher:active { transform: scale(.96); }
 .aw-launcher .ic-open { width: 40px; height: 40px; }
 .aw-launcher svg { width: 27px; height: 27px; position: absolute; transition: opacity 180ms ease, transform 260ms var(--spring); }
@@ -191,7 +191,7 @@ button { font-family: inherit; }
   position: relative; flex-shrink: 0;
   width: 42px; height: 42px; border-radius: 13px;
   background: linear-gradient(140deg, var(--blue-500), var(--blue-700));
-  box-shadow: 0 4px 12px -4px rgba(37, 99, 235, .6), inset 0 1px 0 rgba(255, 255, 255, .25);
+  box-shadow: 0 4px 12px -4px rgba(15, 118, 110, .6), inset 0 1px 0 rgba(255, 255, 255, .25);
   display: flex; align-items: center; justify-content: center;
   color: #fff;
 }
@@ -282,10 +282,10 @@ button { font-family: inherit; }
   border-radius: var(--r-md);
   background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
   color: #fff;
-  box-shadow: 0 8px 20px -8px rgba(37, 99, 235, .5);
+  box-shadow: 0 8px 20px -8px rgba(15, 118, 110, .5);
   transition: transform 180ms var(--spring), box-shadow 180ms ease;
 }
-.aw-calcchip:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(37, 99, 235, .55); }
+.aw-calcchip:hover { transform: translateY(-1px); box-shadow: 0 12px 24px -8px rgba(15, 118, 110, .55); }
 .aw-calcchip:active { transform: scale(.99); }
 .aw-calcchip-ic {
   flex-shrink: 0; width: 34px; height: 34px; border-radius: 10px;
@@ -344,7 +344,7 @@ button { font-family: inherit; }
   border-radius: var(--r-md);
   background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-700) 100%);
   color: #fff;
-  box-shadow: 0 8px 20px -6px rgba(37, 99, 235, .45);
+  box-shadow: 0 8px 20px -6px rgba(15, 118, 110, .45);
   transition: transform 200ms var(--spring), box-shadow 200ms ease;
   position: relative; overflow: hidden;
 }
@@ -356,7 +356,7 @@ button { font-family: inherit; }
   animation: shine 3.6s ease-in-out infinite;
 }
 @keyframes shine { 0%, 55%, 100% { left: -80%; } 25% { left: 130%; } }
-.aw-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -6px rgba(37, 99, 235, .5); }
+.aw-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -6px rgba(15, 118, 110, .5); }
 .aw-cta:active { transform: scale(.98); }
 .aw-cta-ic {
   flex-shrink: 0; width: 40px; height: 40px; border-radius: 12px;
@@ -451,6 +451,59 @@ button { font-family: inherit; }
 .aw-card-check svg { width: 11px; height: 11px; }
 .aw-card[aria-pressed="true"] .aw-card-check { opacity: 1; transform: scale(1); }
 
+.aw-chat-choice {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%; margin-top: 10px; padding: 12px 13px;
+  border: 1.5px dashed rgba(15, 118, 110, .34);
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, #fff 0%, var(--blue-50) 100%);
+  color: var(--slate-700);
+  text-align: left; cursor: pointer;
+  box-shadow: var(--sh-sm);
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+.aw-chat-choice:hover {
+  transform: translateY(-1px);
+  border-color: var(--blue-600);
+  box-shadow: var(--sh-md);
+}
+.aw-chat-choice-ic {
+  flex-shrink: 0;
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--blue-600); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+}
+.aw-chat-choice-ic svg { width: 18px; height: 18px; }
+.aw-chat-choice b {
+  display: block;
+  font-size: 13.5px; line-height: 1.25;
+  color: var(--slate-900);
+}
+.aw-chat-choice span span {
+  display: block; margin-top: 2px;
+  font-size: 11.5px; line-height: 1.35;
+  color: var(--slate-500);
+}
+
+.aw-step-space .aw-step-sub { margin-bottom: 10px; }
+.aw-step-space .aw-grid { gap: 7px; }
+.aw-step-space .aw-card {
+  min-height: 82px;
+  padding: 10px 11px;
+  gap: 7px;
+}
+.aw-step-space .aw-card-ic {
+  width: 30px;
+  height: 30px;
+}
+.aw-step-space .aw-card-t { font-size: 13px; }
+.aw-step-space .aw-card-s { font-size: 11px; line-height: 1.3; }
+.aw-step-space .aw-hint {
+  margin-top: 10px;
+  padding: 8px 10px;
+  line-height: 1.42;
+}
+
 /* Section label */
 .aw-sec {
   margin: 13px 0 7px;
@@ -497,7 +550,7 @@ button { font-family: inherit; }
 .aw-input::placeholder, .aw-textarea::placeholder { color: var(--slate-400); }
 .aw-input:focus, .aw-textarea:focus {
   outline: none; border-color: var(--blue-600);
-  box-shadow: 0 0 0 3px rgba(37, 99, 235, .13);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, .13);
 }
 .aw-textarea { resize: vertical; min-height: 66px; line-height: 1.5; }
 .aw-row2 { display: grid; grid-template-columns: 1fr 108px; gap: 9px; }
@@ -604,7 +657,7 @@ button { font-family: inherit; }
   -webkit-appearance: none; appearance: none;
   width: 26px; height: 26px; border-radius: 50%;
   background: #fff; border: 3px solid var(--blue-600);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, .35);
+  box-shadow: 0 2px 8px rgba(15, 118, 110, .35);
   cursor: grab;
   transition: transform 140ms ease;
 }
@@ -612,10 +665,10 @@ button { font-family: inherit; }
 .aw-slider::-moz-range-thumb {
   width: 26px; height: 26px; border-radius: 50%;
   background: #fff; border: 3px solid var(--blue-600);
-  box-shadow: 0 2px 8px rgba(37, 99, 235, .35);
+  box-shadow: 0 2px 8px rgba(15, 118, 110, .35);
   cursor: grab;
 }
-.aw-slider:focus-visible { box-shadow: 0 0 0 3px rgba(37, 99, 235, .2); }
+.aw-slider:focus-visible { box-shadow: 0 0 0 3px rgba(15, 118, 110, .2); }
 .aw-vol-ticks {
   display: flex; justify-content: space-between;
   margin-top: 7px;
@@ -851,7 +904,7 @@ button { font-family: inherit; }
   flex: 1;
   background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
   color: #fff;
-  box-shadow: 0 5px 14px -4px rgba(37, 99, 235, .5);
+  box-shadow: 0 5px 14px -4px rgba(15, 118, 110, .5);
 }
 .aw-btn-primary:hover:not(:disabled) { filter: brightness(1.07); transform: translateY(-1px); }
 .aw-btn-primary:active:not(:disabled) { transform: scale(.98); }
@@ -878,7 +931,7 @@ button { font-family: inherit; }
   font: inherit; font-size: 13.5px; color: var(--slate-900);
   transition: all 150ms ease;
 }
-.aw-composer input:focus { outline: none; border-color: var(--blue-600); background: #fff; box-shadow: 0 0 0 3px rgba(37, 99, 235, .12); }
+.aw-composer input:focus { outline: none; border-color: var(--blue-600); background: #fff; box-shadow: 0 0 0 3px rgba(15, 118, 110, .12); }
 .aw-composer input::placeholder { color: var(--slate-400); }
 .aw-send {
   flex-shrink: 0; width: 42px; height: 42px; border-radius: 50%;
@@ -886,7 +939,7 @@ button { font-family: inherit; }
   background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
   color: #fff;
   display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 10px -3px rgba(37, 99, 235, .5);
+  box-shadow: 0 4px 10px -3px rgba(15, 118, 110, .5);
   transition: transform 160ms var(--spring), filter 150ms ease;
 }
 .aw-send:hover { filter: brightness(1.08); transform: scale(1.06); }
@@ -916,26 +969,26 @@ button { font-family: inherit; }
    MOVARIO QUALITY LIFT — inspired by the provided premium widget
    ========================================================================== */
 :root {
-  --mv-green: #2E7D32;
-  --mv-green-dark: #1B5E20;
-  --mv-green-light: #4CAF50;
-  --mv-green-soft: #ECFDF5;
-  --mv-ink: #1F2937;
-  --mv-ink-deep: #111827;
+  --mv-green: #0F766E;
+  --mv-green-dark: #134E4A;
+  --mv-green-light: #14B8A6;
+  --mv-green-soft: #ECFEFF;
+  --mv-ink: #1E293B;
+  --mv-ink-deep: #0F172A;
   --mv-amber: #F59E0B;
   --mv-line: #E2E6EA;
 }
 body {
   background:
-    radial-gradient(920px 480px at 8% 0%, rgba(76, 175, 80, .13), transparent 60%),
+    radial-gradient(920px 480px at 8% 0%, rgba(20, 184, 166, .14), transparent 60%),
     radial-gradient(820px 420px at 96% 10%, rgba(245, 158, 11, .10), transparent 58%),
-    linear-gradient(135deg, #F7FAF6 0%, #FFFFFF 46%, #EEF5EE 100%);
+    linear-gradient(135deg, #F4FBFA 0%, #FFFFFF 46%, #EEF8F6 100%);
 }
 .intro {
   background:
-    radial-gradient(1050px 540px at 88% -14%, rgba(76, 175, 80, .16), transparent 62%),
+    radial-gradient(1050px 540px at 88% -14%, rgba(20, 184, 166, .16), transparent 62%),
     radial-gradient(680px 360px at -8% 108%, rgba(245, 158, 11, .08), transparent 58%),
-    linear-gradient(135deg, #F7FAF6 0%, #FFFFFF 52%, #F0F7F0 100%) !important;
+    linear-gradient(135deg, #F4FBFA 0%, #FFFFFF 52%, #EFF8F6 100%) !important;
 }
 .intro-card {
   max-width: 760px !important;
@@ -949,7 +1002,7 @@ body {
   width: 64px !important;
   height: 64px !important;
   border-radius: 18px !important;
-  box-shadow: 0 16px 34px -13px rgba(46, 125, 50, .55), inset 0 1px 0 rgba(255, 255, 255, .34) !important;
+  box-shadow: 0 16px 34px -13px rgba(15, 118, 110, .55), inset 0 1px 0 rgba(255, 255, 255, .34) !important;
 }
 .intro-brand {
   color: var(--mv-green) !important;
@@ -968,7 +1021,7 @@ body {
   box-shadow: 0 12px 32px -28px rgba(31, 41, 55, .72) !important;
 }
 .intro-feat:hover {
-  border-color: rgba(46, 125, 50, .28) !important;
+  border-color: rgba(15, 118, 110, .28) !important;
   box-shadow: 0 20px 38px -30px rgba(31, 41, 55, .82) !important;
 }
 .intro-feat-ic {
@@ -977,19 +1030,19 @@ body {
 }
 .intro-cta {
   background: linear-gradient(135deg, var(--mv-green), var(--mv-green-dark)) !important;
-  box-shadow: 0 16px 32px -12px rgba(46, 125, 50, .58) !important;
+  box-shadow: 0 16px 32px -12px rgba(15, 118, 110, .58) !important;
 }
 .intro-cta:hover {
-  box-shadow: 0 20px 38px -12px rgba(46, 125, 50, .62) !important;
+  box-shadow: 0 20px 38px -12px rgba(15, 118, 110, .62) !important;
 }
 .aw-panel {
   border: 1px solid rgba(226, 230, 234, .96) !important;
-  box-shadow: 0 24px 74px -24px rgba(17, 24, 39, .36), 0 10px 30px -20px rgba(46, 125, 50, .34) !important;
+  box-shadow: 0 24px 74px -24px rgba(17, 24, 39, .36), 0 10px 30px -20px rgba(15, 118, 110, .34) !important;
 }
 .aw-head {
   background:
-    radial-gradient(360px 140px at 92% -34%, rgba(76, 175, 80, .34), transparent 70%),
-    linear-gradient(130deg, var(--mv-ink-deep) 0%, var(--mv-ink) 72%, #16301E 100%) !important;
+    radial-gradient(360px 140px at 92% -34%, rgba(20, 184, 166, .34), transparent 70%),
+    linear-gradient(130deg, var(--mv-ink-deep) 0%, var(--mv-ink) 72%, #12333A 100%) !important;
 }
 .aw-head-sub i,
 .aw-launcher-dot {
@@ -997,10 +1050,10 @@ body {
 }
 .aw-progress i.is-on,
 .aw-progress i[style*="1"] {
-  background: linear-gradient(90deg, var(--mv-green), #86EFAC) !important;
+  background: linear-gradient(90deg, var(--mv-green), #5EEAD4) !important;
 }
 .aw-body {
-  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAF8 100%) !important;
+  background: linear-gradient(180deg, #FFFFFF 0%, #F6FBFA 100%) !important;
 }
 .aw-msg.bot {
   background: #F5F7F4 !important;
@@ -1014,15 +1067,15 @@ body {
 .aw-continue,
 .aw-submit {
   background: linear-gradient(135deg, var(--mv-green), var(--mv-green-dark)) !important;
-  box-shadow: 0 12px 24px -14px rgba(46, 125, 50, .7) !important;
+  box-shadow: 0 12px 24px -14px rgba(15, 118, 110, .7) !important;
 }
 .aw-launcher {
-  box-shadow: 0 12px 28px -8px rgba(46, 125, 50, .45), 0 0 0 0 rgba(46, 125, 50, .28) !important;
+  box-shadow: 0 12px 28px -8px rgba(15, 118, 110, .45), 0 0 0 0 rgba(15, 118, 110, .28) !important;
   animation: mvLauncherPulse 3s ease-in-out infinite;
 }
 @keyframes mvLauncherPulse {
-  0%, 100% { box-shadow: 0 12px 28px -8px rgba(46, 125, 50, .45), 0 0 0 0 rgba(46, 125, 50, .28); }
-  50% { box-shadow: 0 12px 28px -8px rgba(46, 125, 50, .45), 0 0 0 10px rgba(46, 125, 50, 0); }
+  0%, 100% { box-shadow: 0 12px 28px -8px rgba(15, 118, 110, .45), 0 0 0 0 rgba(15, 118, 110, .28); }
+  50% { box-shadow: 0 12px 28px -8px rgba(15, 118, 110, .45), 0 0 0 10px rgba(15, 118, 110, 0); }
 }
 .aw-card,
 .aw-zone,
@@ -1039,7 +1092,7 @@ body {
 .aw-qchip:hover,
 .aw-photo-add:hover,
 .aw-done-card:hover {
-  border-color: rgba(46, 125, 50, .35) !important;
+  border-color: rgba(15, 118, 110, .35) !important;
   color: var(--mv-green) !important;
 }
 .aw-card[aria-pressed="true"],
@@ -1048,7 +1101,7 @@ body {
 .aw-gdpr[data-on="true"] {
   border-color: var(--mv-green) !important;
   background: var(--mv-green-soft) !important;
-  box-shadow: 0 0 0 1px rgba(46, 125, 50, .48), var(--sh-sm) !important;
+  box-shadow: 0 0 0 1px rgba(15, 118, 110, .48), var(--sh-sm) !important;
 }
 .aw-card[aria-pressed="true"] .aw-card-ic,
 .aw-gdpr[data-on="true"] .aw-gdpr-box {
@@ -1064,7 +1117,7 @@ body {
 .aw-input:focus,
 .aw-textarea:focus {
   border-color: var(--mv-green) !important;
-  box-shadow: 0 0 0 3px rgba(46, 125, 50, .13) !important;
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, .13) !important;
 }
 .aw-range,
 .aw-slider,
@@ -1072,17 +1125,17 @@ input[type="range"] {
   accent-color: var(--mv-green) !important;
 }
 .aw-hint {
-  background: #F4FBF4 !important;
+  background: #F0FDFA !important;
 }
 .aw-hint svg,
 .aw-card-ic,
 .aw-done-card-ic {
   color: var(--mv-green) !important;
 }
-.aw-ava svg path[stroke="#BBF7D0"],
-.aw-launcher svg path[stroke="#BBF7D0"],
-.intro-mark svg path[stroke="#BBF7D0"] {
-  stroke: #DCFCE7 !important;
+.aw-ava svg path[stroke="#CCFBF1"],
+.aw-launcher svg path[stroke="#CCFBF1"],
+.intro-mark svg path[stroke="#CCFBF1"] {
+  stroke: #CCFBF1 !important;
 }
 @media (min-width: 980px) {
   .intro {
@@ -1134,7 +1187,7 @@ input[type="range"] {
 <main class="intro">
   <div class="intro-card">
     <div class="intro-mark">
-      <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BBF7D0" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DCFCE7"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#86EFAC"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
+      <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#CCFBF1" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#CCFBF1"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#5EEAD4"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
     </div>
     <div class="intro-brand">Movario · webový asistent</div>
     <h1>Zákazník dostane cenu za minútu.<br>Vy dostanete <span>hotový dopyt</span>.</h1>
@@ -1171,12 +1224,12 @@ input[type="range"] {
     <header class="aw-head">
       <div class="aw-head-row">
         <div class="aw-ava">
-          <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BBF7D0" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DCFCE7"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#86EFAC"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
+          <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#CCFBF1" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#CCFBF1"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#5EEAD4"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
           <span class="aw-ava-dot"></span>
         </div>
         <div class="aw-head-txt">
           <div class="aw-head-title">Movario</div>
-          <div class="aw-head-sub"><i></i>Online · odpovieme do pár minút</div>
+          <div class="aw-head-sub"><i></i>Online</div>
         </div>
         <button class="aw-head-btn" id="awToggle" data-a="toggle" aria-label="Prepnúť" type="button"></button>
         <button class="aw-head-btn" data-a="close" aria-label="Zavrieť okno" type="button">
@@ -1190,7 +1243,7 @@ input[type="range"] {
   </div>
 
   <button class="aw-launcher" id="awLauncher" aria-label="Otvoriť kalkulačku" type="button">
-    <svg class="ic-open" viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BBF7D0" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DCFCE7"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#86EFAC"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
+    <svg class="ic-open" viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#CCFBF1" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#CCFBF1"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#5EEAD4"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
     <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     <span class="aw-launcher-dot"></span>
   </button>
@@ -1226,6 +1279,8 @@ var ICONS = {
   lock:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
   expand:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>',
   glass:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M12 15v6M17 3H7l1.5 9h7z"/></svg>',
+  tool:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18v3h3l6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-3-3z"/></svg>',
+  list:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>',
   pin:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg>',
   camera:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>',
   check:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
@@ -1256,15 +1311,14 @@ var SERVICES = [
 var SPACES = [
   { id: 'kusy',       label: 'Len pár kusov',    sub: 'jednotlivý nábytok',   icon: 'piece',   m3: 2 },
   { id: 'garsonka',   label: 'Garsónka / 1 izba', sub: 'malý byt do 40 m²',   icon: 'room',    m3: 6 },
-  { id: 'byt',        label: '2–3 izbový byt',   sub: 'štandardný byt',        icon: 'flat',    m3: 12 },
-  { id: 'bytvelky',   label: '4+ izbový byt',    sub: 'väčší byt',             icon: 'flat',    m3: 20 },
+  { id: 'byt',        label: 'Byt / apartmán',   sub: '2–4 izby',              icon: 'flat',    m3: 14 },
   { id: 'dom',        label: 'Rodinný dom',      sub: 'celý dom',              icon: 'house',   m3: 30 },
   { id: 'kancelaria', label: 'Kancelária / firma', sub: 'prevádzka, sklad',    icon: 'office',  m3: 16 },
-  { id: 'pivnica',    label: 'Pivnica / garáž',  sub: 'sklad, komora',         icon: 'cabinet', m3: 5 },
-  { id: 'ine',        label: 'Iné / neviem',     sub: 'poradíme telefonicky',  icon: 'help',    m3: 8 }
+  { id: 'pivnica',    label: 'Pivnica / garáž',  sub: 'sklad, komora',         icon: 'cabinet', m3: 5 }
 ];
 
 var VOL_MAX = 40;
+var VAN_CAPACITY_M3 = 11;
 
 /* Slovný popis objemu k sliderovej hodnote (m³); dodávka ~11 m³ */
 function volumeDesc(m3) {
@@ -1276,25 +1330,38 @@ function volumeDesc(m3) {
   if (m3 <= 30) return 'rodinný dom';
   return 'veľký objem — dohodneme individuálne';
 }
-function volumeTrips(m3) { return Math.max(1, Math.ceil(m3 / 11)); }
-
-/* Pekný vizuál dodávky, ktorá sa plní podľa m³ (jedna dodávka ~11 m³).
-   Vracia SVG; fill sa dá updatovať cez #awVanFill a #awVanBadge naživo. */
-function vanFillPct(m3) { return Math.max(0, Math.min(1, (m3 % 11 === 0 && m3 >= 11 ? 11 : m3 % 11) / 11)); }
-function vanFullVans(m3) { return Math.floor(m3 / 11); }
+function formatVolume(n) { return String(Math.round(n * 10) / 10).replace('.', ','); }
+function volumeTrips(m3) { return Math.max(1, Math.ceil(m3 / VAN_CAPACITY_M3)); }
+function vanFullVans(m3) { return Math.floor(Math.max(0, m3) / VAN_CAPACITY_M3); }
+function vanPartialM3(m3) {
+  var full = vanFullVans(m3);
+  var rest = Math.max(0, m3 - full * VAN_CAPACITY_M3);
+  if (m3 >= VAN_CAPACITY_M3 && rest < 0.05) return VAN_CAPACITY_M3;
+  return Math.max(0.5, rest || m3);
+}
+function vanVisualRatio(m3) {
+  return Math.max(0.05, Math.min(1, vanPartialM3(m3) / VAN_CAPACITY_M3));
+}
+function vanLoadText(m3) {
+  var full = vanFullVans(m3);
+  var rest = Math.max(0, m3 - full * VAN_CAPACITY_M3);
+  if (full < 1) return 'časť dodávky (' + Math.round((m3 / VAN_CAPACITY_M3) * 100) + ' %)';
+  if (rest < 0.05) return full + '× plná dodávka';
+  return full + '× plná dodávka + ' + formatVolume(rest) + ' m³ ďalšej (' + Math.round((rest / VAN_CAPACITY_M3) * 100) + ' %)';
+}
 
 function vanSVG(m3) {
   var trips = volumeTrips(m3);
   /* Výška cargo priestoru vo vnútri (y 22 → 92 = 70 px) */
-  var ratio = Math.max(0, Math.min(1, m3 >= 11 ? 1 : m3 / 11));
+  var ratio = vanVisualRatio(m3);
   var fillH = 66 * ratio;
   var fillY = 22 + 66 - fillH;
   var badge = trips > 1
-    ? '<g id="awVanBadge"><circle cx="210" cy="30" r="16" fill="#1B5E20"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text></g>'
+    ? '<g id="awVanBadge"><circle cx="210" cy="30" r="16" fill="#134E4A"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text></g>'
     : '<g id="awVanBadge"></g>';
   return '<svg class="aw-van-svg" viewBox="0 0 240 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
     + '<defs><linearGradient id="awVanGrad" x1="0" y1="1" x2="0" y2="0">'
-    +   '<stop offset="0" stop-color="#1B5E20"/><stop offset="1" stop-color="#60A5FA"/>'
+    +   '<stop offset="0" stop-color="#0F766E"/><stop offset="1" stop-color="#5EEAD4"/>'
     + '</linearGradient></defs>'
     /* tieň */
     + '<ellipse cx="118" cy="116" rx="104" ry="7" fill="#0F172A" opacity="0.06"/>'
@@ -1309,8 +1376,8 @@ function vanSVG(m3) {
     +   '</g>'
     + '</g>'
     /* kabína */
-    + '<path d="M140 34 h34 l22 26 v32 h-56 z" fill="#DCFCE7" stroke="#86EFAC" stroke-width="2" stroke-linejoin="round"/>'
-    + '<path d="M148 40 h22 l16 20 h-38 z" fill="#fff" stroke="#86EFAC" stroke-width="1.5" stroke-linejoin="round"/>'
+    + '<path d="M140 34 h34 l22 26 v32 h-56 z" fill="#CCFBF1" stroke="#5EEAD4" stroke-width="2" stroke-linejoin="round"/>'
+    + '<path d="M148 40 h22 l16 20 h-38 z" fill="#fff" stroke="#5EEAD4" stroke-width="1.5" stroke-linejoin="round"/>'
     /* nárazník */
     + '<rect x="196" y="86" width="8" height="14" rx="2" fill="#94A3B8"/>'
     /* kolesá */
@@ -1323,7 +1390,7 @@ function vanSVG(m3) {
 function updateVan(m3) {
   var fill = document.getElementById('awVanFill');
   if (fill) {
-    var ratio = Math.max(0, Math.min(1, m3 >= 11 ? 1 : m3 / 11));
+    var ratio = vanVisualRatio(m3);
     var fillH = 66 * ratio;
     fill.setAttribute('y', String(22 + 66 - fillH));
     fill.setAttribute('height', String(fillH));
@@ -1332,7 +1399,7 @@ function updateVan(m3) {
   if (badge) {
     var trips = volumeTrips(m3);
     badge.innerHTML = trips > 1
-      ? '<circle cx="210" cy="30" r="16" fill="#1B5E20"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text>'
+      ? '<circle cx="210" cy="30" r="16" fill="#134E4A"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text>'
       : '';
   }
 }
@@ -1341,7 +1408,9 @@ var SPECIALS = [
   { id: 'piano',    label: 'Klavír',           icon: 'piano',  add: 90 },
   { id: 'safe',     label: 'Trezor / sejf',    icon: 'lock',   add: 70 },
   { id: 'oversize', label: 'Nadrozmerné kusy', icon: 'expand', add: 50 },
-  { id: 'fragile',  label: 'Krehké veci',      icon: 'glass',  add: 25 }
+  { id: 'fragile',  label: 'Krehké veci',      icon: 'glass',  add: 25 },
+  { id: 'demontaz', label: 'Demontáž',         icon: 'tool',   add: 35 },
+  { id: 'triedenie',label: 'Triedenie / balenie', icon: 'list', add: 30 }
 ];
 
 function crewFor(effM3, d) {
@@ -1372,13 +1441,13 @@ var TIMES = [
 var FAQ = {
   sluzby:  { q: 'Aké služby robíte?', a: 'Robíme <strong>odvoz nábytku a spotrebičov</strong>, <strong>vývoz odpadu a sute</strong>, <strong>sťahovanie</strong> bytov, domov aj firiem a <strong>vypratávanie</strong> pivníc, bytov či pozostalostí. Všetko vrátane nakládky a vynášania.' },
   kedy:    { q: 'Kedy viete prísť?', a: 'Štandardne do <strong>2–3 pracovných dní</strong>, pri súrnych požiadavkách často už <strong>do 48 hodín</strong>. Presný termín si dohodneme telefonicky po odoslaní dopytu.' },
-  cena:    { q: 'Ako počítate cenu?', a: 'Cena sa skladá z <strong>výjazdu</strong>, <strong>objemu nákladu</strong> (€/m³ vrátane práce), príplatkov za poschodie, parkovanie a špeciálne predmety a z <strong>dopravy podľa PSČ</strong>. V kalkulačke uvidíte celý rozpis — nič nie je skryté.' },
+  cena:    { q: 'Ako počítate cenu?', a: 'Cena sa skladá z <strong>výjazdu</strong>, <strong>objemu nákladu</strong> (€/m³ vrátane práce), príplatkov za poschodie, parkovanie, doplnkové práce alebo ťažké kusy a z <strong>dopravy podľa PSČ</strong>. V kalkulačke uvidíte celý rozpis — nič nie je skryté.' },
   kontakt: { q: 'Kontakt', a: 'Zavolajte nám na <strong>' + CONFIG.phone + '</strong>, napíšte na <strong>' + CONFIG.email + '</strong>, alebo použite WhatsApp. Sme k dispozícii Po–So, 8:00–18:00.' }
 };
 
 var STEP_TITLES = [
   { t: 'S čím vám pomôžeme?',      s: 'Vyberte službu — všetko ostatné doladíme spolu.' },
-  { t: 'Z akého priestoru?',       s: 'Typ priestoru nám napovie, koľko toho zvyčajne býva.' },
+  { t: 'Z akého priestoru?',       s: 'Vyberte najbližšiu možnosť — objem doladíte v ďalšom kroku.' },
   { t: 'Koľko toho približne je?', s: 'Potiahnite posuvník — dodávka sa plní podľa objemu.' },
   { t: 'Adresa a prístup',         s: 'Poschodie, výťah a parkovanie ovplyvňujú prácnosť.' },
   { t: 'Kedy to potrebujete?',     s: 'Flexibilný termín je lacnejší, súrny zvládneme do 48 hodín.' },
@@ -1475,7 +1544,7 @@ function calcPrice() {
   if (trips > 1) {
     var tripFee = (trips - 1) * 25;
     total += tripFee;
-    lines.push({ label: 'Ďalšie jazdy (' + trips + '× dodávka)', amount: tripFee });
+    lines.push({ label: 'Ďalšie jazdy — ' + vanLoadText(m3), amount: tripFee });
   }
 
   var crew = crewFor(m3, d);
@@ -1487,7 +1556,7 @@ function calcPrice() {
 
   var specSum = 0;
   SPECIALS.forEach(function (s) { if (d.specials[s.id]) specSum += s.add; });
-  if (specSum > 0) { total += specSum; lines.push({ label: 'Špeciálne predmety', amount: specSum }); }
+  if (specSum > 0) { total += specSum; lines.push({ label: 'Doplnkové práce / ťažké kusy', amount: specSum }); }
 
   var floorFee = 0;
   if (d.lift === 'no') floorFee = Math.min(72, Math.max(0, d.floor) * 12);
@@ -1634,18 +1703,22 @@ function step0HTML() {
     + SERVICES.map(function (s) {
         return cardHTML('data-a="svc:' + s.id + '"', d.service === s.id, s.icon, s.label, s.sub);
       }).join('')
-    + '</div></div>';
+    + '</div>'
+    + '<button class="aw-chat-choice" data-a="chat-home" type="button">'
+    +   '<span class="aw-chat-choice-ic">' + ICONS.chat + '</span>'
+    +   '<span><b>AI chatbot</b><span>Rýchla otázka bez vypĺňania kalkulačky</span></span>'
+    +   '<span class="aw-calcchip-arr">' + ICONS.arrowR + '</span>'
+    + '</button>'
+    + '</div>';
 }
 
 function step1HTML() {
   var d = state.data;
-  return '<div class="aw-view">' + stepHeadHTML(1)
+  return '<div class="aw-view aw-step-space">' + stepHeadHTML(1)
     + '<div class="aw-grid">'
     + SPACES.map(function (s) {
         return cardHTML('data-a="space:' + s.id + '"', d.space === s.id, s.icon, s.label, s.sub);
       }).join('')
-    + '</div>'
-    + '<div class="aw-hint">' + ICONS.alert + '<span>Podľa priestoru predvyplníme objem — v ďalšom kroku ho len doladíte posuvníkom.</span></div>'
     + '</div>';
 }
 
@@ -1657,7 +1730,6 @@ function sliderFillCSS(m3) {
 function step2HTML() {
   var d = state.data;
   var m3 = Math.max(0.5, Number(d.volumeM3) || 6);
-  var trips = volumeTrips(m3);
   return '<div class="aw-view">' + stepHeadHTML(2)
     + '<div class="aw-van" id="awVan">' + vanSVG(m3) + '</div>'
     + '<div class="aw-vol">'
@@ -1667,9 +1739,10 @@ function step2HTML() {
     +   '</div>'
     +   '<input type="range" class="aw-slider" id="awVolSlider" min="0.5" max="' + VOL_MAX + '" step="0.5" value="' + m3 + '" style="' + sliderFillCSS(m3) + '" aria-label="Objem nákladu v m³">'
     +   '<div class="aw-vol-ticks"><span>0,5</span><span>10</span><span>20</span><span>30</span><span>40 m³</span></div>'
-    +   '<div class="aw-vol-desc" id="awVolDesc">≈ ' + volumeDesc(m3) + (trips > 1 ? ' · ' + trips + '× dodávka' : '') + '</div>'
+    +   '<div class="aw-vol-desc" id="awVolDesc">≈ ' + volumeDesc(m3) + ' · ' + vanLoadText(m3) + '</div>'
     + '</div>'
-    + '<div class="aw-sec">Špeciálne predmety <small>· príplatok za náročnú manipuláciu</small></div>'
+    + '<div class="aw-hint aw-owner-tip">' + ICONS.alert + '<span>Pri nacenení majitelia najčastejšie potrebujú vedieť aj demontáž, triedenie a ťažké kusy — označte všetko, čo platí.</span></div>'
+    + '<div class="aw-sec">Doplnkové práce a ťažké kusy <small>· menia čas aj posádku</small></div>'
     + '<div class="aw-chips">'
     + SPECIALS.map(function (s) {
         return '<button class="aw-chip" type="button" data-a="spec:' + s.id + '" aria-pressed="' + !!d.specials[s.id] + '">'
@@ -1773,9 +1846,9 @@ function summaryRows() {
   var rows = [];
   rows.push(['Služba', svc ? svc.label : '—']);
   if (space) rows.push(['Priestor', space.label]);
-  rows.push(['Objem', String(price.m3).replace('.', ',') + ' m³ — ' + volumeDesc(price.m3) + (price.trips > 1 ? ' (' + price.trips + '× dodávka)' : '')]);
+  rows.push(['Objem', String(price.m3).replace('.', ',') + ' m³ — ' + vanLoadText(price.m3)]);
   rows.push(['Odhad posádky', price.crew + ' ' + (price.crew === 1 ? 'osoba' : 'osoby')]);
-  if (specials.length) rows.push(['Špeciálne', specials.join(', ')]);
+  if (specials.length) rows.push(['Doplnky', specials.join(', ')]);
   var from = [d.cityFrom.trim(), d.zipFrom.trim()].filter(Boolean).join(', ');
   rows.push([d.service === 'stahovanie' ? 'Odkiaľ' : 'Adresa', from || '—']);
   if (d.service === 'stahovanie') {
@@ -1999,6 +2072,15 @@ function startWizard() {
   render();
 }
 
+function focusChatInput() {
+  setTimeout(function () {
+    var input = $('#awChatInput');
+    if (!input) return;
+    try { input.focus({ preventScroll: true }); }
+    catch (_) { input.focus(); }
+  }, 60);
+}
+
 function buildPayload() {
   var d = state.data;
   var svc = findById(SERVICES, d.service);
@@ -2092,9 +2174,11 @@ $('#awPanel').addEventListener('click', function (e) {
   if (a === 'toggle') {
     state.view = (state.view === 'home') ? 'wizard' : 'home';
     render();
+    if (state.view === 'home') focusChatInput();
     return;
   }
   if (a === 'wizard') { state.view = 'wizard'; render(); return; }
+  if (a === 'chat-home') { state.view = 'home'; render(); focusChatInput(); return; }
   if (a === 'restart') { state.data = freshData(); startWizard(); return; }
   if (a === 'back') { goStep(state.step - 1); return; }
   if (a === 'next') { if (stepValid(state.step)) goStep(state.step + 1); return; }
@@ -2173,9 +2257,8 @@ elBody.addEventListener('input', function (e) {
     e.target.style.cssText = sliderFillCSS(m3);
     var v = $('#awVolVal');
     if (v) v.textContent = String(m3).replace('.', ',') + ' m³';
-    var trips = volumeTrips(m3);
     var dsc = $('#awVolDesc');
-    if (dsc) dsc.textContent = '≈ ' + volumeDesc(m3) + (trips > 1 ? ' · ' + trips + '× dodávka' : '');
+    if (dsc) dsc.textContent = '≈ ' + volumeDesc(m3) + ' · ' + vanLoadText(m3);
     updateVan(m3);
     refreshPrice();
     refreshNext();
