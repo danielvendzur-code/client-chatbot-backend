@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="sk">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>ProfiPresun — odvoz, sťahovanie a vypratávanie</title>
+<title>Movario — odvoz, sťahovanie a vypratávanie</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -12,13 +12,13 @@
    DESIGN TOKENS
    ========================================================================== */
 :root {
-  --blue-50:  #EFF6FF;
-  --blue-100: #DBEAFE;
-  --blue-500: #3B82F6;
-  --blue-600: #2563EB;
-  --blue-700: #1D4ED8;
-  --navy-800: #14243E;
-  --navy-900: #0B1526;
+  --blue-50:  #ECFDF5;
+  --blue-100: #DCFCE7;
+  --blue-500: #4CAF50;
+  --blue-600: #2E7D32;
+  --blue-700: #1B5E20;
+  --navy-800: #1F2937;
+  --navy-900: #111827;
 
   --slate-50:  #F8FAFC;
   --slate-100: #F1F5F9;
@@ -911,6 +911,221 @@ button { font-family: inherit; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* ==========================================================================
+   MOVARIO QUALITY LIFT — inspired by the provided premium widget
+   ========================================================================== */
+:root {
+  --mv-green: #2E7D32;
+  --mv-green-dark: #1B5E20;
+  --mv-green-light: #4CAF50;
+  --mv-green-soft: #ECFDF5;
+  --mv-ink: #1F2937;
+  --mv-ink-deep: #111827;
+  --mv-amber: #F59E0B;
+  --mv-line: #E2E6EA;
+}
+body {
+  background:
+    radial-gradient(920px 480px at 8% 0%, rgba(76, 175, 80, .13), transparent 60%),
+    radial-gradient(820px 420px at 96% 10%, rgba(245, 158, 11, .10), transparent 58%),
+    linear-gradient(135deg, #F7FAF6 0%, #FFFFFF 46%, #EEF5EE 100%);
+}
+.intro {
+  background:
+    radial-gradient(1050px 540px at 88% -14%, rgba(76, 175, 80, .16), transparent 62%),
+    radial-gradient(680px 360px at -8% 108%, rgba(245, 158, 11, .08), transparent 58%),
+    linear-gradient(135deg, #F7FAF6 0%, #FFFFFF 52%, #F0F7F0 100%) !important;
+}
+.intro-card {
+  max-width: 760px !important;
+}
+.intro-mark,
+.aw-ava,
+.aw-launcher {
+  background: linear-gradient(140deg, var(--mv-green-light), var(--mv-green-dark)) !important;
+}
+.intro-mark {
+  width: 64px !important;
+  height: 64px !important;
+  border-radius: 18px !important;
+  box-shadow: 0 16px 34px -13px rgba(46, 125, 50, .55), inset 0 1px 0 rgba(255, 255, 255, .34) !important;
+}
+.intro-brand {
+  color: var(--mv-green) !important;
+}
+.intro h1 {
+  color: var(--mv-ink-deep) !important;
+}
+.intro h1 span {
+  color: var(--mv-green) !important;
+}
+.intro-lead {
+  color: #526173 !important;
+}
+.intro-feat {
+  border-color: rgba(226, 230, 234, .96) !important;
+  box-shadow: 0 12px 32px -28px rgba(31, 41, 55, .72) !important;
+}
+.intro-feat:hover {
+  border-color: rgba(46, 125, 50, .28) !important;
+  box-shadow: 0 20px 38px -30px rgba(31, 41, 55, .82) !important;
+}
+.intro-feat-ic {
+  background: var(--mv-green-soft) !important;
+  color: var(--mv-green) !important;
+}
+.intro-cta {
+  background: linear-gradient(135deg, var(--mv-green), var(--mv-green-dark)) !important;
+  box-shadow: 0 16px 32px -12px rgba(46, 125, 50, .58) !important;
+}
+.intro-cta:hover {
+  box-shadow: 0 20px 38px -12px rgba(46, 125, 50, .62) !important;
+}
+.aw-panel {
+  border: 1px solid rgba(226, 230, 234, .96) !important;
+  box-shadow: 0 24px 74px -24px rgba(17, 24, 39, .36), 0 10px 30px -20px rgba(46, 125, 50, .34) !important;
+}
+.aw-head {
+  background:
+    radial-gradient(360px 140px at 92% -34%, rgba(76, 175, 80, .34), transparent 70%),
+    linear-gradient(130deg, var(--mv-ink-deep) 0%, var(--mv-ink) 72%, #16301E 100%) !important;
+}
+.aw-head-sub i,
+.aw-launcher-dot {
+  background: var(--mv-green-light) !important;
+}
+.aw-progress i.is-on,
+.aw-progress i[style*="1"] {
+  background: linear-gradient(90deg, var(--mv-green), #86EFAC) !important;
+}
+.aw-body {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F8FAF8 100%) !important;
+}
+.aw-msg.bot {
+  background: #F5F7F4 !important;
+  border-color: #E2E6EA !important;
+}
+.aw-msg.user {
+  background: linear-gradient(135deg, var(--mv-green), var(--mv-green-dark)) !important;
+}
+.aw-primary,
+.aw-send,
+.aw-continue,
+.aw-submit {
+  background: linear-gradient(135deg, var(--mv-green), var(--mv-green-dark)) !important;
+  box-shadow: 0 12px 24px -14px rgba(46, 125, 50, .7) !important;
+}
+.aw-launcher {
+  box-shadow: 0 12px 28px -8px rgba(46, 125, 50, .45), 0 0 0 0 rgba(46, 125, 50, .28) !important;
+  animation: mvLauncherPulse 3s ease-in-out infinite;
+}
+@keyframes mvLauncherPulse {
+  0%, 100% { box-shadow: 0 12px 28px -8px rgba(46, 125, 50, .45), 0 0 0 0 rgba(46, 125, 50, .28); }
+  50% { box-shadow: 0 12px 28px -8px rgba(46, 125, 50, .45), 0 0 0 10px rgba(46, 125, 50, 0); }
+}
+.aw-card,
+.aw-zone,
+.aw-chip,
+.aw-contact-link,
+.aw-qchip,
+.aw-input,
+.aw-textarea,
+.aw-done-card {
+  border-color: rgba(226, 230, 234, .96) !important;
+}
+.aw-card:hover,
+.aw-contact-link:hover,
+.aw-qchip:hover,
+.aw-photo-add:hover,
+.aw-done-card:hover {
+  border-color: rgba(46, 125, 50, .35) !important;
+  color: var(--mv-green) !important;
+}
+.aw-card[aria-pressed="true"],
+.aw-chip[aria-pressed="true"],
+.aw-seg-btn[aria-pressed="true"],
+.aw-gdpr[data-on="true"] {
+  border-color: var(--mv-green) !important;
+  background: var(--mv-green-soft) !important;
+  box-shadow: 0 0 0 1px rgba(46, 125, 50, .48), var(--sh-sm) !important;
+}
+.aw-card[aria-pressed="true"] .aw-card-ic,
+.aw-gdpr[data-on="true"] .aw-gdpr-box {
+  background: var(--mv-green) !important;
+  color: #fff !important;
+}
+.aw-price-number,
+.aw-total,
+.aw-zone[data-tone="ok"],
+.aw-done-price {
+  color: var(--mv-green-dark) !important;
+}
+.aw-input:focus,
+.aw-textarea:focus {
+  border-color: var(--mv-green) !important;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, .13) !important;
+}
+.aw-range,
+.aw-slider,
+input[type="range"] {
+  accent-color: var(--mv-green) !important;
+}
+.aw-hint {
+  background: #F4FBF4 !important;
+}
+.aw-hint svg,
+.aw-card-ic,
+.aw-done-card-ic {
+  color: var(--mv-green) !important;
+}
+.aw-ava svg path[stroke="#BBF7D0"],
+.aw-launcher svg path[stroke="#BBF7D0"],
+.intro-mark svg path[stroke="#BBF7D0"] {
+  stroke: #DCFCE7 !important;
+}
+@media (min-width: 980px) {
+  .intro {
+    justify-content: flex-start !important;
+    padding-left: clamp(42px, 7vw, 112px) !important;
+    padding-right: min(520px, 38vw) !important;
+  }
+  .intro-card {
+    max-width: 620px !important;
+    text-align: left !important;
+  }
+  .intro-mark {
+    margin-left: 0 !important;
+  }
+  .intro-lead {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: 560px !important;
+  }
+  .intro-feats {
+    max-width: 560px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+  .intro-cta {
+    justify-content: center !important;
+  }
+}
+@media (max-width: 640px) {
+  .intro {
+    align-items: flex-start !important;
+    padding-top: 28px !important;
+  }
+  .intro-card {
+    text-align: left !important;
+  }
+  .intro-mark {
+    margin-left: 0 !important;
+  }
+  .intro-cta {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -919,9 +1134,9 @@ button { font-family: inherit; }
 <main class="intro">
   <div class="intro-card">
     <div class="intro-mark">
-      <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BFDBFE" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DBEAFE"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#93C5FD"/><circle cx="15" cy="28" r="3.5" fill="#0B1526"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#0B1526"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
+      <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BBF7D0" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DCFCE7"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#86EFAC"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
     </div>
-    <div class="intro-brand">ProfiPresun · webový asistent</div>
+    <div class="intro-brand">Movario · webový asistent</div>
     <h1>Zákazník dostane cenu za minútu.<br>Vy dostanete <span>hotový dopyt</span>.</h1>
     <p class="intro-lead">Asistent prevedie návštevníka pár rýchlymi krokmi — služba, priestor, objem, adresa, termín — a na e-mail vám pošle kompletný dopyt s fotkami, rozpisom ceny a odhadom posádky.</p>
     <div class="intro-feats">
@@ -956,11 +1171,11 @@ button { font-family: inherit; }
     <header class="aw-head">
       <div class="aw-head-row">
         <div class="aw-ava">
-          <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BFDBFE" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DBEAFE"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#93C5FD"/><circle cx="15" cy="28" r="3.5" fill="#0B1526"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#0B1526"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
+          <svg viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BBF7D0" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DCFCE7"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#86EFAC"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
           <span class="aw-ava-dot"></span>
         </div>
         <div class="aw-head-txt">
-          <div class="aw-head-title">ProfiPresun</div>
+          <div class="aw-head-title">Movario</div>
           <div class="aw-head-sub"><i></i>Online · odpovieme do pár minút</div>
         </div>
         <button class="aw-head-btn" id="awToggle" data-a="toggle" aria-label="Prepnúť" type="button"></button>
@@ -975,7 +1190,7 @@ button { font-family: inherit; }
   </div>
 
   <button class="aw-launcher" id="awLauncher" aria-label="Otvoriť kalkulačku" type="button">
-    <svg class="ic-open" viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BFDBFE" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DBEAFE"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#93C5FD"/><circle cx="15" cy="28" r="3.5" fill="#0B1526"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#0B1526"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
+    <svg class="ic-open" viewBox="0 0 40 40" fill="none"><path d="M4 15h6M3 20.5h5" stroke="#BBF7D0" stroke-width="2.4" stroke-linecap="round"/><rect x="9" y="11" width="15" height="15" rx="2.6" fill="#fff"/><path d="M24 15h4.8c.6 0 1.2.26 1.6.72l3 3.4c.4.44.6 1 .6 1.6V26H24z" fill="#DCFCE7"/><path d="M25.6 16.6h3.1l2.5 2.9h-5.6z" fill="#86EFAC"/><circle cx="15" cy="28" r="3.5" fill="#111827"/><circle cx="15" cy="28" r="1.3" fill="#fff"/><circle cx="28.5" cy="28" r="3.5" fill="#111827"/><circle cx="28.5" cy="28" r="1.3" fill="#fff"/></svg>
     <svg class="ic-close" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
     <span class="aw-launcher-dot"></span>
   </button>
@@ -989,12 +1204,12 @@ button { font-family: inherit; }
    CONFIG + CATALOG
    ========================================================================== */
 var CONFIG = {
-  company: 'ProfiPresun',
+  company: 'Movario',
   assistant: 'Tomáš',
-  phone: '+421 948 841 313',
-  phoneRaw: '+421948841313',
-  whatsapp: '421948841313',
-  email: 'info@odvoznabytku.sk',
+  phone: '+421 900 123 456',
+  phoneRaw: '+421900123456',
+  whatsapp: '421900123456',
+  email: 'kontakt@movario.sk',
   endpoint: '/api/lead'
 };
 
@@ -1075,11 +1290,11 @@ function vanSVG(m3) {
   var fillH = 66 * ratio;
   var fillY = 22 + 66 - fillH;
   var badge = trips > 1
-    ? '<g id="awVanBadge"><circle cx="210" cy="30" r="16" fill="#1D4ED8"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text></g>'
+    ? '<g id="awVanBadge"><circle cx="210" cy="30" r="16" fill="#1B5E20"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text></g>'
     : '<g id="awVanBadge"></g>';
   return '<svg class="aw-van-svg" viewBox="0 0 240 128" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">'
     + '<defs><linearGradient id="awVanGrad" x1="0" y1="1" x2="0" y2="0">'
-    +   '<stop offset="0" stop-color="#1D4ED8"/><stop offset="1" stop-color="#60A5FA"/>'
+    +   '<stop offset="0" stop-color="#1B5E20"/><stop offset="1" stop-color="#60A5FA"/>'
     + '</linearGradient></defs>'
     /* tieň */
     + '<ellipse cx="118" cy="116" rx="104" ry="7" fill="#0F172A" opacity="0.06"/>'
@@ -1094,8 +1309,8 @@ function vanSVG(m3) {
     +   '</g>'
     + '</g>'
     /* kabína */
-    + '<path d="M140 34 h34 l22 26 v32 h-56 z" fill="#DBEAFE" stroke="#93C5FD" stroke-width="2" stroke-linejoin="round"/>'
-    + '<path d="M148 40 h22 l16 20 h-38 z" fill="#fff" stroke="#93C5FD" stroke-width="1.5" stroke-linejoin="round"/>'
+    + '<path d="M140 34 h34 l22 26 v32 h-56 z" fill="#DCFCE7" stroke="#86EFAC" stroke-width="2" stroke-linejoin="round"/>'
+    + '<path d="M148 40 h22 l16 20 h-38 z" fill="#fff" stroke="#86EFAC" stroke-width="1.5" stroke-linejoin="round"/>'
     /* nárazník */
     + '<rect x="196" y="86" width="8" height="14" rx="2" fill="#94A3B8"/>'
     /* kolesá */
@@ -1117,7 +1332,7 @@ function updateVan(m3) {
   if (badge) {
     var trips = volumeTrips(m3);
     badge.innerHTML = trips > 1
-      ? '<circle cx="210" cy="30" r="16" fill="#1D4ED8"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text>'
+      ? '<circle cx="210" cy="30" r="16" fill="#1B5E20"/><text x="210" y="35" text-anchor="middle" font-family="Inter,sans-serif" font-size="15" font-weight="800" fill="#fff">×' + trips + '</text>'
       : '';
   }
 }
