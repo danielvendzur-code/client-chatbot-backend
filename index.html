@@ -54,94 +54,77 @@ body { font-family: var(--font); color: var(--slate-900); background: var(--slat
 button { font-family: inherit; }
 
 /* ==========================================================================
-   LANDING PAGE (website behind the widget)
+   INTRO PAGE — popis asistenta
    ========================================================================== */
-.site {
+.intro {
   min-height: 100vh;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 22px;
   background:
-    radial-gradient(1100px 520px at 90% -12%, rgba(37, 99, 235, .09), transparent 60%),
+    radial-gradient(1100px 520px at 88% -12%, rgba(37, 99, 235, .10), transparent 60%),
     radial-gradient(700px 380px at -8% 108%, rgba(16, 185, 129, .07), transparent 55%),
     var(--slate-50);
 }
-.site-nav {
-  max-width: 1080px; margin: 0 auto;
-  display: flex; align-items: center; gap: 28px;
-  padding: 22px 28px;
-}
-.site-logo { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
-.site-logo-mark {
-  width: 36px; height: 36px; border-radius: 11px;
+.intro-card { max-width: 660px; text-align: center; }
+.intro-mark {
+  width: 58px; height: 58px; margin: 0 auto 20px;
+  border-radius: 17px;
   background: linear-gradient(140deg, var(--blue-500), var(--blue-700));
   display: flex; align-items: center; justify-content: center;
-  color: #fff; box-shadow: 0 5px 14px -5px rgba(37, 99, 235, .55);
+  color: #fff;
+  box-shadow: 0 14px 30px -10px rgba(37, 99, 235, .55), inset 0 1px 0 rgba(255, 255, 255, .3);
 }
-.site-logo-mark svg { width: 20px; height: 20px; }
-.site-logo-name { font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: var(--slate-900); }
-.site-logo-name b { color: var(--blue-600); font-weight: 800; }
-.site-links { display: flex; gap: 24px; margin-left: auto; }
-.site-links a {
-  font-size: 13.5px; font-weight: 600; color: var(--slate-500);
-  text-decoration: none; transition: color 140ms ease;
-}
-.site-links a:hover { color: var(--slate-900); }
-.site-nav-cta {
-  display: inline-flex; align-items: center;
-  padding: 9px 18px; border-radius: 999px;
-  background: var(--slate-900); color: #fff;
-  font-size: 13px; font-weight: 700; text-decoration: none;
-  transition: transform 160ms ease, background 160ms ease;
-}
-.site-nav-cta:hover { background: var(--navy-800); transform: translateY(-1px); }
-.site-hero {
-  max-width: 1080px; margin: 0 auto;
-  padding: 64px 28px 80px;
-}
-.site-kicker {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 12.5px; font-weight: 700; letter-spacing: .06em;
+.intro-mark svg { width: 30px; height: 30px; }
+.intro-brand {
+  font-size: 13px; font-weight: 800; letter-spacing: .12em;
   text-transform: uppercase; color: var(--blue-600);
-  margin-bottom: 18px;
+  margin-bottom: 14px;
 }
-.site-kicker::before { content: ""; width: 22px; height: 2px; background: var(--blue-600); border-radius: 2px; }
-.site-hero h1 {
-  margin: 0 0 18px; max-width: 620px;
-  font-size: clamp(30px, 5vw, 48px);
-  font-weight: 800; letter-spacing: -0.03em; line-height: 1.08;
+.intro h1 {
+  margin: 0 0 16px;
+  font-size: clamp(27px, 4.6vw, 40px);
+  font-weight: 800; letter-spacing: -0.03em; line-height: 1.12;
   color: var(--slate-900);
 }
-.site-hero h1 span { color: var(--blue-600); }
-.site-hero p {
-  margin: 0 0 28px; max-width: 470px;
-  font-size: 16px; line-height: 1.65; color: var(--slate-500);
+.intro h1 span { color: var(--blue-600); }
+.intro-lead {
+  margin: 0 auto 30px; max-width: 480px;
+  font-size: 15.5px; line-height: 1.7; color: var(--slate-500);
 }
-.site-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
-.site-btn-primary {
-  display: inline-flex; align-items: center; gap: 9px;
-  padding: 14px 26px; border: none; border-radius: 999px; cursor: pointer;
+.intro-feats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+  margin-bottom: 32px;
+}
+@media (max-width: 640px) { .intro-feats { grid-template-columns: 1fr 1fr; } }
+.intro-feat {
+  padding: 16px 12px 14px;
+  background: #fff; border: 1px solid var(--slate-200);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-sm);
+  text-align: center;
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
+}
+.intro-feat:hover { transform: translateY(-2px); box-shadow: var(--sh-md); border-color: var(--blue-100); }
+.intro-feat-ic {
+  width: 34px; height: 34px; margin: 0 auto 9px;
+  border-radius: 10px;
+  background: var(--blue-50); color: var(--blue-600);
+  display: flex; align-items: center; justify-content: center;
+}
+.intro-feat-ic svg { width: 17px; height: 17px; }
+.intro-feat b { display: block; font-size: 12.5px; font-weight: 700; color: var(--slate-900); line-height: 1.3; }
+.intro-feat span { display: block; margin-top: 3px; font-size: 11px; color: var(--slate-500); line-height: 1.4; }
+.intro-cta {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 15px 30px; border: none; border-radius: 999px; cursor: pointer;
   background: linear-gradient(135deg, var(--blue-600), var(--blue-700));
-  color: #fff; font-size: 14.5px; font-weight: 700; font-family: inherit;
-  box-shadow: 0 10px 24px -8px rgba(37, 99, 235, .55);
+  color: #fff; font-size: 15px; font-weight: 700; font-family: inherit;
+  box-shadow: 0 12px 26px -8px rgba(37, 99, 235, .55);
   transition: transform 180ms var(--spring), box-shadow 180ms ease;
 }
-.site-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -8px rgba(37, 99, 235, .6); }
-.site-btn-primary svg { width: 17px; height: 17px; }
-.site-btn-ghost {
-  display: inline-flex; align-items: center;
-  padding: 14px 24px; border-radius: 999px;
-  background: #fff; border: 1.5px solid var(--slate-200);
-  color: var(--slate-700); font-size: 14.5px; font-weight: 700; text-decoration: none;
-  transition: border-color 160ms ease;
-}
-.site-btn-ghost:hover { border-color: var(--slate-400); }
-.site-trust { display: flex; flex-wrap: wrap; gap: 28px; }
-.site-trust-item { display: flex; align-items: center; gap: 10px; }
-.site-trust-item svg { width: 20px; height: 20px; color: var(--blue-600); flex-shrink: 0; }
-.site-trust-item b { display: block; font-size: 14.5px; font-weight: 800; color: var(--slate-900); line-height: 1.2; }
-.site-trust-item span { font-size: 12px; color: var(--slate-500); font-weight: 500; }
-@media (max-width: 720px) {
-  .site-links { display: none; }
-  .site-hero { padding: 40px 24px 60px; }
-}
+.intro-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 32px -8px rgba(37, 99, 235, .6); }
+.intro-cta svg { width: 18px; height: 18px; }
+.intro-note { margin-top: 16px; font-size: 12px; color: var(--slate-400); }
 
 /* ==========================================================================
    WIDGET ROOT + LAUNCHER
@@ -565,6 +548,64 @@ button { font-family: inherit; }
 .aw-step-val b { font-size: 14px; font-weight: 700; line-height: 1.2; white-space: nowrap; }
 .aw-step-val span { font-size: 10px; font-weight: 600; color: var(--slate-400); text-transform: uppercase; letter-spacing: .05em; }
 
+/* Item rows with quantity steppers */
+.aw-items { display: flex; flex-direction: column; gap: 7px; }
+.aw-item {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+  padding: 9px 9px 9px 14px;
+  background: #fff; border: 1.5px solid var(--slate-200);
+  border-radius: var(--r-sm);
+  transition: border-color 150ms ease, background 150ms ease;
+}
+.aw-item.on { border-color: var(--blue-600); background: var(--blue-50); }
+.aw-item-label { font-size: 13px; font-weight: 600; color: var(--slate-700); }
+.aw-item.on .aw-item-label { color: var(--slate-900); font-weight: 700; }
+.aw-item-ctl {
+  display: flex; align-items: center; gap: 2px;
+  background: var(--slate-100); border-radius: 9px; padding: 2px;
+}
+.aw-item.on .aw-item-ctl { background: var(--blue-100); }
+.aw-item-ctl button {
+  width: 28px; height: 28px; border: none; border-radius: 7px; cursor: pointer;
+  background: transparent; color: var(--slate-500);
+  font-size: 16px; font-weight: 700; line-height: 1;
+  transition: background 130ms ease, color 130ms ease;
+}
+.aw-item-ctl button:hover { background: #fff; color: var(--blue-600); box-shadow: var(--sh-sm); }
+.aw-item-ctl b {
+  min-width: 22px; text-align: center;
+  font-size: 13.5px; font-weight: 700; color: var(--slate-900);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Inline hint */
+.aw-hint {
+  display: flex; gap: 8px; align-items: flex-start;
+  margin-top: 14px; padding: 10px 12px;
+  background: var(--blue-50); border-radius: var(--r-sm);
+  font-size: 11.5px; line-height: 1.55; color: var(--slate-500);
+}
+.aw-hint svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; color: var(--blue-500); }
+
+/* Price breakdown inside the hero */
+.aw-bd { margin-top: 12px; border-top: 1px solid rgba(255, 255, 255, .12); padding-top: 4px; }
+.aw-bd summary {
+  list-style: none; cursor: pointer;
+  padding: 6px 0;
+  font-size: 11.5px; font-weight: 700; color: rgba(255, 255, 255, .65);
+  user-select: none;
+}
+.aw-bd summary::-webkit-details-marker { display: none; }
+.aw-bd summary::after { content: " ▾"; font-size: 10px; }
+.aw-bd[open] summary::after { content: " ▴"; }
+.aw-bd summary:hover { color: #fff; }
+.aw-bd-row {
+  display: flex; justify-content: space-between; gap: 12px;
+  padding: 4px 0;
+  font-size: 11.5px; color: rgba(255, 255, 255, .75);
+}
+.aw-bd-row b { font-weight: 700; color: #A7F3D0; font-variant-numeric: tabular-nums; }
+
 /* Photos */
 .aw-photo-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .aw-photo-add {
@@ -824,50 +865,40 @@ button { font-family: inherit; }
 </head>
 <body>
 
-<!-- ======================= LANDING PAGE ======================= -->
-<div class="site">
-  <nav class="site-nav">
-    <a class="site-logo" href="#">
-      <span class="site-logo-mark">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M12 10V3M8.5 6.5L12 3l3.5 3.5"/></svg>
-      </span>
-      <span class="site-logo-name">Profi<b>Presun</b></span>
-    </a>
-    <div class="site-links">
-      <a href="#">Služby</a>
-      <a href="#">Cenník</a>
-      <a href="#">Referencie</a>
-      <a href="#">Kontakt</a>
+<!-- ======================= INTRO — POPIS ASISTENTA ======================= -->
+<main class="intro">
+  <div class="intro-card">
+    <div class="intro-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16v9a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1z"/><path d="M12 10V3M8.5 6.5L12 3l3.5 3.5"/></svg>
     </div>
-    <a class="site-nav-cta" href="tel:+421948841313">+421 948 841 313</a>
-  </nav>
-  <main class="site-hero">
-    <div class="site-kicker">Odvoz · Sťahovanie · Vypratávanie</div>
-    <h1>Presunieme všetko.<br>Vy sa <span>nemusíte dvíhať</span>.</h1>
-    <p>Nábytok, odpad aj celé domácnosti — s vlastnou posádkou a poistením. Cenu sa dozviete za minútu, termín do 48 hodín.</p>
-    <div class="site-actions">
-      <button class="site-btn-primary" type="button" onclick="AWWidget.startWizard()">
-        Nezáväzná kalkulácia
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-      <a class="site-btn-ghost" href="#" onclick="AWWidget.open();return false;">Napíšte nám</a>
-    </div>
-    <div class="site-trust">
-      <div class="site-trust-item">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.9 6.3 6.9.8-5.1 4.7 1.4 6.8L12 17.3 5.9 20.6l1.4-6.8L2.2 9.1l6.9-.8z"/></svg>
-        <div><b>4,9 / 5</b><span>hodnotenie zákazníkov</span></div>
+    <div class="intro-brand">ProfiPresun · webový asistent</div>
+    <h1>Zákazník dostane cenu za minútu.<br>Vy dostanete <span>hotový dopyt</span>.</h1>
+    <p class="intro-lead">Asistent prevedie návštevníka šiestimi rýchlymi krokmi — služba, objem, položky, adresa, termín — a na e-mail vám pošle kompletný dopyt s kontaktom, fotkami a orientačnou cenou.</p>
+    <div class="intro-feats">
+      <div class="intro-feat">
+        <div class="intro-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+        <b>6 rýchlych krokov</b><span>hotové do minúty</span>
       </div>
-      <div class="site-trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 7h13v10H1z"/><path d="M14 10h4l3 3v4h-7"/><circle cx="6" cy="19" r="1.6"/><circle cx="17.5" cy="19" r="1.6"/></svg>
-        <div><b>2 400+</b><span>úspešných zákaziek</span></div>
+      <div class="intro-feat">
+        <div class="intro-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h8M8 11h.01M12 11h.01M16 11h.01M8 15h.01M12 15h.01M16 15h.01"/></svg></div>
+        <b>Cena naživo</b><span>mení sa s každou odpoveďou</span>
       </div>
-      <div class="site-trust-item">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-        <div><b>Poistené</b><span>zodpovednosť do 100 000 €</span></div>
+      <div class="intro-feat">
+        <div class="intro-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></svg></div>
+        <b>Dopyt na e-mail</b><span>s fotkami a kontaktom</span>
+      </div>
+      <div class="intro-feat">
+        <div class="intro-feat-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M12 18h.01"/></svg></div>
+        <b>Mobil aj desktop</b><span>na mobile celá obrazovka</span>
       </div>
     </div>
-  </main>
-</div>
+    <button class="intro-cta" type="button" onclick="AWWidget.startWizard()">
+      Vyskúšať asistenta
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </button>
+    <div class="intro-note">Alebo kliknite na bublinu vpravo dole.</div>
+  </div>
+</main>
 
 <!-- ======================= WIDGET ======================= -->
 <div class="aw" id="aw" data-open="false">
@@ -886,7 +917,7 @@ button { font-family: inherit; }
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 9l6 6 6-6"/></svg>
         </button>
       </div>
-      <div class="aw-progress" id="awProgress" data-on="false"><i></i><i></i><i></i><i></i></div>
+      <div class="aw-progress" id="awProgress" data-on="false"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     </header>
     <div class="aw-body" id="awBody"></div>
     <footer class="aw-foot" id="awFoot"></footer>
@@ -1003,6 +1034,18 @@ var TERMS = [
   { id: 'rush', label: 'Súrne',        hint: 'do 48 h +22 %', tone: 'up',   mult: 1.22 }
 ];
 
+var PARKING = [
+  { id: 'easy',   label: 'Pri vchode',      hint: 'v cene',  fee: 0 },
+  { id: 'medium', label: 'Do 20 m',         hint: '+10 €',   fee: 10 },
+  { id: 'hard',   label: 'Ďaleko / zložité', hint: '+25 €',  fee: 25 }
+];
+
+var TIMES = [
+  { id: 'morning',  label: 'Ráno (7–12)' },
+  { id: 'afternoon',label: 'Poobede (12–18)' },
+  { id: 'weekend',  label: 'Víkend' }
+];
+
 var FAQ = {
   sluzby:  { q: 'Aké služby robíte?', a: 'Robíme <strong>odvoz nábytku a spotrebičov</strong>, <strong>vývoz odpadu a sute</strong>, <strong>sťahovanie</strong> bytov, domov aj firiem a <strong>vypratávanie</strong> pivníc, bytov či pozostalostí. Všetko vrátane nakládky a vynášania.' },
   kedy:    { q: 'Kedy viete prísť?', a: 'Štandardne do <strong>2–3 pracovných dní</strong>, pri súrnych požiadavkách často už <strong>do 48 hodín</strong>. Presný termín si dohodneme telefonicky po odoslaní dopytu.' },
@@ -1010,10 +1053,12 @@ var FAQ = {
 };
 
 var STEP_TITLES = [
-  { t: 'S čím vám pomôžeme?', s: 'Vyberte službu — všetko ostatné doladíme spolu.' },
-  { t: 'Čo a koľko toho je?', s: 'Vyberte objem a označte, čo všetko treba odviezť.' },
-  { t: 'Adresa a termín',     s: 'Podľa lokality a termínu spresníme cenu dopravy.' },
-  { t: 'Zhrnutie a kontakt',  s: 'Skontrolujte dopyt a nechajte nám kontakt.' }
+  { t: 'S čím vám pomôžeme?',      s: 'Vyberte službu — všetko ostatné doladíme spolu.' },
+  { t: 'Koľko toho približne je?', s: 'Podľa objemu pošleme správne auto aj posádku.' },
+  { t: 'Čo konkrétne odvezieme?',  s: 'Pridajte položky a počty — spresnia cenu aj čas práce.' },
+  { t: 'Adresa a prístup',         s: 'Poschodie, výťah a parkovanie ovplyvňujú prácnosť.' },
+  { t: 'Kedy to potrebujete?',     s: 'Flexibilný termín je lacnejší, súrny zvládneme do 48 hodín.' },
+  { t: 'Zhrnutie a kontakt',       s: 'Skontrolujte dopyt a nechajte nám kontakt.' }
 ];
 
 /* ==========================================================================
@@ -1033,8 +1078,8 @@ function freshData() {
     service: '', volume: '', specials: {}, items: {},
     photos: [],
     cityFrom: '', zipFrom: '', cityTo: '', zipTo: '',
-    floor: 0, lift: 'yes',
-    term: 'flex', date: '',
+    floor: 0, lift: 'yes', parking: 'easy',
+    term: 'flex', date: '', timePref: '',
     name: '', phone: '', email: '', note: '', gdpr: false
   };
 }
@@ -1068,40 +1113,72 @@ function calcPrice() {
   var d = state.data;
   var svc = findById(SERVICES, d.service);
   var vol = findById(VOLUMES, d.volume);
-  var total = (svc ? svc.base : 49) + (vol ? vol.add : 0);
+  var lines = [];
+  var total = svc ? svc.base : 49;
+  lines.push({ label: 'Základ — ' + (svc ? svc.label.toLowerCase() : 'služba'), amount: total });
 
-  (ITEMS[d.service] || []).forEach(function (it) { if (d.items[it.id]) total += it.add; });
-  SPECIALS.forEach(function (s) { if (d.specials[s.id]) total += s.add; });
+  if (vol && vol.add > 0) {
+    total += vol.add;
+    lines.push({ label: 'Objem — ' + vol.label.toLowerCase() + ' (' + vol.m3 + ')', amount: vol.add });
+  }
 
-  if (d.lift === 'no') total += Math.max(0, d.floor) * 12;
-  else if (d.floor > 0) total += 10;
+  var itemsSum = 0, itemsN = 0;
+  (ITEMS[d.service] || []).forEach(function (it) {
+    var n = d.items[it.id] || 0;
+    if (n > 0) { itemsSum += it.add * n; itemsN += n; }
+  });
+  if (itemsSum > 0) { total += itemsSum; lines.push({ label: 'Položky (' + itemsN + ' ks)', amount: itemsSum }); }
+
+  var specSum = 0;
+  SPECIALS.forEach(function (s) { if (d.specials[s.id]) specSum += s.add; });
+  if (specSum > 0) { total += specSum; lines.push({ label: 'Špeciálne predmety', amount: specSum }); }
+
+  var floorFee = 0;
+  if (d.lift === 'no') floorFee = Math.max(0, d.floor) * 12;
+  else if (d.floor > 0) floorFee = 10;
+  if (floorFee > 0) {
+    total += floorFee;
+    lines.push({ label: d.lift === 'no' ? (d.floor + '. poschodie bez výťahu') : 'Vynesenie s výťahom', amount: floorFee });
+  }
+
+  var park = findById(PARKING, d.parking);
+  if (park && park.fee > 0) { total += park.fee; lines.push({ label: 'Parkovanie — ' + park.label.toLowerCase(), amount: park.fee }); }
 
   var zf = zoneFor(d.zipFrom);
   var zt = (d.service === 'stahovanie') ? zoneFor(d.zipTo) : null;
-  total += Math.max(zf ? zf.fee : 0, zt ? zt.fee : 0);
+  var zone = (zt && (!zf || zt.fee > zf.fee)) ? zt : zf;
+  if (zone && zone.fee > 0) { total += zone.fee; lines.push({ label: 'Doprava — ' + zone.label, amount: zone.fee }); }
 
   var term = findById(TERMS, d.term);
-  total *= term ? term.mult : 1;
+  if (term && term.mult !== 1) {
+    var delta = Math.round(total * (term.mult - 1));
+    total += delta;
+    lines.push({ label: 'Termín — ' + term.label.toLowerCase(), amount: delta });
+  }
 
   var min = round5(total * 0.9);
   var max = round5(total * 1.18);
   if (max <= min) max = min + 20;
-  return { min: min, max: max, text: min + ' – ' + max + ' €' };
+  return { min: min, max: max, text: min + ' – ' + max + ' €', lines: lines };
 }
 
 /* ==========================================================================
    VALIDATION
    ========================================================================== */
+var LAST_STEP = 5;
+
 function stepValid(step) {
   var d = state.data;
   if (step === 0) return !!d.service;
   if (step === 1) return !!d.volume;
-  if (step === 2) {
+  if (step === 2) return true; /* položky sú voliteľné */
+  if (step === 3) {
     if (!d.cityFrom.trim()) return false;
     if (d.service === 'stahovanie' && !d.cityTo.trim()) return false;
     return true;
   }
-  if (step === 3) {
+  if (step === 4) return true; /* termín má predvolenú hodnotu */
+  if (step === 5) {
     var digits = String(d.phone || '').replace(/\D/g, '');
     return d.name.trim().length >= 2 && digits.length >= 9 && d.gdpr;
   }
@@ -1191,7 +1268,7 @@ function cannedAnswer(text) {
    VIEW: WIZARD STEPS
    ========================================================================== */
 function stepHeadHTML(i) {
-  return '<span class="aw-step-count">Krok ' + (i + 1) + ' zo 4</span>'
+  return '<span class="aw-step-count">Krok ' + (i + 1) + ' zo ' + (LAST_STEP + 1) + '</span>'
     + '<h2 class="aw-step-title">' + STEP_TITLES[i].t + '</h2>'
     + '<p class="aw-step-sub">' + STEP_TITLES[i].s + '</p>';
 }
@@ -1216,23 +1293,34 @@ function step0HTML() {
 
 function step1HTML() {
   var d = state.data;
-  var items = ITEMS[d.service] || [];
   return '<div class="aw-view">' + stepHeadHTML(1)
     + '<div class="aw-grid">'
     + VOLUMES.map(function (v) {
         return cardHTML('data-a="vol:' + v.id + '"', d.volume === v.id, v.icon, v.label + ' · ' + v.m3, v.sub);
       }).join('')
     + '</div>'
-    + (items.length
-      ? '<div class="aw-sec">Čo treba odviezť? <small>· označte všetko, čo platí</small></div>'
-        + '<div class="aw-chips">'
-        + items.map(function (it) {
-            return '<button class="aw-chip" type="button" data-a="item:' + it.id + '" aria-pressed="' + !!d.items[it.id] + '">'
-              + esc(it.label) + '</button>';
-          }).join('')
-        + '</div>'
-      : '')
-    + '<div class="aw-sec">Špeciálne predmety <small>· voliteľné</small></div>'
+    + '<div class="aw-hint">' + ICONS.alert + '<span>Netrafili ste sa presne? Nevadí — objem doladíme telefonicky, cena sa upraví.</span></div>'
+    + '</div>';
+}
+
+function step2HTML() {
+  var d = state.data;
+  var items = ITEMS[d.service] || [];
+  return '<div class="aw-view">' + stepHeadHTML(2)
+    + '<div class="aw-items">'
+    + items.map(function (it) {
+        var n = d.items[it.id] || 0;
+        return '<div class="aw-item' + (n > 0 ? ' on' : '') + '" id="awItem-' + it.id + '">'
+          + '<span class="aw-item-label">' + esc(it.label) + '</span>'
+          + '<span class="aw-item-ctl">'
+          +   '<button type="button" data-a="iminus:' + it.id + '" aria-label="Menej">−</button>'
+          +   '<b id="awItemN-' + it.id + '">' + n + '</b>'
+          +   '<button type="button" data-a="iplus:' + it.id + '" aria-label="Viac">+</button>'
+          + '</span>'
+          + '</div>';
+      }).join('')
+    + '</div>'
+    + '<div class="aw-sec">Špeciálne predmety <small>· príplatok za náročnú manipuláciu</small></div>'
     + '<div class="aw-chips">'
     + SPECIALS.map(function (s) {
         return '<button class="aw-chip" type="button" data-a="spec:' + s.id + '" aria-pressed="' + !!d.specials[s.id] + '">'
@@ -1252,13 +1340,12 @@ function step1HTML() {
     + '</div>';
 }
 
-function step2HTML() {
+function step3HTML() {
   var d = state.data;
   var isMoving = d.service === 'stahovanie';
   var zf = zoneFor(d.zipFrom);
   var zt = zoneFor(d.zipTo);
-  var showDate = d.term === 'date';
-  return '<div class="aw-view">' + stepHeadHTML(2)
+  return '<div class="aw-view">' + stepHeadHTML(3)
     + '<div class="aw-field">'
     +   '<label class="aw-label">' + (isMoving ? 'Odkiaľ sa sťahujete' : 'Adresa') + ' <em>*</em></label>'
     +   '<div class="aw-row2">'
@@ -1279,7 +1366,7 @@ function step2HTML() {
         +   ICONS.pin + '<span>' + (zt ? esc(zt.label) + ' · ' + esc(zt.feeTxt) : '') + '</span></span>'
         + '</div>'
       : '')
-    + '<div class="aw-sec">Prístup</div>'
+    + '<div class="aw-sec">Poschodie a výťah</div>'
     + '<div class="aw-access">'
     +   '<div class="aw-stepper">'
     +     '<button type="button" data-a="floor:-1" aria-label="Menej">−</button>'
@@ -1291,7 +1378,20 @@ function step2HTML() {
     +     '<button class="aw-seg-btn" type="button" data-a="lift:no" aria-pressed="' + (d.lift === 'no') + '">Bez výťahu</button>'
     +   '</div>'
     + '</div>'
-    + '<div class="aw-sec">Termín</div>'
+    + '<div class="aw-sec">Parkovanie pre dodávku</div>'
+    + '<div class="aw-seg" data-n="3">'
+    + PARKING.map(function (p) {
+        return '<button class="aw-seg-btn" type="button" data-a="park:' + p.id + '" aria-pressed="' + (d.parking === p.id) + '">'
+          + esc(p.label) + '<small>' + esc(p.hint) + '</small></button>';
+      }).join('')
+    + '</div>'
+    + '</div>';
+}
+
+function step4HTML() {
+  var d = state.data;
+  var showDate = d.term === 'date';
+  return '<div class="aw-view">' + stepHeadHTML(4)
     + '<div class="aw-seg" data-n="3">'
     + TERMS.map(function (t) {
         return '<button class="aw-seg-btn" type="button" data-a="term:' + t.id + '" aria-pressed="' + (d.term === t.id) + '">'
@@ -1299,8 +1399,16 @@ function step2HTML() {
       }).join('')
     + '</div>'
     + (showDate
-      ? '<div class="aw-field" style="margin-top:10px"><input class="aw-input" type="date" data-f="date" value="' + esc(d.date) + '"></div>'
+      ? '<div class="aw-field" style="margin-top:10px"><label class="aw-label">Vyberte dátum</label><input class="aw-input" type="date" data-f="date" value="' + esc(d.date) + '"></div>'
       : '')
+    + '<div class="aw-sec">Preferovaný čas <small>· voliteľné</small></div>'
+    + '<div class="aw-chips">'
+    + TIMES.map(function (t) {
+        return '<button class="aw-chip" type="button" data-a="time:' + t.id + '" aria-pressed="' + (d.timePref === t.id) + '">'
+          + esc(t.label) + '</button>';
+      }).join('')
+    + '</div>'
+    + '<div class="aw-hint">' + ICONS.alert + '<span>Presný čas príchodu potvrdíme telefonicky deň vopred.</span></div>'
     + '</div>';
 }
 
@@ -1310,10 +1418,13 @@ function summaryRows() {
   var vol = findById(VOLUMES, d.volume);
   var term = findById(TERMS, d.term);
   var specials = SPECIALS.filter(function (s) { return d.specials[s.id]; }).map(function (s) { return s.label; });
-  var items = (ITEMS[d.service] || []).filter(function (it) { return d.items[it.id]; }).map(function (it) { return it.label; });
+  var items = (ITEMS[d.service] || []).filter(function (it) { return (d.items[it.id] || 0) > 0; })
+    .map(function (it) { return it.label + ' ×' + d.items[it.id]; });
+  var park = findById(PARKING, d.parking);
+  var time = findById(TIMES, d.timePref);
   var rows = [];
   rows.push(['Služba', svc ? svc.label : '—']);
-  rows.push(['Rozsah', vol ? vol.label + ' (' + vol.m3 + ')' : '—']);
+  rows.push(['Objem', vol ? vol.label + ' (' + vol.m3 + ')' : '—']);
   if (items.length) rows.push(['Položky', items.join(', ')]);
   if (specials.length) rows.push(['Špeciálne', specials.join(', ')]);
   var from = [d.cityFrom.trim(), d.zipFrom.trim()].filter(Boolean).join(', ');
@@ -1323,21 +1434,28 @@ function summaryRows() {
     rows.push(['Kam', to || '—']);
   }
   rows.push(['Prístup', (d.floor === 0 ? 'Prízemie' : d.floor + '. poschodie') + (d.lift === 'no' ? ', bez výťahu' : ', s výťahom')]);
+  if (park) rows.push(['Parkovanie', park.label]);
   var termTxt = term ? term.label : '—';
   if (d.term === 'date' && d.date) termTxt += ' · ' + d.date;
+  if (time) termTxt += ' · ' + time.label;
   rows.push(['Termín', termTxt]);
   if (d.photos.length) rows.push(['Fotky', d.photos.length + ' ks']);
   return rows;
 }
 
-function step3HTML() {
+function step5HTML() {
   var d = state.data;
   var price = calcPrice();
-  return '<div class="aw-view">' + stepHeadHTML(3)
+  return '<div class="aw-view">' + stepHeadHTML(5)
     + '<div class="aw-price-hero">'
     +   '<div class="aw-price-hero-label">Orientačná cena</div>'
     +   '<div class="aw-price-hero-val">' + price.text + '</div>'
     +   '<div class="aw-price-hero-note">Vrátane dopravy, nakládky a práce. Konečnú cenu potvrdíme telefonicky — zvyčajne do pár hodín.</div>'
+    +   '<details class="aw-bd"><summary>Z čoho sa skladá cena</summary>'
+    +     price.lines.map(function (l) {
+            return '<div class="aw-bd-row"><span>' + esc(l.label) + '</span><b>' + (l.amount >= 0 ? '+' : '−') + Math.abs(l.amount) + ' €</b></div>';
+          }).join('')
+    +   '</details>'
     + '</div>'
     + '<div class="aw-sum">'
     + summaryRows().map(function (r) {
@@ -1392,8 +1510,8 @@ function doneHTML() {
 function wizardFootHTML() {
   var s = state.step;
   var price = calcPrice();
-  var showBar = s === 1 || s === 2;
-  var last = s === 3;
+  var showBar = s >= 1 && s < LAST_STEP;
+  var last = s === LAST_STEP;
   var html = '';
   if (showBar) {
     html += '<div class="aw-pricebar"><span>Orientačná cena</span><b id="awPriceVal">' + price.text + '</b></div>';
@@ -1401,7 +1519,7 @@ function wizardFootHTML() {
   html += '<div class="aw-nav">';
   html += '<button class="aw-btn aw-btn-ghost" type="button" data-a="' + (s === 0 ? 'home' : 'back') + '" aria-label="Späť">' + ICONS.arrowL + (s === 0 ? '' : 'Späť') + '</button>';
   if (last) {
-    html += '<button class="aw-btn aw-btn-success" type="button" id="awNext" data-a="submit"' + (stepValid(3) && !state.sending ? '' : ' disabled') + '>'
+    html += '<button class="aw-btn aw-btn-success" type="button" id="awNext" data-a="submit"' + (stepValid(LAST_STEP) && !state.sending ? '' : ' disabled') + '>'
       + (state.sending ? 'Odosielam…' : 'Odoslať nezáväzný dopyt') + ICONS.send + '</button>';
   } else {
     html += '<button class="aw-btn aw-btn-primary" type="button" id="awNext" data-a="next"' + (stepValid(s) ? '' : ' disabled') + '>Pokračovať' + ICONS.arrowR + '</button>';
@@ -1435,7 +1553,7 @@ function render() {
     elBody.innerHTML = homeHTML();
     elFoot.innerHTML = homeFootHTML();
   } else if (v === 'wizard') {
-    var steps = [step0HTML, step1HTML, step2HTML, step3HTML];
+    var steps = [step0HTML, step1HTML, step2HTML, step3HTML, step4HTML, step5HTML];
     elBody.innerHTML = steps[state.step]();
     elFoot.innerHTML = wizardFootHTML();
   } else {
@@ -1481,7 +1599,7 @@ function openPanel(open) {
 }
 
 function goStep(n) {
-  state.step = Math.max(0, Math.min(3, n));
+  state.step = Math.max(0, Math.min(LAST_STEP, n));
   state.error = '';
   render();
 }
@@ -1518,7 +1636,7 @@ function buildPayload() {
 }
 
 function submit() {
-  if (!stepValid(3) || state.sending) return;
+  if (!stepValid(LAST_STEP) || state.sending) return;
   state.sending = true;
   state.error = '';
   render();
@@ -1607,12 +1725,19 @@ $('#awPanel').addEventListener('click', function (e) {
     return;
   }
   if (a === 'vol') { d.volume = arg; render(); return; }
-  if (a === 'item') {
-    if (d.items[arg]) delete d.items[arg]; else d.items[arg] = true;
-    el.setAttribute('aria-pressed', String(!!d.items[arg]));
+  if (a === 'iplus' || a === 'iminus') {
+    var cur = d.items[arg] || 0;
+    var next = Math.max(0, Math.min(20, cur + (a === 'iplus' ? 1 : -1)));
+    if (next === 0) delete d.items[arg]; else d.items[arg] = next;
+    var row = $('#awItem-' + arg);
+    var num = $('#awItemN-' + arg);
+    if (num) num.textContent = next;
+    if (row) row.classList.toggle('on', next > 0);
     refreshPrice(); refreshNext();
     return;
   }
+  if (a === 'park') { d.parking = arg; render(); return; }
+  if (a === 'time') { d.timePref = (d.timePref === arg) ? '' : arg; render(); return; }
   if (a === 'spec') {
     if (d.specials[arg]) delete d.specials[arg]; else d.specials[arg] = true;
     el.setAttribute('aria-pressed', String(!!d.specials[arg]));
